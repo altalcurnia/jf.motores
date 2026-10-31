@@ -48,6 +48,11 @@ export function EngineExperience({ locale, t }: Props) {
             numberLocale: localeTags[locale],
             hud: hudRef.current,
             onPartClick: (part: string) => routerRef.current.push(`/${locale}/repuestos/${part}`),
+            // El celular liberó la memoria gráfica: ocultar el 3D y dejar el fondo fijo (el texto sigue visible)
+            onContextLost: () => {
+              canvas.classList.remove("ready");
+              document.body.classList.add("no-3d");
+            },
           });
           requestAnimationFrame(() => canvas.classList.add("ready"));
         } catch (err) {
@@ -61,6 +66,7 @@ export function EngineExperience({ locale, t }: Props) {
       cancelled = true;
       cleanup?.();
       canvas.remove();
+      document.body.classList.remove("no-3d");
     };
   }, [locale]);
 

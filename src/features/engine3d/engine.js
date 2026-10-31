@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * @param {{ canvas: HTMLCanvasElement, isMobile: boolean, numberLocale: string,
  *   hud: { standby: string, start: string, running: string, full: string },
- *   onPartClick: (partKey: string) => void }} opts
+ *   onPartClick: (partKey: string) => void, onContextLost?: () => void }} opts
  * @returns {() => void} función de limpieza
  */
 export function startEngine(opts) {
@@ -47,10 +47,20 @@ export function startEngine(opts) {
 
       /* ================= THREE ================= */
       const canvas = opts.canvas;
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      // Celulares (sobre todo iPhone): menos resolución y sin suavizado para no agotar la memoria gráfica
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: !isMobile, powerPreference: "default" });
       renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, isMobile ? 1.6 : 2),
+        Math.min(window.devicePixelRatio, isMobile ? 1.25 : 2),
       );
+      // Si el sistema libera el contexto WebGL (falta de memoria), detener el motor y avisar
+      const onLost = (ev) => {
+        ev.preventDefault();
+        cancelAnimationFrame(rafId);
+        rafId = -1;
+        if (opts.onContextLost) opts.onContextLost();
+      };
+      canvas.addEventListener("webglcontextlost", onLost, false);
+      disposers.push(() => canvas.removeEventListener("webglcontextlost", onLost, false));
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -660,7 +670,7 @@ export function startEngine(opts) {
       }
       const smokeTex = makeSmokeTex();
       const smokePool = [];
-      const POOL_N = isMobile ? 90 : 180;
+      const POOL_N = isMobile ? 50 : 180;
       for (let i = 0; i < POOL_N; i++) {
         const m = new THREE.SpriteMaterial({
           map: smokeTex,
@@ -921,6 +931,7 @@ listen("mousemove", (e) => {
         );
       }
       function tick() {
+        if (rafId === -1) return;
         rafId = requestAnimationFrame(tick);
         const dt = Math.min(clock.getDelta(), 0.05);
         const t = clock.elapsedTime;

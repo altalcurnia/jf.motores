@@ -268,3 +268,27 @@ body.over-part {
 .acc-consent { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .acc-consent a { color: var(--yellow); }
 .acc-consent .btn { border: 0; cursor: pointer; }
+
+/* ---------- Celulares: aliviar la memoria gráfica (iPhone/Safari) ---------- */
+@media (max-width: 760px) {
+  /* La textura animada de grano es una capa fija enorme: se quita en celular */
+  .grain { display: none; }
+  /* Desenfoques de fondo → fondos sólidos (cada blur crea una capa gráfica extra) */
+  .card, .gauge, .acc-card, .catalog-card, nav.scrolled {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .card { background: rgba(10, 12, 15, 0.9); }
+  .gauge { background: rgba(10, 12, 15, 0.92); }
+  .acc-card, .catalog-card { background: rgba(14, 17, 21, 0.94); }
+  nav.scrolled { background: rgba(8, 10, 12, 0.96); }
+}
+
+/* Si el sistema apagó el 3D, el recorrido sigue legible sobre un fondo fijo */
+body.no-3d .webgl-host { display: none; }
+body.no-3d #labels, body.no-3d #hud { display: none; }
+body.no-3d {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(247, 198, 0, 0.12), transparent 70%),
+    #0b0d10;
+}

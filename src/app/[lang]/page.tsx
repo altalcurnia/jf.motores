@@ -7,9 +7,8 @@ import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
 
-// Foto de referencia temporal (servidor externo). Se reemplaza por fotos propias desde el panel.
-const BENEFITS_IMAGE =
-  "https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/165e11408-37e4-4eec-908d-1dfbb476b268.png";
+// Ilustración de referencia local (public/demo). Se reemplaza por una foto real de la empresa.
+const BENEFITS_IMAGE = "/demo/jf-m25.jpg";
 
 const catalogKeys = ["motobombas", "motores", "repuestos"] as const;
 
