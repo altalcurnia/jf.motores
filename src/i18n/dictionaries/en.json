@@ -33,9 +33,18 @@
     "kicker": "Catalogue",
     "title": "Everything to keep your mine running",
     "items": {
-      "motobombas": { "title": "Complete pump sets", "desc": "Ready-to-work units: diesel engine coupled to a pump for water, slurry and underground dewatering." },
-      "motores": { "title": "Engines", "desc": "High-torque diesel engines for mining, new and rebuilt." },
-      "repuestos": { "title": "Spare parts", "desc": "Parts with compatibility information for your engine or pump set." }
+      "motobombas": {
+        "title": "Complete pump sets",
+        "desc": "Ready-to-work units: diesel engine coupled to a pump for water, slurry and underground dewatering."
+      },
+      "motores": {
+        "title": "Engines",
+        "desc": "High-torque diesel engines for mining, new and rebuilt."
+      },
+      "repuestos": {
+        "title": "Spare parts",
+        "desc": "Parts with compatibility information for your engine or pump set."
+      }
     },
     "cta": "View catalogue",
     "soon": "We are loading the catalogue. In the meantime, request a quote directly on WhatsApp."
@@ -54,5 +63,135 @@
   },
   "whatsapp": {
     "general": "Hello JF Motores, I would like information about your equipment."
+  },
+  "journey": {
+    "a": {
+      "pk": "01 / Start-up",
+      "h2": "Peace of mind and reliability in every engine.",
+      "p": "One turn of the key. Four cylinders breathe in a 1-3-4-2 sequence, the exhaust lets out its first breath and the whole system comes alive.",
+      "chips": [
+        {
+          "label": "Mechanical excellence",
+          "value": "BENCH-TESTED"
+        },
+        {
+          "label": "Unmatched power",
+          "value": "25 HP"
+        },
+        {
+          "label": "Direct advice",
+          "value": "WHATSAPP"
+        }
+      ]
+    },
+    "b": {
+      "pk": "02 / Revving",
+      "torque": "Torque",
+      "temp": "Temp",
+      "flow": "Flow",
+      "p": "Full load. Two pistons up, two down: a perfectly balanced crankshaft to keep the pump going where other engines give up."
+    },
+    "c": {
+      "pk": "03 / Look inside",
+      "h2": "Engineering from the inside.",
+      "p": "Live technical exploded view: every part labelled. Tap any part to see its spare parts.",
+      "hint": "▼ Keep scrolling"
+    },
+    "d": {
+      "pk": "04 / Shutdown",
+      "h2": "Silence is reliability too.",
+      "p": "End of cycle: parts return to place, the block cools down and is ready for the next shift. That's how every workday ends — and how yours begins."
+    }
+  },
+  "hud": {
+    "state": "Status",
+    "standby": "STANDBY",
+    "start": "STARTING",
+    "running": "RUNNING",
+    "full": "FULL LOAD",
+    "rpm": "RPM",
+    "temp": "Temp"
+  },
+  "rail": {
+    "a": "Start-up",
+    "b": "Revving",
+    "c": "Exploded",
+    "d": "Shutdown"
+  },
+  "marquee": [
+    "JF Motores Medellín",
+    "Peace of mind and reliability",
+    "6″ suction",
+    "Up to 25 HP",
+    "Electric start",
+    "4,000 L/min flow",
+    "80 m head",
+    "Spare parts"
+  ],
+  "benefits": {
+    "kicker": "Benefits",
+    "title1": "Built for the ",
+    "titleEm": "mine",
+    "title2": ", not the showroom.",
+    "intro": "Every JF unit leaves the workshop tested under real load. This is what you get from the very first start.",
+    "imageAlt": "JF Motores diesel pump set",
+    "bar1": "Unit JF-M25",
+    "bar2": "Workshop test · OK",
+    "rows": [
+      {
+        "h3": "Mechanical excellence",
+        "p": "Mining-grade cast blocks, bench-verified torque and tolerances checked part by part before shipping."
+      },
+      {
+        "h3": "Unmatched power",
+        "p": "Flat torque curve from 1,200 rpm: the pump holds steady flow even with dense slurry and suspended solids."
+      },
+      {
+        "h3": "Spare parts and service",
+        "p": "Parts for your engine and pump set with compatibility information. Get quotes and arrange everything on WhatsApp."
+      },
+      {
+        "h3": "Built for altitude",
+        "p": "Calibrated to operate above 2,500 m: compensated injection, cold start and oversized cooling."
+      }
+    ],
+    "specs": [
+      {
+        "b": "25 HP",
+        "span": "Rated power"
+      },
+      {
+        "b": "4,000",
+        "span": "L/min flow"
+      },
+      {
+        "b": "80 m",
+        "span": "Max head"
+      },
+      {
+        "b": "6″",
+        "span": "Suction"
+      }
+    ]
+  },
+  "parts": {
+    "chasis": "Skid frame",
+    "luz": "Ambient light",
+    "bloque": "Engine block",
+    "camisas": "Cylinder liners",
+    "pistones": "Pistons",
+    "culata": "Cylinder head and valves",
+    "escape": "Exhaust",
+    "tanque": "Diesel tank",
+    "radiador": "Radiator",
+    "ventilador": "Fan",
+    "volante": "Flywheel",
+    "bomba": "Pump",
+    "tablero": "Control panel"
+  },
+  "partPage": {
+    "title": "Spare parts: ",
+    "back": "See all spare parts",
+    "whatsapp": "Hello JF Motores, I'm looking for spare parts: "
   }
 }

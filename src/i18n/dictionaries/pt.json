@@ -33,9 +33,18 @@
     "kicker": "Catálogo",
     "title": "Tudo para manter sua mina em operação",
     "items": {
-      "motobombas": { "title": "Motobombas completas", "desc": "Equipamentos prontos para trabalhar: motor a diesel acoplado à bomba para água, lama e drenagem de galerias." },
-      "motores": { "title": "Motores", "desc": "Motores a diesel de alto torque para mineração, novos e recondicionados." },
-      "repuestos": { "title": "Peças de reposição", "desc": "Peças com informação de compatibilidade para seu motor ou motobomba." }
+      "motobombas": {
+        "title": "Motobombas completas",
+        "desc": "Equipamentos prontos para trabalhar: motor a diesel acoplado à bomba para água, lama e drenagem de galerias."
+      },
+      "motores": {
+        "title": "Motores",
+        "desc": "Motores a diesel de alto torque para mineração, novos e recondicionados."
+      },
+      "repuestos": {
+        "title": "Peças de reposição",
+        "desc": "Peças com informação de compatibilidade para seu motor ou motobomba."
+      }
     },
     "cta": "Ver catálogo",
     "soon": "Estamos carregando o catálogo. Enquanto isso, peça seu orçamento diretamente pelo WhatsApp."
@@ -54,5 +63,135 @@
   },
   "whatsapp": {
     "general": "Olá JF Motores, gostaria de informações sobre seus equipamentos."
+  },
+  "journey": {
+    "a": {
+      "pk": "01 / Partida",
+      "h2": "Tranquilidade e confiança em nossos motores.",
+      "p": "Um giro da chave. Os quatro cilindros respiram na sequência 1-3-4-2, o escapamento solta o primeiro sopro e todo o sistema ganha vida.",
+      "chips": [
+        {
+          "label": "Mecânica de excelência",
+          "value": "TESTADO EM BANCADA"
+        },
+        {
+          "label": "Potência sem igual",
+          "value": "25 HP"
+        },
+        {
+          "label": "Atendimento direto",
+          "value": "WHATSAPP"
+        }
+      ]
+    },
+    "b": {
+      "pk": "02 / Rotação",
+      "torque": "Torque",
+      "temp": "Temp",
+      "flow": "Vazão",
+      "p": "Regime pleno. Dois pistões sobem, dois descem: virabrequim perfeitamente equilibrado para sustentar a bomba onde outros motores desistem."
+    },
+    "c": {
+      "pk": "03 / Explore o interior",
+      "h2": "Engenharia por dentro.",
+      "p": "Vista explodida ao vivo: cada peça identificada. Toque em qualquer peça para ver as peças de reposição.",
+      "hint": "▼ Continue rolando"
+    },
+    "d": {
+      "pk": "04 / Desligamento",
+      "h2": "O silêncio também é confiança.",
+      "p": "Fim do ciclo: as peças voltam ao lugar, o bloco esfria e fica pronto para o próximo turno. Assim termina cada jornada — e assim começa a sua."
+    }
+  },
+  "hud": {
+    "state": "Estado",
+    "standby": "STANDBY",
+    "start": "PARTIDA",
+    "running": "REGIME",
+    "full": "CARGA TOTAL",
+    "rpm": "RPM",
+    "temp": "Temp"
+  },
+  "rail": {
+    "a": "Partida",
+    "b": "Rotação",
+    "c": "Vista explodida",
+    "d": "Desligamento"
+  },
+  "marquee": [
+    "JF Motores Medellín",
+    "Tranquilidade e confiança",
+    "Sucção 6″",
+    "Até 25 HP",
+    "Partida elétrica",
+    "Vazão 4.000 L/min",
+    "Altura 80 m",
+    "Peças de reposição"
+  ],
+  "benefits": {
+    "kicker": "Benefícios",
+    "title1": "Feitas para a ",
+    "titleEm": "mina",
+    "title2": ", não para a vitrine.",
+    "intro": "Cada unidade JF sai da oficina testada sob carga real. É isso que você recebe desde a primeira partida.",
+    "imageAlt": "Motobomba a diesel JF Motores",
+    "bar1": "Unidade JF-M25",
+    "bar2": "Teste de oficina · OK",
+    "rows": [
+      {
+        "h3": "Mecânica de excelência",
+        "p": "Blocos fundidos de grau mineração, torque verificado em bancada e tolerâncias revisadas peça por peça antes do envio."
+      },
+      {
+        "h3": "Potência sem igual",
+        "p": "Curva de torque plana desde 1.200 rpm: a bomba mantém vazão constante mesmo com lama densa e sólidos em suspensão."
+      },
+      {
+        "h3": "Peças e assistência técnica",
+        "p": "Peças para seu motor e motobomba com informação de compatibilidade. Faça orçamento e combine tudo pelo WhatsApp."
+      },
+      {
+        "h3": "DNA de altitude",
+        "p": "Calibrada para operar acima de 2.500 m: injeção compensada, partida a frio e arrefecimento superdimensionado."
+      }
+    ],
+    "specs": [
+      {
+        "b": "25 HP",
+        "span": "Potência nominal"
+      },
+      {
+        "b": "4.000",
+        "span": "L/min de vazão"
+      },
+      {
+        "b": "80 m",
+        "span": "Altura máxima"
+      },
+      {
+        "b": "6″",
+        "span": "Sucção"
+      }
+    ]
+  },
+  "parts": {
+    "chasis": "Chassi",
+    "luz": "Luz ambiente",
+    "bloque": "Bloco",
+    "camisas": "Camisas",
+    "pistones": "Pistões",
+    "culata": "Cabeçote e válvulas",
+    "escape": "Escapamento",
+    "tanque": "Tanque de diesel",
+    "radiador": "Radiador",
+    "ventilador": "Ventilador",
+    "volante": "Volante",
+    "bomba": "Bomba",
+    "tablero": "Painel"
+  },
+  "partPage": {
+    "title": "Peças: ",
+    "back": "Ver todas as peças",
+    "whatsapp": "Olá JF Motores, procuro peças de: "
   }
 }

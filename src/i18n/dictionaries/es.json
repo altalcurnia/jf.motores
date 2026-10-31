@@ -33,9 +33,18 @@
     "kicker": "Catálogo",
     "title": "Todo para mantener tu mina en operación",
     "items": {
-      "motobombas": { "title": "Motobombas completas", "desc": "Equipos listos para trabajar: motor diésel acoplado a bomba para agua, lodo y desagüe de socavón." },
-      "motores": { "title": "Motores", "desc": "Motores diésel de alto torque para minería, nuevos y reconstruidos." },
-      "repuestos": { "title": "Repuestos", "desc": "Piezas con información de compatibilidad para tu motor o motobomba." }
+      "motobombas": {
+        "title": "Motobombas completas",
+        "desc": "Equipos listos para trabajar: motor diésel acoplado a bomba para agua, lodo y desagüe de socavón."
+      },
+      "motores": {
+        "title": "Motores",
+        "desc": "Motores diésel de alto torque para minería, nuevos y reconstruidos."
+      },
+      "repuestos": {
+        "title": "Repuestos",
+        "desc": "Piezas con información de compatibilidad para tu motor o motobomba."
+      }
     },
     "cta": "Ver catálogo",
     "soon": "Estamos cargando el catálogo. Mientras tanto, cotiza directamente por WhatsApp."
@@ -54,5 +63,135 @@
   },
   "whatsapp": {
     "general": "Hola JF Motores, quiero información sobre sus equipos."
+  },
+  "journey": {
+    "a": {
+      "pk": "01 / Encendido",
+      "h2": "Tranquilidad y confianza en nuestros motores.",
+      "p": "Un giro de llave. Los cuatro cilindros respiran en secuencia 1-3-4-2, el escape libera su primer aliento y todo el sistema cobra vida.",
+      "chips": [
+        {
+          "label": "Mecánica de excelencia",
+          "value": "PROBADO EN BANCO"
+        },
+        {
+          "label": "Potencia sin igual",
+          "value": "25 HP"
+        },
+        {
+          "label": "Asesoría directa",
+          "value": "WHATSAPP"
+        }
+      ]
+    },
+    "b": {
+      "pk": "02 / Revolución",
+      "torque": "Torque",
+      "temp": "Temp",
+      "flow": "Caudal",
+      "p": "Régimen pleno. Dos pistones suben, dos bajan: equilibrio perfecto de cigüeñal para sostener la bomba donde otros motores se rinden."
+    },
+    "c": {
+      "pk": "03 / Explora el interior",
+      "h2": "Ingeniería por dentro.",
+      "p": "Despiece técnico en vivo: cada pieza etiquetada. Toca cualquier pieza para ver sus repuestos.",
+      "hint": "▼ Continúa el despiece"
+    },
+    "d": {
+      "pk": "04 / Apagado",
+      "h2": "El silencio también es confianza.",
+      "p": "Cierre de ciclo: las piezas vuelven a su sitio, el bloque enfría y queda listo para la siguiente guardia. Así termina cada jornada — así empieza la tuya."
+    }
+  },
+  "hud": {
+    "state": "Estado",
+    "standby": "STANDBY",
+    "start": "ARRANQUE",
+    "running": "RÉGIMEN",
+    "full": "PLENA CARGA",
+    "rpm": "RPM",
+    "temp": "Temp"
+  },
+  "rail": {
+    "a": "Encendido",
+    "b": "Revolución",
+    "c": "Despiece",
+    "d": "Apagado"
+  },
+  "marquee": [
+    "JF Motores Medellín",
+    "Tranquilidad y confianza",
+    "Succión 6″",
+    "Hasta 25 HP",
+    "Arranque eléctrico",
+    "Caudal 4 000 L/min",
+    "Cabeza 80 m",
+    "Repuestos"
+  ],
+  "benefits": {
+    "kicker": "Beneficios",
+    "title1": "Construidas para la ",
+    "titleEm": "mina",
+    "title2": ", no para la vitrina.",
+    "intro": "Cada unidad JF sale del taller probada bajo carga real. Esto es lo que obtienes desde el primer arranque.",
+    "imageAlt": "Motobomba diésel JF Motores",
+    "bar1": "Unidad JF-M25",
+    "bar2": "Prueba de taller · OK",
+    "rows": [
+      {
+        "h3": "Mecánica de excelencia",
+        "p": "Bloques fundidos de grado minero, torque verificado en banco y tolerancias revisadas pieza por pieza antes del despacho."
+      },
+      {
+        "h3": "Potencia sin igual",
+        "p": "Curva de torque plana desde 1 200 rpm: la bomba mantiene caudal constante incluso con lodo denso y sólidos en suspensión."
+      },
+      {
+        "h3": "Repuestos y servicio técnico",
+        "p": "Repuestos para tu motor y motobomba con información de compatibilidad. Cotiza y coordina directamente por WhatsApp."
+      },
+      {
+        "h3": "ADN de altura",
+        "p": "Calibración para operación sobre 2 500 m s. n. m.: inyección compensada, arranque en frío y refrigeración sobredimensionada."
+      }
+    ],
+    "specs": [
+      {
+        "b": "25 HP",
+        "span": "Potencia nominal"
+      },
+      {
+        "b": "4 000",
+        "span": "L/min de caudal"
+      },
+      {
+        "b": "80 m",
+        "span": "Cabeza máxima"
+      },
+      {
+        "b": "6″",
+        "span": "Succión"
+      }
+    ]
+  },
+  "parts": {
+    "chasis": "Chasis",
+    "luz": "Luz ambiental",
+    "bloque": "Bloque",
+    "camisas": "Camisas",
+    "pistones": "Pistones",
+    "culata": "Culata y válvulas",
+    "escape": "Escape",
+    "tanque": "Tanque diésel",
+    "radiador": "Radiador",
+    "ventilador": "Ventilador",
+    "volante": "Volante",
+    "bomba": "Bomba",
+    "tablero": "Tablero"
+  },
+  "partPage": {
+    "title": "Repuestos: ",
+    "back": "Ver todos los repuestos",
+    "whatsapp": "Hola JF Motores, busco repuestos de: "
   }
 }
