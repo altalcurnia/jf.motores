@@ -253,3 +253,18 @@ body.over-part {
 .legal-section { margin-top: 26px; }
 .legal-section h2 { font-size: 18px; margin-bottom: 8px; }
 .legal-section p { color: var(--mut); }
+
+/* Google */
+.acc-google-block { display: grid; gap: 12px; }
+.acc-google {
+  width: 100%; justify-content: center; gap: 12px; cursor: pointer;
+  background: #fff !important; color: #1f1f1f !important; border: 0; text-transform: none; letter-spacing: 0.02em;
+}
+.acc-google:disabled { opacity: 0.7; cursor: wait; }
+.acc-legal { font-size: 12px; color: var(--mut); text-align: center; }
+.acc-legal a { color: var(--yellow); }
+.acc-divider { display: flex; align-items: center; gap: 12px; color: var(--mut); font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; font-family: var(--mono); }
+.acc-divider::before, .acc-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.acc-consent { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.acc-consent a { color: var(--yellow); }
+.acc-consent .btn { border: 0; cursor: pointer; }

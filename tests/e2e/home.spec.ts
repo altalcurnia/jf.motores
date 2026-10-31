@@ -66,7 +66,7 @@ test("cuentas de clientes: registro, entrar y protección de Mi cuenta", async (
   await expect(page).toHaveURL(/\/es\/cuenta\/registro$/);
   // Sin autorizar el tratamiento de datos no se puede enviar
   await expect(page.getByRole("checkbox").first()).toHaveAttribute("required", "");
-  await expect(page.getByRole("link", { name: "política de tratamiento de datos" })).toHaveAttribute("href", "/es/legal/privacidad");
+  await expect(page.locator(".acc-check a")).toHaveAttribute("href", "/es/legal/privacidad");
 
   await page.goto("/en/cuenta/registro");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Create your account");
@@ -78,4 +78,29 @@ test("el encabezado tiene el acceso a la cuenta y la política de datos responde
   const res = await page.goto("/es/legal/privacidad");
   expect(res?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Política de tratamiento de datos personales");
+});
+
+test("el motor 3D vuelve a funcionar al regresar al inicio desde otra página", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (m) => {
+    if (m.text().includes("Motor 3D no disponible")) errors.push(m.text());
+  });
+  await page.goto("/es");
+  await expect(page.locator("#webgl.ready")).toHaveCount(1, { timeout: 15_000 });
+  await page.locator('#catalogos a[href="/es/motores"]').click();
+  await expect(page).toHaveURL(/\/es\/motores$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/es$/);
+  await expect(page.locator("#webgl.ready")).toHaveCount(1, { timeout: 15_000 });
+  expect(errors).toEqual([]);
+});
+
+test("entrar y registro ofrecen Google con el aviso de datos", async ({ page }) => {
+  for (const path of ["/es/cuenta/entrar", "/es/cuenta/registro"]) {
+    await page.goto(path);
+    await expect(page.getByRole("button", { name: "Continuar con Google" })).toBeVisible();
+    await expect(page.locator(".acc-legal a")).toHaveAttribute("href", "/es/legal/privacidad");
+  }
+  await page.goto("/admin/login");
+  await expect(page.getByRole("button", { name: "Entrar con Google" })).toBeVisible();
 });

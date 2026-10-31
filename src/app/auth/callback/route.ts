@@ -14,7 +14,11 @@ export async function GET(request: NextRequest) {
   if (code) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(new URL(next, origin));
+    if (!error) {
+      // Entró con Google aceptando el texto legal junto al botón (Ley 1581)
+      if (searchParams.get("consent") === "1") await supabase.rpc("accept_privacy");
+      return NextResponse.redirect(new URL(next, origin));
+    }
   }
 
   // Volver a la pantalla de entrada correspondiente con aviso de enlace vencido

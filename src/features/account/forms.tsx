@@ -8,6 +8,7 @@ import { safeNextPath } from "@/lib/safe-redirect";
 import type { Locale } from "@/i18n/config";
 import { localeTags } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { GoogleButton } from "./GoogleButton";
 
 type T = Dictionary["account"];
 type Props = { locale: Locale; t: T };
@@ -50,6 +51,25 @@ function ErrorBox({ message }: { message: string | null }) {
   ) : null;
 }
 
+/** Botón de Google + texto legal + separador, arriba de los formularios de entrar y registro. */
+function GoogleBlock({ locale, t, next }: Props & { next: string }) {
+  return (
+    <div className="acc-google-block">
+      <GoogleButton label={t.google} next={next} consent errorText={t.googleError} />
+      <p className="acc-legal">
+        {t.googleLegal1}
+        <Link href={`/${locale}/legal/privacidad`} target="_blank">
+          {t.privacyLink}
+        </Link>
+        {t.googleLegal2}
+      </p>
+      <div className="acc-divider">
+        <span>{t.or}</span>
+      </div>
+    </div>
+  );
+}
+
 /* ---------------- Entrar ---------------- */
 export function SignInForm({ locale, t }: Props) {
   const router = useRouter();
@@ -88,6 +108,7 @@ export function SignInForm({ locale, t }: Props) {
 
   return (
     <form className="acc-form" onSubmit={onSubmit}>
+      <GoogleBlock locale={locale} t={t} next={next} />
       <label>
         {t.email}
         <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -172,6 +193,7 @@ export function SignUpForm({ locale, t }: Props) {
 
   return (
     <form className="acc-form" onSubmit={onSubmit}>
+      <GoogleBlock locale={locale} t={t} next={`/${locale}/cuenta`} />
       <label>
         {t.fullName}
         <input required autoComplete="name" maxLength={120} value={form.fullName} onChange={set("fullName")} />

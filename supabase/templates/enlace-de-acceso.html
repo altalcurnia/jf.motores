@@ -12,21 +12,21 @@
 <h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#0b0d10;">Your sign-in link</h1>
 <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#3a3f45;">Tap the button to sign in to your JF Motores account.</p>
 <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="border-radius:999px;background:#f7c600;">
-<a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Sign in</a>
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;redirect_to={{ .RedirectTo }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Sign in</a>
 </td></tr></table>
 <p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">If this wasn't you, ignore this email. The link expires in 1 hour and can only be used once.</p>
 {{ else if eq .Data.locale "pt" }}
 <h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#0b0d10;">Seu link de acesso</h1>
 <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#3a3f45;">Toque no botão para entrar na sua conta JF Motores.</p>
 <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="border-radius:999px;background:#f7c600;">
-<a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Entrar na minha conta</a>
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;redirect_to={{ .RedirectTo }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Entrar na minha conta</a>
 </td></tr></table>
 <p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">Se não foi você, ignore este e-mail. O link expira em 1 hora e só pode ser usado uma vez.</p>
 {{ else }}
 <h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#0b0d10;">Tu enlace para entrar</h1>
 <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#3a3f45;">Toca el botón para entrar a tu cuenta de JF Motores.</p>
 <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="border-radius:999px;background:#f7c600;">
-<a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Entrar a mi cuenta</a>
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;redirect_to={{ .RedirectTo }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Entrar a mi cuenta</a>
 </td></tr></table>
 <p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">Si no fuiste tú, ignora este correo. El enlace vence en 1 hora y solo se puede usar una vez.</p>
 {{ end }}

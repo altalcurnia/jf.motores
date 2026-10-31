@@ -6,6 +6,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import { getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PasswordForm, ProfileForm } from "@/features/account/forms";
+import { ConsentBanner } from "@/features/account/ConsentBanner";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
@@ -44,7 +45,7 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
 
   const supabase = await createSupabaseServerClient();
   const [{ data: profile }, { data: units }, { data: leads }] = await Promise.all([
-    supabase.from("profiles").select("full_name, phone, country, marketing_opt_in").eq("id", session.userId).single(),
+    supabase.from("profiles").select("full_name, phone, country, marketing_opt_in, privacy_accepted_at").eq("id", session.userId).single(),
     supabase
       .from("units")
       .select("id, serial, sold_at, products ( ref, name )")
@@ -81,6 +82,10 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
           </form>
         </div>
       </header>
+
+      {profile && !profile.privacy_accepted_at && (
+        <ConsentBanner locale={locale} text={t.consentBanner} linkText={t.privacyLink} accept={t.consentAccept} />
+      )}
 
       <div className="acc-dash-grid">
         <section className="acc-card">

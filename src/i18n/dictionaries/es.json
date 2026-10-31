@@ -273,7 +273,14 @@
       "cotizado": "Cotizada",
       "vendido": "Comprada",
       "perdido": "Cerrada"
-    }
+    },
+    "google": "Continuar con Google",
+    "or": "o con tu correo",
+    "googleLegal1": "Al continuar con Google autorizas el tratamiento de tus datos según la ",
+    "googleLegal2": ".",
+    "consentBanner": "Para usar tu cuenta, autoriza el tratamiento de tus datos según la ",
+    "consentAccept": "Autorizo",
+    "googleError": "No se pudo conectar con Google. Intenta de nuevo."
   },
   "legal": {
     "privacyTitle": "Política de tratamiento de datos personales",

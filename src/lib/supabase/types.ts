@@ -415,7 +415,9 @@ export type Database = {
       };
     };
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+      accept_privacy: { Args: Record<string, never>; Returns: undefined };
+    };
     Enums: {
       catalog_type: "motobomba" | "motor" | "repuesto";
       lead_status: "nuevo" | "contactado" | "cotizado" | "vendido" | "perdido";

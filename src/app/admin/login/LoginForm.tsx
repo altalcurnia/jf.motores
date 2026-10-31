@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { safeAdminPath } from "@/lib/safe-redirect";
+import { GoogleButton } from "@/features/account/GoogleButton";
 
 type Mode = "link" | "password";
 
@@ -64,6 +65,15 @@ export function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} className="form">
+      <GoogleButton
+        label="Entrar con Google"
+        next={nextPath()}
+        errorText="No se pudo conectar con Google. Intenta de nuevo."
+        className="btn-secondary google"
+      />
+      <div className="divider">
+        <span>o con tu correo</span>
+      </div>
       <div className="tabs" role="tablist">
         <button type="button" role="tab" aria-selected={mode === "link"} className={mode === "link" ? "on" : ""} onClick={() => setMode("link")}>
           Enlace al correo

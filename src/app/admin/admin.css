@@ -84,3 +84,6 @@ button:disabled { opacity: 0.6; cursor: wait; }
 @media (max-width: 760px) {
   .two-col { grid-template-columns: 1fr; }
 }
+.btn-secondary.google { display: flex; align-items: center; justify-content: center; gap: 10px; background: #fff; color: #1f1f1f; border: 0; }
+.divider { display: flex; align-items: center; gap: 10px; color: var(--mut); font-size: 12px; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }

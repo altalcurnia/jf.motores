@@ -273,7 +273,14 @@
       "cotizado": "Orçado",
       "vendido": "Comprado",
       "perdido": "Encerrado"
-    }
+    },
+    "google": "Continuar com o Google",
+    "or": "ou com seu e-mail",
+    "googleLegal1": "Ao continuar com o Google você autoriza o tratamento dos seus dados conforme a ",
+    "googleLegal2": ".",
+    "consentBanner": "Para usar sua conta, autorize o tratamento dos seus dados conforme a ",
+    "consentAccept": "Autorizo",
+    "googleError": "Não foi possível conectar com o Google. Tente novamente."
   },
   "legal": {
     "privacyTitle": "Política de tratamento de dados pessoais",

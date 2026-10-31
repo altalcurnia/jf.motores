@@ -16,7 +16,7 @@ type Props = {
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
 export function EngineExperience({ locale, t }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   // Referencias estables: el motor se crea una sola vez por idioma.
   const routerRef = useRef(router);
@@ -27,8 +27,14 @@ export function EngineExperience({ locale, t }: Props) {
   });
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const host = hostRef.current;
+    if (!host) return;
+    // Un lienzo nuevo en cada montaje: Next.js conserva la página oculta al navegar y la
+    // reutiliza al volver; un lienzo cuyo contexto WebGL ya se liberó no se puede reutilizar.
+    const canvas = document.createElement("canvas");
+    canvas.id = "webgl";
+    canvas.setAttribute("aria-hidden", "true");
+    host.appendChild(canvas);
     let cleanup: (() => void) | undefined;
     let cancelled = false;
 
@@ -54,13 +60,14 @@ export function EngineExperience({ locale, t }: Props) {
     return () => {
       cancelled = true;
       cleanup?.();
+      canvas.remove();
     };
   }, [locale]);
 
   const j = t.journey;
   return (
     <>
-      <canvas id="webgl" ref={canvasRef} aria-hidden="true" />
+      <div ref={hostRef} className="webgl-host" />
       <div className="vignette" />
       <div className="grain" />
       <div className="lb top" />

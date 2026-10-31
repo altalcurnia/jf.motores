@@ -273,7 +273,14 @@
       "cotizado": "Quoted",
       "vendido": "Purchased",
       "perdido": "Closed"
-    }
+    },
+    "google": "Continue with Google",
+    "or": "or with your email",
+    "googleLegal1": "By continuing with Google you authorize the processing of your data under our ",
+    "googleLegal2": ".",
+    "consentBanner": "To use your account, authorize the processing of your data under our ",
+    "consentAccept": "I authorize",
+    "googleError": "Could not connect to Google. Please try again."
   },
   "legal": {
     "privacyTitle": "Personal data processing policy",
