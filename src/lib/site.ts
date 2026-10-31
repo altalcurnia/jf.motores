@@ -5,7 +5,10 @@
  */
 export const site = {
   name: "JF Motores",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  // Producción: dominio propio. Vistas previas de Vercel: su URL automática. Local: localhost.
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
   whatsappFallback: process.env.NEXT_PUBLIC_WHATSAPP_FALLBACK ?? "573122110262",
   phoneDisplay: "+57 312 2110262",
   workshopAddress: "Cra. 52 # 12-40, Medellín",
