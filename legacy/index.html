@@ -1,0 +1,3264 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      JF Motores — Tranquilidad y Confianza | Motobombas Diésel para Minería
+    </title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/archivo@latest/700.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/archivo@latest/900.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/space-grotesk@latest/400.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/space-grotesk@latest/500.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/jetbrains-mono@latest/400.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/jetbrains-mono@latest/700.css"
+    />
+    <style>
+      :root {
+        --yellow: #f7c600;
+        --yellow-soft: #ffd84d;
+        --bg: #0b0d10;
+        --ink: #eef1f4;
+        --mut: #98a2ad;
+        --line: rgba(255, 255, 255, 0.08);
+        --glass: rgba(12, 15, 19, 0.55);
+        --disp: "Archivo", system-ui, sans-serif;
+        --body: "Space Grotesk", system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+        --lbh: 7vh;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      html,
+      body {
+        overflow-x: hidden;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--body);
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      ::selection {
+        background: var(--yellow);
+        color: #0b0d10;
+      }
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0b0d10;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #2a2f36;
+        border-radius: 6px;
+        border: 2px solid #0b0d10;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--yellow);
+      }
+      img {
+        max-width: 100%;
+      }
+
+      /* ---------- FIXED LAYERS ---------- */
+      #webgl {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        display: block;
+      }
+      .vignette {
+        position: fixed;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        background: radial-gradient(
+          ellipse at 50% 45%,
+          transparent 55%,
+          rgba(0, 0, 0, 0.55) 100%
+        );
+      }
+      .grain {
+        position: fixed;
+        inset: -100px;
+        z-index: 3;
+        pointer-events: none;
+        opacity: 0.06;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: grain 7s steps(8) infinite;
+      }
+      @keyframes grain {
+        0% {
+          transform: translate(0, 0);
+        }
+        12.5% {
+          transform: translate(-40px, 20px);
+        }
+        25% {
+          transform: translate(30px, -30px);
+        }
+        37.5% {
+          transform: translate(-20px, -40px);
+        }
+        50% {
+          transform: translate(40px, 30px);
+        }
+        62.5% {
+          transform: translate(-30px, 10px);
+        }
+        75% {
+          transform: translate(20px, -20px);
+        }
+        87.5% {
+          transform: translate(-10px, 40px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      .lb {
+        position: fixed;
+        left: 0;
+        right: 0;
+        height: var(--lbh);
+        background: #000;
+        z-index: 5;
+        pointer-events: none;
+        transform: scaleY(0);
+        transition: transform 0.9s cubic-bezier(0.7, 0, 0.3, 1);
+      }
+      .lb.top {
+        top: 0;
+        transform-origin: top;
+      }
+      .lb.bot {
+        bottom: 0;
+        transform-origin: bottom;
+      }
+      body.in-journey .lb {
+        transform: scaleY(1);
+      }
+
+      /* ---------- LOADER ---------- */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        background: #08090b;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        transition:
+          opacity 0.8s ease,
+          visibility 0.8s;
+      }
+      #loader.done {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #loader .lbar {
+        width: 220px;
+        height: 2px;
+        background: #1d2126;
+        overflow: hidden;
+        border-radius: 2px;
+      }
+      #loader .lbar i {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: var(--yellow);
+      }
+      #loader p {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.35em;
+        color: var(--mut);
+        text-transform: uppercase;
+      }
+      #loader .lpiston {
+        animation: lpis 1s ease-in-out infinite;
+      }
+      @keyframes lpis {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* ---------- NAV ---------- */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 4vw;
+        transition:
+          background 0.4s,
+          border-color 0.4s;
+        border-bottom: 1px solid transparent;
+      }
+      nav.scrolled {
+        background: rgba(8, 10, 12, 0.72);
+        backdrop-filter: blur(14px);
+        border-bottom-color: var(--line);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .brand svg {
+        width: 34px;
+        height: 34px;
+        flex: none;
+      }
+      .brand b {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: 15px;
+        letter-spacing: 0.14em;
+      }
+      .brand b em {
+        color: var(--yellow);
+        font-style: normal;
+      }
+      .nlinks {
+        display: flex;
+        gap: 30px;
+      }
+      .nlinks a {
+        color: var(--mut);
+        text-decoration: none;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        font-family: var(--mono);
+        position: relative;
+        transition: color 0.3s;
+      }
+      .nlinks a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -6px;
+        width: 0;
+        height: 1px;
+        background: var(--yellow);
+        transition: width 0.3s;
+      }
+      .nlinks a:hover {
+        color: var(--ink);
+      }
+      .nlinks a:hover::after {
+        width: 100%;
+      }
+      .ncta {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #0b0d10;
+        background: var(--yellow);
+        padding: 10px 20px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 700;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .ncta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(247, 198, 0, 0.35);
+      }
+
+      /* ---------- MAIN ---------- */
+      main {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* HERO */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 80px 5vw 120px;
+        position: relative;
+      }
+      #hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          90deg,
+          rgba(8, 10, 12, 0.92) 0%,
+          rgba(8, 10, 12, 0.6) 42%,
+          transparent 70%
+        );
+      }
+      .hero-in {
+        position: relative;
+        max-width: 640px;
+        padding-top: 6vh;
+      }
+      .kicker {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.4em;
+        color: var(--yellow);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+      }
+      .kicker::before {
+        content: "";
+        width: 44px;
+        height: 1px;
+        background: var(--yellow);
+      }
+      .logo-row {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        margin-bottom: 8px;
+      }
+      .logo-mark {
+        width: 132px;
+        height: 132px;
+        flex: none;
+        filter: drop-shadow(0 12px 40px rgba(247, 198, 0, 0.25));
+      }
+      .wordmark {
+        line-height: 0.9;
+      }
+      .wordmark .wm1 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(32px, 4.5vw, 72px);
+        letter-spacing: 0.02em;
+        color: var(--yellow);
+        transform: skewX(-6deg);
+        display: block;
+        white-space: nowrap;
+        clip-path: polygon(0 0, 100% 0, 97% 100%, 3% 100%);
+      }
+      .wordmark .wm2 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(20px, 2.5vw, 36px);
+        letter-spacing: 0.34em;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      .slogan {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 22px 0 18px;
+        padding: 9px 18px;
+        border: 1px solid rgba(247, 198, 0, 0.4);
+        border-radius: 999px;
+        color: var(--yellow-soft);
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        background: rgba(247, 198, 0, 0.06);
+      }
+      .slogan i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--yellow);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(247, 198, 0, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 0 7px rgba(247, 198, 0, 0);
+        }
+      }
+      .hero-in h1 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(30px, 4.2vw, 58px);
+        line-height: 1.02;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        margin-bottom: 20px;
+      }
+      .hero-in h1 .ln {
+        display: block;
+        overflow: hidden;
+      }
+      .hero-in h1 .ln i {
+        display: block;
+        font-style: normal;
+        transform: translateY(110%);
+      }
+      .hero-in h1 .yl {
+        color: var(--yellow);
+      }
+      .hero-in p.copy {
+        color: var(--mut);
+        max-width: 46ch;
+        margin-bottom: 34px;
+        font-size: 15px;
+      }
+      .cta-row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 30px;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        text-decoration: none;
+        overflow: hidden;
+        transition:
+          transform 0.35s,
+          box-shadow 0.35s;
+        cursor: pointer;
+      }
+      .btn.y {
+        background: var(--yellow);
+        color: #0b0d10;
+      }
+      .btn.y::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -80%;
+        width: 50%;
+        height: 100%;
+        transform: skewX(-25deg);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.55),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+      .btn.y:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 44px rgba(247, 198, 0, 0.4);
+      }
+      .btn.y:hover::after {
+        left: 130%;
+      }
+      .btn.g {
+        border: 1px solid var(--line);
+        color: var(--ink);
+        background: var(--glass);
+        backdrop-filter: blur(8px);
+      }
+      .btn.g:hover {
+        border-color: var(--yellow);
+        color: var(--yellow);
+        transform: translateY(-3px);
+      }
+      .btn svg {
+        width: 15px;
+        height: 15px;
+      }
+      .scroll-hint {
+        position: absolute;
+        bottom: 4vh;
+        left: 5vw;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.4em;
+        color: var(--mut);
+        text-transform: uppercase;
+      }
+      .scroll-hint .wire {
+        width: 1px;
+        height: 56px;
+        background: var(--line);
+        position: relative;
+        overflow: hidden;
+      }
+      .scroll-hint .wire i {
+        position: absolute;
+        top: -40%;
+        left: 0;
+        width: 1px;
+        height: 40%;
+        background: var(--yellow);
+        animation: wire 1.8s ease-in-out infinite;
+      }
+      @keyframes wire {
+        0% {
+          top: -40%;
+        }
+        100% {
+          top: 110%;
+        }
+      }
+      .hero-spec {
+        position: absolute;
+        right: 5vw;
+        bottom: 4vh;
+        text-align: right;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--mut);
+        letter-spacing: 0.2em;
+        line-height: 2;
+      }
+      .hero-spec b {
+        color: var(--yellow);
+      }
+
+      /* ---------- JOURNEY ---------- */
+      #journey {
+        position: relative;
+      }
+      .phase {
+        position: relative;
+      }
+      #ph-a {
+        height: 200vh;
+      }
+      #ph-b {
+        height: 170vh;
+      }
+      #ph-c {
+        height: 250vh;
+      }
+      #ph-d {
+        height: 150vh;
+      }
+      .panel {
+        position: sticky;
+        top: 22vh;
+        pointer-events: none;
+        padding: 0 6vw;
+      }
+      .card {
+        max-width: 480px;
+        background: var(--glass);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--yellow);
+        padding: 34px 36px;
+        border-radius: 4px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      }
+      .card.right {
+        margin-left: auto;
+        border-left: 1px solid var(--line);
+        border-right: 3px solid var(--yellow);
+      }
+      .card .pk {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.4em;
+        color: var(--yellow);
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .card h2 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(26px, 3vw, 42px);
+        line-height: 1.05;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .card p {
+        color: var(--mut);
+        font-size: 14px;
+      }
+      .chips {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .chip {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 16px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.03);
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0;
+        transform: translateX(-24px);
+      }
+      .chip .dot {
+        width: 8px;
+        height: 8px;
+        background: var(--yellow);
+        flex: none;
+        clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      }
+      .chip b {
+        color: var(--yellow);
+        margin-left: auto;
+        font-size: 11px;
+      }
+      .big-rpm {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: clamp(64px, 8vw, 120px);
+        color: var(--yellow);
+        line-height: 1;
+        text-shadow: 0 0 60px rgba(247, 198, 0, 0.35);
+      }
+      .big-rpm small {
+        font-size: 0.25em;
+        color: var(--mut);
+        letter-spacing: 0.3em;
+      }
+      .statline {
+        display: flex;
+        gap: 34px;
+        margin-top: 18px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        color: var(--mut);
+        text-transform: uppercase;
+      }
+      .statline b {
+        display: block;
+        color: var(--ink);
+        font-size: 16px;
+      }
+      .hint-down {
+        margin-top: 22px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.35em;
+        color: var(--yellow);
+        text-transform: uppercase;
+        animation: blink 2s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+
+      /* 3D LABELS */
+      #labels {
+        position: fixed;
+        inset: 0;
+        z-index: 4;
+        pointer-events: none;
+      }
+      .lbl {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.4s;
+        will-change: left, top;
+      }
+      .lbl .tag {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--ink);
+        background: rgba(10, 12, 15, 0.75);
+        border: 1px solid var(--line);
+        padding: 8px 14px;
+        border-radius: 3px;
+        backdrop-filter: blur(8px);
+        white-space: nowrap;
+      }
+      .lbl .tag b {
+        color: var(--yellow);
+      }
+      .lbl .tag::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        background: var(--yellow);
+        border-radius: 50%;
+        box-shadow: 0 0 12px var(--yellow);
+      }
+      .lbl .stem {
+        width: 1px;
+        height: 38px;
+        background: linear-gradient(var(--yellow), transparent);
+        margin: 0 auto;
+      }
+
+      /* HUD */
+      #hud {
+        position: fixed;
+        left: 26px;
+        bottom: calc(var(--lbh) + 20px);
+        z-index: 6;
+        display: flex;
+        gap: 14px;
+        align-items: flex-end;
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.7s,
+          transform 0.7s;
+        pointer-events: none;
+      }
+      body.in-journey #hud {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .gauge {
+        background: var(--glass);
+        border: 1px solid var(--line);
+        backdrop-filter: blur(10px);
+        border-radius: 6px;
+        padding: 10px 12px 8px;
+        text-align: center;
+      }
+      .gauge svg {
+        width: 110px;
+        height: 68px;
+        display: block;
+      }
+      .gauge .gt {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.3em;
+        color: var(--mut);
+        text-transform: uppercase;
+      }
+      .gauge .gv {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--yellow);
+      }
+      #hud .hud-state {
+        padding: 10px 16px;
+        border-radius: 6px;
+        background: var(--glass);
+        border: 1px solid var(--line);
+        backdrop-filter: blur(10px);
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--mut);
+      }
+      #hud .hud-state b {
+        display: block;
+        color: var(--yellow);
+        font-size: 12px;
+        letter-spacing: 0.2em;
+      }
+
+      /* RAIL */
+      #rail {
+        position: fixed;
+        right: 26px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 6;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        opacity: 0;
+        transition: opacity 0.6s;
+        pointer-events: none;
+      }
+      body.in-journey #rail {
+        opacity: 1;
+      }
+      #rail .rd {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      #rail .rd span {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.3em;
+        color: var(--mut);
+        text-transform: uppercase;
+        opacity: 0;
+        transform: translateX(8px);
+        transition: 0.4s;
+      }
+      #rail .rd i {
+        width: 8px;
+        height: 8px;
+        border: 1px solid var(--mut);
+        transform: rotate(45deg);
+        transition: 0.4s;
+      }
+      #rail .rd.on span {
+        opacity: 1;
+        transform: none;
+        color: var(--yellow);
+      }
+      #rail .rd.on i {
+        background: var(--yellow);
+        border-color: var(--yellow);
+        box-shadow: 0 0 14px rgba(247, 198, 0, 0.6);
+      }
+
+      /* ---------- POST ---------- */
+      .post {
+        position: relative;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(8, 10, 12, 0.9) 12%,
+          #0a0c0f 30%
+        );
+        z-index: 2;
+      }
+      .marquee {
+        overflow: hidden;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: var(--yellow);
+        padding: 14px 0;
+        position: relative;
+        z-index: 2;
+      }
+      .marquee .track {
+        display: flex;
+        gap: 60px;
+        width: max-content;
+        animation: mq 26s linear infinite;
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: 15px;
+        letter-spacing: 0.24em;
+        color: #0b0d10;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      @keyframes mq {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      section.block {
+        padding: 16vh 6vw;
+        position: relative;
+      }
+      .sec-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 30px;
+        margin-bottom: 8vh;
+        flex-wrap: wrap;
+      }
+      .sec-head .sk,
+      .sk {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.4em;
+        color: var(--yellow);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .sec-head .sk::before,
+      .sk::before {
+        content: "";
+        width: 44px;
+        height: 1px;
+        background: var(--yellow);
+      }
+      .sec-head h2 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(34px, 5vw, 72px);
+        line-height: 0.98;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        max-width: 16ch;
+      }
+      .sec-head h2 em {
+        font-style: normal;
+        color: var(--yellow);
+      }
+      .sec-head p {
+        color: var(--mut);
+        max-width: 38ch;
+        font-size: 14px;
+      }
+      .b-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 6vw;
+        align-items: start;
+      }
+      .b-visual {
+        position: sticky;
+        top: 12vh;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+        background: #0d1014;
+      }
+      .b-visual img {
+        width: 100%;
+        display: block;
+        transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        filter: saturate(1.05) contrast(1.05);
+      }
+      .b-visual:hover img {
+        transform: scale(1.05);
+      }
+      .b-visual .bv-bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px 18px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        color: var(--yellow);
+        text-transform: uppercase;
+      }
+      .b-row {
+        border-top: 1px solid var(--line);
+        padding: 34px 6px;
+        display: grid;
+        grid-template-columns: 70px 1fr 40px;
+        gap: 22px;
+        align-items: start;
+        transition:
+          background 0.4s,
+          padding 0.4s;
+        position: relative;
+      }
+      .b-row:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+      .b-row::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: rgba(247, 198, 0, 0.07);
+        transition: width 0.5s;
+      }
+      .b-row:hover::before {
+        width: 100%;
+      }
+      .b-row:hover {
+        padding-left: 20px;
+      }
+      .b-row .num {
+        font-family: var(--mono);
+        color: var(--yellow);
+        font-size: 13px;
+        letter-spacing: 0.2em;
+        padding-top: 6px;
+      }
+      .b-row h3 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(20px, 2.2vw, 30px);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .b-row p {
+        color: var(--mut);
+        font-size: 14px;
+        max-width: 52ch;
+      }
+      .b-row .arr {
+        font-size: 22px;
+        color: var(--mut);
+        transition:
+          transform 0.4s,
+          color 0.4s;
+        padding-top: 4px;
+      }
+      .b-row:hover .arr {
+        transform: translate(6px, -6px);
+        color: var(--yellow);
+      }
+      .spec-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+        margin-top: 10vh;
+      }
+      .spec-strip div {
+        padding: 34px 26px;
+        border-right: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.02);
+        transition: background 0.4s;
+      }
+      .spec-strip div:last-child {
+        border-right: none;
+      }
+      .spec-strip div:hover {
+        background: rgba(247, 198, 0, 0.06);
+      }
+      .spec-strip b {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(24px, 2.6vw, 40px);
+        color: var(--yellow);
+        display: block;
+        line-height: 1;
+      }
+      .spec-strip span {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        color: var(--mut);
+        text-transform: uppercase;
+        display: block;
+        margin-top: 10px;
+      }
+
+      /* ---------- CATÁLOGO ---------- */
+      .cat-tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 5vh;
+        flex-wrap: wrap;
+      }
+      .cat-tab {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        padding: 13px 24px;
+        border: 1px solid var(--line);
+        background: var(--glass);
+        color: var(--mut);
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        transition: 0.35s;
+        backdrop-filter: blur(8px);
+      }
+      .cat-tab b {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 10px;
+      }
+      .cat-tab:hover {
+        border-color: var(--yellow);
+        color: var(--yellow);
+      }
+      .cat-tab.active {
+        background: var(--yellow);
+        color: #0b0d10;
+        border-color: var(--yellow);
+        font-weight: 700;
+      }
+      .cat-tab.active b {
+        background: rgba(0, 0, 0, 0.16);
+      }
+      .cat-tab.active:hover {
+        color: #0b0d10;
+      }
+      #catGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .cat-card {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+        background: #0e1114;
+        transition:
+          border-color 0.35s,
+          transform 0.35s,
+          box-shadow 0.35s;
+      }
+      .cat-card:hover {
+        border-color: rgba(247, 198, 0, 0.5);
+        transform: translateY(-6px);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      }
+      .cc-media {
+        position: relative;
+        aspect-ratio: 4/3;
+        overflow: hidden;
+        background: #0a0c0e;
+      }
+      .cc-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .cat-card:hover .cc-media img {
+        transform: scale(1.06);
+      }
+      .cat-card[data-status="vendido"] .cc-media img {
+        filter: grayscale(0.75) brightness(0.68) contrast(1.05);
+      }
+      .cc-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border-radius: 3px;
+      }
+      .cc-badge.ok {
+        background: var(--yellow);
+        color: #0b0d10;
+        font-weight: 700;
+      }
+      .cc-badge.sold {
+        background: rgba(10, 12, 14, 0.85);
+        color: var(--mut);
+        border: 1px solid var(--line);
+      }
+      .cc-ref {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        color: rgba(255, 255, 255, 0.8);
+        background: rgba(0, 0, 0, 0.55);
+        padding: 4px 8px;
+        border-radius: 3px;
+      }
+      .cc-body {
+        padding: 22px;
+      }
+      .cc-body h3 {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: 20px;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+      .cc-sub {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        color: var(--yellow);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        display: block;
+      }
+      .cat-card[data-status="vendido"] .cc-sub {
+        color: var(--mut);
+      }
+      .cc-specs {
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 14px;
+        margin-bottom: 18px;
+      }
+      .cc-specs li {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: var(--mut);
+        text-transform: uppercase;
+        border-top: 1px solid var(--line);
+        padding-top: 8px;
+      }
+      .cc-specs li b {
+        display: block;
+        color: var(--ink);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+      .cc-foot .btn {
+        padding: 11px 20px;
+        font-size: 11px;
+      }
+      .cc-dest {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        color: var(--mut);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .cc-dest i {
+        width: 8px;
+        height: 8px;
+        background: #3a4048;
+        transform: rotate(45deg);
+        flex: none;
+      }
+
+      /* CONTACT */
+      #contacto .big {
+        font-family: var(--disp);
+        font-weight: 900;
+        font-size: clamp(44px, 8vw, 120px);
+        line-height: 0.95;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+      }
+      #contacto .big em {
+        font-style: normal;
+        color: transparent;
+        -webkit-text-stroke: 1.5px var(--yellow);
+      }
+      #contacto .c-row {
+        display: flex;
+        gap: 18px;
+        margin-top: 5vh;
+        flex-wrap: wrap;
+      }
+      .c-meta {
+        display: flex;
+        gap: 6vw;
+        margin-top: 9vh;
+        flex-wrap: wrap;
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        color: var(--mut);
+        text-transform: uppercase;
+      }
+      .c-meta b {
+        display: block;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 34px 6vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        background: #08090b;
+        position: relative;
+        z-index: 2;
+      }
+      footer .fbrand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--disp);
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        font-size: 14px;
+      }
+      footer .fbrand svg {
+        width: 28px;
+        height: 28px;
+      }
+      footer p {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        color: var(--mut);
+        text-transform: uppercase;
+      }
+      footer p em {
+        color: var(--yellow);
+        font-style: normal;
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(46px);
+      }
+
+      /* ---------- TABLET ---------- */
+      @media (max-width: 1024px) {
+        #catGrid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .b-grid {
+          grid-template-columns: 1fr;
+        }
+        .b-visual {
+          position: static;
+        }
+      }
+      /* ---------- MOBILE ---------- */
+      @media (max-width: 760px) {
+        :root {
+          --lbh: 4vh;
+        }
+        nav {
+          padding: 14px 5vw;
+        }
+        .nlinks {
+          display: none;
+        }
+        #hero {
+          padding: 100px 6vw 16vh;
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .hero-in {
+          padding-top: 0;
+        }
+        .logo-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+        .logo-mark {
+          width: 96px;
+          height: 96px;
+        }
+        .wordmark .wm1 {
+          font-size: 11vw;
+        }
+        .wordmark .wm2 {
+          font-size: 4.8vw;
+          letter-spacing: 0.24em;
+        }
+        .hero-in h1 {
+          font-size: clamp(20px, 6vw, 32px);
+        }
+        .hero-in p.copy {
+          font-size: 14px;
+        }
+        .hero-spec {
+          display: none;
+        }
+        .scroll-hint {
+          position: static;
+          margin-top: 50px;
+        }
+        .btn {
+          padding: 14px 22px;
+          font-size: 12px;
+        }
+        .panel {
+          top: 14vh;
+          padding: 0 5vw;
+        }
+        .card {
+          padding: 22px;
+          max-width: 100%;
+        }
+        .card h2 {
+          font-size: 24px;
+        }
+        .big-rpm {
+          font-size: 56px;
+        }
+        .statline {
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+        #hud {
+          left: 12px;
+          bottom: calc(var(--lbh) + 12px);
+          gap: 8px;
+        }
+        #hud .hud-state {
+          display: none;
+        }
+        .gauge {
+          padding: 8px 8px 6px;
+        }
+        .gauge svg {
+          width: 82px;
+          height: 52px;
+        }
+        .lbl .tag {
+          font-size: 9px;
+          padding: 6px 10px;
+          letter-spacing: 0.16em;
+        }
+        .lbl .stem {
+          height: 24px;
+        }
+        section.block {
+          padding: 12vh 6vw;
+        }
+        .sec-head {
+          margin-bottom: 6vh;
+        }
+        .sec-head h2 {
+          font-size: clamp(30px, 9vw, 44px);
+        }
+        .b-row {
+          grid-template-columns: 44px 1fr;
+          gap: 14px;
+          padding: 26px 4px;
+        }
+        .b-row .arr {
+          display: none;
+        }
+        .spec-strip {
+          grid-template-columns: 1fr 1fr;
+        }
+        #catGrid {
+          grid-template-columns: 1fr;
+        }
+        .cat-tab {
+          padding: 11px 18px;
+          font-size: 11px;
+        }
+        #contacto .big {
+          font-size: clamp(38px, 12vw, 70px);
+        }
+        .c-meta {
+          gap: 26px;
+        }
+        footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader">
+      <img
+        class="lpiston"
+        src="logo.png"
+        width="70"
+        height="70"
+        alt="Logo JF Motores"
+      />
+      <div class="lbar"><i id="lfill"></i></div>
+      <p>Encendiendo motor…</p>
+    </div>
+
+    <canvas id="webgl"></canvas>
+    <div class="vignette"></div>
+    <div class="grain"></div>
+    <div class="lb top"></div>
+    <div class="lb bot"></div>
+
+    <nav id="nav">
+      <a class="brand" href="#hero" aria-label="JF Motores">
+        <img
+          src="logo.png"
+          alt="Logo JF Motores"
+          style="width: 34px; height: 34px"
+        />
+        <b>JF <em>MOTORES</em></b>
+      </a>
+      <div class="nlinks">
+        <a href="#journey">Proceso</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+      <a
+        class="ncta"
+        href="https://wa.me/573122110262"
+        target="_blank"
+        rel="noopener"
+        >Contáctanos</a
+      >
+    </nav>
+
+    <main>
+      <!-- ============ HERO ============ -->
+      <section id="hero">
+        <div class="hero-in">
+          <div class="kicker">Medellín · Colombia — Motobombas mineras · [PRUEBA SINCRONIZADA]</div>
+          <div class="logo-row" id="logoRow">
+            <img class="logo-mark" src="logo.png" alt="Logo JF Motores" />
+            <div class="wordmark">
+              <span class="wm1">JF MOTORES</span>
+              <span class="wm2">MEDELLÍN</span>
+            </div>
+          </div>
+          <div class="slogan"><i></i>Tranquilidad y confianza</div>
+          <h1>
+            <span class="ln"><i>Motobombas diésel</i></span>
+            <span class="ln"
+              ><i>que <span class="yl">no se detienen</span>,</i></span
+            >
+            <span class="ln"><i>ni a 4 000 metros.</i></span>
+          </h1>
+          <p class="copy">
+            Fabricamos y mantenemos motobombas para minería con motores diésel
+            de alto torque: potencia constante en lodo, abrasión y altura.
+            Ingeniería que responde antes de fallar.
+          </p>
+          <div class="cta-row">
+            <a
+              class="btn y"
+              href="https://wa.me/573122110262"
+              target="_blank"
+              rel="noopener"
+              >Contáctanos
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" /></svg
+            ></a>
+            <a class="btn g" href="#journey">Ver el motor en vivo</a>
+          </div>
+        </div>
+        <div class="scroll-hint">
+          <span class="wire"><i></i></span>Desliza para encender
+        </div>
+        <div class="hero-spec">
+          <b>UNIDAD JF-M25 · 4 CILINDROS</b><br />DIÉSEL · 25 HP · SUCCIÓN 6″<br />LISTA
+          PARA TAJO ABIERTO
+        </div>
+      </section>
+
+      <!-- ============ JOURNEY ============ -->
+      <section id="journey">
+        <div class="phase" id="ph-a">
+          <div class="panel">
+            <div class="card">
+              <div class="pk">01 / Encendido</div>
+              <h2>Tranquilidad y confianza en nuestros motores.</h2>
+              <p>
+                Un giro de llave. Los cuatro cilindros respiran en secuencia
+                1-3-4-2, el escape libera su primer aliento y todo el sistema
+                cobra vida.
+              </p>
+              <div class="chips">
+                <div class="chip">
+                  <span class="dot"></span>Mecánica de excelencia<b>ISO 9001</b>
+                </div>
+                <div class="chip">
+                  <span class="dot"></span>Potencia sin igual<b>25 HP</b>
+                </div>
+                <div class="chip">
+                  <span class="dot"></span>Asistencia 24/7<b>EN RUTA</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase" id="ph-b">
+          <div class="panel">
+            <div class="card right">
+              <div class="pk">02 / Revolución</div>
+              <div class="big-rpm">
+                <span id="bigRpm">0000</span> <small>RPM</small>
+              </div>
+              <div class="statline">
+                <span>Torque<b id="stTorque">0 N·m</b></span>
+                <span>Temp<b id="stTemp">21 °C</b></span>
+                <span>Caudal<b id="stFlow">0 L/min</b></span>
+              </div>
+              <p style="margin-top: 18px">
+                Régimen pleno. Dos pistones suben, dos bajan: equilibrio
+                perfecto de cigüeñal para sostener la bomba donde otros motores
+                se rinden.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase" id="ph-c">
+          <div class="panel">
+            <div class="card">
+              <div class="pk">03 / Explora el interior</div>
+              <h2>Ingeniería por dentro.</h2>
+              <p>
+                Despiece técnico en vivo: cada pieza etiquetada, cada tolerancia
+                bajo control. Sigue bajando para recorrer el motor pieza por
+                pieza.
+              </p>
+              <div class="hint-down">▼ Continúa el despiece</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase" id="ph-d">
+          <div class="panel">
+            <div class="card right">
+              <div class="pk">04 / Apagado</div>
+              <h2>El silencio también es confianza.</h2>
+              <p>
+                Cierre de ciclo: las piezas vuelven a su sitio, el bloque enfría
+                y queda listo para la siguiente guardia. Así termina cada
+                jornada — así empieza la tuya.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="labels">
+        <div class="lbl" id="lbl-escape">
+          <div class="tag"><b>01</b> Escape</div>
+          <div class="stem"></div>
+        </div>
+        <div class="lbl" id="lbl-valvulas">
+          <div class="tag"><b>02</b> Válvulas</div>
+          <div class="stem"></div>
+        </div>
+        <div class="lbl" id="lbl-pistones">
+          <div class="tag"><b>03</b> Pistones</div>
+          <div class="stem"></div>
+        </div>
+        <div class="lbl" id="lbl-tanque">
+          <div class="tag"><b>04</b> Tanque diésel</div>
+          <div class="stem"></div>
+        </div>
+        <div class="lbl" id="lbl-tablero">
+          <div class="tag"><b>05</b> Tablero</div>
+          <div class="stem"></div>
+        </div>
+        <div class="lbl" id="lbl-luz">
+          <div class="tag"><b>06</b> Luz ambiental</div>
+          <div class="stem"></div>
+        </div>
+      </div>
+
+      <div id="hud">
+        <div class="hud-state">Estado<b id="hudState">STANDBY</b></div>
+        <div class="gauge">
+          <svg viewBox="0 0 120 74">
+            <path
+              d="M12 66 A50 50 0 0 1 108 66"
+              fill="none"
+              stroke="#23282e"
+              stroke-width="6"
+              stroke-linecap="round"
+            />
+            <path
+              id="rpmArc"
+              d="M12 66 A50 50 0 0 1 108 66"
+              fill="none"
+              stroke="#F7C600"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-dasharray="151"
+              stroke-dashoffset="151"
+            />
+            <g stroke="#5a636d" stroke-width="2">
+              <line x1="14" y1="62" x2="20" y2="59" />
+              <line x1="24" y1="38" x2="29" y2="41" />
+              <line x1="45" y1="22" x2="47" y2="27" />
+              <line x1="73" y1="22" x2="71" y2="27" />
+              <line x1="96" y1="38" x2="91" y2="41" />
+              <line x1="106" y1="62" x2="100" y2="59" />
+            </g>
+            <line
+              id="needleRpm"
+              x1="60"
+              y1="66"
+              x2="60"
+              y2="24"
+              stroke="#F7C600"
+              stroke-width="3"
+              stroke-linecap="round"
+              transform="rotate(-80 60 66)"
+            />
+            <circle cx="60" cy="66" r="5" fill="#F7C600" />
+          </svg>
+          <div class="gv" id="txtRpm">0</div>
+          <div class="gt">RPM</div>
+        </div>
+        <div class="gauge">
+          <svg viewBox="0 0 120 74">
+            <path
+              d="M12 66 A50 50 0 0 1 108 66"
+              fill="none"
+              stroke="#23282e"
+              stroke-width="6"
+              stroke-linecap="round"
+            />
+            <path
+              id="tmpArc"
+              d="M12 66 A50 50 0 0 1 108 66"
+              fill="none"
+              stroke="#ff7a45"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-dasharray="151"
+              stroke-dashoffset="151"
+            />
+            <line
+              id="needleTemp"
+              x1="60"
+              y1="66"
+              x2="60"
+              y2="24"
+              stroke="#ff7a45"
+              stroke-width="3"
+              stroke-linecap="round"
+              transform="rotate(-80 60 66)"
+            />
+            <circle cx="60" cy="66" r="5" fill="#ff7a45" />
+          </svg>
+          <div class="gv" id="txtTemp" style="color: #ff7a45">21°</div>
+          <div class="gt">Temp</div>
+        </div>
+      </div>
+
+      <div id="rail">
+        <div class="rd" data-r="a"><span>Encendido</span><i></i></div>
+        <div class="rd" data-r="b"><span>Revolución</span><i></i></div>
+        <div class="rd" data-r="c"><span>Despiece</span><i></i></div>
+        <div class="rd" data-r="d"><span>Apagado</span><i></i></div>
+      </div>
+
+      <!-- ============ POST ============ -->
+      <div class="post">
+        <div class="marquee">
+          <div class="track" id="mqTrack">
+            <span>JF Motores Medellín</span><span>◆</span
+            ><span>Tranquilidad y confianza</span><span>◆</span>
+            <span>Succión 6″</span><span>◆</span><span>Hasta 25 HP</span
+            ><span>◆</span><span>Arranque eléctrico</span><span>◆</span>
+            <span>Caudal 4 000 L/min</span><span>◆</span><span>Cabeza 80 m</span
+            ><span>◆</span><span>Servicio 24/7</span><span>◆</span>
+          </div>
+        </div>
+
+        <section class="block" id="beneficios">
+          <div class="sec-head">
+            <div>
+              <div class="sk reveal">Beneficios</div>
+              <h2 class="reveal">
+                Construidas para la <em>mina</em>, no para la vitrina.
+              </h2>
+            </div>
+            <p class="reveal">
+              Cada unidad JF sale del taller probada bajo carga real. Esto es lo
+              que obtienes desde el primer arranque.
+            </p>
+          </div>
+          <div class="b-grid">
+            <!-- Imágenes con URLs vigentes + fallback automático -->
+            <div class="b-visual reveal">
+              <img
+                src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/165e11408-37e4-4eec-908d-1dfbb476b268.png"
+                alt="Motobomba diésel JF Motores"
+              />
+              <div class="bv-bar">
+                <span>Unidad JF-M25</span><span>Prueba de taller · OK</span>
+              </div>
+            </div>
+            <div>
+              <div class="b-row reveal">
+                <div class="num">/01</div>
+                <div>
+                  <h3>Mecánica de excelencia</h3>
+                  <p>
+                    Bloques fundidos de grado minero, torque verificado en banco
+                    y tolerancias certificadas pieza por pieza antes del
+                    despacho.
+                  </p>
+                </div>
+                <div class="arr">↗</div>
+              </div>
+              <div class="b-row reveal">
+                <div class="num">/02</div>
+                <div>
+                  <h3>Potencia sin igual</h3>
+                  <p>
+                    Curva de torque plana desde 1 200 rpm: la bomba mantiene
+                    caudal constante incluso con lodo denso y sólidos en
+                    suspensión.
+                  </p>
+                </div>
+                <div class="arr">↗</div>
+              </div>
+              <div class="b-row reveal">
+                <div class="num">/03</div>
+                <div>
+                  <h3>Asistencia 24/7</h3>
+                  <p>
+                    Equipo técnico en ruta, repuestos originales en stock y
+                    respuesta promedio menor a 6 horas en cualquier tajo de
+                    Antioquia.
+                  </p>
+                </div>
+                <div class="arr">↗</div>
+              </div>
+              <div class="b-row reveal">
+                <div class="num">/04</div>
+                <div>
+                  <h3>ADN de altura</h3>
+                  <p>
+                    Calibración para operación sobre 2 500 m s. n. m.: inyección
+                    compensada, arranque en frío y refrigeración
+                    sobredimensionada.
+                  </p>
+                </div>
+                <div class="arr">↗</div>
+              </div>
+            </div>
+          </div>
+          <div class="spec-strip" id="specs">
+            <div class="reveal"><b>25 HP</b><span>Potencia nominal</span></div>
+            <div class="reveal"><b>4 000</b><span>L/min de caudal</span></div>
+            <div class="reveal"><b>80 m</b><span>Cabeza máxima</span></div>
+            <div class="reveal"><b>24/7</b><span>Soporte en mina</span></div>
+          </div>
+        </section>
+
+        <!-- ============ CATÁLOGO ============ -->
+        <section class="block" id="catalogo">
+          <div class="sec-head">
+            <div>
+              <div class="sk reveal">Catálogo</div>
+              <h2 class="reveal">
+                Unidades en patio y <em>proyectos entregados</em>.
+              </h2>
+            </div>
+            <p class="reveal">
+              Explora las motobombas disponibles para entrega inmediata y las
+              unidades que ya están trabajando en las minas del país.
+            </p>
+          </div>
+
+          <div class="cat-tabs reveal">
+            <button class="cat-tab active" data-filter="disponible">
+              Disponibles <b id="countD">0</b>
+            </button>
+            <button class="cat-tab" data-filter="vendido">
+              Vendidos <b id="countV">0</b>
+            </button>
+          </div>
+
+          <div id="catGrid">
+            <article class="cat-card" data-status="disponible">
+              <div class="cc-media">
+                <img
+                  src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/1e9619207-c788-4e55-a48f-fa2fabac43cd.png"
+                  alt="Motobomba JF-M12"
+                  loading="lazy"
+                />
+                <span class="cc-badge ok">Disponible</span
+                ><span class="cc-ref">REF JF-M12</span>
+              </div>
+              <div class="cc-body">
+                <h3>JF-M12</h3>
+                <span class="cc-sub">Compacta · socavón</span>
+                <ul class="cc-specs">
+                  <li>Potencia<b>12 HP</b></li>
+                  <li>Succión<b>4″</b></li>
+                  <li>Caudal<b>1 800 L/min</b></li>
+                  <li>Cabeza<b>45 m</b></li>
+                </ul>
+                <div class="cc-foot">
+                  <a
+                    class="btn y"
+                    href="https://wa.me/573122110262"
+                    target="_blank"
+                    rel="noopener"
+                    >Cotizar</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cat-card" data-status="disponible">
+              <div class="cc-media">
+                <img
+                  src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/165e11408-37e4-4eec-908d-1dfbb476b268.png"
+                  alt="Motobomba JF-M25"
+                  loading="lazy"
+                />
+                <span class="cc-badge ok">Disponible</span
+                ><span class="cc-ref">REF JF-M25</span>
+              </div>
+              <div class="cc-body">
+                <h3>JF-M25</h3>
+                <span class="cc-sub">Minera · tajo abierto</span>
+                <ul class="cc-specs">
+                  <li>Potencia<b>25 HP</b></li>
+                  <li>Succión<b>6″</b></li>
+                  <li>Caudal<b>4 000 L/min</b></li>
+                  <li>Cabeza<b>80 m</b></li>
+                </ul>
+                <div class="cc-foot">
+                  <a
+                    class="btn y"
+                    href="https://wa.me/573122110262"
+                    target="_blank"
+                    rel="noopener"
+                    >Cotizar</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cat-card" data-status="disponible">
+              <div class="cc-media">
+                <img
+                  src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/171e25dc3-f68c-49db-af7c-8d1254a7094c.png"
+                  alt="Motobomba JF-M40"
+                  loading="lazy"
+                />
+                <span class="cc-badge ok">Disponible</span
+                ><span class="cc-ref">REF JF-M40</span>
+              </div>
+              <div class="cc-body">
+                <h3>JF-M40</h3>
+                <span class="cc-sub">Alta montaña · +3 000 m</span>
+                <ul class="cc-specs">
+                  <li>Potencia<b>40 HP</b></li>
+                  <li>Succión<b>8″</b></li>
+                  <li>Caudal<b>6 500 L/min</b></li>
+                  <li>Cabeza<b>95 m</b></li>
+                </ul>
+                <div class="cc-foot">
+                  <a
+                    class="btn y"
+                    href="https://wa.me/573122110262"
+                    target="_blank"
+                    rel="noopener"
+                    >Cotizar</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cat-card" data-status="vendido">
+              <div class="cc-media">
+                <img
+                  src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/14edd4c60-c8fa-4e3c-8f57-fac31d7f7ef8.png"
+                  alt="Unidad entregada mina El Roble"
+                  loading="lazy"
+                />
+                <span class="cc-badge sold">Vendido</span
+                ><span class="cc-ref">REF JF-M30</span>
+              </div>
+              <div class="cc-body">
+                <h3>JF-M30</h3>
+                <span class="cc-sub">Entregada · 2024</span>
+                <ul class="cc-specs">
+                  <li>Destino<b>Mina El Roble</b></li>
+                  <li>Operación<b>Tajo abierto</b></li>
+                  <li>Horas<b>+3 200 h</b></li>
+                  <li>Estado<b>En servicio</b></li>
+                </ul>
+                <div class="cc-dest"><i></i>Drenado de tajo · turno 24/7</div>
+              </div>
+            </article>
+
+            <article class="cat-card" data-status="vendido">
+              <div class="cc-media">
+                <img
+                  src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/1da49a78f-c3fc-4928-b82a-0ba6f02a7cff.png"
+                  alt="Unidad entregada Río Nechí"
+                  loading="lazy"
+                />
+                <span class="cc-badge sold">Vendido</span
+                ><span class="cc-ref">REF JF-M18</span>
+              </div>
+              <div class="cc-body">
+                <h3>JF-M18</h3>
+                <span class="cc-sub">Entregada · 2023</span>
+                <ul class="cc-specs">
+                  <li>Destino<b>Río Nechí</b></li>
+                  <li>Operación<b>Draga aluvial</b></li>
+                  <li>Horas<b>+5 100 h</b></li>
+                  <li>Estado<b>En servicio</b></li>
+                </ul>
+                <div class="cc-dest"><i></i>Bombeo de lodo abrasivo</div>
+              </div>
+            </article>
+
+            <article class="cat-card" data-status="vendido">
+              <div class="cc-media">
+                <img
+                  src="https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/1241582a4-942b-4d46-a723-f22f9bbf2a73.png"
+                  alt="Unidad entregada Mina La Antorcha"
+                  loading="lazy"
+                />
+                <span class="cc-badge sold">Vendido</span
+                ><span class="cc-ref">REF JF-M25B</span>
+              </div>
+              <div class="cc-body">
+                <h3>JF-M25 B</h3>
+                <span class="cc-sub">Entregada · 2025</span>
+                <ul class="cc-specs">
+                  <li>Destino<b>Mina La Antorcha</b></li>
+                  <li>Operación<b>Socavón</b></li>
+                  <li>Horas<b>+900 h</b></li>
+                  <li>Estado<b>En servicio</b></li>
+                </ul>
+                <div class="cc-dest"><i></i>Desagüe de socavón · 2 800 m</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="block" id="contacto">
+          <div class="sk reveal">Contacto</div>
+          <div class="big reveal">
+            ¿Listo para operar<br /><em>sin pausas?</em>
+          </div>
+          <div class="c-row reveal">
+            <a
+              class="btn y"
+              href="https://wa.me/573122110262"
+              target="_blank"
+              rel="noopener"
+              >Contáctanos
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" /></svg
+            ></a>
+            <a class="btn g" href="mailto:contacto@jf-motores.co">Escríbenos</a>
+          </div>
+          <div class="c-meta reveal">
+            <div><b>Taller</b>Cra. 52 # 12-40, Medellín</div>
+            <div><b>Línea directa</b>+57 312 2110262</div>
+            <div><b>Horario mina</b>24 horas · 7 días</div>
+          </div>
+        </section>
+
+        <footer>
+          <div class="fbrand">
+            <img
+              src="logo.png"
+              alt="Logo JF Motores"
+              style="width: 34px; height: 34px"
+            />
+            JF <em style="color: var(--yellow)">MOTORES</em>
+          </div>
+          <p>
+            © 2025 JF Motores — Medellín, Colombia ·
+            <em>Tranquilidad y confianza</em>
+          </p>
+        </footer>
+      </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+      const isMobile = window.matchMedia("(max-width:760px)").matches;
+
+      /* ---- Fallback automático: si alguna imagen falla, se reemplaza por un placeholder de marca ---- */
+      const IMG_FALLBACK =
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%230d1014'/%3E%3Cpolygon points='400,210 490,262 490,366 400,418 310,366 310,262' fill='%23F7C600'/%3E%3Crect x='382' y='252' width='36' height='30' rx='4' fill='%230b0d10'/%3E%3Crect x='392' y='282' width='16' height='36' fill='%230b0d10'/%3E%3Ccircle cx='400' cy='330' r='17' fill='%230b0d10'/%3E%3Ctext x='400' y='480' fill='%2398a2ad' font-family='monospace' font-size='22' letter-spacing='6' text-anchor='middle'%3EJF MOTORES%3C/text%3E%3C/svg%3E";
+      document.addEventListener(
+        "error",
+        function (ev) {
+          const t = ev.target;
+          if (t && t.tagName === "IMG" && !t.dataset.fb) {
+            t.dataset.fb = "1";
+            t.src = IMG_FALLBACK;
+          }
+        },
+        true,
+      );
+
+      /* ================= STATE ================= */
+      const S = {
+        camTheta: 0.35,
+        camPhi: 1.22,
+        camR: 13.5,
+        camTY: 1.5,
+        rpm: 0,
+        smoke: 0,
+        explode: 0,
+        glow: 0,
+        shake: 0,
+        atmo: 0,
+      };
+      let heat = 0,
+        pistonPhase = 0,
+        flyRot = 0;
+      const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+      let inJourney = false;
+
+      /* ================= THREE ================= */
+      const canvas = document.getElementById("webgl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, isMobile ? 1.6 : 2),
+      );
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.shadowMap.enabled = !isMobile;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0d1014);
+      scene.fog = new THREE.FogExp2(0x0d1014, 0.03);
+      const camera = new THREE.PerspectiveCamera(
+        42,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        120,
+      );
+
+      /* zoom-out responsivo */
+      const CAMK = isMobile ? 1.6 : 1;
+      const RMIN = isMobile ? 14.5 : 0;
+      if (isMobile) {
+        camera.fov = 55;
+        camera.updateProjectionMatrix();
+      }
+
+      const hemi = new THREE.HemisphereLight(0x39424d, 0x0a0c0e, 0.75);
+      scene.add(hemi);
+      const key = new THREE.DirectionalLight(0xffe3b0, 1.15);
+      key.position.set(6, 9, 5);
+      key.castShadow = !isMobile;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.left = -10;
+      key.shadow.camera.right = 10;
+      key.shadow.camera.top = 10;
+      key.shadow.camera.bottom = -10;
+      scene.add(key);
+      const rim = new THREE.SpotLight(0xf7c600, 1.2, 40, Math.PI / 4, 0.5, 1);
+      rim.position.set(-7, 6, -6);
+      scene.add(rim);
+      const fill = new THREE.PointLight(0x3d5a77, 0.5, 30);
+      fill.position.set(4, 2, -6);
+      scene.add(fill);
+      const underGlow = new THREE.PointLight(0xf7c600, 0, 9, 2);
+      underGlow.position.set(0, 0.4, 0);
+      scene.add(underGlow);
+      const smokeLight = new THREE.PointLight(0xffb066, 0, 7, 2);
+      smokeLight.position.set(1.7, 4.4, -0.95);
+      scene.add(smokeLight);
+
+      const ground = new THREE.Mesh(
+        new THREE.CircleGeometry(30, 48),
+        new THREE.MeshStandardMaterial({
+          color: 0x0c0e11,
+          roughness: 0.95,
+          metalness: 0.1,
+        }),
+      );
+      ground.rotation.x = -Math.PI / 2;
+      ground.receiveShadow = true;
+      scene.add(ground);
+      const floorRing = new THREE.Mesh(
+        new THREE.RingGeometry(4.6, 4.75, 72),
+        new THREE.MeshBasicMaterial({
+          color: 0xf7c600,
+          transparent: true,
+          opacity: 0.12,
+        }),
+      );
+      floorRing.rotation.x = -Math.PI / 2;
+      floorRing.position.y = 0.012;
+      scene.add(floorRing);
+
+      const MAT = {
+        steel: new THREE.MeshStandardMaterial({
+          color: 0x9aa0a6,
+          metalness: 0.85,
+          roughness: 0.35,
+        }),
+        iron: new THREE.MeshStandardMaterial({
+          color: 0x3a3f45,
+          metalness: 0.8,
+          roughness: 0.5,
+        }),
+        dark: new THREE.MeshStandardMaterial({
+          color: 0x1a1d21,
+          metalness: 0.6,
+          roughness: 0.6,
+        }),
+        yellow: new THREE.MeshStandardMaterial({
+          color: 0xf7c600,
+          metalness: 0.35,
+          roughness: 0.45,
+        }),
+        chrome: new THREE.MeshStandardMaterial({
+          color: 0xdfe4ea,
+          metalness: 1.0,
+          roughness: 0.16,
+        }),
+        glass: new THREE.MeshStandardMaterial({
+          color: 0x9fd8ff,
+          metalness: 0.1,
+          roughness: 0.08,
+          transparent: true,
+          opacity: 0.22,
+          depthWrite: false,
+        }),
+        glow: new THREE.MeshStandardMaterial({
+          color: 0xf7c600,
+          emissive: 0xf7c600,
+          emissiveIntensity: 0,
+        }),
+        screen: new THREE.MeshStandardMaterial({
+          color: 0x141414,
+          emissive: 0xf7c600,
+          emissiveIntensity: 0,
+        }),
+        white: new THREE.MeshStandardMaterial({
+          color: 0xe8ecef,
+          roughness: 0.4,
+          metalness: 0.1,
+        }),
+      };
+      function mk(geo, mat, x, y, z) {
+        const m = new THREE.Mesh(geo, mat);
+        m.position.set(x || 0, y || 0, z || 0);
+        m.castShadow = true;
+        return m;
+      }
+
+      const engine = new THREE.Group();
+      scene.add(engine);
+      const parts = [];
+      function regPart(g, dx, dy, dz) {
+        g.userData.dir = new THREE.Vector3(dx, dy, dz);
+        g.userData.base = g.position.clone();
+        parts.push(g);
+      }
+
+      const skid = new THREE.Group();
+      skid.add(
+        mk(new THREE.BoxGeometry(6.8, 0.24, 2.6), MAT.dark, -0.2, 0.14, 0),
+      );
+      skid.add(
+        mk(new THREE.BoxGeometry(6.8, 0.1, 0.14), MAT.yellow, -0.2, 0.06, 1.28),
+      );
+      skid.add(
+        mk(
+          new THREE.BoxGeometry(6.8, 0.1, 0.14),
+          MAT.yellow,
+          -0.2,
+          0.06,
+          -1.28,
+        ),
+      );
+      engine.add(skid);
+
+      const luzG = new THREE.Group();
+      luzG.add(
+        mk(new THREE.BoxGeometry(6.2, 0.05, 2.1), MAT.glow, -0.2, 0.035, 0),
+      );
+      engine.add(luzG);
+      regPart(luzG, 0, -1.15, 0);
+
+      const CYL_X = [-1.275, -0.425, 0.425, 1.275];
+      const blockG = new THREE.Group();
+      blockG.add(mk(new THREE.BoxGeometry(3.4, 1.2, 1.2), MAT.iron, 0, 0.9, 0));
+      blockG.add(
+        mk(new THREE.BoxGeometry(3.46, 0.12, 1.26), MAT.steel, 0, 1.52, 0),
+      );
+      CYL_X.forEach((cx) =>
+        blockG.add(
+          mk(new THREE.BoxGeometry(0.09, 1.0, 1.24), MAT.dark, cx, 0.9, 0),
+        ),
+      );
+      engine.add(blockG);
+
+      const linerG = new THREE.Group();
+      CYL_X.forEach((cx) => {
+        linerG.add(
+          mk(
+            new THREE.CylinderGeometry(0.3, 0.3, 0.8, 24, 1, true),
+            MAT.glass,
+            cx,
+            1.9,
+            0,
+          ),
+        );
+        const rt = mk(
+          new THREE.TorusGeometry(0.3, 0.025, 10, 24),
+          MAT.steel,
+          cx,
+          2.3,
+          0,
+        );
+        rt.rotation.x = Math.PI / 2;
+        linerG.add(rt);
+      });
+      engine.add(linerG);
+      regPart(linerG, 0, 1.5, 1.1);
+
+      const PISTON_PHASE = [0, Math.PI, Math.PI, 0];
+      const pistonG = new THREE.Group();
+      const pistonBodies = [];
+      CYL_X.forEach((cx) => {
+        const pb = new THREE.Group();
+        pb.position.set(cx, 1.92, 0);
+        pb.add(
+          mk(
+            new THREE.CylinderGeometry(0.25, 0.25, 0.4, 22),
+            MAT.chrome,
+            0,
+            0,
+            0,
+          ),
+        );
+        for (let r = 0; r < 3; r++) {
+          const ring = mk(
+            new THREE.TorusGeometry(0.25, 0.014, 8, 22),
+            MAT.dark,
+            0,
+            0.11 - r * 0.07,
+            0,
+          );
+          ring.rotation.x = Math.PI / 2;
+          pb.add(ring);
+        }
+        pb.add(
+          mk(
+            new THREE.CylinderGeometry(0.05, 0.07, 0.7, 10),
+            MAT.steel,
+            0,
+            -0.5,
+            0,
+          ),
+        );
+        const pin = mk(
+          new THREE.CylinderGeometry(0.06, 0.06, 0.3, 10),
+          MAT.dark,
+          0,
+          -0.05,
+          0,
+        );
+        pin.rotation.x = Math.PI / 2;
+        pb.add(pin);
+        pistonG.add(pb);
+        pistonBodies.push(pb);
+      });
+      engine.add(pistonG);
+      regPart(pistonG, 0, 2.9, 0);
+
+      const headG = new THREE.Group();
+      headG.add(
+        mk(new THREE.BoxGeometry(3.4, 0.22, 1.25), MAT.iron, 0, 2.41, 0),
+      );
+      headG.add(
+        mk(new THREE.BoxGeometry(3.3, 0.2, 0.95), MAT.yellow, 0, 2.62, 0),
+      );
+      CYL_X.forEach((cx) =>
+        [-0.22, 0.22].forEach((zo) =>
+          headG.add(
+            mk(
+              new THREE.CylinderGeometry(0.045, 0.045, 0.18, 10),
+              MAT.chrome,
+              cx,
+              2.8,
+              zo,
+            ),
+          ),
+        ),
+      );
+      engine.add(headG);
+      regPart(headG, 0, 4.4, 0);
+
+      const escG = new THREE.Group();
+      CYL_X.forEach((cx) => {
+        const dp = mk(
+          new THREE.CylinderGeometry(0.05, 0.05, 0.4, 10),
+          MAT.steel,
+          cx,
+          2.42,
+          -0.78,
+        );
+        dp.rotation.x = Math.PI / 2;
+        escG.add(dp);
+      });
+      const collector = mk(
+        new THREE.CylinderGeometry(0.07, 0.07, 3.0, 14),
+        MAT.steel,
+        0,
+        2.42,
+        -0.98,
+      );
+      collector.rotation.z = Math.PI / 2;
+      escG.add(collector);
+      escG.add(
+        mk(
+          new THREE.CylinderGeometry(0.09, 0.09, 1.3, 14),
+          MAT.steel,
+          1.7,
+          3.1,
+          -0.98,
+        ),
+      );
+      escG.add(
+        mk(
+          new THREE.CylinderGeometry(0.18, 0.18, 0.7, 18),
+          MAT.chrome,
+          1.7,
+          4.05,
+          -0.98,
+        ),
+      );
+      escG.add(
+        mk(
+          new THREE.CylinderGeometry(0.07, 0.09, 0.3, 12),
+          MAT.dark,
+          1.7,
+          4.55,
+          -0.98,
+        ),
+      );
+      const smokeAnchor = new THREE.Object3D();
+      smokeAnchor.position.set(1.7, 4.75, -0.98);
+      escG.add(smokeAnchor);
+      engine.add(escG);
+      regPart(escG, 1.2, 2.6, -1.4);
+
+      const tankG = new THREE.Group();
+      tankG.add(
+        mk(new THREE.BoxGeometry(0.9, 0.55, 1.0), MAT.yellow, -2.45, 1.95, 0),
+      );
+      tankG.add(
+        mk(
+          new THREE.CylinderGeometry(0.11, 0.11, 0.1, 14),
+          MAT.dark,
+          -2.45,
+          2.27,
+          0,
+        ),
+      );
+      tankG.add(
+        mk(new THREE.BoxGeometry(0.08, 0.5, 0.08), MAT.dark, -2.45, 1.45, 0.4),
+      );
+      tankG.add(
+        mk(new THREE.BoxGeometry(0.08, 0.5, 0.08), MAT.dark, -2.45, 1.45, -0.4),
+      );
+      engine.add(tankG);
+      regPart(tankG, -2.2, 2.2, 0);
+
+      const radG = new THREE.Group();
+      radG.add(
+        mk(new THREE.BoxGeometry(2.2, 1.25, 0.18), MAT.dark, 0, 1.15, 1.05),
+      );
+      for (let i = 0; i < 6; i++)
+        radG.add(
+          mk(
+            new THREE.BoxGeometry(2.1, 0.03, 0.2),
+            MAT.iron,
+            0,
+            0.68 + i * 0.19,
+            1.05,
+          ),
+        );
+      radG.add(
+        mk(new THREE.BoxGeometry(2.3, 0.1, 0.26), MAT.yellow, 0, 1.83, 1.05),
+      );
+      engine.add(radG);
+      regPart(radG, 0, 0.5, 3.0);
+      const fanG = new THREE.Group();
+      fanG.position.set(0, 1.15, 0.82);
+      for (let i = 0; i < 5; i++) {
+        const blade = mk(
+          new THREE.BoxGeometry(0.12, 0.5, 0.02),
+          MAT.steel,
+          0,
+          0.28,
+          0,
+        );
+        const pv = new THREE.Group();
+        pv.rotation.z = (i / 5) * Math.PI * 2;
+        blade.rotation.x = 0.5;
+        pv.add(blade);
+        fanG.add(pv);
+      }
+      engine.add(fanG);
+
+      const flyG = new THREE.Group();
+      flyG.position.set(2.1, 1.05, 0);
+      const flyMesh = mk(
+        new THREE.CylinderGeometry(0.82, 0.82, 0.16, 36),
+        MAT.iron,
+        0,
+        0,
+        0,
+      );
+      flyMesh.rotation.z = Math.PI / 2;
+      flyG.add(flyMesh);
+      const flyHub = mk(
+        new THREE.CylinderGeometry(0.2, 0.2, 0.24, 20),
+        MAT.chrome,
+        0,
+        0,
+        0,
+      );
+      flyHub.rotation.z = Math.PI / 2;
+      flyG.add(flyHub);
+      for (let i = 0; i < 4; i++) {
+        const spoke = mk(
+          new THREE.BoxGeometry(0.18, 0.62, 0.06),
+          MAT.dark,
+          0,
+          0,
+          0,
+        );
+        const pv = new THREE.Group();
+        pv.rotation.x = (i / 4) * Math.PI * 2 + 0.4;
+        spoke.position.y = 0.4;
+        pv.add(spoke);
+        flyG.add(pv);
+      }
+      engine.add(flyG);
+      regPart(flyG, 3.0, 0.5, 0);
+
+      const pumpG = new THREE.Group();
+      const vol = mk(
+        new THREE.CylinderGeometry(0.55, 0.55, 0.34, 28),
+        MAT.yellow,
+        -2.75,
+        0.85,
+        0,
+      );
+      vol.rotation.z = Math.PI / 2;
+      pumpG.add(vol);
+      const suc = mk(
+        new THREE.CylinderGeometry(0.2, 0.2, 0.5, 18),
+        MAT.steel,
+        -3.2,
+        0.85,
+        0,
+      );
+      suc.rotation.z = Math.PI / 2;
+      pumpG.add(suc);
+      pumpG.add(
+        mk(
+          new THREE.CylinderGeometry(0.17, 0.17, 0.6, 18),
+          MAT.steel,
+          -3.0,
+          1.3,
+          0,
+        ),
+      );
+      engine.add(pumpG);
+      regPart(pumpG, -3.0, 0.4, 0);
+
+      const tabG = new THREE.Group();
+      tabG.position.set(2.5, 1.85, 0.95);
+      tabG.rotation.y = 0.55;
+      tabG.rotation.x = -0.12;
+      tabG.add(mk(new THREE.BoxGeometry(1.15, 0.72, 0.1), MAT.dark, 0, 0, 0));
+      tabG.add(
+        mk(new THREE.BoxGeometry(1.25, 0.08, 0.14), MAT.yellow, 0, 0.4, 0),
+      );
+      const tFace1 = mk(
+        new THREE.CylinderGeometry(0.17, 0.17, 0.03, 24),
+        MAT.white,
+        -0.3,
+        0.1,
+        0.06,
+      );
+      tFace1.rotation.x = Math.PI / 2;
+      tabG.add(tFace1);
+      const tFace2 = mk(
+        new THREE.CylinderGeometry(0.17, 0.17, 0.03, 24),
+        MAT.white,
+        0.3,
+        0.1,
+        0.06,
+      );
+      tFace2.rotation.x = Math.PI / 2;
+      tabG.add(tFace2);
+      const tNeedles = [];
+      [-0.3, 0.3].forEach((nx) => {
+        const pv = new THREE.Group();
+        pv.position.set(nx, 0.1, 0.085);
+        pv.add(
+          mk(new THREE.BoxGeometry(0.02, 0.13, 0.012), MAT.dark, 0, 0.045, 0),
+        );
+        tabG.add(pv);
+        tNeedles.push(pv);
+      });
+      tabG.add(
+        mk(new THREE.BoxGeometry(0.62, 0.16, 0.02), MAT.screen, 0, -0.2, 0.06),
+      );
+      [-0.42, 0, 0.42].forEach((ix) =>
+        tabG.add(
+          mk(
+            new THREE.CylinderGeometry(0.025, 0.025, 0.03, 10),
+            MAT.yellow,
+            ix,
+            -0.32,
+            0.06,
+          ),
+        ),
+      );
+      tabG.add(
+        mk(
+          new THREE.CylinderGeometry(0.05, 0.06, 1.7, 10),
+          MAT.iron,
+          0,
+          -1.0,
+          -0.1,
+        ),
+      );
+      engine.add(tabG);
+      regPart(tabG, 1.6, 1.4, 2.4);
+
+      /* labels */
+      const labelDefs = [
+        {
+          el: document.getElementById("lbl-escape"),
+          parent: escG,
+          off: new THREE.Vector3(1.7, 4.05, -0.98),
+          th: 0.5,
+        },
+        {
+          el: document.getElementById("lbl-valvulas"),
+          parent: headG,
+          off: new THREE.Vector3(0, 2.85, 0),
+          th: 0.58,
+        },
+        {
+          el: document.getElementById("lbl-pistones"),
+          parent: pistonG,
+          off: new THREE.Vector3(0.425, 2.25, 0),
+          th: 0.66,
+        },
+        {
+          el: document.getElementById("lbl-tanque"),
+          parent: tankG,
+          off: new THREE.Vector3(-2.45, 2.3, 0),
+          th: 0.74,
+        },
+        {
+          el: document.getElementById("lbl-tablero"),
+          parent: tabG,
+          off: new THREE.Vector3(0, 0.5, 0.1),
+          th: 0.82,
+        },
+        {
+          el: document.getElementById("lbl-luz"),
+          parent: luzG,
+          off: new THREE.Vector3(2.6, 0.05, 0.8),
+          th: 0.9,
+        },
+      ];
+      labelDefs.forEach((d) => {
+        d.anchor = new THREE.Object3D();
+        d.anchor.position.copy(d.off);
+        d.parent.add(d.anchor);
+      });
+
+      /* smoke */
+      function makeSmokeTex() {
+        const c = document.createElement("canvas");
+        c.width = c.height = 128;
+        const g = c.getContext("2d");
+        const gr = g.createRadialGradient(64, 64, 4, 64, 64, 62);
+        gr.addColorStop(0, "rgba(255,255,255,.95)");
+        gr.addColorStop(0.35, "rgba(255,255,255,.55)");
+        gr.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = gr;
+        g.fillRect(0, 0, 128, 128);
+        return new THREE.CanvasTexture(c);
+      }
+      const smokeTex = makeSmokeTex();
+      const smokePool = [];
+      const POOL_N = isMobile ? 90 : 180;
+      for (let i = 0; i < POOL_N; i++) {
+        const m = new THREE.SpriteMaterial({
+          map: smokeTex,
+          transparent: true,
+          depthWrite: false,
+          opacity: 0,
+          color: 0xd6dade,
+        });
+        const sp = new THREE.Sprite(m);
+        sp.visible = false;
+        scene.add(sp);
+        smokePool.push({
+          sp,
+          vel: new THREE.Vector3(),
+          life: 0,
+          max: 1,
+          alive: false,
+        });
+      }
+      let smokeAcc = 0;
+      function spawnSmoke(rate, dt) {
+        smokeAcc += rate * dt;
+        while (smokeAcc >= 1) {
+          smokeAcc -= 1;
+          const p = smokePool.find((q) => !q.alive);
+          if (!p) break;
+          p.alive = true;
+          p.sp.visible = true;
+          smokeAnchor.getWorldPosition(p.sp.position);
+          p.sp.position.x += (Math.random() - 0.5) * 0.1;
+          p.sp.position.z += (Math.random() - 0.5) * 0.1;
+          p.vel.set(
+            (Math.random() - 0.5) * 0.3 + 0.3,
+            1.1 + Math.random() * 0.8,
+            (Math.random() - 0.5) * 0.3,
+          );
+          p.life = 0;
+          p.max = 2.2 + Math.random() * 1.6;
+          p.sp.material.opacity = 0;
+          p.sp.scale.set(0.35, 0.35, 0.35);
+        }
+      }
+      function updateSmoke(dt) {
+        for (const p of smokePool) {
+          if (!p.alive) continue;
+          p.life += dt;
+          const t = p.life / p.max;
+          if (t >= 1) {
+            p.alive = false;
+            p.sp.visible = false;
+            continue;
+          }
+          p.sp.position.addScaledVector(p.vel, dt);
+          p.vel.y += dt * 0.3;
+          p.vel.x += dt * 0.15;
+          const s = 0.35 + t * 2.6;
+          p.sp.scale.set(s, s, s);
+          p.sp.material.opacity =
+            Math.sin(Math.min(t, 1) * Math.PI) * (0.55 + S.smoke * 0.35);
+        }
+      }
+
+      /* dust */
+      const dustGeo = new THREE.BufferGeometry();
+      const dustN = isMobile ? 120 : 260,
+        dustPos = new Float32Array(dustN * 3);
+      for (let i = 0; i < dustN; i++) {
+        dustPos[i * 3] = (Math.random() - 0.5) * 26;
+        dustPos[i * 3 + 1] = Math.random() * 7;
+        dustPos[i * 3 + 2] = (Math.random() - 0.5) * 26;
+      }
+      dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+      const dust = new THREE.Points(
+        dustGeo,
+        new THREE.PointsMaterial({
+          color: 0xf7c600,
+          size: 0.035,
+          transparent: true,
+          opacity: 0.4,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      );
+      scene.add(dust);
+
+      /* atmospheres */
+      const ATMO = [
+        { bg: new THREE.Color(0x0d1014), rim: 0.9, fog: 0.03 },
+        { bg: new THREE.Color(0x15100a), rim: 1.4, fog: 0.03 },
+        { bg: new THREE.Color(0x1c1206), rim: 2.0, fog: 0.026 },
+        { bg: new THREE.Color(0x0b1217), rim: 1.2, fog: 0.023 },
+        { bg: new THREE.Color(0x060709), rim: 0.5, fog: 0.034 },
+      ];
+      const tmpColor = new THREE.Color();
+      function applyAtmo(t) {
+        const i = Math.max(0, Math.min(ATMO.length - 2, Math.floor(t)));
+        const f = THREE.MathUtils.clamp(t - i, 0, 1);
+        tmpColor.copy(ATMO[i].bg).lerp(ATMO[i + 1].bg, f);
+        scene.background.copy(tmpColor);
+        scene.fog.color.copy(tmpColor);
+        scene.fog.density = THREE.MathUtils.lerp(
+          ATMO[i].fog,
+          ATMO[i + 1].fog,
+          f,
+        );
+        rim.intensity =
+          THREE.MathUtils.lerp(ATMO[i].rim, ATMO[i + 1].rim, f) *
+          (0.6 + S.glow * 0.7);
+      }
+
+      /* master timeline */
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#journey",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1,
+        },
+      });
+      tl.to(
+        S,
+        { camTheta: 1.9, camR: 10.5, camPhi: 1.32, duration: 22, ease: "none" },
+        0,
+      )
+        .to(S, { rpm: 0.14, duration: 5, ease: "power2.in" }, 2)
+        .to(S, { rpm: 0.05, duration: 3, ease: "power1.out" }, 7)
+        .to(S, { rpm: 0.55, duration: 6, ease: "power2.out" }, 11)
+        .to(S, { smoke: 0.7, duration: 5, ease: "power1.in" }, 10)
+        .to(S, { glow: 0.7, duration: 8, ease: "power1.inOut" }, 10)
+        .to(S, { atmo: 1, duration: 12, ease: "power1.inOut" }, 8)
+        .to(
+          S,
+          {
+            camTheta: 3.7,
+            camR: 7.6,
+            camPhi: 1.42,
+            camTY: 1.7,
+            duration: 20,
+            ease: "none",
+          },
+          22,
+        )
+        .to(S, { rpm: 1, duration: 12, ease: "power2.inOut" }, 24)
+        .to(S, { smoke: 1, duration: 10, ease: "power1.inOut" }, 26)
+        .to(S, { shake: 1, duration: 10, ease: "power1.inOut" }, 24)
+        .to(S, { atmo: 2, duration: 12, ease: "power1.inOut" }, 22)
+        .to(
+          S,
+          {
+            camTheta: 6.283,
+            camR: 15.5,
+            camPhi: 1.12,
+            camTY: 1.7,
+            duration: 34,
+            ease: "power1.inOut",
+          },
+          42,
+        )
+        .to(S, { rpm: 0.35, duration: 10, ease: "power2.inOut" }, 44)
+        .to(S, { smoke: 0.5, duration: 8, ease: "power1.inOut" }, 44)
+        .to(S, { shake: 0.12, duration: 8, ease: "power2.out" }, 44)
+        .to(S, { explode: 1, duration: 18, ease: "power2.inOut" }, 52)
+        .to(S, { atmo: 3, duration: 12, ease: "power1.inOut" }, 42)
+        .to(S, { explode: 0, duration: 10, ease: "power2.inOut" }, 80)
+        .to(S, { rpm: 0, duration: 8, ease: "power2.in" }, 86)
+        .to(S, { smoke: 0, duration: 6, ease: "power2.in" }, 86)
+        .to(S, { glow: 0, duration: 8, ease: "power2.in" }, 86)
+        .to(S, { atmo: 4, duration: 10, ease: "power1.inOut" }, 84)
+        .to(
+          S,
+          {
+            camTheta: 6.7,
+            camR: 13,
+            camPhi: 1.24,
+            camTY: 1.5,
+            duration: 24,
+            ease: "power1.inOut",
+          },
+          76,
+        );
+
+      ScrollTrigger.create({
+        trigger: "#journey",
+        start: "top 60%",
+        end: "bottom 40%",
+        onEnter: () => {
+          inJourney = true;
+          document.body.classList.add("in-journey");
+        },
+        onLeave: () => {
+          inJourney = false;
+          document.body.classList.remove("in-journey");
+        },
+        onEnterBack: () => {
+          inJourney = true;
+          document.body.classList.add("in-journey");
+        },
+        onLeaveBack: () => {
+          inJourney = false;
+          document.body.classList.remove("in-journey");
+        },
+      });
+      ["a", "b", "c", "d"].forEach((k) => {
+        ScrollTrigger.create({
+          trigger: "#ph-" + k,
+          start: "top 55%",
+          end: "bottom 45%",
+          onEnter: () => setRail(k),
+          onEnterBack: () => setRail(k),
+        });
+      });
+      function setRail(k) {
+        document
+          .querySelectorAll("#rail .rd")
+          .forEach((d) => d.classList.toggle("on", d.dataset.r === k));
+      }
+
+      ScrollTrigger.create({
+        trigger: "#ph-a",
+        start: "top 55%",
+        onEnter: () =>
+          gsap.to(".chip", {
+            opacity: 1,
+            x: 0,
+            duration: 0.7,
+            stagger: 0.15,
+            ease: "power3.out",
+          }),
+        onLeaveBack: () => gsap.set(".chip", { opacity: 0, x: -24 }),
+      });
+
+      gsap.utils.toArray(".reveal").forEach((el) => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      /* ================= CATÁLOGO ================= */
+      const catCards = Array.from(document.querySelectorAll(".cat-card"));
+      document.getElementById("countD").textContent = catCards.filter(
+        (c) => c.dataset.status === "disponible",
+      ).length;
+      document.getElementById("countV").textContent = catCards.filter(
+        (c) => c.dataset.status === "vendido",
+      ).length;
+      let currentFilter = "disponible";
+      gsap.set('.cat-card[data-status="vendido"]', { display: "none" });
+      function filterCat(status) {
+        currentFilter = status;
+        let vi = 0;
+        catCards.forEach((c) => {
+          const show = c.dataset.status === status;
+          if (show) {
+            c.style.display = "";
+            gsap.fromTo(
+              c,
+              { autoAlpha: 0, y: 30, scale: 0.97 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.55,
+                delay: vi++ * 0.08,
+                ease: "power3.out",
+                clearProps: "scale",
+              },
+            );
+          } else {
+            gsap.to(c, {
+              autoAlpha: 0,
+              y: -12,
+              duration: 0.25,
+              ease: "power2.in",
+              onComplete: () => {
+                c.style.display = "none";
+              },
+            });
+          }
+        });
+      }
+      document.querySelectorAll(".cat-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.dataset.filter === currentFilter) return;
+          document
+            .querySelectorAll(".cat-tab")
+            .forEach((b) => b.classList.toggle("active", b === btn));
+          filterCat(btn.dataset.filter);
+        });
+      });
+      ScrollTrigger.create({
+        trigger: "#catalogo",
+        start: "top 75%",
+        once: true,
+        onEnter: () => filterCat("disponible"),
+      });
+
+      const mq = document.getElementById("mqTrack");
+      mq.innerHTML += mq.innerHTML;
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          document
+            .getElementById("nav")
+            .classList.toggle("scrolled", window.scrollY > 40);
+        },
+        { passive: true },
+      );
+
+      window.addEventListener("mousemove", (e) => {
+        mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      /* HUD refs */
+      const needleRpm = document.getElementById("needleRpm");
+      const needleTemp = document.getElementById("needleTemp");
+      const rpmArc = document.getElementById("rpmArc");
+      const tmpArc = document.getElementById("tmpArc");
+      const txtRpm = document.getElementById("txtRpm");
+      const txtTemp = document.getElementById("txtTemp");
+      const bigRpm = document.getElementById("bigRpm");
+      const stTorque = document.getElementById("stTorque");
+      const stTemp = document.getElementById("stTemp");
+      const stFlow = document.getElementById("stFlow");
+      const hudState = document.getElementById("hudState");
+
+      /* loop */
+      const clock = new THREE.Clock();
+      const wv = new THREE.Vector3();
+      function noise(t, s) {
+        return (
+          Math.sin(t * 12.9898 + s) * 0.5 + Math.sin(t * 7.233 + s * 2) * 0.5
+        );
+      }
+      function tick() {
+        requestAnimationFrame(tick);
+        const dt = Math.min(clock.getDelta(), 0.05);
+        const t = clock.elapsedTime;
+        mouse.x += (mouse.tx - mouse.x) * 0.05;
+        mouse.y += (mouse.ty - mouse.y) * 0.05;
+
+        const par = inJourney ? 0.3 : 1;
+        const th = S.camTheta + mouse.x * 0.07 * par;
+        const ph = THREE.MathUtils.clamp(
+          S.camPhi + mouse.y * 0.05 * par,
+          0.5,
+          1.5,
+        );
+        const rEff = Math.max(S.camR * CAMK, RMIN);
+        camera.position.set(
+          rEff * Math.sin(ph) * Math.sin(th),
+          rEff * Math.cos(ph) + S.camTY,
+          rEff * Math.sin(ph) * Math.cos(th),
+        );
+        const sh = S.shake * S.rpm;
+        camera.position.x += noise(t, 1) * 0.028 * sh;
+        camera.position.y += noise(t, 2) * 0.02 * sh;
+        camera.lookAt(0, S.camTY, 0);
+
+        engine.position.set(
+          noise(t, 3) * 0.018 * sh,
+          Math.abs(noise(t, 5)) * 0.012 * sh,
+          noise(t, 7) * 0.018 * sh,
+        );
+
+        const e = S.explode;
+        for (const p of parts)
+          p.position.copy(p.userData.base).addScaledVector(p.userData.dir, e);
+
+        const run = THREE.MathUtils.clamp(S.rpm * 4, 0, 1);
+        pistonPhase += dt * (2 + S.rpm * 26);
+        for (let i = 0; i < 4; i++)
+          pistonBodies[i].position.y =
+            1.92 + Math.sin(pistonPhase + PISTON_PHASE[i]) * 0.14 * run;
+        flyRot += dt * S.rpm * 16;
+        flyG.rotation.x = flyRot;
+        fanG.rotation.z = -flyRot * 1.6;
+        tNeedles[0].rotation.z = -0.9 + run * 1.5 + noise(t, 9) * 0.08 * run;
+        tNeedles[1].rotation.z = 0.9 - run * 1.5 - noise(t, 10) * 0.08 * run;
+
+        MAT.glow.emissiveIntensity = S.glow * (1.6 + Math.sin(t * 3) * 0.25);
+        MAT.screen.emissiveIntensity = 0.3 + S.glow * 1.4;
+        underGlow.intensity = S.glow * 2.2;
+        floorRing.material.opacity = 0.1 + S.glow * 0.3;
+
+        if (S.smoke > 0.02) spawnSmoke(S.smoke * (12 + S.rpm * 30), dt);
+        updateSmoke(dt);
+        smokeLight.intensity = S.smoke * (0.7 + Math.abs(noise(t, 4)) * 0.5);
+
+        dust.rotation.y += dt * 0.012;
+        dust.position.y = Math.sin(t * 0.3) * 0.2;
+
+        applyAtmo(S.atmo);
+
+        const W = window.innerWidth,
+          H = window.innerHeight;
+        for (const d of labelDefs) {
+          const vis =
+            THREE.MathUtils.clamp((e - d.th) * 6, 0, 1) *
+            THREE.MathUtils.clamp((1.02 - e) * 10 + 0.4, 0, 1);
+          if (vis <= 0.01) {
+            d.el.style.opacity = 0;
+            continue;
+          }
+          d.anchor.getWorldPosition(wv);
+          wv.project(camera);
+          if (wv.z > 1) {
+            d.el.style.opacity = 0;
+            continue;
+          }
+          d.el.style.opacity = vis;
+          d.el.style.left = (wv.x * 0.5 + 0.5) * W + "px";
+          d.el.style.top = (-wv.y * 0.5 + 0.5) * H + "px";
+        }
+
+        heat += (S.rpm - heat) * dt * 0.25;
+        const rpmVal = Math.round(S.rpm * 2400 + noise(t, 11) * 30 * run);
+        const tempVal = Math.round(21 + heat * 74);
+        const ang =
+          -80 +
+          THREE.MathUtils.clamp(S.rpm, 0, 1) * 160 +
+          noise(t, 12) * 3 * run;
+        needleRpm.setAttribute("transform", "rotate(" + ang + " 60 66)");
+        rpmArc.style.strokeDashoffset =
+          151 - THREE.MathUtils.clamp(S.rpm, 0, 1) * 151;
+        needleTemp.setAttribute(
+          "transform",
+          "rotate(" +
+            (-80 + THREE.MathUtils.clamp(heat, 0, 1) * 160) +
+            " 60 66)",
+        );
+        tmpArc.style.strokeDashoffset =
+          151 - THREE.MathUtils.clamp(heat, 0, 1) * 151;
+        txtRpm.textContent = rpmVal;
+        txtTemp.textContent = tempVal + "°";
+        bigRpm.textContent = String(Math.max(0, rpmVal)).padStart(4, "0");
+        stTorque.textContent = Math.round(S.rpm * 92) + " N·m";
+        stTemp.textContent = tempVal + " °C";
+        stFlow.textContent =
+          Math.round(S.rpm * 4000).toLocaleString("es-CO") + " L/min";
+        hudState.textContent =
+          S.rpm < 0.03
+            ? "STANDBY"
+            : S.rpm < 0.3
+              ? "ARRANQUE"
+              : S.rpm < 0.7
+                ? "RÉGIMEN"
+                : "PLENA CARGA";
+
+        renderer.render(scene, camera);
+      }
+      tick();
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      /* intro */
+      gsap.to("#lfill", { width: "100%", duration: 1.4, ease: "power2.inOut" });
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("loader").classList.add("done");
+          const itl = gsap.timeline();
+          itl
+            .from("#hero .kicker", {
+              y: 20,
+              opacity: 0,
+              duration: 0.7,
+              ease: "power3.out",
+            })
+            .from(
+              "#logoRow",
+              { scale: 0.92, opacity: 0, duration: 0.9, ease: "power3.out" },
+              "-=.3",
+            )
+            .from(".slogan", { opacity: 0, y: 14, duration: 0.6 }, "-=.4")
+            .to(
+              "#hero h1 .ln i",
+              { y: 0, duration: 1, stagger: 0.12, ease: "power4.out" },
+              "-=.3",
+            )
+            .from(".copy", { opacity: 0, y: 20, duration: 0.7 }, "-=.5")
+            .from(".cta-row", { opacity: 0, y: 20, duration: 0.7 }, "-=.45")
+            .from(
+              ".scroll-hint, .hero-spec",
+              { opacity: 0, duration: 0.8 },
+              "-=.4",
+            );
+        }, 900);
+      });
+
+      const logoRow = document.getElementById("logoRow");
+      if (!isMobile) {
+        window.addEventListener("mousemove", (e) => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 14;
+          const y = (e.clientY / window.innerHeight - 0.5) * 10;
+          logoRow.style.transform = "translate(" + x + "px," + y + "px)";
+        });
+      }
+    </script>
+  </body>
+</html>

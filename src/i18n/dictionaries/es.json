@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "JF Motores — Motobombas diésel para minería | Medellín, Colombia",
+    "description": "Motobombas diésel, motores y repuestos para minería. Potencia constante en lodo, abrasión y altura. Cotiza por WhatsApp."
+  },
+  "nav": {
+    "home": "Inicio",
+    "motobombas": "Motobombas",
+    "motores": "Motores",
+    "repuestos": "Repuestos",
+    "empresa": "Empresa",
+    "contacto": "Contacto",
+    "cta": "Cotizar por WhatsApp",
+    "language": "Idioma"
+  },
+  "hero": {
+    "kicker": "Medellín · Colombia — Motobombas mineras",
+    "slogan": "Tranquilidad y confianza",
+    "line1": "Motobombas diésel",
+    "line2a": "que ",
+    "line2b": "no se detienen",
+    "line2c": ",",
+    "line3": "ni a 4 000 metros.",
+    "copy": "Fabricamos y mantenemos motobombas para minería con motores diésel de alto torque: potencia constante en lodo, abrasión y altura. Ingeniería que responde antes de fallar.",
+    "ctaPrimary": "Cotizar por WhatsApp",
+    "ctaSecondary": "Ver catálogo",
+    "scrollHint": "Desliza para explorar",
+    "spec1": "UNIDAD JF-M25 · 4 CILINDROS",
+    "spec2": "DIÉSEL · 25 HP · SUCCIÓN 6″",
+    "spec3": "LISTA PARA TAJO ABIERTO"
+  },
+  "catalogs": {
+    "kicker": "Catálogo",
+    "title": "Todo para mantener tu mina en operación",
+    "items": {
+      "motobombas": { "title": "Motobombas completas", "desc": "Equipos listos para trabajar: motor diésel acoplado a bomba para agua, lodo y desagüe de socavón." },
+      "motores": { "title": "Motores", "desc": "Motores diésel de alto torque para minería, nuevos y reconstruidos." },
+      "repuestos": { "title": "Repuestos", "desc": "Piezas con información de compatibilidad para tu motor o motobomba." }
+    },
+    "cta": "Ver catálogo",
+    "soon": "Estamos cargando el catálogo. Mientras tanto, cotiza directamente por WhatsApp."
+  },
+  "contact": {
+    "kicker": "Contacto",
+    "title1": "¿Listo para operar",
+    "title2": "sin pausas?",
+    "cta": "Cotizar por WhatsApp",
+    "workshop": "Taller",
+    "phone": "Línea directa"
+  },
+  "footer": {
+    "slogan": "Tranquilidad y confianza",
+    "priceNotice": "Los precios corresponden únicamente al artículo. No incluyen envío, impuestos ni costos de importación o exportación."
+  },
+  "whatsapp": {
+    "general": "Hola JF Motores, quiero información sobre sus equipos."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "JF Motores — Motobombas a diesel para mineração | Medellín, Colômbia",
+    "description": "Motobombas a diesel, motores e peças de reposição para mineração. Potência constante em lama, abrasão e altitude. Faça seu orçamento pelo WhatsApp."
+  },
+  "nav": {
+    "home": "Início",
+    "motobombas": "Motobombas",
+    "motores": "Motores",
+    "repuestos": "Peças",
+    "empresa": "Empresa",
+    "contacto": "Contato",
+    "cta": "Orçamento no WhatsApp",
+    "language": "Idioma"
+  },
+  "hero": {
+    "kicker": "Medellín · Colômbia — Motobombas para mineração",
+    "slogan": "Tranquilidade e confiança",
+    "line1": "Motobombas a diesel",
+    "line2a": "que ",
+    "line2b": "não param",
+    "line2c": ",",
+    "line3": "nem a 4.000 metros.",
+    "copy": "Fabricamos e fazemos a manutenção de motobombas para mineração com motores a diesel de alto torque: potência constante em lama, abrasão e altitude. Engenharia que responde antes de falhar.",
+    "ctaPrimary": "Orçamento no WhatsApp",
+    "ctaSecondary": "Ver catálogo",
+    "scrollHint": "Role para explorar",
+    "spec1": "UNIDADE JF-M25 · 4 CILINDROS",
+    "spec2": "DIESEL · 25 HP · SUCÇÃO 6″",
+    "spec3": "PRONTA PARA MINA A CÉU ABERTO"
+  },
+  "catalogs": {
+    "kicker": "Catálogo",
+    "title": "Tudo para manter sua mina em operação",
+    "items": {
+      "motobombas": { "title": "Motobombas completas", "desc": "Equipamentos prontos para trabalhar: motor a diesel acoplado à bomba para água, lama e drenagem de galerias." },
+      "motores": { "title": "Motores", "desc": "Motores a diesel de alto torque para mineração, novos e recondicionados." },
+      "repuestos": { "title": "Peças de reposição", "desc": "Peças com informação de compatibilidade para seu motor ou motobomba." }
+    },
+    "cta": "Ver catálogo",
+    "soon": "Estamos carregando o catálogo. Enquanto isso, peça seu orçamento diretamente pelo WhatsApp."
+  },
+  "contact": {
+    "kicker": "Contato",
+    "title1": "Pronto para operar",
+    "title2": "sem paradas?",
+    "cta": "Orçamento no WhatsApp",
+    "workshop": "Oficina",
+    "phone": "Linha direta"
+  },
+  "footer": {
+    "slogan": "Tranquilidade e confiança",
+    "priceNotice": "Os preços referem-se apenas ao item. Não incluem frete, impostos nem custos de importação ou exportação."
+  },
+  "whatsapp": {
+    "general": "Olá JF Motores, gostaria de informações sobre seus equipamentos."
+  }
+}

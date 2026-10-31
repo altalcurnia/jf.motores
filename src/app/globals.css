@@ -1,0 +1,140 @@
+/* Ajustes sobre el diseño original (legacy.css) para la versión Next.js. */
+
+/* Fondo provisional mientras no está montado el motor 3D (día 5). */
+body {
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 45%, rgba(247, 198, 0, 0.08), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Animaciones que antes hacía GSAP */
+.hero-in h1 .ln i {
+  animation: jf-ln-up 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.hero-in h1 .ln:nth-child(2) i { animation-delay: 0.12s; }
+.hero-in h1 .ln:nth-child(3) i { animation-delay: 0.24s; }
+@keyframes jf-ln-up {
+  to { transform: translateY(0); }
+}
+.reveal {
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-in h1 .ln i { animation: none; transform: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Navegación */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.lang-switch select {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+.lang-switch select option {
+  background: var(--bg);
+}
+@media (max-width: 760px) {
+  .ncta { display: none; }
+}
+
+/* Tarjetas de catálogos en el inicio */
+.catalog-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 40px;
+}
+.catalog-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.catalog-card:hover {
+  border-color: var(--yellow);
+  transform: translateY(-4px);
+}
+.catalog-card h3 {
+  font-family: var(--disp);
+  font-weight: 900;
+  font-size: 22px;
+}
+.catalog-card p {
+  color: var(--mut);
+  flex: 1;
+}
+.catalog-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--yellow);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.catalog-card-cta svg { width: 16px; height: 16px; }
+@media (max-width: 900px) {
+  .catalog-cards { grid-template-columns: 1fr; }
+}
+
+/* Páginas de catálogo provisionales */
+.catalog-page {
+  min-height: 70vh;
+  padding-top: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.catalog-page h1 {
+  font-family: var(--disp);
+  font-weight: 900;
+  font-size: clamp(36px, 6vw, 72px);
+  line-height: 1;
+}
+.catalog-page p { color: var(--mut); max-width: 60ch; }
+.catalog-page .soon { color: var(--ink); }
+
+.price-notice {
+  color: var(--mut);
+  font-size: 12px;
+}

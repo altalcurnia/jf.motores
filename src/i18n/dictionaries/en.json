@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "JF Motores — Diesel pump sets for mining | Medellín, Colombia",
+    "description": "Diesel pump sets, engines and spare parts for mining. Steady power in slurry, abrasion and high altitude. Get a quote on WhatsApp."
+  },
+  "nav": {
+    "home": "Home",
+    "motobombas": "Pump sets",
+    "motores": "Engines",
+    "repuestos": "Spare parts",
+    "empresa": "Company",
+    "contacto": "Contact",
+    "cta": "Quote on WhatsApp",
+    "language": "Language"
+  },
+  "hero": {
+    "kicker": "Medellín · Colombia — Mining pump sets",
+    "slogan": "Peace of mind and reliability",
+    "line1": "Diesel pump sets",
+    "line2a": "that ",
+    "line2b": "never stop",
+    "line2c": ",",
+    "line3": "not even at 4,000 metres.",
+    "copy": "We build and service mining pump sets driven by high-torque diesel engines: steady power in slurry, abrasion and altitude. Engineering that responds before it fails.",
+    "ctaPrimary": "Quote on WhatsApp",
+    "ctaSecondary": "View catalogue",
+    "scrollHint": "Scroll to explore",
+    "spec1": "UNIT JF-M25 · 4 CYLINDERS",
+    "spec2": "DIESEL · 25 HP · 6″ SUCTION",
+    "spec3": "READY FOR OPEN-PIT MINING"
+  },
+  "catalogs": {
+    "kicker": "Catalogue",
+    "title": "Everything to keep your mine running",
+    "items": {
+      "motobombas": { "title": "Complete pump sets", "desc": "Ready-to-work units: diesel engine coupled to a pump for water, slurry and underground dewatering." },
+      "motores": { "title": "Engines", "desc": "High-torque diesel engines for mining, new and rebuilt." },
+      "repuestos": { "title": "Spare parts", "desc": "Parts with compatibility information for your engine or pump set." }
+    },
+    "cta": "View catalogue",
+    "soon": "We are loading the catalogue. In the meantime, request a quote directly on WhatsApp."
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title1": "Ready to run",
+    "title2": "without downtime?",
+    "cta": "Quote on WhatsApp",
+    "workshop": "Workshop",
+    "phone": "Direct line"
+  },
+  "footer": {
+    "slogan": "Peace of mind and reliability",
+    "priceNotice": "Prices cover the item only. They do not include shipping, taxes or import/export costs."
+  },
+  "whatsapp": {
+    "general": "Hello JF Motores, I would like information about your equipment."
+  }
+}
