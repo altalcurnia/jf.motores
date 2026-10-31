@@ -280,7 +280,10 @@
     "googleLegal2": ".",
     "consentBanner": "Para usar tu cuenta, autoriza el tratamiento de tus datos según la ",
     "consentAccept": "Autorizo",
-    "googleError": "No se pudo conectar con Google. Intenta de nuevo."
+    "googleError": "No se pudo conectar con Google. Intenta de nuevo.",
+    "optional": "opcional",
+    "googleNoPassword": "Entras con Google: tu cuenta ya está lista y no necesitas contraseña.",
+    "optionalPassword": "Crear una contraseña (opcional, para entrar también con tu correo)"
   },
   "legal": {
     "privacyTitle": "Política de tratamiento de datos personales",
@@ -294,7 +297,7 @@
       },
       {
         "h": "2. Datos que recolectamos",
-        "p": "Nombre, correo electrónico, teléfono o WhatsApp, país, y la información de las cotizaciones que solicitas (producto, fecha y canal). También datos técnicos de navegación como idioma y dispositivo."
+        "p": "Nombre, correo electrónico, teléfono o WhatsApp, país, y la información de las cotizaciones que solicitas (producto, fecha y canal). Si entras con Google, recibimos de Google solo tu nombre, correo y foto de perfil. El país se calcula de forma aproximada a partir de la conexión y puedes cambiarlo en Mi cuenta. También datos técnicos de navegación como idioma y dispositivo."
       },
       {
         "h": "3. Para qué los usamos",
@@ -313,5 +316,65 @@
         "p": "Tus datos se guardan en servidores con acceso restringido. Las contraseñas se almacenan cifradas y nadie puede verlas. Conservamos los datos mientras exista la relación comercial o lo exija la ley."
       }
     ]
+  },
+  "catalog": {
+    "all": "Todos",
+    "available": "Disponibles",
+    "sold": "Vendidos",
+    "search": "Buscar por nombre o referencia",
+    "category": "Categoría",
+    "allCategories": "Todas las categorías",
+    "compatibleWith": "Compatible con",
+    "anyModel": "Cualquier motor",
+    "sort": "Ordenar",
+    "sortNew": "Más recientes",
+    "sortPriceAsc": "Precio: menor a mayor",
+    "sortPriceDesc": "Precio: mayor a menor",
+    "sortHp": "Mayor potencia",
+    "results": "{n} resultados",
+    "empty": "No hay productos con esos filtros.",
+    "clear": "Quitar filtros",
+    "details": "Ver detalle",
+    "quote": "Cotizar",
+    "askPrice": "Consultar precio",
+    "statusAvailable": "Disponible",
+    "statusSold": "Vendido",
+    "reference": "Imagen de referencia",
+    "ref": "REF",
+    "priceNote": "Solo el artículo. No incluye envío, impuestos ni costos de importación o exportación.",
+    "specsTitle": "Especificaciones",
+    "descriptionTitle": "Descripción",
+    "compatTitle": "Compatible con",
+    "partsTitle": "Repuestos compatibles",
+    "engineModel": "Motor",
+    "view3d": "Ver en 3D",
+    "close": "Cerrar",
+    "back": "Volver al catálogo",
+    "soldNotice": "Este equipo ya fue vendido. Escríbenos y te ofrecemos uno similar.",
+    "whatsapp": "Hola JF Motores, quiero cotizar: {name} (REF {ref}). {url}",
+    "whatsappSold": "Hola JF Motores, vi el {name} (REF {ref}) vendido. ¿Tienen uno similar? {url}",
+    "partCategoryIntro": "Repuestos de esta pieza del motor.",
+    "specs": {
+      "hp": "Potencia",
+      "succion_in": "Succión",
+      "descarga_in": "Descarga",
+      "caudal_lpm": "Caudal",
+      "cabeza_m": "Cabeza máxima",
+      "rpm": "Régimen",
+      "arranque": "Arranque",
+      "peso_kg": "Peso",
+      "cilindros": "Cilindros",
+      "refrigeracion": "Refrigeración",
+      "material": "Material",
+      "filas": "Filas",
+      "diametro_mm": "Diámetro",
+      "diametro_in": "Diámetro",
+      "unidades": "Unidades",
+      "capacidad_l": "Capacidad",
+      "aspas": "Aspas",
+      "dientes": "Dientes",
+      "caras": "Caras",
+      "voltaje_v": "Voltaje"
+    }
   }
 }

@@ -159,9 +159,9 @@ export type Database = {
         ];
       };
       engine_models: {
-        Row: { brand: string; id: string; model: string; notes: string | null };
-        Insert: { brand: string; id?: string; model: string; notes?: string | null };
-        Update: { brand?: string; id?: string; model?: string; notes?: string | null };
+        Row: { brand: string; id: string; model: string; notes: string | null; is_demo: boolean };
+        Insert: { brand: string; id?: string; model: string; notes?: string | null; is_demo?: boolean };
+        Update: { brand?: string; id?: string; model?: string; notes?: string | null; is_demo?: boolean };
         Relationships: [];
       };
       exchange_rates: {
@@ -261,6 +261,7 @@ export type Database = {
           engine_model_id: string | null;
           featured: boolean;
           id: string;
+          is_demo: boolean;
           model_glb_path: string | null;
           name: Json;
           price_cop: number | null;
@@ -282,6 +283,7 @@ export type Database = {
           engine_model_id?: string | null;
           featured?: boolean;
           id?: string;
+          is_demo?: boolean;
           model_glb_path?: string | null;
           name: Json;
           price_cop?: number | null;

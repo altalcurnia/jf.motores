@@ -292,3 +292,8 @@ body.no-3d {
     radial-gradient(ellipse 70% 50% at 50% 40%, rgba(247, 198, 0, 0.12), transparent 70%),
     #0b0d10;
 }
+
+/* Contraseña opcional (cuentas de Google) */
+.acc-details summary { cursor: pointer; color: var(--yellow); font-size: 14px; margin-top: 6px; }
+.acc-details[open] summary { margin-bottom: 14px; }
+.acc-form label > span small { font-weight: 400; }

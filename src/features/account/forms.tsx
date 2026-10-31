@@ -375,11 +375,15 @@ export function ProfileForm({
       </label>
       <div className="acc-row">
         <label>
-          {t.phone}
+          <span>
+            {t.phone} <small className="acc-muted">({t.optional})</small>
+          </span>
           <input type="tel" maxLength={30} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
         </label>
         <label>
-          {t.country}
+          <span>
+            {t.country} <small className="acc-muted">({t.optional})</small>
+          </span>
           <select value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })}>
             <option value="">{t.countryPlaceholder}</option>
             {countryNames.map((c) => (

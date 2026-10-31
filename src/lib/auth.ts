@@ -9,6 +9,8 @@ export type StaffSession = {
   /** Propietario: único que otorga roles y edita permisos. */
   isOwner: boolean;
   permissions: string[];
+  /** Formas de entrar de la cuenta: "email", "google"… */
+  providers: string[];
 };
 
 /**
@@ -19,6 +21,7 @@ export async function getSession(): Promise<StaffSession | null> {
   const supabase = await createSupabaseServerClient();
   const { data: claims } = await supabase.auth.getClaims();
   const userId = claims?.claims?.sub;
+  const appMeta = (claims?.claims?.app_metadata ?? {}) as { providers?: unknown };
   if (!userId) return null;
 
   const { data: profile } = await supabase
@@ -40,6 +43,7 @@ export async function getSession(): Promise<StaffSession | null> {
     role: { key: profile.roles.key, name: profile.roles.name, isInternal: profile.roles.is_internal },
     isOwner: profile.is_owner,
     permissions: (perms ?? []).map((p) => p.permission_key).sort(),
+    providers: Array.isArray(appMeta.providers) ? appMeta.providers.map(String) : [],
   };
 }
 

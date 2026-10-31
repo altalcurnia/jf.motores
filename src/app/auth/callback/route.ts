@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { isStaffUser, localeFromRequest, resolveDestination } from "@/lib/auth-routing";
+import { countryFromRequest, isStaffUser, localeFromRequest, resolveDestination } from "@/lib/auth-routing";
 
 /**
  * Regreso de Google y de enlaces con ?code=: crea la sesión y lleva a cada quien a su lugar
@@ -18,6 +18,9 @@ export async function GET(request: NextRequest) {
     if (!error && data.user) {
       // Entró con Google aceptando el texto legal junto al botón (Ley 1581)
       if (searchParams.get("consent") === "1") await supabase.rpc("accept_privacy");
+      // País aproximado por la conexión (Vercel), solo si la cuenta aún no tiene uno. Se puede cambiar en Mi cuenta.
+      const country = countryFromRequest(request);
+      if (country) await supabase.from("profiles").update({ country }).eq("id", data.user.id).is("country", null);
       const isStaff = await isStaffUser(supabase, data.user.id);
       return NextResponse.redirect(new URL(resolveDestination({ requested, isStaff, locale }), origin));
     }

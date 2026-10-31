@@ -280,7 +280,10 @@
     "googleLegal2": ".",
     "consentBanner": "To use your account, authorize the processing of your data under our ",
     "consentAccept": "I authorize",
-    "googleError": "Could not connect to Google. Please try again."
+    "googleError": "Could not connect to Google. Please try again.",
+    "optional": "optional",
+    "googleNoPassword": "You sign in with Google: your account is ready and you don't need a password.",
+    "optionalPassword": "Create a password (optional, to also sign in with your email)"
   },
   "legal": {
     "privacyTitle": "Personal data processing policy",
@@ -294,7 +297,7 @@
       },
       {
         "h": "2. Data we collect",
-        "p": "Name, email, phone or WhatsApp, country, and information about the quotes you request (product, date and channel). Also technical browsing data such as language and device."
+        "p": "Name, email, phone or WhatsApp, country, and the details of the quotes you request (product, date and channel). If you sign in with Google, we only receive your name, email and profile picture from Google. Your country is estimated from your connection and you can change it in My account. We also collect technical browsing data such as language and device."
       },
       {
         "h": "3. How we use it",
@@ -313,5 +316,65 @@
         "p": "Your data is stored on servers with restricted access. Passwords are stored encrypted and nobody can see them. We keep data while the business relationship exists or as required by law."
       }
     ]
+  },
+  "catalog": {
+    "all": "All",
+    "available": "Available",
+    "sold": "Sold",
+    "search": "Search by name or reference",
+    "category": "Category",
+    "allCategories": "All categories",
+    "compatibleWith": "Compatible with",
+    "anyModel": "Any engine",
+    "sort": "Sort",
+    "sortNew": "Newest",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "sortHp": "Most powerful",
+    "results": "{n} results",
+    "empty": "No products match these filters.",
+    "clear": "Clear filters",
+    "details": "View details",
+    "quote": "Get a quote",
+    "askPrice": "Ask for price",
+    "statusAvailable": "Available",
+    "statusSold": "Sold",
+    "reference": "Reference image",
+    "ref": "REF",
+    "priceNote": "Item only. Shipping, taxes and import/export costs not included.",
+    "specsTitle": "Specifications",
+    "descriptionTitle": "Description",
+    "compatTitle": "Compatible with",
+    "partsTitle": "Compatible spare parts",
+    "engineModel": "Engine",
+    "view3d": "View in 3D",
+    "close": "Close",
+    "back": "Back to catalogue",
+    "soldNotice": "This unit has been sold. Message us and we'll offer you a similar one.",
+    "whatsapp": "Hello JF Motores, I'd like a quote for: {name} (REF {ref}). {url}",
+    "whatsappSold": "Hello JF Motores, I saw the {name} (REF {ref}) is sold. Do you have a similar one? {url}",
+    "partCategoryIntro": "Spare parts for this engine part.",
+    "specs": {
+      "hp": "Power",
+      "succion_in": "Suction",
+      "descarga_in": "Discharge",
+      "caudal_lpm": "Flow",
+      "cabeza_m": "Max head",
+      "rpm": "Speed",
+      "arranque": "Start",
+      "peso_kg": "Weight",
+      "cilindros": "Cylinders",
+      "refrigeracion": "Cooling",
+      "material": "Material",
+      "filas": "Rows",
+      "diametro_mm": "Diameter",
+      "diametro_in": "Diameter",
+      "unidades": "Units",
+      "capacidad_l": "Capacity",
+      "aspas": "Blades",
+      "dientes": "Teeth",
+      "caras": "Faces",
+      "voltaje_v": "Voltage"
+    }
   }
 }

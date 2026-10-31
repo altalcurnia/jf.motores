@@ -28,6 +28,12 @@ export function localeFromRequest(request: { cookies: { get(name: string): { val
   return visitorLocale(request.cookies.get(LOCALE_COOKIE)?.value, request.headers.get("accept-language"), path);
 }
 
+/** País aproximado de la conexión (cabecera que agrega Vercel). Null si no viene o no es válido. */
+export function countryFromRequest(request: { headers: Headers }): string | null {
+  const code = request.headers.get("x-vercel-ip-country")?.trim().toUpperCase() ?? "";
+  return /^[A-Z]{2}$/.test(code) && code !== "XX" ? code : null;
+}
+
 /** ¿El usuario tiene un rol interno (Administrador, Editor, Asesor)? Se lee de la base de datos, nunca del navegador. */
 export async function isStaffUser(supabase: SupabaseClient<Database>, userId: string): Promise<boolean> {
   const { data } = await supabase.from("profiles").select("roles ( is_internal )").eq("id", userId).maybeSingle();

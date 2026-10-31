@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveDestination, visitorLocale } from "@/lib/auth-routing";
+import { countryFromRequest, resolveDestination, visitorLocale } from "@/lib/auth-routing";
 
 describe("a dónde va cada quien después de entrar", () => {
   it("un cliente nunca termina en el panel", () => {
@@ -22,5 +22,15 @@ describe("a dónde va cada quien después de entrar", () => {
     expect(visitorLocale(undefined, "pt-BR", "/en/cuenta")).toBe("en");
     expect(visitorLocale("pt", "en-US", null)).toBe("pt");
     expect(visitorLocale(undefined, "en-US,en;q=0.9", null)).toBe("en");
+  });
+});
+
+describe("countryFromRequest", () => {
+  const req = (v?: string) => ({ headers: new Headers(v === undefined ? {} : { "x-vercel-ip-country": v }) });
+  it("lee el país de la conexión", () => expect(countryFromRequest(req("co"))).toBe("CO"));
+  it("ignora valores vacíos o inválidos", () => {
+    expect(countryFromRequest(req())).toBeNull();
+    expect(countryFromRequest(req("XX"))).toBeNull();
+    expect(countryFromRequest(req("Colombia"))).toBeNull();
   });
 });

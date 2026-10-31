@@ -142,7 +142,17 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
 
         <section className="acc-card">
           <h2>{t.passwordTitle}</h2>
-          <PasswordForm t={t} />
+          {session.providers.includes("google") ? (
+            <>
+              <p className="acc-muted">{t.googleNoPassword}</p>
+              <details className="acc-details">
+                <summary>{t.optionalPassword}</summary>
+                <PasswordForm t={t} />
+              </details>
+            </>
+          ) : (
+            <PasswordForm t={t} />
+          )}
         </section>
       </div>
     </div>
