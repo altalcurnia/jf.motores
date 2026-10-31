@@ -1,4 +1,3 @@
-// @ts-nocheck
 /*
  * Motor diésel 3D del sitio original (Three.js r128 + GSAP ScrollTrigger),
  * migrado casi literal desde legacy/index.html para conservar el mismo aspecto.
