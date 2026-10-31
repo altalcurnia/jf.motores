@@ -8,7 +8,6 @@ import { AdminTopbar } from "./AdminTopbar";
 export const metadata = { title: "Inicio" };
 
 const sections = [
-  { title: "Productos", desc: "Motobombas, motores y repuestos: fotos, modelo 3D, precio, disponible/vendido.", perm: "catalogo.editar", day: 3 },
   { title: "Categorías", desc: "Categorías de cada catálogo y pieza del motor 3D que abre cada una.", perm: "catalogo.editar", day: 3 },
   { title: "Cotizaciones", desc: "Clientes que tocaron WhatsApp: producto, asesor, país y estado.", perm: "leads.ver_todos", day: 6 },
   { title: "Asesores", desc: "WhatsApp, nombre, cargo y reglas para repartir clientes.", perm: "asesores.gestionar", day: 6 },
@@ -66,6 +65,13 @@ async function Dashboard() {
 
       <h2>Secciones</h2>
       <section className="grid">
+        {can(session, "catalogo.ver") && (
+          <Link href="/admin/productos" className="card link">
+            <h3>Productos</h3>
+            <p>Motobombas, motores y repuestos: fotos, modelo 3D, precio, disponible/vendido y compatibilidad.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
         {(session.isOwner || can(session, "usuarios.ver")) && (
           <>
             <Link href="/admin/usuarios" className="card link">

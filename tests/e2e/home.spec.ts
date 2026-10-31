@@ -104,3 +104,26 @@ test("entrar y registro ofrecen Google con el aviso de datos", async ({ page }) 
   await page.goto("/admin/login");
   await expect(page.getByRole("button", { name: "Entrar con Google" })).toBeVisible();
 });
+
+test("catálogo: filtros en la URL y ficha del producto con WhatsApp", async ({ page }) => {
+  await page.goto("/es/motobombas");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "Vendidos" }).click();
+  await expect(page).toHaveURL(/estado=vendido/);
+  await page.getByRole("button", { name: "Todos" }).click();
+  await expect(page).not.toHaveURL(/estado=/);
+
+  const cards = page.locator("a.pc");
+  test.skip((await cards.count()) === 0, "Catálogo vacío en esta base de datos");
+  await cards.first().click();
+  await expect(page).toHaveURL(/\/es\/motobombas\/[a-z0-9-]+$/);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".pd-info a.btn.y")).toHaveAttribute("href", /^https:\/\/wa\.me\/.*REF/);
+});
+
+test("un producto inexistente muestra la página de no encontrado y no se indexa", async ({ page }) => {
+  // Con streaming el código puede quedar en 200; Next marca la página con noindex.
+  await page.goto("/es/motores/no-existe-este-motor");
+  await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
+  await expect(page.locator(".pd-info")).toHaveCount(0);
+});

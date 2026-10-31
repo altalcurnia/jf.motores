@@ -20,7 +20,6 @@ function frame(inner, ref) {
 <path d="M40 100V40H100"/><path d="M1100 40H1160V100"/><path d="M40 800V860H100"/><path d="M1100 860H1160V800"/></g>
 ${inner}
 <text x="60" y="830" font-family="monospace" font-size="26" letter-spacing="6" fill="${Y}">REF ${ref}</text>
-<text x="1140" y="830" text-anchor="end" font-family="monospace" font-size="20" letter-spacing="4" fill="#98a2ad">IMAGEN DE REFERENCIA</text>
 <text x="1140" y="80" text-anchor="end" font-family="sans-serif" font-weight="900" font-size="28" letter-spacing="4" fill="#eef1f4">JF <tspan fill="${Y}">MOTORES</tspan></text>
 </svg>`;
 }

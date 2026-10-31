@@ -12,6 +12,7 @@ export function AdminTopbar() {
       </div>
       <nav className="admin-nav">
         <Link href="/admin">Inicio</Link>
+        <Link href="/admin/productos">Productos</Link>
         <Link href="/admin/usuarios">Usuarios</Link>
         <Link href="/admin/permisos">Permisos</Link>
         <Link href="/es">Ver sitio</Link>

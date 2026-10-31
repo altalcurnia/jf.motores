@@ -1,7 +1,7 @@
-import { CatalogPlaceholder, catalogMetadata } from "@/components/CatalogPlaceholder";
+import { CatalogListing, catalogMetadata } from "@/features/catalog/CatalogListing";
 
-export const generateMetadata = () => catalogMetadata("motores");
+export const generateMetadata = () => catalogMetadata("motor");
 
-export default function Page() {
-  return <CatalogPlaceholder catalog="motores" />;
+export default function Page({ searchParams }: PageProps<"/[lang]/motores">) {
+  return <CatalogListing catalog="motor" searchParams={searchParams} />;
 }

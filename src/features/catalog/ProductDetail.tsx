@@ -1,0 +1,161 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { localizedAlternates } from "@/i18n/metadata";
+import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { site } from "@/lib/site";
+import { Arrow } from "@/components/Arrow";
+import { BRAND_PLACEHOLDER } from "@/components/placeholder";
+import { compatibleParts, compatibleWith, getCatalogData } from "./data";
+import { Gallery } from "./Gallery";
+import { ProductCard } from "./ProductCard";
+import { Viewer3D } from "./Viewer3D";
+import { catalogPaths, fill, formatPrice, productHref, specValue, storageUrl, tr, type CatalogType } from "./shared";
+
+const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+async function findProduct(catalog: CatalogType, slug: string) {
+  const data = await getCatalogData();
+  const product = data.products.find((p) => p.catalog === catalog && p.slug === slug);
+  return { data, product };
+}
+
+/** Slugs conocidos al compilar (Cache Components exige al menos uno). */
+export async function productStaticParams(catalog: CatalogType) {
+  const { products } = await getCatalogData();
+  const slugs = products.filter((p) => p.catalog === catalog).map((p) => ({ slug: p.slug }));
+  return slugs.length ? slugs : [{ slug: "__vacio__" }];
+}
+
+export async function productMetadata(catalog: CatalogType, slug: string) {
+  const [{ product }, locale] = await Promise.all([findProduct(catalog, slug), getLocale()]);
+  if (!product) return {};
+  const img = product.images[0];
+  return {
+    title: `${tr(product.name, locale)} · ${product.ref}`,
+    description: tr(product.summary, locale) || tr(product.description, locale).slice(0, 160),
+    alternates: localizedAlternates(locale, `/${catalogPaths[catalog]}/${slug}`),
+    openGraph: img ? { images: [storageUrl(img.path, supabaseUrl())] } : undefined,
+  };
+}
+
+export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; slug: string }) {
+  const [{ data, product: p }, locale, dict] = await Promise.all([findProduct(catalog, slug), getLocale(), getDictionary()]);
+  if (!p) notFound();
+  const t = dict.catalog;
+  const name = tr(p.name, locale);
+  const price = formatPrice(p.priceCop, locale);
+  const category = data.categories.find((c) => c.id === p.categoryId);
+  const model = data.engineModels.find((m) => m.id === p.engineModelId);
+  const pageUrl = `${site.url}${productHref(locale, p)}`;
+  const message = fill(p.status === "vendido" ? t.whatsappSold : t.whatsapp, { name, ref: p.ref, url: pageUrl });
+  const images = p.images.length
+    ? p.images.map((i) => ({ url: storageUrl(i.path, supabaseUrl()), alt: tr(i.alt, locale) || name, isReference: i.isReference }))
+    : [{ url: BRAND_PLACEHOLDER, alt: name, isReference: false }];
+  const specs = Object.entries(p.specs).filter(([, v]) => v != null && v !== "");
+  const parts = catalog === "repuesto" ? [] : compatibleParts(data, p);
+  const fits = catalog === "repuesto" ? compatibleWith(data, p) : null;
+  const listHref = `/${locale}/${catalogPaths[catalog]}`;
+
+  return (
+    <section className="block pd-page">
+      <div className="pd-crumbs">
+        <Link href={listHref}>← {dict.catalogs.items[catalogPaths[catalog]].title}</Link>
+        {category && <span> / {tr(category.name, locale)}</span>}
+      </div>
+
+      <div className="pd-top">
+        <div className="pd-media">
+          <Gallery images={images} referenceLabel={t.reference} />
+          {p.glbPath && (
+            <Viewer3D src={storageUrl(p.glbPath, supabaseUrl())} alt={name} label={t.view3d} closeLabel={t.close} />
+          )}
+        </div>
+
+        <div className="pd-info">
+          <span className="pc-ref">
+            {t.ref} {p.ref}
+          </span>
+          <h1>{name}</h1>
+          {tr(p.summary, locale) && <p className="pd-summary">{tr(p.summary, locale)}</p>}
+          <span className={`pc-status static ${p.status}`}>{p.status === "vendido" ? t.statusSold : t.statusAvailable}</span>
+
+          <div className="pd-price">
+            <b>{price ?? t.askPrice}</b>
+            {price && <small>{t.priceNote}</small>}
+          </div>
+          {p.status === "vendido" && <p className="pd-sold">{t.soldNotice}</p>}
+
+          <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, message)} target="_blank" rel="noopener">
+            {t.quote}
+            <Arrow />
+          </a>
+
+          {specs.length > 0 && (
+            <>
+              <h2>{t.specsTitle}</h2>
+              <dl className="pd-specs">
+                {model && (
+                  <div>
+                    <dt>{t.engineModel}</dt>
+                    <dd>
+                      {model.brand} {model.model}
+                    </dd>
+                  </div>
+                )}
+                {specs.map(([k, v]) => (
+                  <div key={k}>
+                    <dt>{t.specs[k as keyof typeof t.specs] ?? k}</dt>
+                    <dd>{specValue(k, v, locale)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </>
+          )}
+
+          {fits && (fits.models.length > 0 || fits.products.length > 0) && (
+            <>
+              <h2>{t.compatTitle}</h2>
+              <ul className="pd-fits">
+                {fits.models.map((m) => (
+                  <li key={m.id}>
+                    <Link href={`/${locale}/repuestos?motor=${m.id}`}>
+                      {m.brand} {m.model}
+                    </Link>
+                  </li>
+                ))}
+                {fits.products.map((x) => (
+                  <li key={x.id}>
+                    <Link href={productHref(locale, x)}>{tr(x.name, locale)}</Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </div>
+
+      {tr(p.description, locale) && (
+        <div className="pd-desc">
+          <h2>{t.descriptionTitle}</h2>
+          {tr(p.description, locale)
+            .split(/\n{2,}/)
+            .map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+        </div>
+      )}
+
+      {parts.length > 0 && (
+        <div className="pd-related">
+          <h2>{t.partsTitle}</h2>
+          <div className="pc-grid">
+            {parts.slice(0, 6).map((x) => (
+              <ProductCard key={x.id} p={x} locale={locale} t={t} />
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

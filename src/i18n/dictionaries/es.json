@@ -376,5 +376,10 @@
       "caras": "Caras",
       "voltaje_v": "Voltaje"
     }
+  },
+  "notFound": {
+    "title": "No encontramos esa página",
+    "text": "Puede que el producto ya no esté publicado. Mira el catálogo o escríbenos por WhatsApp.",
+    "home": "Ir al inicio"
   }
 }

@@ -136,3 +136,25 @@ export function filterProducts(
   };
   return list.sort(sorters[query.sort]);
 }
+
+// ------------------------------------------------------------ Especificaciones
+
+const specUnits: Record<string, string> = {
+  hp: " HP",
+  succion_in: '"',
+  descarga_in: '"',
+  diametro_in: '"',
+  caudal_lpm: " L/min",
+  cabeza_m: " m",
+  rpm: " rpm",
+  peso_kg: " kg",
+  diametro_mm: " mm",
+  capacidad_l: " L",
+  voltaje_v: " V",
+};
+
+export function specValue(key: string, value: string | number | undefined, locale: Locale = "es"): string {
+  if (value == null || value === "") return "";
+  const v = typeof value === "number" ? value.toLocaleString(localeTags[locale]) : value;
+  return `${v}${specUnits[key] ?? ""}`;
+}

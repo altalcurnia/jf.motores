@@ -26,7 +26,6 @@ const empty: CatalogData = { products: [], categories: [], engineModels: [], com
 
 export async function getCatalogData(): Promise<CatalogData> {
   "use cache";
-  cacheLife("hours");
   cacheTag("catalog");
   try {
     const supabase = createSupabasePublicClient();
@@ -43,6 +42,7 @@ export async function getCatalogData(): Promise<CatalogData> {
       supabase.from("part_compatibility").select("part_id, engine_model_id, product_id"),
     ]);
     if (products.error) throw products.error;
+    cacheLife("hours");
 
     return {
       products: (products.data ?? []).map((p) => ({
@@ -77,7 +77,9 @@ export async function getCatalogData(): Promise<CatalogData> {
       compat: (compat.data ?? []).map((c) => ({ partId: c.part_id, engineModelId: c.engine_model_id, productId: c.product_id })),
     };
   } catch (error) {
+    // Falla temporal: se muestra vacío, pero se reintenta al minuto para reintentar pronto.
     console.error("[catalog] no se pudo leer el catálogo", error);
+    cacheLife("minutes");
     return empty;
   }
 }

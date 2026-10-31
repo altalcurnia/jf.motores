@@ -376,5 +376,10 @@
       "caras": "Faces",
       "voltaje_v": "Tensão"
     }
+  },
+  "notFound": {
+    "title": "Não encontramos essa página",
+    "text": "O produto pode não estar mais publicado. Veja o catálogo ou fale conosco pelo WhatsApp.",
+    "home": "Ir para o início"
   }
 }
