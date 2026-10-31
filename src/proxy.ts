@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { LOCALE_COOKIE, hasLocale, matchLocale } from "@/i18n/config";
+import { isStaffUser, localeFromRequest } from "@/lib/auth-routing";
+import type { Database } from "@/lib/supabase/types";
 
 /** Rutas del panel que no requieren sesión. */
 const PUBLIC_ADMIN_PATHS = ["/admin/login"];
@@ -16,11 +18,11 @@ const ACCOUNT_RE = /^\/(es|en|pt)\/cuenta(?:\/([^/]+))?\/?$/;
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
-  // Enlace de acceso que cayó en la raíz (si Supabase usó la URL del sitio por defecto)
+  // Enlace de acceso que cayó en la raíz (si Supabase usó la URL del sitio por defecto).
+  // Sin "next": /auth/callback decide según el rol (cliente → su cuenta, personal → panel).
   if (pathname === "/" && searchParams.has("code")) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/callback";
-    if (!url.searchParams.has("next")) url.searchParams.set("next", "/admin");
     return NextResponse.redirect(url);
   }
 
@@ -53,7 +55,7 @@ async function handleSessionRoutes(request: NextRequest) {
   if (!url || !key) return NextResponse.next();
 
   let response = NextResponse.next({ request });
-  const supabase = createServerClient(url, key, {
+  const supabase = createServerClient<Database>(url, key, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (toSet, headers) => {
@@ -67,14 +69,17 @@ async function handleSessionRoutes(request: NextRequest) {
 
   // Valida el token con Supabase (no confiar solo en la cookie)
   const { data } = await supabase.auth.getClaims();
-  const signedIn = !!data?.claims?.sub;
+  const userId = data?.claims?.sub as string | undefined;
+  const signedIn = !!userId;
   const { pathname } = request.nextUrl;
 
-  // Panel
+  // Panel: solo personal interno. Un cliente con sesión nunca ve el panel: va a su cuenta.
   if (pathname.startsWith("/admin")) {
     const isPublic = PUBLIC_ADMIN_PATHS.includes(pathname);
-    if (!isPublic && !signedIn) return redirectTo(request, "/admin/login", pathname);
-    if (pathname === "/admin/login" && signedIn) return redirectTo(request, "/admin");
+    if (!signedIn) return isPublic ? response : redirectTo(request, "/admin/login", pathname);
+    const staff = await isStaffUser(supabase, userId);
+    if (!staff) return redirectTo(request, `/${localeFromRequest(request)}/cuenta`);
+    if (pathname === "/admin/login") return redirectTo(request, "/admin");
     return response;
   }
 

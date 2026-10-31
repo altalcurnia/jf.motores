@@ -1,28 +1,28 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { safeNextPath } from "@/lib/safe-redirect";
+import { isStaffUser, localeFromRequest, resolveDestination } from "@/lib/auth-routing";
 
 /**
- * Destino de los enlaces enviados por correo (entrar, confirmar cuenta, recuperar contraseña):
- * crea la sesión y lleva a la página indicada en "next".
+ * Regreso de Google y de enlaces con ?code=: crea la sesión y lleva a cada quien a su lugar
+ * (clientes → su cuenta en el sitio; personal interno → lo que pidió o el panel).
  */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
-  const next = safeNextPath(searchParams.get("next"), "/admin");
+  const requested = searchParams.get("next");
+  const locale = localeFromRequest(request, requested);
 
   if (code) {
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error && data.user) {
       // Entró con Google aceptando el texto legal junto al botón (Ley 1581)
       if (searchParams.get("consent") === "1") await supabase.rpc("accept_privacy");
-      return NextResponse.redirect(new URL(next, origin));
+      const isStaff = await isStaffUser(supabase, data.user.id);
+      return NextResponse.redirect(new URL(resolveDestination({ requested, isStaff, locale }), origin));
     }
   }
 
-  // Volver a la pantalla de entrada correspondiente con aviso de enlace vencido
-  const locale = next.match(/^\/(es|en|pt)\//)?.[1];
-  const failUrl = locale ? `/${locale}/cuenta/entrar?error=enlace` : "/admin/login?error=enlace";
+  const failUrl = requested?.startsWith("/admin") ? "/admin/login?error=enlace" : `/${locale}/cuenta/entrar?error=enlace`;
   return NextResponse.redirect(new URL(failUrl, origin));
 }
