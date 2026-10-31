@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { supabasePublicEnv, supabaseSecretKey } from "@/lib/env";
+import type { Database } from "./types";
 
 /**
  * Cliente con la sesión del usuario actual (respeta RLS).
@@ -11,7 +12,7 @@ import { supabasePublicEnv, supabaseSecretKey } from "@/lib/env";
 export async function createSupabaseServerClient() {
   const env = supabasePublicEnv();
   const cookieStore = await cookies();
-  return createServerClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
+  return createServerClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll: (toSet) => {
@@ -31,7 +32,7 @@ export async function createSupabaseServerClient() {
  */
 export function createSupabaseAdminClient() {
   const env = supabasePublicEnv();
-  return createClient(env.NEXT_PUBLIC_SUPABASE_URL, supabaseSecretKey(), {
+  return createClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, supabaseSecretKey(), {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

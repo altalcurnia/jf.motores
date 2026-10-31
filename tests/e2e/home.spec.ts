@@ -48,3 +48,11 @@ test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async
   await expect(page.locator("#journey .phase")).toHaveCount(4);
   await expect(page.locator("#lbl-pistones")).toHaveAttribute("href", "/en/repuestos/pistones");
 });
+
+test("el panel exige iniciar sesión", async ({ page }) => {
+  await page.goto("/admin");
+  await expect(page).toHaveURL(/\/admin\/login\?next=%2Fadmin$/);
+  await expect(page.getByRole("button", { name: "Enviarme el enlace" })).toBeVisible();
+  await page.getByRole("tab", { name: "Contraseña" }).click();
+  await expect(page.getByLabel("Contraseña", { exact: true })).toBeVisible();
+});

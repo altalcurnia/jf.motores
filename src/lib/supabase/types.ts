@@ -1,0 +1,429 @@
+// Tipos generados desde el esquema de Supabase (proyecto jf-motores-dev).
+// Regenerar después de cada migración.
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+type CatalogType = Database["public"]["Enums"]["catalog_type"];
+
+export type Database = {
+  __InternalSupabase: { PostgrestVersion: "14.18" };
+  public: {
+    Tables: {
+      admin_bootstrap: {
+        Row: { email: string };
+        Insert: { email: string };
+        Update: { email?: string };
+        Relationships: [];
+      };
+      advisors: {
+        Row: {
+          active: boolean;
+          catalogs: CatalogType[];
+          countries: string[];
+          created_at: string;
+          functions: Json;
+          id: string;
+          is_fallback: boolean;
+          languages: string[];
+          name: string;
+          phone_e164: string;
+          photo_path: string | null;
+          profile_id: string | null;
+          schedule: Json;
+          sort: number;
+          title: Json;
+          updated_at: string;
+          weight: number;
+        };
+        Insert: {
+          active?: boolean;
+          catalogs?: CatalogType[];
+          countries?: string[];
+          created_at?: string;
+          functions?: Json;
+          id?: string;
+          is_fallback?: boolean;
+          languages?: string[];
+          name: string;
+          phone_e164: string;
+          photo_path?: string | null;
+          profile_id?: string | null;
+          schedule?: Json;
+          sort?: number;
+          title?: Json;
+          updated_at?: string;
+          weight?: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["advisors"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "advisors_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: true; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ];
+      };
+      audit_log: {
+        Row: { action: string; actor: string | null; at: string; diff: Json | null; id: number; record_id: string | null; table_name: string };
+        Insert: { action: string; actor?: string | null; at?: string; diff?: Json | null; id?: never; record_id?: string | null; table_name: string };
+        Update: { action?: string; actor?: string | null; at?: string; diff?: Json | null; id?: never; record_id?: string | null; table_name?: string };
+        Relationships: [];
+      };
+      branches: {
+        Row: {
+          active: boolean;
+          address: string | null;
+          city: string;
+          country: string;
+          hours: Json;
+          id: string;
+          lat: number | null;
+          lng: number | null;
+          name: string;
+          phone: string | null;
+          sort: number;
+        };
+        Insert: {
+          active?: boolean;
+          address?: string | null;
+          city: string;
+          country?: string;
+          hours?: Json;
+          id?: string;
+          lat?: number | null;
+          lng?: number | null;
+          name: string;
+          phone?: string | null;
+          sort?: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["branches"]["Insert"]>;
+        Relationships: [];
+      };
+      categories: {
+        Row: {
+          active: boolean;
+          catalog: CatalogType;
+          created_at: string;
+          description: Json;
+          engine_part_key: string | null;
+          id: string;
+          name: Json;
+          parent_id: string | null;
+          slug: string;
+          sort: number;
+        };
+        Insert: {
+          active?: boolean;
+          catalog: CatalogType;
+          created_at?: string;
+          description?: Json;
+          engine_part_key?: string | null;
+          id?: string;
+          name: Json;
+          parent_id?: string | null;
+          slug: string;
+          sort?: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["categories"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "categories_parent_id_fkey"; columns: ["parent_id"]; isOneToOne: false; referencedRelation: "categories"; referencedColumns: ["id"] },
+        ];
+      };
+      company_settings: {
+        Row: {
+          email: string | null;
+          id: boolean;
+          legal_name: string | null;
+          nit: string | null;
+          socials: Json;
+          stats: Json;
+          texts: Json;
+          trade_name: string;
+          updated_at: string;
+        };
+        Insert: {
+          email?: string | null;
+          id?: boolean;
+          legal_name?: string | null;
+          nit?: string | null;
+          socials?: Json;
+          stats?: Json;
+          texts?: Json;
+          trade_name?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["company_settings"]["Insert"]>;
+        Relationships: [];
+      };
+      devices: {
+        Row: { created_at: string; id: string; key_hash: string; last_seen_at: string | null; unit_id: string };
+        Insert: { created_at?: string; id?: string; key_hash: string; last_seen_at?: string | null; unit_id: string };
+        Update: { created_at?: string; id?: string; key_hash?: string; last_seen_at?: string | null; unit_id?: string };
+        Relationships: [
+          { foreignKeyName: "devices_unit_id_fkey"; columns: ["unit_id"]; isOneToOne: true; referencedRelation: "units"; referencedColumns: ["id"] },
+        ];
+      };
+      engine_models: {
+        Row: { brand: string; id: string; model: string; notes: string | null };
+        Insert: { brand: string; id?: string; model: string; notes?: string | null };
+        Update: { brand?: string; id?: string; model?: string; notes?: string | null };
+        Relationships: [];
+      };
+      exchange_rates: {
+        Row: { currency: string; is_manual: boolean; per_cop: number; updated_at: string };
+        Insert: { currency: string; is_manual?: boolean; per_cop: number; updated_at?: string };
+        Update: { currency?: string; is_manual?: boolean; per_cop?: number; updated_at?: string };
+        Relationships: [];
+      };
+      forms: {
+        Row: { active: boolean; created_at: string; fields: Json; id: string; name: string; placement: string };
+        Insert: { active?: boolean; created_at?: string; fields?: Json; id?: string; name: string; placement?: string };
+        Update: { active?: boolean; created_at?: string; fields?: Json; id?: string; name?: string; placement?: string };
+        Relationships: [];
+      };
+      leads: {
+        Row: {
+          advisor_id: string | null;
+          catalog: CatalogType | null;
+          country: string | null;
+          created_at: string;
+          currency: string | null;
+          customer_id: string | null;
+          form_data: Json;
+          id: string;
+          locale: string | null;
+          notes: string | null;
+          part_key: string | null;
+          price_shown: number | null;
+          product_id: string | null;
+          rule_id: string | null;
+          status: Database["public"]["Enums"]["lead_status"];
+          updated_at: string;
+          user_agent: string | null;
+          utm: Json;
+          visitor_id: string | null;
+        };
+        Insert: {
+          advisor_id?: string | null;
+          catalog?: CatalogType | null;
+          country?: string | null;
+          created_at?: string;
+          currency?: string | null;
+          customer_id?: string | null;
+          form_data?: Json;
+          id?: string;
+          locale?: string | null;
+          notes?: string | null;
+          part_key?: string | null;
+          price_shown?: number | null;
+          product_id?: string | null;
+          rule_id?: string | null;
+          status?: Database["public"]["Enums"]["lead_status"];
+          updated_at?: string;
+          user_agent?: string | null;
+          utm?: Json;
+          visitor_id?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["leads"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "leads_advisor_id_fkey"; columns: ["advisor_id"]; isOneToOne: false; referencedRelation: "advisors"; referencedColumns: ["id"] },
+          { foreignKeyName: "leads_customer_id_fkey"; columns: ["customer_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "leads_product_id_fkey"; columns: ["product_id"]; isOneToOne: false; referencedRelation: "products"; referencedColumns: ["id"] },
+          { foreignKeyName: "leads_rule_id_fkey"; columns: ["rule_id"]; isOneToOne: false; referencedRelation: "routing_rules"; referencedColumns: ["id"] },
+        ];
+      };
+      part_compatibility: {
+        Row: { engine_model_id: string | null; id: string; notes: string | null; part_id: string; product_id: string | null };
+        Insert: { engine_model_id?: string | null; id?: string; notes?: string | null; part_id: string; product_id?: string | null };
+        Update: { engine_model_id?: string | null; id?: string; notes?: string | null; part_id?: string; product_id?: string | null };
+        Relationships: [
+          { foreignKeyName: "part_compatibility_engine_model_id_fkey"; columns: ["engine_model_id"]; isOneToOne: false; referencedRelation: "engine_models"; referencedColumns: ["id"] },
+          { foreignKeyName: "part_compatibility_part_id_fkey"; columns: ["part_id"]; isOneToOne: false; referencedRelation: "products"; referencedColumns: ["id"] },
+          { foreignKeyName: "part_compatibility_product_id_fkey"; columns: ["product_id"]; isOneToOne: false; referencedRelation: "products"; referencedColumns: ["id"] },
+        ];
+      };
+      permissions: {
+        Row: { description: string; key: string };
+        Insert: { description: string; key: string };
+        Update: { description?: string; key?: string };
+        Relationships: [];
+      };
+      product_images: {
+        Row: { alt: Json; id: string; is_reference: boolean; path: string; product_id: string; sort: number };
+        Insert: { alt?: Json; id?: string; is_reference?: boolean; path: string; product_id: string; sort?: number };
+        Update: { alt?: Json; id?: string; is_reference?: boolean; path?: string; product_id?: string; sort?: number };
+        Relationships: [
+          { foreignKeyName: "product_images_product_id_fkey"; columns: ["product_id"]; isOneToOne: false; referencedRelation: "products"; referencedColumns: ["id"] },
+        ];
+      };
+      products: {
+        Row: {
+          catalog: CatalogType;
+          category_id: string | null;
+          created_at: string;
+          created_by: string | null;
+          description: Json;
+          engine_model_id: string | null;
+          featured: boolean;
+          id: string;
+          model_glb_path: string | null;
+          name: Json;
+          price_cop: number | null;
+          published_at: string | null;
+          ref: string;
+          slug: string;
+          sold_at: string | null;
+          specs: Json;
+          status: Database["public"]["Enums"]["product_status"];
+          summary: Json;
+          updated_at: string;
+        };
+        Insert: {
+          catalog: CatalogType;
+          category_id?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          description?: Json;
+          engine_model_id?: string | null;
+          featured?: boolean;
+          id?: string;
+          model_glb_path?: string | null;
+          name: Json;
+          price_cop?: number | null;
+          published_at?: string | null;
+          ref: string;
+          slug: string;
+          sold_at?: string | null;
+          specs?: Json;
+          status?: Database["public"]["Enums"]["product_status"];
+          summary?: Json;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["products"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "products_category_id_fkey"; columns: ["category_id"]; isOneToOne: false; referencedRelation: "categories"; referencedColumns: ["id"] },
+          { foreignKeyName: "products_created_by_fkey"; columns: ["created_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "products_engine_model_id_fkey"; columns: ["engine_model_id"]; isOneToOne: false; referencedRelation: "engine_models"; referencedColumns: ["id"] },
+        ];
+      };
+      profiles: {
+        Row: {
+          country: string | null;
+          created_at: string;
+          email: string;
+          full_name: string | null;
+          id: string;
+          phone: string | null;
+          role_id: number;
+          updated_at: string;
+        };
+        Insert: {
+          country?: string | null;
+          created_at?: string;
+          email: string;
+          full_name?: string | null;
+          id: string;
+          phone?: string | null;
+          role_id: number;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "profiles_role_id_fkey"; columns: ["role_id"]; isOneToOne: false; referencedRelation: "roles"; referencedColumns: ["id"] },
+        ];
+      };
+      role_permissions: {
+        Row: { permission_key: string; role_id: number };
+        Insert: { permission_key: string; role_id: number };
+        Update: { permission_key?: string; role_id?: number };
+        Relationships: [
+          { foreignKeyName: "role_permissions_permission_key_fkey"; columns: ["permission_key"]; isOneToOne: false; referencedRelation: "permissions"; referencedColumns: ["key"] },
+          { foreignKeyName: "role_permissions_role_id_fkey"; columns: ["role_id"]; isOneToOne: false; referencedRelation: "roles"; referencedColumns: ["id"] },
+        ];
+      };
+      roles: {
+        Row: { description: string | null; id: number; is_internal: boolean; key: string; name: string };
+        Insert: { description?: string | null; id?: never; is_internal?: boolean; key: string; name: string };
+        Update: { description?: string | null; id?: never; is_internal?: boolean; key?: string; name?: string };
+        Relationships: [];
+      };
+      routing_rules: {
+        Row: {
+          active: boolean;
+          advisor_ids: string[];
+          conditions: Json;
+          created_at: string;
+          id: string;
+          name: string;
+          priority: number;
+          sticky: boolean;
+          strategy: Database["public"]["Enums"]["routing_strategy"];
+        };
+        Insert: {
+          active?: boolean;
+          advisor_ids?: string[];
+          conditions?: Json;
+          created_at?: string;
+          id?: string;
+          name: string;
+          priority?: number;
+          sticky?: boolean;
+          strategy?: Database["public"]["Enums"]["routing_strategy"];
+        };
+        Update: Partial<Database["public"]["Tables"]["routing_rules"]["Insert"]>;
+        Relationships: [];
+      };
+      routing_state: {
+        Row: { last_index: number; rule_id: string };
+        Insert: { last_index?: number; rule_id: string };
+        Update: { last_index?: number; rule_id?: string };
+        Relationships: [
+          { foreignKeyName: "routing_state_rule_id_fkey"; columns: ["rule_id"]; isOneToOne: true; referencedRelation: "routing_rules"; referencedColumns: ["id"] },
+        ];
+      };
+      telemetry: {
+        Row: { data: Json; device_id: string; id: number; recorded_at: string };
+        Insert: { data: Json; device_id: string; id?: never; recorded_at?: string };
+        Update: { data?: Json; device_id?: string; id?: never; recorded_at?: string };
+        Relationships: [
+          { foreignKeyName: "telemetry_device_id_fkey"; columns: ["device_id"]; isOneToOne: false; referencedRelation: "devices"; referencedColumns: ["id"] },
+        ];
+      };
+      units: {
+        Row: {
+          created_at: string;
+          id: string;
+          notes: string | null;
+          owner_id: string | null;
+          product_id: string | null;
+          serial: string;
+          sold_at: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          notes?: string | null;
+          owner_id?: string | null;
+          product_id?: string | null;
+          serial: string;
+          sold_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["units"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "units_owner_id_fkey"; columns: ["owner_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "units_product_id_fkey"; columns: ["product_id"]; isOneToOne: false; referencedRelation: "products"; referencedColumns: ["id"] },
+        ];
+      };
+    };
+    Views: { [_ in never]: never };
+    Functions: { [_ in never]: never };
+    Enums: {
+      catalog_type: "motobomba" | "motor" | "repuesto";
+      lead_status: "nuevo" | "contactado" | "cotizado" | "vendido" | "perdido";
+      product_status: "borrador" | "disponible" | "vendido";
+      routing_strategy: "fijo" | "rotacion" | "ponderada" | "eleccion";
+    };
+    CompositeTypes: { [_ in never]: never };
+  };
+};
+
+type PublicSchema = Database["public"];
+export type Tables<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Row"];
+export type TablesInsert<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Insert"];
+export type TablesUpdate<T extends keyof PublicSchema["Tables"]> = PublicSchema["Tables"][T]["Update"];
+export type Enums<T extends keyof PublicSchema["Enums"]> = PublicSchema["Enums"][T];

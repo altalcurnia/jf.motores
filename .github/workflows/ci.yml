@@ -9,6 +9,10 @@ jobs:
   verificar:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # Valores públicos (los mismos que ve el navegador). La clave secreta NUNCA va aquí.
+      NEXT_PUBLIC_SUPABASE_URL: https://lsrjrwpxxqlgobablyyc.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_1tM02IsUi0DFz8WS87pHoQ_3vWU4HGm
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
