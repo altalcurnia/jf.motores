@@ -20,13 +20,14 @@
 
 | Rol | Quién | Puede |
 |---|---|---|
-| **Administrador** | Administrador principal | Todo. Gestiona usuarios, roles y **permisos** desde el panel. |
+| **Propietario** | Administrador principal (único, definido en la base de datos) | Todo. Es el **único** que asigna roles y edita los permisos de cada rol. |
+| **Administrador** | Socios de confianza | Todo el panel, excepto asignar roles y editar permisos. |
 | **Editor** | Colaboradores | Catálogo, contenido, datos de empresa (según permisos asignados). |
 | **Asesor** | Vendedores por WhatsApp | Ver y actualizar sus leads asignados. |
 | **Cliente** | Usuario externo registrado | Funciones extra (favoritos, historial de cotizaciones, **Mis equipos**). |
 | **Visitante** | Anónimo | Ver catálogo, 3D, cotizar por WhatsApp. |
 
-Los permisos son **granulares** (p. ej. `productos.editar`, `leads.ver_todos`, `usuarios.gestionar`) y el Administrador los asigna a cada rol desde el panel.
+Toda cuenta nueva (correo o Google) es **Cliente**. Los permisos son **granulares** (p. ej. `catalogo.editar`, `leads.ver_todos`) y solo el **Propietario** los edita desde el panel (/admin/permisos) y asigna roles (/admin/usuarios). Administrador y Cliente tienen permisos fijos. Cada cambio queda en el historial (`audit_log`).
 
 ## 3. Requisitos funcionales
 

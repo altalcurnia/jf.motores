@@ -313,6 +313,7 @@ export type Database = {
           updated_at: string;
           privacy_accepted_at: string | null;
           marketing_opt_in: boolean;
+          is_owner: boolean;
         };
         Insert: {
           country?: string | null;
@@ -325,6 +326,7 @@ export type Database = {
           updated_at?: string;
           privacy_accepted_at?: string | null;
           marketing_opt_in?: boolean;
+          is_owner?: boolean;
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
         Relationships: [
@@ -417,6 +419,8 @@ export type Database = {
     Views: { [_ in never]: never };
     Functions: {
       accept_privacy: { Args: Record<string, never>; Returns: undefined };
+      set_user_role: { Args: { target: string; role_key: string }; Returns: undefined };
+      set_role_permission: { Args: { role_key: string; permission_key: string; granted: boolean }; Returns: undefined };
     };
     Enums: {
       catalog_type: "motobomba" | "motor" | "repuesto";

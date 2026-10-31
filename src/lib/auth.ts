@@ -6,6 +6,8 @@ export type StaffSession = {
   email: string;
   fullName: string | null;
   role: { key: string; name: string; isInternal: boolean };
+  /** Propietario: único que otorga roles y edita permisos. */
+  isOwner: boolean;
   permissions: string[];
 };
 
@@ -21,7 +23,7 @@ export async function getSession(): Promise<StaffSession | null> {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("email, full_name, role_id, roles ( key, name, is_internal )")
+    .select("email, full_name, role_id, is_owner, roles ( key, name, is_internal )")
     .eq("id", userId)
     .single();
   if (!profile || !profile.roles) return null;
@@ -36,6 +38,7 @@ export async function getSession(): Promise<StaffSession | null> {
     email: profile.email,
     fullName: profile.full_name,
     role: { key: profile.roles.key, name: profile.roles.name, isInternal: profile.roles.is_internal },
+    isOwner: profile.is_owner,
     permissions: (perms ?? []).map((p) => p.permission_key).sort(),
   };
 }

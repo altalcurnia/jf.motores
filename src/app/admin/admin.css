@@ -87,3 +87,31 @@ button:disabled { opacity: 0.6; cursor: wait; }
 .btn-secondary.google { display: flex; align-items: center; justify-content: center; gap: 10px; background: #fff; color: #1f1f1f; border: 0; }
 .divider { display: flex; align-items: center; gap: 10px; color: var(--mut); font-size: 12px; }
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+/* Navegación y tablas */
+.topbar { gap: 16px; flex-wrap: wrap; }
+.admin-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.admin-nav a { color: var(--mut); text-decoration: none; padding: 7px 12px; border-radius: 8px; font-size: 14px; }
+.admin-nav a:hover { background: var(--panel); color: var(--ink); }
+.shell > h1 { margin-top: 4px; }
+.lead { margin: 8px 0 20px; max-width: 70ch; }
+.block { display: block; }
+.small { font-size: 12px; }
+.center { text-align: center; }
+.notice { margin-bottom: 14px; }
+.pill.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); }
+.pill.owner { color: var(--yellow); border-color: color-mix(in srgb, var(--yellow) 50%, transparent); margin-left: 8px; }
+.card.link { text-decoration: none; color: var(--ink); transition: border-color 0.2s; }
+.card.link:hover { border-color: var(--yellow); }
+.toolbar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; }
+.search { flex: 1; min-width: 220px; background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; }
+.seg { display: flex; gap: 4px; background: #0d1014; padding: 4px; border-radius: 10px; }
+.seg button { background: none; border: 0; color: var(--mut); padding: 7px 12px; border-radius: 8px; font: inherit; cursor: pointer; }
+.seg button.on { background: var(--panel); color: var(--ink); }
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mut); padding: 10px; border-bottom: 1px solid var(--line); }
+.table td { padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.table select { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; font: inherit; }
+.table select:disabled { opacity: 0.6; }
+.matrix input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--yellow); cursor: pointer; }
+.matrix input:disabled { cursor: not-allowed; opacity: 0.55; }

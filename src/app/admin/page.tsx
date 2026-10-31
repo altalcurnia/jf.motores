@@ -1,8 +1,9 @@
-import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PasswordForm } from "./PasswordForm";
+import { AdminTopbar } from "./AdminTopbar";
 
 export const metadata = { title: "Inicio" };
 
@@ -12,22 +13,12 @@ const sections = [
   { title: "Cotizaciones", desc: "Clientes que tocaron WhatsApp: producto, asesor, país y estado.", perm: "leads.ver_todos", day: 6 },
   { title: "Asesores", desc: "WhatsApp, nombre, cargo y reglas para repartir clientes.", perm: "asesores.gestionar", day: 6 },
   { title: "Empresa y sedes", desc: "Datos de confianza, garantía, cifras y sedes.", perm: "empresa.editar", day: 7 },
-  { title: "Usuarios y permisos", desc: "Invitar colaboradores y definir qué puede hacer cada rol.", perm: "usuarios.gestionar", day: 7 },
 ];
 
 export default function AdminHome() {
   return (
     <main className="shell">
-      <header className="topbar">
-        <div className="brand">
-          <Image src="/logo.png" alt="" width={34} height={34} />
-          <b>JF MOTORES</b>
-          <span className="tag">Panel</span>
-        </div>
-        <form action="/auth/signout" method="post">
-          <button className="btn-ghost">Cerrar sesión</button>
-        </form>
-      </header>
+      <AdminTopbar />
       <Suspense fallback={<p className="muted">Cargando tu cuenta…</p>}>
         <Dashboard />
       </Suspense>
@@ -61,6 +52,7 @@ async function Dashboard() {
         <h1>Hola{session.fullName ? `, ${session.fullName}` : ""}</h1>
         <p className="muted">
           {session.email} · <b className="role">{session.role.name}</b>
+          {session.isOwner && <span className="pill owner">Propietario</span>}
         </p>
       </section>
 
@@ -74,6 +66,20 @@ async function Dashboard() {
 
       <h2>Secciones</h2>
       <section className="grid">
+        {(session.isOwner || can(session, "usuarios.ver")) && (
+          <>
+            <Link href="/admin/usuarios" className="card link">
+              <h3>Usuarios</h3>
+              <p>Todas las cuentas. Toda cuenta nueva es Cliente; {session.isOwner ? "tú" : "el propietario"} asigna los roles del equipo.</p>
+              <span className="pill ok">Disponible</span>
+            </Link>
+            <Link href="/admin/permisos" className="card link">
+              <h3>Permisos</h3>
+              <p>Qué puede hacer cada rol (Editor, Asesor). Administrador y Cliente son fijos.</p>
+              <span className="pill ok">Disponible</span>
+            </Link>
+          </>
+        )}
         {sections
           .filter((s) => can(session, s.perm))
           .map((s) => (
