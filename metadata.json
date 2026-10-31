@@ -1,0 +1,6 @@
+{
+  "name": "JF Motores",
+  "description": "Migrated static site for JF Motores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
