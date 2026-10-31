@@ -138,3 +138,32 @@ body {
   color: var(--mut);
   font-size: 12px;
 }
+
+/* Motor 3D: aparece con fundido cuando está listo (sin pantalla de carga) */
+#webgl {
+  /* Dentro de <main> el lienzo debe quedar detrás del contenido */
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+#webgl.ready {
+  opacity: 1;
+}
+body.over-part {
+  cursor: pointer;
+}
+/* Etiquetas del despiece: son enlaces a la categoría de repuestos */
+.lbl {
+  text-decoration: none;
+  pointer-events: none;
+}
+.lbl .tag {
+  transition: border-color 0.3s, background 0.3s;
+}
+.lbl:hover .tag {
+  border-color: var(--yellow);
+  background: rgba(247, 198, 0, 0.12);
+}
+.marquee .mq-item {
+  display: contents;
+}

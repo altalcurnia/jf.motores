@@ -4,6 +4,12 @@ import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
+import { FallbackImage } from "@/components/FallbackImage";
+import { EngineExperience } from "@/features/engine3d/EngineExperience";
+
+// Foto de referencia temporal (servidor externo). Se reemplaza por fotos propias desde el panel.
+const BENEFITS_IMAGE =
+  "https://image.qwenlm.ai/public_source/0b9b4f50-6968-461a-9931-f52210560732/165e11408-37e4-4eec-908d-1dfbb476b268.png";
 
 const catalogKeys = ["motobombas", "motores", "repuestos"] as const;
 
@@ -11,11 +17,11 @@ export default async function HomePage() {
   const locale = await getLocale();
   const dict = await getDictionary();
   const t = dict.hero;
+  const b = dict.benefits;
   const wa = buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general);
 
   return (
     <>
-      {/* El motor 3D (día 5) se monta detrás de este hero. */}
       <section id="hero">
         <div className="hero-in">
           <div className="kicker">{t.kicker}</div>
@@ -71,6 +77,68 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <EngineExperience
+        locale={locale}
+        t={{ journey: dict.journey, hud: dict.hud, rail: dict.rail, parts: dict.parts }}
+      />
+
+      <div className="post">
+        <div className="marquee" aria-hidden="true">
+          <div className="track">
+            {[0, 1].map((copy) =>
+              dict.marquee.map((item, i) => (
+                <span key={`${copy}-${i}`} className="mq-item">
+                  <span>{item}</span>
+                  <span>◆</span>
+                </span>
+              )),
+            )}
+          </div>
+        </div>
+
+        <section className="block" id="beneficios">
+          <div className="sec-head">
+            <div>
+              <div className="sk reveal">{b.kicker}</div>
+              <h2 className="reveal">
+                {b.title1}
+                <em>{b.titleEm}</em>
+                {b.title2}
+              </h2>
+            </div>
+            <p className="reveal">{b.intro}</p>
+          </div>
+          <div className="b-grid">
+            <div className="b-visual reveal">
+              <FallbackImage src={BENEFITS_IMAGE} alt={b.imageAlt} />
+              <div className="bv-bar">
+                <span>{b.bar1}</span>
+                <span>{b.bar2}</span>
+              </div>
+            </div>
+            <div>
+              {b.rows.map((row, i) => (
+                <div className="b-row reveal" key={row.h3}>
+                  <div className="num">/{String(i + 1).padStart(2, "0")}</div>
+                  <div>
+                    <h3>{row.h3}</h3>
+                    <p>{row.p}</p>
+                  </div>
+                  <div className="arr">↗</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="spec-strip" id="specs">
+            {b.specs.map((sp) => (
+              <div className="reveal" key={sp.span}>
+                <b>{sp.b}</b>
+                <span>{sp.span}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
       <section className="block" id="catalogos">
         <div className="sk reveal">{dict.catalogs.kicker}</div>
         <h2 className="reveal">{dict.catalogs.title}</h2>
@@ -111,6 +179,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </div>
     </>
   );
 }

@@ -35,3 +35,16 @@ test("los tres catálogos responden", async ({ page }) => {
     expect(res?.status()).toBe(200);
   }
 });
+
+test("cada pieza del motor tiene su página de repuestos", async ({ page }) => {
+  const res = await page.goto("/es/repuestos/radiador");
+  expect(res?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Repuestos: Radiador");
+  await expect(page.locator("a.btn.y")).toHaveAttribute("href", /text=.*radiador/i);
+});
+
+test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async ({ page }) => {
+  await page.goto("/en");
+  await expect(page.locator("#journey .phase")).toHaveCount(4);
+  await expect(page.locator("#lbl-pistones")).toHaveAttribute("href", "/en/repuestos/pistones");
+});
