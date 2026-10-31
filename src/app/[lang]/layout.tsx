@@ -48,7 +48,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       <body>
         <SiteHeader locale={locale} dict={dict} />
         <main>{children}</main>
-        <SiteFooter dict={dict} />
+        <SiteFooter dict={dict} locale={locale} />
         <SiteEffects />
       </body>
     </html>

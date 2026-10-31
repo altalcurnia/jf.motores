@@ -56,3 +56,26 @@ test("el panel exige iniciar sesión", async ({ page }) => {
   await page.getByRole("tab", { name: "Contraseña" }).click();
   await expect(page.getByLabel("Contraseña", { exact: true })).toBeVisible();
 });
+
+test("cuentas de clientes: registro, entrar y protección de Mi cuenta", async ({ page }) => {
+  await page.goto("/es/cuenta");
+  await expect(page).toHaveURL(/\/es\/cuenta\/entrar\?next=%2Fes%2Fcuenta$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Entra a tu cuenta");
+
+  await page.getByRole("link", { name: "Créala aquí" }).click();
+  await expect(page).toHaveURL(/\/es\/cuenta\/registro$/);
+  // Sin autorizar el tratamiento de datos no se puede enviar
+  await expect(page.getByRole("checkbox").first()).toHaveAttribute("required", "");
+  await expect(page.getByRole("link", { name: "política de tratamiento de datos" })).toHaveAttribute("href", "/es/legal/privacidad");
+
+  await page.goto("/en/cuenta/registro");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Create your account");
+});
+
+test("el encabezado tiene el acceso a la cuenta y la política de datos responde", async ({ page }) => {
+  await page.goto("/pt");
+  await expect(page.locator("a.acc-nav")).toHaveAttribute("href", "/pt/cuenta/entrar");
+  const res = await page.goto("/es/legal/privacidad");
+  expect(res?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Política de tratamiento de datos personales");
+});

@@ -5,6 +5,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { site } from "@/lib/site";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { AccountNavLink } from "@/features/account/AccountNavLink";
 
 export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const t = dict.nav;
@@ -24,6 +25,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
       </div>
       <div className="nav-right">
         <LanguageSwitcher current={locale} label={t.language} />
+        <AccountNavLink locale={locale} signIn={dict.account.signIn} myAccount={dict.account.myAccount} />
         <a
           className="ncta"
           href={buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general)}

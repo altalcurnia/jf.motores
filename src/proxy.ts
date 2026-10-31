@@ -4,10 +4,13 @@ import { LOCALE_COOKIE, hasLocale, matchLocale } from "@/i18n/config";
 
 /** Rutas del panel que no requieren sesión. */
 const PUBLIC_ADMIN_PATHS = ["/admin/login"];
+/** Páginas de cuenta para visitantes sin sesión (con sesión, redirigen a /cuenta). */
+const GUEST_ACCOUNT_PAGES = ["entrar", "registro", "recuperar"];
+const ACCOUNT_RE = /^\/(es|en|pt)\/cuenta(?:\/([^/]+))?\/?$/;
 
 /**
- * 1. Panel (/admin) y autenticación (/auth): renueva la sesión de Supabase y
- *    exige sesión iniciada en /admin (el rol se verifica en el servidor).
+ * 1. Panel (/admin), cuenta de cliente (/[lang]/cuenta) y /auth: renueva la sesión de
+ *    Supabase y protege las páginas que la requieren (el rol se verifica en el servidor).
  * 2. Sitio público: redirige las rutas sin idioma a /es, /en o /pt.
  */
 export async function proxy(request: NextRequest) {
@@ -21,8 +24,8 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (pathname.startsWith("/admin") || pathname.startsWith("/auth")) {
-    return handleAuthRoutes(request);
+  if (pathname.startsWith("/admin") || pathname.startsWith("/auth") || ACCOUNT_RE.test(pathname)) {
+    return handleSessionRoutes(request);
   }
 
   const first = pathname.split("/")[1];
@@ -36,7 +39,15 @@ export async function proxy(request: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-async function handleAuthRoutes(request: NextRequest) {
+function redirectTo(request: NextRequest, pathname: string, next?: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+  url.search = "";
+  if (next) url.searchParams.set("next", next);
+  return NextResponse.redirect(url);
+}
+
+async function handleSessionRoutes(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return NextResponse.next();
@@ -57,21 +68,23 @@ async function handleAuthRoutes(request: NextRequest) {
   // Valida el token con Supabase (no confiar solo en la cookie)
   const { data } = await supabase.auth.getClaims();
   const signedIn = !!data?.claims?.sub;
-
   const { pathname } = request.nextUrl;
-  const isProtected = pathname.startsWith("/admin") && !PUBLIC_ADMIN_PATHS.includes(pathname);
-  if (isProtected && !signedIn) {
-    const login = request.nextUrl.clone();
-    login.pathname = "/admin/login";
-    login.search = "";
-    login.searchParams.set("next", pathname);
-    return NextResponse.redirect(login);
+
+  // Panel
+  if (pathname.startsWith("/admin")) {
+    const isPublic = PUBLIC_ADMIN_PATHS.includes(pathname);
+    if (!isPublic && !signedIn) return redirectTo(request, "/admin/login", pathname);
+    if (pathname === "/admin/login" && signedIn) return redirectTo(request, "/admin");
+    return response;
   }
-  if (pathname === "/admin/login" && signedIn) {
-    const home = request.nextUrl.clone();
-    home.pathname = "/admin";
-    home.search = "";
-    return NextResponse.redirect(home);
+
+  // Cuenta de cliente
+  const account = pathname.match(ACCOUNT_RE);
+  if (account) {
+    const [, locale, sub] = account;
+    const guestPage = !!sub && GUEST_ACCOUNT_PAGES.includes(sub);
+    if (guestPage && signedIn) return redirectTo(request, `/${locale}/cuenta`);
+    if (!guestPage && !signedIn) return redirectTo(request, `/${locale}/cuenta/entrar`, pathname);
   }
   return response;
 }

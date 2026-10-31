@@ -59,7 +59,8 @@
   },
   "footer": {
     "slogan": "Peace of mind and reliability",
-    "priceNotice": "Prices cover the item only. They do not include shipping, taxes or import/export costs."
+    "priceNotice": "Prices cover the item only. They do not include shipping, taxes or import/export costs.",
+    "privacy": "Data policy"
   },
   "whatsapp": {
     "general": "Hello JF Motores, I would like information about your equipment."
@@ -193,5 +194,117 @@
     "title": "Spare parts: ",
     "back": "See all spare parts",
     "whatsapp": "Hello JF Motores, I'm looking for spare parts: "
+  },
+  "account": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "myAccount": "My account",
+    "signOut": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 10 characters.",
+    "confirmPassword": "Repeat password",
+    "fullName": "Full name",
+    "phone": "WhatsApp / phone",
+    "phoneOptional": "(optional)",
+    "country": "Country",
+    "countryPlaceholder": "Choose your country",
+    "acceptPrivacy1": "I authorize the processing of my data under JF Motores' ",
+    "privacyLink": "personal data policy",
+    "acceptPrivacy2": ".",
+    "marketingOptIn": "I want to receive news and offers.",
+    "signInTitle": "Sign in to your account",
+    "signInSubtitle": "Check your quotes and the equipment you bought.",
+    "noAccount": "Don't have an account?",
+    "createOne": "Create one",
+    "haveAccount": "Already have an account?",
+    "signInHere": "Sign in",
+    "forgot": "Forgot your password?",
+    "useLink": "Email me a sign-in link instead",
+    "usePassword": "Use my password instead",
+    "sendLink": "Email me the link",
+    "signUpTitle": "Create your account",
+    "signUpSubtitle": "Free. Get quotes faster and keep track of your equipment.",
+    "benefits": [
+      "History of your quotes",
+      "Tracking of the equipment you buy",
+      "Your details saved for faster quotes"
+    ],
+    "checkEmailTitle": "Check your email",
+    "checkEmailSignup": "We sent a link to {email} to confirm your account.",
+    "checkEmailLink": "We sent a sign-in link to {email}.",
+    "checkEmailReset": "We sent a link to {email} to create a new password.",
+    "spamHint": "It may take a minute. Check your spam folder too.",
+    "errors": {
+      "invalid": "Incorrect email or password.",
+      "exists": "An account with that email already exists. Sign in or reset your password.",
+      "weak": "Password must be at least 10 characters.",
+      "mismatch": "Passwords do not match.",
+      "privacy": "You must authorize data processing to create an account.",
+      "rate": "Too many attempts. Please wait a few minutes.",
+      "unconfirmed": "Confirm your email with the link we sent before signing in.",
+      "generic": "Something went wrong. Please try again.",
+      "link": "The link expired or was already used. Request a new one."
+    },
+    "sending": "Sending…",
+    "save": "Save changes",
+    "saved": "Changes saved.",
+    "hello": "Hello",
+    "profileTitle": "Your details",
+    "passwordTitle": "Password",
+    "newPassword": "New password",
+    "savePassword": "Save password",
+    "passwordSaved": "Password saved.",
+    "equipmentTitle": "My equipment",
+    "equipmentEmpty": "When you buy JF equipment we'll register it here so you can keep track of it.",
+    "serial": "Serial",
+    "soldOn": "Purchased on",
+    "quotesTitle": "My quotes",
+    "quotesEmpty": "No quotes yet. Quotes requested while signed in will appear here.",
+    "staffPanel": "Go to the admin panel",
+    "forgotTitle": "Reset password",
+    "forgotSubtitle": "Enter your email and we'll send you a link to create a new one.",
+    "newPasswordTitle": "Create your new password",
+    "backToSignIn": "Back to sign in",
+    "goToAccount": "Go to my account",
+    "quoteStatus": {
+      "nuevo": "New",
+      "contactado": "Contacted",
+      "cotizado": "Quoted",
+      "vendido": "Purchased",
+      "perdido": "Closed"
+    }
+  },
+  "legal": {
+    "privacyTitle": "Personal data processing policy",
+    "draftNotice": "Draft pending legal review and the company's legal details.",
+    "pending": "[pending]",
+    "updated": "Last updated: October 31, 2026",
+    "sections": [
+      {
+        "h": "1. Data controller",
+        "p": "JF Motores ({legalName}, Tax ID {nit}), with its workshop at {address}, is responsible for processing the personal data collected on this site, in accordance with Colombian Law 1581 of 2012 and Decree 1377 of 2013."
+      },
+      {
+        "h": "2. Data we collect",
+        "p": "Name, email, phone or WhatsApp, country, and information about the quotes you request (product, date and channel). Also technical browsing data such as language and device."
+      },
+      {
+        "h": "3. How we use it",
+        "p": "To handle your quotes and purchases, give you access to your account, track the equipment you buy, improve the site and, only if you authorize it, send you news and offers."
+      },
+      {
+        "h": "4. Your rights",
+        "p": "You may access, update, correct and request deletion of your data, revoke this authorization and file complaints with Colombia's Superintendence of Industry and Commerce. You can update your details from My account."
+      },
+      {
+        "h": "5. How to exercise them",
+        "p": "Message us on WhatsApp at {phone} with your name, email and request. We will reply within the legal deadlines (10 business days for inquiries and 15 for claims)."
+      },
+      {
+        "h": "6. Security and retention",
+        "p": "Your data is stored on servers with restricted access. Passwords are stored encrypted and nobody can see them. We keep data while the business relationship exists or as required by law."
+      }
+    ]
   }
 }

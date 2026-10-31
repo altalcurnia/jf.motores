@@ -59,7 +59,8 @@
   },
   "footer": {
     "slogan": "Tranquilidade e confiança",
-    "priceNotice": "Os preços referem-se apenas ao item. Não incluem frete, impostos nem custos de importação ou exportação."
+    "priceNotice": "Os preços referem-se apenas ao item. Não incluem frete, impostos nem custos de importação ou exportação.",
+    "privacy": "Política de dados"
   },
   "whatsapp": {
     "general": "Olá JF Motores, gostaria de informações sobre seus equipamentos."
@@ -193,5 +194,117 @@
     "title": "Peças: ",
     "back": "Ver todas as peças",
     "whatsapp": "Olá JF Motores, procuro peças de: "
+  },
+  "account": {
+    "signIn": "Entrar",
+    "signUp": "Criar conta",
+    "myAccount": "Minha conta",
+    "signOut": "Sair",
+    "email": "E-mail",
+    "password": "Senha",
+    "passwordHint": "Mínimo de 10 caracteres.",
+    "confirmPassword": "Repetir senha",
+    "fullName": "Nome completo",
+    "phone": "WhatsApp / telefone",
+    "phoneOptional": "(opcional)",
+    "country": "País",
+    "countryPlaceholder": "Escolha seu país",
+    "acceptPrivacy1": "Autorizo o tratamento dos meus dados conforme a ",
+    "privacyLink": "política de tratamento de dados",
+    "acceptPrivacy2": " da JF Motores.",
+    "marketingOptIn": "Quero receber novidades e ofertas.",
+    "signInTitle": "Entre na sua conta",
+    "signInSubtitle": "Consulte seus orçamentos e os equipamentos que comprou.",
+    "noAccount": "Não tem conta?",
+    "createOne": "Crie aqui",
+    "haveAccount": "Já tem conta?",
+    "signInHere": "Entre aqui",
+    "forgot": "Esqueceu sua senha?",
+    "useLink": "Prefiro receber um link por e-mail",
+    "usePassword": "Prefiro usar minha senha",
+    "sendLink": "Enviar o link",
+    "signUpTitle": "Crie sua conta",
+    "signUpSubtitle": "Grátis. Ajuda você a fazer orçamentos mais rápido e acompanhar seus equipamentos.",
+    "benefits": [
+      "Histórico dos seus orçamentos",
+      "Acompanhamento dos equipamentos que comprar",
+      "Seus dados salvos para orçamentos mais rápidos"
+    ],
+    "checkEmailTitle": "Verifique seu e-mail",
+    "checkEmailSignup": "Enviamos um link para {email} para confirmar sua conta.",
+    "checkEmailLink": "Enviamos um link para {email} para entrar.",
+    "checkEmailReset": "Enviamos um link para {email} para criar uma nova senha.",
+    "spamHint": "Pode levar um minuto. Verifique também a pasta de spam.",
+    "errors": {
+      "invalid": "E-mail ou senha incorretos.",
+      "exists": "Já existe uma conta com esse e-mail. Entre ou recupere sua senha.",
+      "weak": "A senha deve ter pelo menos 10 caracteres.",
+      "mismatch": "As senhas não coincidem.",
+      "privacy": "Você deve autorizar o tratamento de dados para criar a conta.",
+      "rate": "Muitas tentativas. Aguarde alguns minutos.",
+      "unconfirmed": "Confirme seu e-mail com o link que enviamos antes de entrar.",
+      "generic": "Algo deu errado. Tente novamente.",
+      "link": "O link expirou ou já foi usado. Peça um novo."
+    },
+    "sending": "Enviando…",
+    "save": "Salvar alterações",
+    "saved": "Alterações salvas.",
+    "hello": "Olá",
+    "profileTitle": "Seus dados",
+    "passwordTitle": "Senha",
+    "newPassword": "Nova senha",
+    "savePassword": "Salvar senha",
+    "passwordSaved": "Senha salva.",
+    "equipmentTitle": "Meus equipamentos",
+    "equipmentEmpty": "Quando você comprar um equipamento JF, ele será registrado aqui para você acompanhá-lo.",
+    "serial": "Série",
+    "soldOn": "Comprado em",
+    "quotesTitle": "Meus orçamentos",
+    "quotesEmpty": "Você ainda não tem orçamentos. Os pedidos feitos com sua sessão iniciada aparecerão aqui.",
+    "staffPanel": "Ir para o painel de administração",
+    "forgotTitle": "Recuperar senha",
+    "forgotSubtitle": "Digite seu e-mail e enviaremos um link para criar uma nova.",
+    "newPasswordTitle": "Crie sua nova senha",
+    "backToSignIn": "Voltar para entrar",
+    "goToAccount": "Ir para minha conta",
+    "quoteStatus": {
+      "nuevo": "Novo",
+      "contactado": "Contatado",
+      "cotizado": "Orçado",
+      "vendido": "Comprado",
+      "perdido": "Encerrado"
+    }
+  },
+  "legal": {
+    "privacyTitle": "Política de tratamento de dados pessoais",
+    "draftNotice": "Rascunho pendente de revisão jurídica e dos dados legais da empresa.",
+    "pending": "[pendente]",
+    "updated": "Última atualização: 31 de outubro de 2026",
+    "sections": [
+      {
+        "h": "1. Responsável",
+        "p": "A JF Motores ({legalName}, NIT {nit}), com oficina em {address}, é responsável pelo tratamento dos dados pessoais coletados neste site, conforme a Lei 1581 de 2012 e o Decreto 1377 de 2013 da Colômbia."
+      },
+      {
+        "h": "2. Dados que coletamos",
+        "p": "Nome, e-mail, telefone ou WhatsApp, país e as informações dos orçamentos que você solicita (produto, data e canal). Também dados técnicos de navegação, como idioma e dispositivo."
+      },
+      {
+        "h": "3. Para que os usamos",
+        "p": "Atender seus orçamentos e compras, dar acesso à sua conta, acompanhar os equipamentos que você comprar, melhorar o site e, somente se você autorizar, enviar novidades e ofertas."
+      },
+      {
+        "h": "4. Seus direitos",
+        "p": "Você pode conhecer, atualizar, retificar e solicitar a exclusão dos seus dados, revogar esta autorização e apresentar reclamações à Superintendência de Indústria e Comércio da Colômbia. Você pode atualizar seus dados em Minha conta."
+      },
+      {
+        "h": "5. Como exercê-los",
+        "p": "Escreva-nos pelo WhatsApp {phone} informando seu nome, e-mail e a solicitação. Responderemos nos prazos legais (10 dias úteis para consultas e 15 para reclamações)."
+      },
+      {
+        "h": "6. Segurança e conservação",
+        "p": "Seus dados ficam em servidores com acesso restrito. As senhas são armazenadas criptografadas e ninguém pode vê-las. Conservamos os dados enquanto existir a relação comercial ou a lei exigir."
+      }
+    ]
   }
 }

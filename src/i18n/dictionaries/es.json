@@ -59,7 +59,8 @@
   },
   "footer": {
     "slogan": "Tranquilidad y confianza",
-    "priceNotice": "Los precios corresponden únicamente al artículo. No incluyen envío, impuestos ni costos de importación o exportación."
+    "priceNotice": "Los precios corresponden únicamente al artículo. No incluyen envío, impuestos ni costos de importación o exportación.",
+    "privacy": "Política de datos"
   },
   "whatsapp": {
     "general": "Hola JF Motores, quiero información sobre sus equipos."
@@ -193,5 +194,117 @@
     "title": "Repuestos: ",
     "back": "Ver todos los repuestos",
     "whatsapp": "Hola JF Motores, busco repuestos de: "
+  },
+  "account": {
+    "signIn": "Entrar",
+    "signUp": "Crear cuenta",
+    "myAccount": "Mi cuenta",
+    "signOut": "Cerrar sesión",
+    "email": "Correo",
+    "password": "Contraseña",
+    "passwordHint": "Mínimo 10 caracteres.",
+    "confirmPassword": "Repetir contraseña",
+    "fullName": "Nombre completo",
+    "phone": "WhatsApp / teléfono",
+    "phoneOptional": "(opcional)",
+    "country": "País",
+    "countryPlaceholder": "Elige tu país",
+    "acceptPrivacy1": "Autorizo el tratamiento de mis datos según la ",
+    "privacyLink": "política de tratamiento de datos",
+    "acceptPrivacy2": " de JF Motores.",
+    "marketingOptIn": "Quiero recibir novedades y ofertas.",
+    "signInTitle": "Entra a tu cuenta",
+    "signInSubtitle": "Consulta tus cotizaciones y los equipos que compraste.",
+    "noAccount": "¿No tienes cuenta?",
+    "createOne": "Créala aquí",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "signInHere": "Entra aquí",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "useLink": "Prefiero recibir un enlace al correo",
+    "usePassword": "Prefiero usar mi contraseña",
+    "sendLink": "Enviarme el enlace",
+    "signUpTitle": "Crea tu cuenta",
+    "signUpSubtitle": "Gratis. Te ayuda a cotizar más rápido y a hacer seguimiento de tus equipos.",
+    "benefits": [
+      "Historial de tus cotizaciones",
+      "Seguimiento de los equipos que compres",
+      "Tus datos ya guardados para cotizar más rápido"
+    ],
+    "checkEmailTitle": "Revisa tu correo",
+    "checkEmailSignup": "Te enviamos un enlace a {email} para confirmar tu cuenta.",
+    "checkEmailLink": "Te enviamos un enlace a {email} para entrar.",
+    "checkEmailReset": "Te enviamos un enlace a {email} para crear una nueva contraseña.",
+    "spamHint": "Puede tardar un minuto. Revisa también la carpeta de spam.",
+    "errors": {
+      "invalid": "Correo o contraseña incorrectos.",
+      "exists": "Ya existe una cuenta con ese correo. Entra o recupera tu contraseña.",
+      "weak": "La contraseña debe tener al menos 10 caracteres.",
+      "mismatch": "Las contraseñas no coinciden.",
+      "privacy": "Debes autorizar el tratamiento de datos para crear la cuenta.",
+      "rate": "Demasiados intentos. Espera unos minutos.",
+      "unconfirmed": "Confirma tu correo con el enlace que te enviamos antes de entrar.",
+      "generic": "Algo salió mal. Intenta de nuevo.",
+      "link": "El enlace venció o ya se usó. Pide uno nuevo."
+    },
+    "sending": "Enviando…",
+    "save": "Guardar cambios",
+    "saved": "Cambios guardados.",
+    "hello": "Hola",
+    "profileTitle": "Tus datos",
+    "passwordTitle": "Contraseña",
+    "newPassword": "Nueva contraseña",
+    "savePassword": "Guardar contraseña",
+    "passwordSaved": "Contraseña guardada.",
+    "equipmentTitle": "Mis equipos",
+    "equipmentEmpty": "Cuando compres un equipo JF lo registraremos aquí para que puedas hacerle seguimiento.",
+    "serial": "Serie",
+    "soldOn": "Comprado el",
+    "quotesTitle": "Mis cotizaciones",
+    "quotesEmpty": "Aún no tienes cotizaciones. Cuando cotices con tu sesión iniciada aparecerán aquí.",
+    "staffPanel": "Ir al panel de administración",
+    "forgotTitle": "Recuperar contraseña",
+    "forgotSubtitle": "Escribe tu correo y te enviaremos un enlace para crear una nueva.",
+    "newPasswordTitle": "Crea tu nueva contraseña",
+    "backToSignIn": "Volver a entrar",
+    "goToAccount": "Ir a mi cuenta",
+    "quoteStatus": {
+      "nuevo": "Nueva",
+      "contactado": "Contactado",
+      "cotizado": "Cotizada",
+      "vendido": "Comprada",
+      "perdido": "Cerrada"
+    }
+  },
+  "legal": {
+    "privacyTitle": "Política de tratamiento de datos personales",
+    "draftNotice": "Borrador pendiente de revisión jurídica y de los datos legales de la empresa.",
+    "pending": "[pendiente]",
+    "updated": "Última actualización: 31 de octubre de 2026",
+    "sections": [
+      {
+        "h": "1. Responsable",
+        "p": "JF Motores ({legalName}, NIT {nit}), con taller en {address}, es responsable del tratamiento de los datos personales recolectados en este sitio, conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013 de Colombia."
+      },
+      {
+        "h": "2. Datos que recolectamos",
+        "p": "Nombre, correo electrónico, teléfono o WhatsApp, país, y la información de las cotizaciones que solicitas (producto, fecha y canal). También datos técnicos de navegación como idioma y dispositivo."
+      },
+      {
+        "h": "3. Para qué los usamos",
+        "p": "Atender tus cotizaciones y compras, darte acceso a tu cuenta, hacer seguimiento de los equipos que compres, mejorar el sitio y, solo si lo autorizas, enviarte novedades y ofertas."
+      },
+      {
+        "h": "4. Tus derechos",
+        "p": "Puedes conocer, actualizar, rectificar y solicitar la eliminación de tus datos, revocar esta autorización y presentar quejas ante la Superintendencia de Industria y Comercio. Puedes actualizar tus datos desde Mi cuenta."
+      },
+      {
+        "h": "5. Cómo ejercerlos",
+        "p": "Escríbenos por WhatsApp al {phone} indicando tu nombre, correo y la solicitud. Responderemos dentro de los plazos de ley (10 días hábiles para consultas y 15 para reclamos)."
+      },
+      {
+        "h": "6. Seguridad y conservación",
+        "p": "Tus datos se guardan en servidores con acceso restringido. Las contraseñas se almacenan cifradas y nadie puede verlas. Conservamos los datos mientras exista la relación comercial o lo exija la ley."
+      }
+    ]
   }
 }

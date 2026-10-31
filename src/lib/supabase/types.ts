@@ -311,6 +311,8 @@ export type Database = {
           phone: string | null;
           role_id: number;
           updated_at: string;
+          privacy_accepted_at: string | null;
+          marketing_opt_in: boolean;
         };
         Insert: {
           country?: string | null;
@@ -321,6 +323,8 @@ export type Database = {
           phone?: string | null;
           role_id: number;
           updated_at?: string;
+          privacy_accepted_at?: string | null;
+          marketing_opt_in?: boolean;
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
         Relationships: [
