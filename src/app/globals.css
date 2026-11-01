@@ -1156,3 +1156,13 @@ body.in-journey.app-open #hud { opacity: 0; }
 .support.dragging .support-fab { cursor: grabbing; transform: scale(1.04); animation: none; }
 /* Si el botón está en la mitad de arriba, el menú se abre hacia abajo */
 .support.upper { display: flex; flex-direction: column-reverse; align-items: flex-end; }
+
+/* Aviso de cookies */
+.consent { position: fixed; left: 16px; bottom: 16px; z-index: 40; width: min(440px, calc(100vw - 32px)); padding: 16px; border-radius: 14px;
+  background: rgba(12, 14, 17, 0.97); border: 1px solid rgba(247, 198, 0, 0.4); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); animation: sheet-up 0.25s ease-out; }
+.consent p { margin: 0 0 12px; font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+.consent p a { color: var(--yellow); }
+.consent-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.consent-actions .btn { padding: 10px 16px; font-size: 11px; cursor: pointer; }
+.consent-link { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
+@media (max-width: 760px) { .consent { left: 12px; right: 12px; bottom: 80px; width: auto; } }

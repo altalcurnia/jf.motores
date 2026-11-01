@@ -7,6 +7,7 @@ import { supabasePublicEnv } from "@/lib/env";
 import { AdminTopbar } from "../AdminTopbar";
 import { ContactForm } from "./ContactForm";
 import { SiteImages } from "./SiteImages";
+import { AnalyticsForm } from "./AnalyticsForm";
 
 export const metadata = { title: "Contacto, sedes e imagen del inicio" };
 
@@ -39,7 +40,7 @@ async function Editor() {
     await Promise.all([
       supabase
         .from("company_settings")
-        .select("email, phones, home_benefits_image")
+        .select("email, phones, home_benefits_image, analytics")
         .maybeSingle(),
       supabase
         .from("branches")
@@ -82,6 +83,13 @@ async function Editor() {
             active: b.active,
           })),
           removedBranches: [],
+        }}
+      />
+      <AnalyticsForm
+        canEdit={canEdit}
+        initial={{
+          ga4: String((company?.analytics as { ga4?: string } | null)?.ga4 ?? ""),
+          pixel: String((company?.analytics as { pixel?: string } | null)?.pixel ?? ""),
         }}
       />
     </>

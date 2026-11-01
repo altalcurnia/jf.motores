@@ -374,6 +374,10 @@
       {
         "h": "6. Security and retention",
         "p": "Your data is stored on servers with restricted access. Passwords are stored encrypted and nobody can see them. We keep data while the business relationship exists or as required by law."
+      },
+      {
+        "h": "7. Cookies and measurement",
+        "p": "We use our own necessary cookies: session, language, preferences and an anonymous identifier we use to record your WhatsApp quote requests (product, approximate country, device and the campaign that brought you). Only if you accept them in the cookie notice do we use Google Analytics 4 and the Meta Pixel to measure visits and ad performance. You can change your choice at any time in “Cookie preferences” at the bottom of the page."
       }
     ]
   },
@@ -968,5 +972,12 @@
       "error": "Couldn't send. Try again.",
       "photo": "View photo"
     }
+  },
+  "consent": {
+    "text": "We use necessary cookies to run the site and, if you accept, measurement cookies (Google Analytics and Meta Pixel) to learn which ads and products interest you.",
+    "accept": "Accept all",
+    "necessary": "Necessary only",
+    "policy": "Privacy policy",
+    "settings": "Cookie preferences"
   }
 }

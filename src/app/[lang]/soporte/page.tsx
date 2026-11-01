@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
@@ -17,7 +17,7 @@ export default async function SupportPage() {
   const t = dict.support;
   const contact = await getContact();
   const hrefs = [
-    buildWhatsAppUrl(contact.whatsapp, t.waTech),
+    waLead({ message: t.waTech, source: "soporte", locale }),
     `/${locale}/repuestos`,
     `/${locale}/cuenta`,
   ];

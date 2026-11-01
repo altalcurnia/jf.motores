@@ -14,6 +14,8 @@ import { site } from "@/lib/site";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SupportFloat } from "@/components/SupportFloat";
 import { SiteFooter } from "@/components/SiteFooter";
+import { Consent } from "@/features/analytics/Consent";
+import { getAnalyticsIds } from "@/lib/supabase/public";
 import { SiteEffects } from "@/components/SiteEffects";
 
 export function generateStaticParams() {
@@ -44,6 +46,7 @@ export const viewport: Viewport = { themeColor: "#0b0d10" };
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const locale = await getLocale();
   const dict = await getDictionary();
+  const analytics = await getAnalyticsIds();
   return (
     <html lang={localeTags[locale]}>
       <body>
@@ -52,6 +55,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <SiteFooter dict={dict} locale={locale} />
         <SupportFloat dict={dict} locale={locale} />
         <SiteEffects />
+        <Consent t={dict.consent} locale={locale} ga4={analytics.ga4} pixel={analytics.pixel} />
       </body>
     </html>
   );

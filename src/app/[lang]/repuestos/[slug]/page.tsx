@@ -2,13 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { isPartKey, partKeys, type PartKey } from "@/features/engine3d/parts";
 import { getCatalog } from "@/features/catalog/data";
 import { ProductCard } from "@/features/catalog/ProductCard";
 import { CatalogTabs } from "@/features/catalog/CatalogListing";
 import { ProductDetail, productMetadata, productStaticParams } from "@/features/catalog/ProductDetail";
-import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 
 /**
@@ -43,7 +42,7 @@ async function PartCategory({ part }: { part: PartKey }) {
   if (!category && !partKeys.includes(part)) notFound();
   const products = category ? data.products.filter((p) => p.categoryId === category.id) : [];
   const name = dict.parts[part];
-  const waHref = buildWhatsAppUrl((await getContact()).whatsapp, dict.partPage.whatsapp + name);
+  const waHref = waLead({ message: dict.partPage.whatsapp + name, source: "repuestos", locale, catalog: "repuesto", partKey: part });
   const t = dict.catalog;
 
   return (

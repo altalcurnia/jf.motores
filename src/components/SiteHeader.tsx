@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { site } from "@/lib/site";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AccountNavLink } from "@/features/account/AccountNavLink";
@@ -14,7 +14,7 @@ export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dicti
   const contact = await getContact();
   const t = dict.nav;
   const l = (path: string) => `/${locale}${path}`;
-  const wa = buildWhatsAppUrl(contact.whatsapp, dict.whatsapp.general);
+  const wa = waLead({ message: dict.whatsapp.general, source: "cabecera", locale });
   const catalogItems = [
     ...(["motobombas", "motores", "repuestos"] as const).map((k) => ({
       href: l(`/${k}`),

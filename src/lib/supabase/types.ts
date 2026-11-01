@@ -269,6 +269,7 @@ export type Database = {
       };
       company_settings: {
         Row: {
+          analytics: Json;
           email: string | null;
           home_benefits_image: string | null;
           id: boolean;
@@ -282,6 +283,7 @@ export type Database = {
           updated_at: string;
         };
         Insert: {
+          analytics?: Json;
           email?: string | null;
           home_benefits_image?: string | null;
           id?: boolean;
@@ -327,9 +329,13 @@ export type Database = {
         Row: {
           advisor_id: string | null;
           catalog: CatalogType | null;
+          code: string;
           country: string | null;
           created_at: string;
           currency: string | null;
+          device: string | null;
+          ip_hash: string | null;
+          source: string | null;
           customer_id: string | null;
           form_data: Json;
           id: string;
@@ -588,6 +594,22 @@ export type Database = {
     };
     Views: { [_ in never]: never };
     Functions: {
+      lead_create: {
+        Args: {
+          p_product?: string | null;
+          p_catalog?: string | null;
+          p_part_key?: string | null;
+          p_source?: string | null;
+          p_country?: string | null;
+          p_locale?: string | null;
+          p_utm?: Json;
+          p_visitor?: string | null;
+          p_user_agent?: string | null;
+          p_device?: string | null;
+          p_ip_hash?: string | null;
+        };
+        Returns: Json;
+      };
       ticket_create: { Args: { subject: string; body: string; images?: string[] }; Returns: string };
       ticket_post: { Args: { ticket: string; body: string; images?: string[] }; Returns: string };
       ticket_set_status: { Args: { ticket: string; new_status: string }; Returns: undefined };

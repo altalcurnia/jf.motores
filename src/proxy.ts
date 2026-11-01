@@ -15,7 +15,27 @@ const ACCOUNT_RE = /^\/(es|en|pt)\/cuenta(?:\/([^/]+))?\/?$/;
  *    Supabase y protege las páginas que la requieren (el rol se verifica en el servidor).
  * 2. Sitio público: redirige las rutas sin idioma a /es, /en o /pt.
  */
+/** Parámetros de campaña que se guardan para atribuir el lead (último clic de campaña, 30 días). */
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"];
+
+function withUtm(request: NextRequest, response: NextResponse | undefined) {
+  const sp = request.nextUrl.searchParams;
+  if (!UTM_KEYS.some((k) => sp.has(k))) return response;
+  const utm: Record<string, string> = {};
+  for (const k of UTM_KEYS) {
+    const v = sp.get(k);
+    if (v) utm[k] = v.slice(0, 100);
+  }
+  const res = response ?? NextResponse.next();
+  res.cookies.set("jf_utm", JSON.stringify(utm), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true, path: "/" });
+  return res;
+}
+
 export async function proxy(request: NextRequest) {
+  return withUtm(request, await route(request));
+}
+
+async function route(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   // Enlace de acceso que cayó en la raíz (si Supabase usó la URL del sitio por defecto).

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { formatPhone, getContact, getHomeImages } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
@@ -24,7 +24,7 @@ export default async function HomePage() {
   const t = dict.hero;
   const b = dict.benefits;
   const [contact, homeImages] = await Promise.all([getContact(), getHomeImages()]);
-  const wa = buildWhatsAppUrl(contact.whatsapp, dict.whatsapp.general);
+  const wa = waLead({ message: dict.whatsapp.general, source: "inicio", locale });
 
   return (
     <>

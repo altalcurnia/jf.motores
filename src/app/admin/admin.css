@@ -340,3 +340,32 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .tk-admin-ticket header a { color: var(--yellow); }
 .tk-admin-thread { min-height: 0; }
 @media (max-width: 860px) { .tk-admin { grid-template-columns: 1fr; } .tk-admin-list { max-height: none; } }
+
+/* Leads */
+.stat.link { text-decoration: none; transition: border-color 0.2s; }
+.stat.link:hover, .stat.link.on { border-color: var(--yellow); }
+.lead-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.lead-filters select, .lead-filters input { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 14px; }
+.lead-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.lead-summary .panel { margin-top: 18px; }
+.leads-table td { font-size: 13.5px; }
+.leads-table code { color: var(--yellow); font-size: 12.5px; }
+.leads-table a { color: var(--ink); }
+.lead-nuevo td:first-child { box-shadow: inset 3px 0 0 var(--yellow); }
+.lead-vendido td:first-child { box-shadow: inset 3px 0 0 var(--ok); }
+.lead-perdido { opacity: 0.6; }
+.lead-notes { min-width: 180px; }
+.lead-note-edit { display: grid; gap: 6px; }
+.lead-note-edit textarea { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: inherit; font-size: 13px; }
+.link-btn { background: none; border: 0; color: var(--mut); cursor: pointer; font: inherit; font-size: 13px; text-align: left; padding: 0; }
+.link-btn:hover { color: var(--yellow); }
+
+/* Asesores y reglas */
+.edit-box { margin-top: 14px; padding: 16px; border: 1px solid rgba(247, 198, 0, 0.4); border-radius: 12px; background: #0f1317; display: grid; gap: 12px; }
+.edit-box h3 { margin: 0; font-size: 16px; }
+.edit-box .contact-row { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border: 0; padding: 0; }
+.edit-box .chip { display: inline-block; padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; color: var(--ink); font-size: 13px; }
+.edit-box .chip.on { background: var(--yellow); color: #0b0d10; border-color: var(--yellow); font-weight: 600; }
+.edit-box input:not([type="checkbox"]), .edit-box select { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 14px; }
+.edit-box .row-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.sched { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }

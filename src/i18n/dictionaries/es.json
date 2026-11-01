@@ -374,6 +374,10 @@
       {
         "h": "6. Seguridad y conservación",
         "p": "Tus datos se guardan en servidores con acceso restringido. Las contraseñas se almacenan cifradas y nadie puede verlas. Conservamos los datos mientras exista la relación comercial o lo exija la ley."
+      },
+      {
+        "h": "7. Cookies y medición",
+        "p": "Usamos cookies propias necesarias: sesión, idioma, preferencias y un identificador anónimo con el que registramos tus solicitudes de cotización por WhatsApp (producto, país aproximado, dispositivo y la campaña por la que llegaste). Solo si las aceptas en el aviso de cookies usamos Google Analytics 4 y el Píxel de Meta para medir visitas y el rendimiento de nuestros anuncios. Puedes cambiar tu decisión cuando quieras en «Preferencias de cookies», al pie de la página."
       }
     ]
   },
@@ -968,5 +972,12 @@
       "error": "No se pudo enviar. Intenta de nuevo.",
       "photo": "Ver foto"
     }
+  },
+  "consent": {
+    "text": "Usamos cookies necesarias para que el sitio funcione y, si aceptas, cookies de medición (Google Analytics y Píxel de Meta) para saber qué anuncios y productos interesan.",
+    "accept": "Aceptar todas",
+    "necessary": "Solo necesarias",
+    "policy": "Política de datos",
+    "settings": "Preferencias de cookies"
   }
 }

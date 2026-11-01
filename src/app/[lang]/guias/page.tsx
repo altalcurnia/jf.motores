@@ -1,7 +1,6 @@
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { getContact } from "@/lib/supabase/public";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
 import { libraryItems, libraryLangs } from "@/features/library/items";
@@ -19,7 +18,6 @@ export async function generateMetadata() {
 export default async function GuidesPage() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
   const t = dict.guides;
-  const contact = await getContact();
   return (
     <section className="block cat-page info-page">
       <SupportTabs current="guias" locale={locale} dict={dict} />
@@ -93,7 +91,7 @@ export default async function GuidesPage() {
                 </ol>
                 <a
                   className="btn g"
-                  href={buildWhatsAppUrl(contact.whatsapp, t.waGuide + g.h)}
+                  href={waLead({ message: t.waGuide + g.h, source: "guia", locale })}
                   target="_blank"
                   rel="noopener"
                 >

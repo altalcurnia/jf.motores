@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { Linkified } from "./Linkified";
 import { TicketsPanel } from "@/features/tickets/TicketsPanel";
 
@@ -43,19 +43,19 @@ const HeadsetIcon = () => (
 export function SupportFab({
   locale,
   waHref,
-  waNumber,
   aiEnabled,
   t,
   tt,
 }: {
   locale: Locale;
   waHref: string;
-  waNumber: string;
   aiEnabled: boolean;
   t: T;
   tt: Dictionary["tickets"];
 }) {
-  const waChatHref = (summary?: string) => buildWhatsAppUrl(waNumber, summary ? `${t.waMessage}\n${t.waSummary}${summary}` : t.waMessage);
+  // Pasa por /api/wa: registra el lead (fuente «asistente») y abre el WhatsApp del asesor asignado
+  const waChatHref = (summary?: string) =>
+    waLead({ message: summary ? `${t.waMessage}\n${t.waSummary}${summary}` : t.waMessage, source: "asistente", locale });
   const [menu, setMenu] = useState(false);
   const [chat, setChat] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);

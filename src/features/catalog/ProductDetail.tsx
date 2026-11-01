@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { waLead } from "@/features/whatsapp/lead-link";
 import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
 import { BRAND_PLACEHOLDER } from "@/components/placeholder";
@@ -11,7 +11,6 @@ import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
 import { OwnerBanner, StatusPill } from "./owned";
 import { catalogPaths, fill, formatPrice, productHref, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
-import { getContact } from "@/lib/supabase/public";
 
 const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
 
@@ -43,7 +42,6 @@ export async function productMetadata(catalog: CatalogType, slug: string) {
 export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; slug: string }) {
   const [{ data, product: p }, locale, dict] = await Promise.all([findProduct(catalog, slug), getLocale(), getDictionary()]);
   if (!p) notFound();
-  const contact = await getContact();
   const t = dict.catalog;
   const name = tr(p.name, locale);
   const price = formatPrice(p.priceCop, locale);
@@ -98,7 +96,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
           {p.status === "vendido" && <p className="pd-sold sold-note">{isPart ? t.outOfStockNotice : t.soldNotice}</p>}
 
           <div className="pd-actions">
-            <a className="btn y" href={buildWhatsAppUrl(contact.whatsapp, message)} target="_blank" rel="noopener">
+            <a className="btn y" href={waLead({ message, source: "ficha", locale, productId: p.id, catalog: p.catalog })} target="_blank" rel="noopener">
               {t.quote}
               <Arrow />
             </a>

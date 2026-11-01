@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { site } from "@/lib/site";
+import { ConsentSettingsLink } from "@/features/analytics/Consent";
 
 export function SiteFooter({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   return (
@@ -24,6 +25,7 @@ export function SiteFooter({ dict, locale }: { dict: Dictionary; locale: Locale 
           <Link className="footer-link" href={`/${locale}/legal/privacidad`}>
             {dict.footer.privacy}
           </Link>
+          <ConsentSettingsLink label={dict.consent.settings} />
         </span>
       </p>
     </footer>

@@ -9,8 +9,6 @@ export const metadata = { title: "Inicio" };
 
 const sections = [
   { title: "Categorías", desc: "Categorías de cada catálogo y pieza del motor 3D que abre cada una.", perm: "catalogo.editar", day: 3 },
-  { title: "Cotizaciones", desc: "Clientes que tocaron WhatsApp: producto, asesor, país y estado.", perm: "leads.ver_todos", day: 6 },
-  { title: "Asesores", desc: "WhatsApp, nombre, cargo y reglas para repartir clientes.", perm: "asesores.gestionar", day: 6 },
   { title: "Empresa y sedes", desc: "Datos de confianza, garantía, cifras y sedes.", perm: "empresa.editar", day: 7 },
 ];
 
@@ -83,6 +81,20 @@ async function Dashboard() {
           <Link href="/admin/interesados" className="card link">
             <h3>Interesados en la app</h3>
             <p>Quienes se anotaron para JF Monitor: datos de contacto, plan que les interesa y cuánto pagarían.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
+        {(can(session, "leads.ver_todos") || session.role.key === "asesor") && (
+          <Link href="/admin/leads" className="card link">
+            <h3>Cotizaciones (leads)</h3>
+            <p>Cada clic a WhatsApp con su producto, campaña y asesor. Estados, notas y resumen por asesor.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
+        {can(session, "asesores.gestionar") && (
+          <Link href="/admin/asesores" className="card link">
+            <h3>Asesores y reparto</h3>
+            <p>WhatsApp, horario y catálogos de cada asesor, y las reglas que reparten los leads.</p>
             <span className="pill ok">Disponible</span>
           </Link>
         )}

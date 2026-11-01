@@ -71,3 +71,23 @@ export async function saveBenefitsImage(path: string | null): Promise<SaveResult
   updateTag("company");
   return { ok: true };
 }
+
+/** IDs de GA4 y del Píxel de Meta (vacíos = desactivados). */
+export async function saveAnalytics(input: { ga4: string; pixel: string }): Promise<SaveResult> {
+  const session = await getSession();
+  if (!session || !session.role.isInternal || !can(session, "empresa.editar")) {
+    return { ok: false, error: "No tienes permiso para cambiar la medición." };
+  }
+  const ga4 = input.ga4.trim().toUpperCase();
+  const pixel = input.pixel.replace(/\D/g, "");
+  if (ga4 && !/^G-[A-Z0-9]{4,15}$/.test(ga4)) return { ok: false, error: "El ID de GA4 debe verse como G-ABC123XYZ." };
+  if (pixel && !/^[0-9]{6,20}$/.test(pixel)) return { ok: false, error: "El ID del Píxel son solo números (6 a 20)." };
+  const analytics: Record<string, string> = {};
+  if (ga4) analytics.ga4 = ga4;
+  if (pixel) analytics.pixel = pixel;
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.from("company_settings").update({ analytics }).eq("id", true);
+  if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
+  updateTag("company");
+  return { ok: true };
+}

@@ -120,3 +120,20 @@ export async function getHomeImages(): Promise<{ benefits: string }> {
     return { benefits: DEFAULT_BENEFITS_IMAGE };
   }
 }
+
+/** IDs de medición (GA4 y Píxel de Meta) editables en /admin/empresa. Vacíos = no se carga nada. */
+export async function getAnalyticsIds(): Promise<{ ga4: string | null; pixel: string | null }> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("company");
+  try {
+    const { data } = await createSupabasePublicClient().from("company_settings").select("analytics").maybeSingle();
+    const a = (data?.analytics ?? {}) as { ga4?: string; pixel?: string };
+    return {
+      ga4: a.ga4 && /^G-[A-Z0-9]{4,15}$/.test(a.ga4) ? a.ga4 : null,
+      pixel: a.pixel && /^[0-9]{6,20}$/.test(a.pixel) ? a.pixel : null,
+    };
+  } catch {
+    return { ga4: null, pixel: null };
+  }
+}

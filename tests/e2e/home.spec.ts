@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 
+// El aviso de cookies se prueba aparte; en el resto de pruebas ya hay decisión tomada
+test.beforeEach(async ({ page }, info) => {
+  if (!info.title.includes("aviso de cookies")) await page.addInitScript(() => localStorage.setItem("jf-consent", "necessary"));
+});
+
 /** El selector de idioma está en el encabezado (escritorio) o dentro del menú lateral (celular). */
 async function languageSelect(page: Page) {
   const burger = page.locator(".burger");
@@ -28,7 +33,7 @@ for (const [lang, heading] of [
     await page.goto(`/${lang}`);
     await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
     const wa = page.locator("#hero a.btn.y");
-    await expect(wa).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/);
+    await expect(wa).toHaveAttribute("href", /^\/api\/wa\?m=.+&s=inicio/);
   });
 }
 
@@ -56,7 +61,7 @@ test("cada pieza del motor tiene su página de repuestos", async ({ page }) => {
   const res = await page.goto("/es/repuestos/radiador");
   expect(res?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Repuestos: Radiador");
-  await expect(page.locator(".cat-actions a.btn.y")).toHaveAttribute("href", /text=.*radiador/i);
+  await expect(page.locator(".cat-actions a.btn.y")).toHaveAttribute("href", /^\/api\/wa\?m=.*radiador.*&s=repuestos.*&k=radiador/i);
 });
 
 test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async ({ page }) => {
@@ -165,7 +170,7 @@ test("catálogo: filtros en la URL y ficha del producto con WhatsApp", async ({ 
   await cards.first().click();
   await expect(page).toHaveURL(/\/es\/motobombas\/[a-z0-9-]+$/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.locator(".pd-info a.btn.y")).toHaveAttribute("href", /^https:\/\/wa\.me\/.*REF/);
+  await expect(page.locator(".pd-info a.btn.y")).toHaveAttribute("href", /^\/api\/wa\?m=.*REF.*&s=ficha.*&p=[0-9a-f-]{36}/);
 });
 
 test("un producto inexistente muestra la página de no encontrado y no se indexa", async ({ page }) => {
@@ -241,7 +246,7 @@ test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de enví
   await page.locator(".support-fab").click();
   const wa = page.locator(".support-menu a.support-opt.sopt-wa");
   await expect(wa).toBeVisible();
-  await expect(wa).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=.*p%C3%A1gina%20web/);
+  await expect(wa).toHaveAttribute("href", /^\/api\/wa\?m=.*p%C3%A1gina\+web.*&s=flotante/);
   await expect(page.locator(".support-opt.sopt-ai")).toHaveCount(0);
   await page.keyboard.press("Escape");
   const meta = page.locator("#contacto .c-meta");
@@ -254,7 +259,7 @@ test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de enví
   await page.locator(".tech-toggle").click();
   await expect(page.locator('.tech-opt.tech-mail[href^="mailto:"]')).toHaveCount(1);
   await expect(page.locator(".tech-opt.tech-wa")).toBeVisible();
-  await expect(page.locator(".tech-opt.tech-wa")).toHaveAttribute("href", /^https:\/\/wa\.me\//);
+  await expect(page.locator(".tech-opt.tech-wa")).toHaveAttribute("href", /^\/api\/wa\?.*s=soporte/);
 });
 
 test("el panel de contacto y sedes exige iniciar sesión", async ({ page }) => {
@@ -349,4 +354,35 @@ test("soporte: el botón flotante se arrastra arriba y abajo y recuerda la posic
   await page.reload();
   const again = (await page.locator(".support-fab").boundingBox())!;
   expect(Math.abs(again.y - after.y)).toBeLessThan(4);
+});
+
+test("WhatsApp: /api/wa registra el lead y redirige a wa.me con el mensaje (y sin lead para bots)", async ({ request }) => {
+  const url = "/api/wa?m=Hola%20REF%20JF-M25&s=ficha&l=es&c=motobomba";
+  const res = await request.get(url, { maxRedirects: 0, headers: { "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Mobile" } });
+  expect(res.status()).toBe(302);
+  const loc = res.headers()["location"];
+  expect(loc).toMatch(/^https:\/\/wa\.me\/\d+\?text=Hola%20REF%20JF-M25/);
+  expect(res.headers()["set-cookie"] ?? "").toContain("jf_vid=");
+  const bot = await request.get(url, { maxRedirects: 0, headers: { "user-agent": "facebookexternalhit/1.1" } });
+  expect(bot.status()).toBe(302);
+  expect(bot.headers()["set-cookie"] ?? "").not.toContain("jf_vid=");
+});
+
+test("aviso de cookies: aparece, se acepta y se puede reabrir desde el pie", async ({ page }) => {
+  await page.goto("/es/soporte");
+  const banner = page.locator(".consent");
+  await expect(banner).toBeVisible();
+  await banner.getByRole("button", { name: "Solo necesarias" }).click();
+  await expect(banner).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator(".consent")).toHaveCount(0);
+  await page.locator("footer .consent-link").click();
+  await expect(page.locator(".consent")).toBeVisible();
+});
+
+test("panel: leads y asesores exigen iniciar sesión", async ({ page }) => {
+  await page.goto("/admin/leads");
+  await expect(page).toHaveURL(/\/admin\/login/);
+  await page.goto("/admin/asesores");
+  await expect(page).toHaveURL(/\/admin\/login/);
 });
