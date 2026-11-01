@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
+import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 
-type Msg = { role: "user" | "assistant"; content: string; kind?: "info" | "error" };
+type Msg = { role: "user" | "assistant"; content: string; kind?: "info" | "error" | "handoff"; summary?: string };
 
 /** Convierte los enlaces del texto en vínculos (los del propio sitio abren en la misma pestaña). */
 function Linkified({ text }: { text: string }) {
@@ -54,7 +55,20 @@ const HeadsetIcon = () => (
   </svg>
 );
 
-export function SupportFab({ locale, waHref, waChatHref, aiEnabled, t }: { locale: Locale; waHref: string; waChatHref: string; aiEnabled: boolean; t: T }) {
+export function SupportFab({
+  locale,
+  waHref,
+  waNumber,
+  aiEnabled,
+  t,
+}: {
+  locale: Locale;
+  waHref: string;
+  waNumber: string;
+  aiEnabled: boolean;
+  t: T;
+}) {
+  const waChatHref = (summary?: string) => buildWhatsAppUrl(waNumber, summary ? `${t.waMessage}\n${t.waSummary}${summary}` : t.waMessage);
   const [menu, setMenu] = useState(false);
   const [chat, setChat] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -94,8 +108,10 @@ export function SupportFab({ locale, waHref, waChatHref, aiEnabled, t }: { local
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ locale, messages: history.map(({ role, content }) => ({ role, content })) }),
       });
-      const data = (await res.json().catch(() => ({}))) as { reply?: string; code?: string };
+      const data = (await res.json().catch(() => ({}))) as { reply?: string; code?: string; summary?: string };
       if (data.reply) setMsgs((m) => [...m, { role: "assistant", content: data.reply! }]);
+      else if (data.code === "handoff")
+        setMsgs((m) => [...m, { role: "assistant", content: t.handoff, kind: "handoff", summary: data.summary || question }]);
       else {
         const map: Record<string, string> = { no_info: t.noInfo, limit: t.limit, disabled: t.disabled };
         setMsgs((m) => [...m, { role: "assistant", content: map[data.code ?? ""] ?? t.unavailable, kind: data.code === "no_info" ? "info" : "error" }]);
@@ -140,8 +156,8 @@ export function SupportFab({ locale, waHref, waChatHref, aiEnabled, t }: { local
               <div key={i} className={`ai-msg ${m.role}${m.kind ? ` ${m.kind}` : ""}`}>
                 {m.role === "assistant" && !m.kind ? <Linkified text={m.content} /> : m.content}
                 {m.kind && (
-                  <a className="ai-wa" href={waChatHref} target="_blank" rel="noopener">
-                    <WaIcon /> {t.toWhatsapp}
+                  <a className="ai-wa" href={waChatHref(m.summary)} target="_blank" rel="noopener">
+                    <WaIcon /> {m.kind === "handoff" ? t.toAdvisor : t.toWhatsapp}
                   </a>
                 )}
               </div>

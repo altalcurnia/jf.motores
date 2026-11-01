@@ -794,6 +794,9 @@
     "unavailable": "The assistant isn't available right now. Message us on WhatsApp.",
     "disabled": "The AI chat is turned off. Message us on WhatsApp.",
     "toWhatsapp": "Continue on WhatsApp",
-    "waMessage": "Hi JF Motores, I'm coming from your website chat and would like to talk to an advisor."
+    "waMessage": "Hi JF Motores, I'm coming from your website chat and would like to talk to an advisor.",
+    "handoff": "An advisor should look at this. I'll pass you to them on WhatsApp with a summary of our chat.",
+    "waSummary": "Chat summary: ",
+    "toAdvisor": "Talk to an advisor"
   }
 }

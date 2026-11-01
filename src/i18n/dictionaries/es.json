@@ -794,6 +794,9 @@
     "unavailable": "El asistente no está disponible ahora. Escríbenos por WhatsApp.",
     "disabled": "El chat con IA está apagado. Escríbenos por WhatsApp.",
     "toWhatsapp": "Seguir por WhatsApp",
-    "waMessage": "Hola JF Motores, vengo del chat de su página web y quiero hablar con un asesor."
+    "waMessage": "Hola JF Motores, vengo del chat de su página web y quiero hablar con un asesor.",
+    "handoff": "Esto lo revisa mejor un asesor. Te paso con él por WhatsApp con el resumen de lo que hablamos.",
+    "waSummary": "Resumen del chat: ",
+    "toAdvisor": "Hablar con un asesor"
   }
 }

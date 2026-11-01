@@ -12,7 +12,7 @@ export async function SupportFloat({ dict, locale }: { dict: Dictionary; locale:
     <SupportFab
       locale={locale}
       waHref={buildWhatsAppUrl(contact.whatsapp, dict.whatsapp.fromWeb)}
-      waChatHref={buildWhatsAppUrl(contact.whatsapp, dict.assistant.waMessage)}
+      waNumber={contact.whatsapp}
       aiEnabled={ai.enabled}
       t={dict.assistant}
     />

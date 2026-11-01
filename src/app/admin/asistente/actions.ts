@@ -6,7 +6,8 @@ import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { site } from "@/lib/site";
 import { askAssistant } from "@/features/assistant/deepseek";
-import { sanitizeHistory } from "@/features/assistant/harness";
+import { cleanDomains, sanitizeHistory } from "@/features/assistant/harness";
+import { catalogForAssistant } from "@/features/assistant/catalog-text";
 
 export type ActionResult = { ok: true; message?: string } | { ok: false; error: string };
 
@@ -16,14 +17,21 @@ async function manager() {
   return { session, supabase: await createSupabaseServerClient() };
 }
 
-export async function saveSettings(input: { enabled: boolean; model: string }): Promise<ActionResult> {
+export async function saveSettings(input: { enabled: boolean; model: string; webVerify: boolean; domains: string }): Promise<ActionResult> {
   const m = await manager();
   if (!m) return { ok: false, error: "No tienes permiso para configurar el asistente." };
   const model = input.model.trim().toLowerCase();
   if (!/^[a-z0-9][a-z0-9.-]{2,39}$/.test(model)) return { ok: false, error: "Nombre de modelo inválido." };
   const { error } = await m.supabase
     .from("ai_settings")
-    .update({ enabled: input.enabled, model, updated_at: new Date().toISOString(), updated_by: m.session.userId })
+    .update({
+      enabled: input.enabled,
+      model,
+      web_verify: input.webVerify,
+      official_domains: cleanDomains(input.domains.split(/[\s,;]+/)),
+      updated_at: new Date().toISOString(),
+      updated_by: m.session.userId,
+    })
     .eq("id", true);
   if (error) return { ok: false, error: error.message };
   updateTag("assistant");
@@ -80,21 +88,31 @@ export async function deleteDocument(id: string): Promise<ActionResult> {
 }
 
 /** Prueba el asistente con los documentos activos, aunque esté apagado para el público. */
-export async function testAssistant(question: string): Promise<{ ok: true; reply: string; noInfo: boolean } | { ok: false; error: string }> {
+export async function testAssistant(
+  question: string,
+): Promise<{ ok: true; reply: string; noInfo: boolean; handoff: string | null; sources: string[] } | { ok: false; error: string }> {
   const m = await manager();
   if (!m) return { ok: false, error: "No tienes permiso." };
   const history = sanitizeHistory([{ role: "user", content: question }]);
   if (!history.length) return { ok: false, error: "Escribe una pregunta." };
   const [{ data: docs }, { data: settings }] = await Promise.all([
     m.supabase.from("ai_documents").select("title, content").eq("active", true).order("created_at"),
-    m.supabase.from("ai_settings").select("model").maybeSingle(),
+    m.supabase.from("ai_settings").select("model, web_verify, official_domains").maybeSingle(),
   ]);
-  const r = await askAssistant({ docs: docs ?? [], model: settings?.model, history, locale: "es" });
+  const r = await askAssistant({
+    docs: docs ?? [],
+    model: settings?.model,
+    history,
+    locale: "es",
+    catalog: await catalogForAssistant("es"),
+    webVerify: settings?.web_verify,
+    officialDomains: settings?.official_domains,
+  });
   if (!r.ok) {
     const why = { no_key: "Falta la clave DEEPSEEK_API_KEY en Vercel.", no_docs: "No hay documentos activos.", api_error: `DeepSeek respondió con error: ${r.detail ?? ""}` };
     return { ok: false, error: why[r.reason] };
   }
-  return { ok: true, reply: r.reply, noInfo: r.noInfo };
+  return { ok: true, reply: r.reply, noInfo: r.noInfo, handoff: r.handoff, sources: r.sources };
 }
 
 /** Registra el webhook del bot de Telegram (usa TELEGRAM_BOT_TOKEN y TELEGRAM_WEBHOOK_SECRET de Vercel). */

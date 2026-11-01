@@ -4,6 +4,7 @@ import { getAssistantContext, rateLimited } from "@/features/assistant/context";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { dictionaryFor } from "@/i18n/dictionaries";
 import { getContact } from "@/lib/supabase/public";
+import { catalogForAssistant } from "@/features/assistant/catalog-text";
 
 /**
  * Webhook del bot de Telegram (pruebas del asistente fuera de la página).
@@ -47,12 +48,25 @@ export async function POST(request: NextRequest) {
     await send(`${t.disabled}\n${wa}`);
     return NextResponse.json({ ok: true });
   }
-  const r = await askAssistant({ docs: ctx.docs, model: ctx.model, history: [{ role: "user", content: text.slice(0, 800) }], locale });
+  const r = await askAssistant({
+    docs: ctx.docs,
+    model: ctx.model,
+    history: [{ role: "user", content: text.slice(0, 800) }],
+    locale,
+    catalog: await catalogForAssistant(locale),
+    webVerify: ctx.webVerify,
+    officialDomains: ctx.officialDomains,
+  });
   if (!r.ok) {
     console.error("Asistente IA (Telegram):", r.reason, r.detail ?? "");
     await send(`${t.unavailable}\n${wa}`);
   } else {
-    await send(r.noInfo ? `${t.noInfo}\n${wa}` : r.reply);
+    const contact = (await getContact()).whatsapp;
+    if (r.handoff !== null) {
+      await send(`${t.handoff}\n${buildWhatsAppUrl(contact, `${t.waMessage}\n${t.waSummary}${r.handoff}`)}`);
+    } else {
+      await send(r.noInfo ? `${t.noInfo}\n${wa}` : r.reply);
+    }
   }
   return NextResponse.json({ ok: true });
 }

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { hasDeepSeekKey } from "@/features/assistant/deepseek";
+import { hasDeepSeekKey, hasSearchKey } from "@/features/assistant/deepseek";
 import { AdminTopbar } from "../AdminTopbar";
 import { AssistantAdmin, type DocRow } from "./AssistantAdmin";
 
@@ -30,7 +30,7 @@ async function Body() {
   }
   const supabase = await createSupabaseServerClient();
   const [{ data: settings }, { data: docs, error }] = await Promise.all([
-    supabase.from("ai_settings").select("enabled, model").maybeSingle(),
+    supabase.from("ai_settings").select("enabled, model, web_verify, official_domains").maybeSingle(),
     supabase.from("ai_documents").select("id, title, content, active, is_test, created_at").order("created_at"),
   ]);
   if (error) return <div className="notice err">No se pudieron leer los documentos: {error.message}</div>;
@@ -48,6 +48,9 @@ async function Body() {
       model={settings?.model ?? "deepseek-flash"}
       docs={rows}
       keyConfigured={hasDeepSeekKey()}
+      searchConfigured={hasSearchKey()}
+      webVerify={settings?.web_verify ?? false}
+      domains={settings?.official_domains ?? []}
       telegramConfigured={!!process.env.TELEGRAM_BOT_TOKEN && !!process.env.TELEGRAM_WEBHOOK_SECRET}
     />
   );

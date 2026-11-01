@@ -2,9 +2,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { askAssistant } from "@/features/assistant/deepseek";
 import { getAssistantContext, rateLimited } from "@/features/assistant/context";
 import { sanitizeHistory, type AssistantLocale } from "@/features/assistant/harness";
+import { catalogForAssistant } from "@/features/assistant/catalog-text";
 
 /**
- * Chat público del asistente. Responde { reply } o { code } (disabled | limit | no_info | unavailable).
+ * Chat público del asistente. Responde { reply }, { code: "handoff", summary } o
+ * { code } (disabled | limit | no_info | unavailable).
  * No guarda las conversaciones.
  */
 export async function POST(request: NextRequest) {
@@ -24,11 +26,21 @@ export async function POST(request: NextRequest) {
   const ctx = await getAssistantContext();
   if (!ctx.enabled) return NextResponse.json({ code: "disabled" }, { status: 403 });
 
-  const r = await askAssistant({ docs: ctx.docs, model: ctx.model, history, locale });
+  const catalog = await catalogForAssistant(locale);
+  const r = await askAssistant({
+    docs: ctx.docs,
+    model: ctx.model,
+    history,
+    locale,
+    catalog,
+    webVerify: ctx.webVerify,
+    officialDomains: ctx.officialDomains,
+  });
   if (!r.ok) {
     console.error("Asistente IA:", r.reason, r.detail ?? "");
     return NextResponse.json({ code: "unavailable" }, { status: 503 });
   }
+  if (r.handoff !== null) return NextResponse.json({ code: "handoff", summary: r.handoff });
   if (r.noInfo) return NextResponse.json({ code: "no_info" });
   return NextResponse.json({ reply: r.reply });
 }

@@ -12,7 +12,18 @@ const MODELS = [
   { id: "deepseek-v4-pro", label: "deepseek-v4-pro (más preciso, cuesta más)" },
 ];
 
-export function AssistantAdmin(props: { enabled: boolean; model: string; docs: DocRow[]; keyConfigured: boolean; telegramConfigured: boolean }) {
+export function AssistantAdmin(props: {
+  enabled: boolean;
+  model: string;
+  docs: DocRow[];
+  keyConfigured: boolean;
+  telegramConfigured: boolean;
+  searchConfigured: boolean;
+  webVerify: boolean;
+  domains: string[];
+}) {
+  const [webVerify, setWebVerify] = useState(props.webVerify);
+  const [domains, setDomains] = useState(props.domains.join("\n"));
   const router = useRouter();
   const [enabled, setEnabled] = useState(props.enabled);
   const [model, setModel] = useState(props.model);
@@ -58,6 +69,10 @@ export function AssistantAdmin(props: { enabled: boolean; model: string; docs: D
             </li>
             <li className={activeDocs ? "ok" : "bad"}>{activeDocs ? `✓ ${activeDocs} documento(s) activo(s)` : "✗ No hay documentos activos"}</li>
             <li className={enabled ? "ok" : "muted"}>{enabled ? "✓ Visible en el sitio" : "Apagado en el sitio (solo se puede probar aquí)"}</li>
+            <li className="ok">✓ Lee el catálogo publicado (productos, precios, estado y compatibilidad) en cada pregunta</li>
+            <li className={props.searchConfigured ? "ok" : "muted"}>
+              {props.searchConfigured ? "✓ Búsqueda en fuentes oficiales disponible (TAVILY_API_KEY)" : "Búsqueda en fuentes oficiales: falta TAVILY_API_KEY en Vercel"}
+            </li>
           </ul>
           <label className="check-row">
             <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} /> Mostrar “Chat con IA” en el botón Soporte
@@ -79,6 +94,14 @@ export function AssistantAdmin(props: { enabled: boolean; model: string; docs: D
               <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="deepseek-…" />
             </label>
           )}
+          <label className="check-row">
+            <input type="checkbox" checked={webVerify} onChange={(e) => setWebVerify(e.target.checked)} /> Verificar datos técnicos en sitios oficiales
+            de fabricantes cuando algo no cuadre
+          </label>
+          <label className="field">
+            <span className="field-label">Sitios oficiales permitidos (uno por línea; nunca foros, tiendas ni blogs)</span>
+            <textarea rows={6} value={domains} onChange={(e) => setDomains(e.target.value)} placeholder="cummins.com" />
+          </label>
           <button
             className="btn-primary"
             disabled={pending}
@@ -87,7 +110,7 @@ export function AssistantAdmin(props: { enabled: boolean; model: string; docs: D
                 setNote({ ok: false, text: "Para encenderlo hace falta la clave de DeepSeek y al menos un documento activo." });
                 return;
               }
-              run(() => saveSettings({ enabled, model }));
+              run(() => saveSettings({ enabled, model, webVerify, domains }));
             }}
           >
             Guardar
@@ -105,7 +128,19 @@ export function AssistantAdmin(props: { enabled: boolean; model: string; docs: D
               start(async () => {
                 setAnswer(null);
                 const r = await testAssistant(question);
-                setAnswer(r.ok ? { ok: true, text: r.noInfo ? "→ Sin dato en los documentos: el cliente verá el mensaje de “escríbenos por WhatsApp”." : r.reply } : { ok: false, text: r.error });
+                setAnswer(
+                  r.ok
+                    ? {
+                        ok: true,
+                        text:
+                          r.handoff !== null
+                            ? `→ Pasa a un asesor por WhatsApp. Resumen para el asesor: ${r.handoff || "(sin resumen)"}`
+                            : r.noInfo
+                              ? "→ Sin dato en las fuentes: el cliente verá “escríbenos por WhatsApp”."
+                              : r.reply + (r.sources.length ? `\n\nFuentes oficiales consultadas:\n${r.sources.join("\n")}` : ""),
+                      }
+                    : { ok: false, text: r.error },
+                );
               })
             }
           >
@@ -117,7 +152,8 @@ export function AssistantAdmin(props: { enabled: boolean; model: string; docs: D
         <section className="panel full">
           <h2>Documentos (única fuente de información)</h2>
           <p className="muted small">
-            PDF con texto seleccionable (no escaneos), hasta 20 MB. Lo que cargues aquí lo puede citar el asistente público:{" "}
+            El catálogo y los precios los lee directamente de la base de datos: no hace falta subirlos en PDF. Aquí van políticas, guías
+            técnicas, manuales y condiciones comerciales. PDF con texto seleccionable (no escaneos), hasta 20 MB. Lo que cargues aquí lo puede citar el asistente público:{" "}
             <b>no subas información confidencial</b> (costos internos, datos de clientes).
           </p>
           <div className="ai-upload">

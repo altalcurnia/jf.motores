@@ -16,7 +16,7 @@ W = ParagraphStyle("w", parent=P, textColor=colors.HexColor("#8a5a00"))
 TC = ParagraphStyle("tc", parent=P, fontSize=8.4, leading=10.6)
 TU = ParagraphStyle("tu", parent=P, fontSize=7.3, leading=9.4, textColor=colors.HexColor("#1a4fd6"))
 doc = SimpleDocTemplate(out, pagesize=A4, leftMargin=1.9*cm, rightMargin=1.9*cm, topMargin=1.7*cm, bottomMargin=1.7*cm,
-                        title="JF Motores - Base de conocimiento del asistente", author="JF Motores")
+                        title="JF Motores - Base de conocimiento", author="JF Motores")
 s = []
 def h1(t): s.append(Paragraph(t, H1))
 def h2(t): s.append(Paragraph(t, H2))
@@ -34,18 +34,18 @@ def table(rows, widths, head=True):
     if head: st.append(("BACKGROUND",(0,0),(-1,0),colors.HexColor("#f7c600")))
     t.setStyle(TableStyle(st)); s.append(t); s.append(Spacer(1,6))
 
-h1("JF Motores — Base de conocimiento del asistente de ventas")
-s.append(Paragraph("VERSIÓN DE PRUEBA (noviembre de 2026). Las referencias de productos de la sección 5 son los productos de ejemplo publicados en el sitio: sus especificaciones son ilustrativas hasta que la empresa cargue el catálogo real. La información técnica de las secciones 6 a 9 es orientación general del sector y no reemplaza el manual del fabricante de cada equipo ni la revisión de un técnico.", W))
-s.append(Spacer(1,6))
+h1("JF Motores — Base de conocimiento")
+p("Documento oficial de JF Motores para el asesor virtual de la página y para el equipo comercial. Versión de noviembre de 2026.")
+p("Los productos, precios, estado (disponible o vendido), garantías y compatibilidades se consultan siempre en el catálogo en vivo de la página, que se actualiza desde el panel de administración. La orientación técnica de este documento es general: la selección final de un equipo y cualquier diagnóstico los confirma un técnico de JF Motores, y en datos de una marca prevalece el manual oficial del fabricante.")
 
-h2("0. Cómo debe responder el asistente")
+h2("0. Cómo debe responder el asesor virtual")
 ul([
+ "Fuentes válidas, en este orden: (1) el catálogo en vivo de la página; (2) este documento y los demás documentos oficiales de JF Motores; (3) los sitios web oficiales de los fabricantes de motores, bombas y repuestos. Nunca foros, blogs, videos, tiendas ni distribuidores.",
  "Responder corto, claro y en el idioma del cliente, con el tono de la marca: «Tranquilidad y confianza».",
- "Cuando ayude, compartir el enlace exacto de la página del sitio que responde la pregunta (sección 2).",
- "Para cotizar, comprar, confirmar disponibilidad, fechas de entrega, envío, formas de pago, factura o un diagnóstico de una falla concreta: invitar a escribir por WhatsApp a un asesor.",
- "Nunca inventar precios, plazos, descuentos, garantías ni especificaciones. Los precios vigentes están en la ficha de cada producto del sitio.",
- "Si una pregunta técnica depende de datos del sitio del cliente (caudal, altura, distancia, altitud, tipo de agua), pedir esos datos y luego recomendar confirmarlo con un asesor.",
- "En temas de seguridad (gases de escape, combustible, partes en movimiento), recomendar siempre detener el equipo y consultar a un técnico.",
+ "Compartir el enlace exacto de la ficha o de la página que responde la pregunta (sección 2).",
+ "Para recomendar un equipo, pedir primero los datos que falten: caudal, altura total, altitud, tipo de agua y horas de trabajo (sección 6).",
+ "Pasar la conversación a un asesor humano cuando el cliente quiere comprar, cotizar formalmente, pagar o pedir envío o factura; cuando hay un reclamo, una garantía, una falla concreta o un riesgo de seguridad; y cuando algo no cuadra entre las fuentes.",
+ "Nunca inventar precios, plazos, descuentos, garantías ni especificaciones.",
 ])
 
 h2("1. Quiénes somos")
@@ -95,14 +95,15 @@ ul([
 h2("4. Garantía y derechos del cliente")
 p("La garantía de cada producto (si la tiene y por cuántos meses) se informa en su ficha y queda registrada en Mi cuenta desde la fecha de compra. En Colombia, los productos nuevos tienen además la garantía legal del Estatuto del Consumidor (Ley 1480 de 2011). La garantía no cubre daños por mal uso, como hacer funcionar la bomba en seco, usar combustible contaminado o no hacer el mantenimiento indicado. Para hacer efectiva una garantía, el cliente escribe por WhatsApp con el número de serie, fotos o video de la falla y una descripción de lo que pasó.")
 
-h2("5. Productos (datos de ejemplo del sitio)")
-p("Las motobombas JF combinan un motor diésel con una bomba centrífuga de superficie montada sobre chasis. Los motores también se venden por separado, nuevos o reconstruidos. Precios vigentes: en la ficha de cada producto.")
-mot = [["JF-M12","12 HP","4\" / 3\"","1 800","45","Compacta para socavón","jf-m12"],["JF-M18","18 HP","4\" / 4\"","2 600","55","Uso general","jf-m18"],["JF-M25","25 HP","6\" / 4\"","4 000","80","Minería, tajo abierto","jf-m25"],["JF-M25 B","25 HP","6\" / 4\"","4 000","80","Variante del JF-M25","jf-m25b"],["JF-M30","30 HP","6\" / 4\"","5 000","85","Uso exigente","jf-m30"],["JF-M40","40 HP","8\" / 6\"","6 500","95","Alto caudal y altura","jf-m40"]]
-table([["Ref.","Potencia","Succión / descarga","Caudal máx. (L/min)","Altura máx. (m)","Ficha"]]+[r[:5]+[B+"/es/motobombas/"+r[6]] for r in mot],[1.6*cm,1.5*cm,2*cm,2*cm,1.7*cm,8.4*cm])
-mtr = [["JF-D18","18 HP","2","3 000","Agua","jf-d18"],["JF-D25","25 HP","4","2 600","Agua","jf-d25"],["JF-D25R","25 HP (reconstruido)","4","2 600","—","jf-d25r"],["JF-D40T","40 HP (turbo)","4","2 400","Agua","jf-d40t"]]
-table([["Ref.","Potencia","Cilindros","Régimen (rpm)","Refrigeración","Ficha"]]+[r[:5]+[B+"/es/motores/"+r[5]] for r in mtr],[1.6*cm,2.9*cm,1.5*cm,1.8*cm,1.9*cm,7.5*cm])
-p("El caudal máximo y la altura máxima no se dan al mismo tiempo: a la altura máxima el caudal es cercano a cero. Para saber si un equipo sirve para un caudal a cierta altura se necesita su curva y confirmarlo con un asesor.")
-p("Repuestos publicados como ejemplo: radiador D25, kit de pistón D25, anillos D18, empaque de culata D25, válvulas D25, camisa D25, silenciador 3\", tanque de 40 L, ventilador de 450 mm, volante D18, impulsor de 6\", sello mecánico de 6\" y tablero con horómetro. Cada ficha indica con qué motores y motobombas es compatible.")
+h2("5. Catálogo: cómo está organizado")
+ul([
+ "<b>Motobombas</b> (" + L("/es/motobombas") + "): equipos completos, motor diésel acoplado a una bomba centrífuga de superficie sobre chasis. Cada ficha indica potencia, diámetros de succión y descarga, caudal máximo, altura máxima, régimen, tipo de arranque, peso, precio, estado y garantía.",
+ "<b>Motores</b> (" + L("/es/motores") + "): motores diésel nuevos y reconstruidos, con potencia, cilindros, régimen y refrigeración.",
+ "<b>Repuestos</b> (" + L("/es/repuestos") + "): piezas por categoría (sección 2), cada una con la lista de motores y motobombas con los que es compatible.",
+ "<b>Estados:</b> Disponible o Vendido. Un equipo vendido sigue visible como referencia y se puede preguntar por uno igual.",
+ "<b>Lectura de especificaciones:</b> el caudal máximo y la altura máxima no se dan al mismo tiempo; a la altura máxima el caudal es cercano a cero. Para saber si un equipo sirve para un caudal a cierta altura se usa su curva, que confirma un asesor.",
+ "<b>Precios:</b> en pesos colombianos (COP), por el equipo; el envío se cotiza aparte.",
+])
 
 h2("6. Asesoría: cómo elegir la motobomba correcta")
 p("Una motobomba bien elegida trabaja cerca de su mejor punto, gasta menos combustible y dura más. Hacen falta tres datos: caudal, altura total y tipo de fluido; y conviene saber la altitud del sitio.")
@@ -204,7 +205,7 @@ faq = [
  ("¿Venden fuera de Colombia?","Sí se atienden clientes del exterior; el asesor cotiza el envío y orienta los trámites de importación del país de destino."),
  ("¿Las fotos son del equipo exacto?","Si dicen «Imagen de referencia», muestran un equipo igual o similar. Fotos del equipo exacto se piden por WhatsApp."),
  ("¿Cómo sé si un repuesto le sirve a mi motor?","Cada repuesto indica su compatibilidad; también se puede filtrar el catálogo por motor. Si hay duda, enviar foto de la placa del motor."),
- ("¿Tienen motores reconstruidos?","Sí, se publican como «reconstruido» en el catálogo de motores."),
+ ("¿Tienen motores reconstruidos?","Cuando hay motores reconstruidos, se publican como «reconstruido» en el catálogo de motores; la disponibilidad está en el catálogo en vivo."),
  ("¿Qué motobomba necesito?","Depende del caudal, la altura total, el tipo de agua y la altitud (sección 6). Con esos datos un asesor recomienda el equipo."),
  ("¿Puedo usar la motobomba dentro del socavón?","Solo con ventilación adecuada para los gases de escape y cumpliendo el reglamento de seguridad minera; consultar el caso con un asesor."),
  ("¿Dónde veo la garantía de mi equipo?","En Mi cuenta, en la ficha del equipo comprado."),
@@ -229,7 +230,7 @@ table([["Término","Significado"],
 ],[3.6*cm,13.6*cm])
 
 h2("14. Cuándo pasar a un asesor humano")
-ul(["Cotización, precio final, disponibilidad o fecha de entrega.","Envío, importación, formas de pago y factura.","Garantías y reclamos.","Diagnóstico de una falla concreta o mantenimiento.","Recomendación final de un equipo para un sitio específico.","Cualquier tema que no esté en este documento."])
+ul(["Cotización formal, reserva, compra o fecha de entrega.","Envío, importación, formas de pago y factura.","Garantías y reclamos.","Diagnóstico de una falla concreta o mantenimiento.","Recomendación final de un equipo para un sitio específico.","Cualquier dato que no esté en el catálogo, en los documentos de JF Motores ni en una fuente oficial del fabricante.","Cuando algo no cuadra: precios o especificaciones que parecen errados, o datos que no coinciden entre fuentes."])
 p("WhatsApp y línea directa: +57 312 2110262.")
 doc.build(s)
 print("ok")

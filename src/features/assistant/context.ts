@@ -3,20 +3,27 @@ import { cacheLife, cacheTag } from "next/cache";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import type { KnowledgeDoc } from "./harness";
 
-export type AssistantContext = { enabled: boolean; model: string; docs: KnowledgeDoc[] };
+export type AssistantContext = { enabled: boolean; model: string; docs: KnowledgeDoc[]; webVerify: boolean; officialDomains: string[] };
 
 /** Ajustes y documentos del asistente (cacheado; el panel lo refresca al guardar). */
 export async function getAssistantContext(): Promise<AssistantContext> {
   "use cache";
   cacheLife("minutes");
   cacheTag("assistant");
+  const off: AssistantContext = { enabled: false, model: "", docs: [], webVerify: false, officialDomains: [] };
   try {
     const { data, error } = await createSupabasePublicClient().rpc("assistant_context");
-    if (error || !data || typeof data !== "object") return { enabled: false, model: "", docs: [] };
-    const d = data as { enabled?: boolean; model?: string; docs?: KnowledgeDoc[] };
-    return { enabled: !!d.enabled, model: d.model ?? "", docs: Array.isArray(d.docs) ? d.docs : [] };
+    if (error || !data || typeof data !== "object") return off;
+    const d = data as { enabled?: boolean; model?: string; docs?: KnowledgeDoc[]; web_verify?: boolean; official_domains?: string[] };
+    return {
+      enabled: !!d.enabled,
+      model: d.model ?? "",
+      docs: Array.isArray(d.docs) ? d.docs : [],
+      webVerify: !!d.web_verify,
+      officialDomains: Array.isArray(d.official_domains) ? d.official_domains : [],
+    };
   } catch {
-    return { enabled: false, model: "", docs: [] };
+    return off;
   }
 }
 

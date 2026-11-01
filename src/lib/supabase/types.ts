@@ -9,8 +9,24 @@ export type Database = {
   public: {
     Tables: {
       ai_settings: {
-        Row: { enabled: boolean; id: boolean; model: string; updated_at: string; updated_by: string | null };
-        Insert: { enabled?: boolean; id?: boolean; model?: string; updated_at?: string; updated_by?: string | null };
+        Row: {
+          enabled: boolean;
+          id: boolean;
+          model: string;
+          official_domains: string[];
+          updated_at: string;
+          updated_by: string | null;
+          web_verify: boolean;
+        };
+        Insert: {
+          enabled?: boolean;
+          id?: boolean;
+          model?: string;
+          official_domains?: string[];
+          updated_at?: string;
+          updated_by?: string | null;
+          web_verify?: boolean;
+        };
         Update: Partial<Database["public"]["Tables"]["ai_settings"]["Insert"]>;
         Relationships: [];
       };
