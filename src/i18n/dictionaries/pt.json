@@ -797,6 +797,13 @@
     "waMessage": "Olá JF Motores, venho do chat do site e quero falar com um consultor.",
     "handoff": "Um consultor deve ver isso. Vou te passar para ele no WhatsApp com o resumo da conversa.",
     "waSummary": "Resumo do chat: ",
-    "toAdvisor": "Falar com um consultor"
+    "toAdvisor": "Falar com um consultor",
+    "loginTitle": "Entre para usar o assistente",
+    "loginText": "O assistente técnico é grátis para clientes cadastrados. Se você já comprou conosco, tem mais consultas por mês.",
+    "login": "Entrar",
+    "register": "Criar conta",
+    "quota": "Você usou suas consultas de IA deste mês. Um consultor te atende pelo WhatsApp; as consultas se renovam todo mês e aumentam com suas compras.",
+    "low": "Resta {n}% das suas consultas do mês.",
+    "telegramPrivate": "Este bot é privado. Seu ID de chat é {id}: peça para autorizá-lo."
   }
 }

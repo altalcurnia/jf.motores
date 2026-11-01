@@ -17,11 +17,23 @@ async function manager() {
   return { session, supabase: await createSupabaseServerClient() };
 }
 
-export async function saveSettings(input: { enabled: boolean; model: string; webVerify: boolean; domains: string }): Promise<ActionResult> {
+export async function saveSettings(input: {
+  enabled: boolean;
+  model: string;
+  webVerify: boolean;
+  domains: string;
+  budgetBase: number;
+  budgetPerMillion: number;
+  budgetMax: number;
+}): Promise<ActionResult> {
   const m = await manager();
   if (!m) return { ok: false, error: "No tienes permiso para configurar el asistente." };
   const model = input.model.trim().toLowerCase();
   if (!/^[a-z0-9][a-z0-9.-]{2,39}$/.test(model)) return { ok: false, error: "Nombre de modelo inválido." };
+  const money = [input.budgetBase, input.budgetPerMillion, input.budgetMax];
+  if (money.some((v) => !Number.isFinite(v) || v < 0) || input.budgetMax > 50 || input.budgetBase > 10 || input.budgetPerMillion > 10) {
+    return { ok: false, error: "Revisa los cupos: valores en dólares entre 0 y 10 (tope máximo 50)." };
+  }
   const { error } = await m.supabase
     .from("ai_settings")
     .update({
@@ -29,6 +41,9 @@ export async function saveSettings(input: { enabled: boolean; model: string; web
       model,
       web_verify: input.webVerify,
       official_domains: cleanDomains(input.domains.split(/[\s,;]+/)),
+      budget_base_usd: input.budgetBase,
+      budget_per_million_cop_usd: input.budgetPerMillion,
+      budget_max_usd: input.budgetMax,
       updated_at: new Date().toISOString(),
       updated_by: m.session.userId,
     })

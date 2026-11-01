@@ -5,9 +5,31 @@ export const DEEPSEEK_URL = "https://api.deepseek.com/chat/completions";
 export const DEFAULT_MODEL = "deepseek-flash";
 const TAVILY_URL = "https://api.tavily.com/search";
 
+export type Usage = { costUsd: number; tokensIn: number; tokensOut: number; searches: number };
 export type AskResult =
-  | { ok: true; reply: string; noInfo: boolean; handoff: string | null; sources: string[] }
-  | { ok: false; reason: "no_key" | "no_docs" | "api_error"; detail?: string };
+  | { ok: true; reply: string; noInfo: boolean; handoff: string | null; sources: string[]; usage: Usage }
+  | { ok: false; reason: "no_key" | "no_docs" | "api_error"; detail?: string; usage?: Usage };
+
+/**
+ * Precios por millón de tokens (US$), tarifa de hora pico para ir a la segura.
+ * Fuente: https://api-docs.deepseek.com/quick_start/pricing (noviembre de 2026).
+ */
+const PRICES: Record<string, { hit: number; miss: number; out: number }> = {
+  "deepseek-flash": { hit: 0.006, miss: 0.3, out: 1.2 },
+  "deepseek-v4-pro": { hit: 0.044, miss: 1.32, out: 3.96 },
+};
+/** Costo aproximado de una búsqueda en fuentes oficiales (Tavily, 1 crédito). */
+export const SEARCH_COST_USD = 0.008;
+
+type ApiUsage = { prompt_tokens?: number; completion_tokens?: number; prompt_cache_hit_tokens?: number; prompt_cache_miss_tokens?: number };
+export function usageCost(model: string, u: ApiUsage | undefined): { cost: number; tin: number; tout: number } {
+  const p = PRICES[model] ?? PRICES["deepseek-v4-pro"];
+  const tin = u?.prompt_tokens ?? 0;
+  const hit = u?.prompt_cache_hit_tokens ?? 0;
+  const miss = u?.prompt_cache_miss_tokens ?? Math.max(0, tin - hit);
+  const tout = u?.completion_tokens ?? 0;
+  return { cost: (hit * p.hit + miss * p.miss + tout * p.out) / 1_000_000, tin, tout };
+}
 
 /** ¿Está configurada la clave en el servidor? (nunca se expone su valor) */
 export function hasDeepSeekKey(): boolean {
@@ -78,15 +100,19 @@ export async function askAssistant(input: {
     ...input.history,
   ];
   const sources: string[] = [];
+  const model = input.model || DEFAULT_MODEL;
+  const usage: Usage = { costUsd: 0, tokensIn: 0, tokensOut: 0, searches: 0 };
   try {
     for (let round = 0; round < 3; round++) {
       const res = await fetch(DEEPSEEK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
         body: JSON.stringify({
-          model: input.model || DEFAULT_MODEL,
-          temperature: 0.1,
-          max_tokens: 600,
+          model,
+          // Sin modo de razonamiento: si no, el razonamiento se come el límite y la respuesta sale cortada
+          thinking: { type: "disabled" },
+          temperature: 0.2,
+          max_tokens: 900,
           stream: false,
           messages,
           ...(web && round < 2 ? { tools: [SEARCH_TOOL], tool_choice: "auto" } : {}),
@@ -96,9 +122,16 @@ export async function askAssistant(input: {
       });
       if (!res.ok) {
         const text = await res.text().catch(() => "");
-        return { ok: false, reason: "api_error", detail: `${res.status} ${text.slice(0, 200)}` };
+        return { ok: false, reason: "api_error", detail: `${res.status} ${text.slice(0, 200)}`, usage };
       }
-      const data = (await res.json()) as { choices?: { message?: { content?: string | null; tool_calls?: ToolCall[] } }[] };
+      const data = (await res.json()) as {
+        choices?: { message?: { content?: string | null; tool_calls?: ToolCall[] }; finish_reason?: string }[];
+        usage?: ApiUsage;
+      };
+      const c = usageCost(model, data.usage);
+      usage.costUsd += c.cost;
+      usage.tokensIn += c.tin;
+      usage.tokensOut += c.tout;
       const msg = data.choices?.[0]?.message;
       const calls = msg?.tool_calls ?? [];
       if (calls.length && web && round < 2) {
@@ -109,6 +142,10 @@ export async function askAssistant(input: {
             q = String((JSON.parse(call.function.arguments) as { consulta?: string }).consulta ?? "");
           } catch {}
           const results = call.function.name === "buscar_fuente_oficial" && q ? await officialSearch(q, input.officialDomains!) : [];
+          if (q) {
+            usage.searches += 1;
+            usage.costUsd += SEARCH_COST_USD;
+          }
           sources.push(...results.map((r) => r.url));
           messages.push({
             role: "tool",
@@ -120,10 +157,10 @@ export async function askAssistant(input: {
       }
       const reply = (msg?.content ?? "").trim();
       const handoff = handoffSummary(reply);
-      return { ok: true, reply, noInfo: handoff === null && isNoInfo(reply), handoff, sources };
+      return { ok: true, reply, noInfo: handoff === null && isNoInfo(reply), handoff, sources, usage };
     }
-    return { ok: true, reply: "", noInfo: false, handoff: "No se pudo verificar la información a tiempo.", sources };
+    return { ok: true, reply: "", noInfo: false, handoff: "No se pudo verificar la información a tiempo.", sources, usage };
   } catch (err) {
-    return { ok: false, reason: "api_error", detail: err instanceof Error ? err.message : String(err) };
+    return { ok: false, reason: "api_error", detail: err instanceof Error ? err.message : String(err), usage };
   }
 }

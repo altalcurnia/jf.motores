@@ -51,12 +51,25 @@ export function SupportFab({
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
+  // null = comprobando; false = sin sesión
+  const [session, setSession] = useState<{ login: boolean; leftPct?: number } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, busy]);
+  useEffect(() => {
+    if (!chat) return;
+    let alive = true;
+    fetch("/api/asistente", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { login?: boolean; leftPct?: number }) => alive && setSession({ login: !!d.login, leftPct: d.leftPct }))
+      .catch(() => alive && setSession({ login: true }));
+    return () => {
+      alive = false;
+    };
+  }, [chat]);
   useEffect(() => {
     if (chat) inputRef.current?.focus();
     document.body.classList.toggle("chat-open", chat);
@@ -90,7 +103,9 @@ export function SupportFab({
       else if (data.code === "handoff")
         setMsgs((m) => [...m, { role: "assistant", content: t.handoff, kind: "handoff", summary: data.summary || question }]);
       else {
-        const map: Record<string, string> = { no_info: t.noInfo, limit: t.limit, disabled: t.disabled };
+        if (data.code === "login") setSession({ login: false });
+        if (data.code === "quota") setSession({ login: true, leftPct: 0 });
+        const map: Record<string, string> = { no_info: t.noInfo, limit: t.limit, disabled: t.disabled, quota: t.quota, login: t.loginTitle };
         setMsgs((m) => [...m, { role: "assistant", content: map[data.code ?? ""] ?? t.unavailable, kind: data.code === "no_info" ? "info" : "error" }]);
       }
     } catch {
@@ -122,7 +137,7 @@ export function SupportFab({
             <p className="ai-msg assistant">
               <Linkified text={t.welcome} />
             </p>
-            {msgs.length === 0 && (
+            {msgs.length === 0 && session?.login !== false && (
               <div className="ai-sugs">
                 {t.suggestions.map((s) => (
                   <button type="button" key={s} onClick={() => ask(s)}>
@@ -149,6 +164,20 @@ export function SupportFab({
               </p>
             )}
           </div>
+          {session && !session.login ? (
+            <div className="ai-login">
+              <b>{t.loginTitle}</b>
+              <p>{t.loginText}</p>
+              <div>
+                <a className="btn y" href={`/${locale}/cuenta/entrar?next=${encodeURIComponent(typeof window !== "undefined" ? window.location.pathname : `/${locale}`)}`}>
+                  {t.login}
+                </a>
+                <a className="btn g" href={`/${locale}/cuenta/registro?next=${encodeURIComponent(typeof window !== "undefined" ? window.location.pathname : `/${locale}`)}`}>
+                  {t.register}
+                </a>
+              </div>
+            </div>
+          ) : (
           <form
             className="ai-form"
             onSubmit={(e) => {
@@ -170,10 +199,14 @@ export function SupportFab({
                 }
               }}
             />
-            <button className="ai-send" disabled={busy || !text.trim()} aria-label={t.send}>
+            <button className="ai-send" disabled={busy || !text.trim() || session?.leftPct === 0} aria-label={t.send}>
               ➤
             </button>
           </form>
+          )}
+          {session?.login && session.leftPct !== undefined && session.leftPct <= 25 && (
+            <p className="ai-low">{session.leftPct === 0 ? t.quota : t.low.replace("{n}", String(session.leftPct))}</p>
+          )}
           <p className="ai-notice">{t.notice}</p>
         </section>
       )}

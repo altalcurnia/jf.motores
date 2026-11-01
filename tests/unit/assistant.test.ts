@@ -55,7 +55,7 @@ describe("arnés del asistente", () => {
     expect(p).toContain("buscar_fuente_oficial");
     expect(p).toContain("cummins.com");
     expect(p).toContain(HANDOFF);
-    expect(systemPrompt([], "es")).toContain("verificación en sitios de fabricantes está desactivada");
+    expect(systemPrompt([], "es")).toContain("búsqueda en sitios de fabricantes está desactivada");
     expect(p).toContain(NO_INFO);
     expect(p).toContain("English");
     expect(p).toContain("La JF-M25 tiene 25 HP.");

@@ -30,10 +30,21 @@ async function Body() {
   }
   const supabase = await createSupabaseServerClient();
   const [{ data: settings }, { data: docs, error }] = await Promise.all([
-    supabase.from("ai_settings").select("enabled, model, web_verify, official_domains").maybeSingle(),
+    supabase
+      .from("ai_settings")
+      .select("enabled, model, web_verify, official_domains, budget_base_usd, budget_per_million_cop_usd, budget_max_usd")
+      .maybeSingle(),
     supabase.from("ai_documents").select("id, title, content, active, is_test, created_at").order("created_at"),
   ]);
   if (error) return <div className="notice err">No se pudieron leer los documentos: {error.message}</div>;
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Bogota" }));
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const { data: usage } = await supabase
+    .from("ai_usage")
+    .select("cost_usd, requests, profiles ( email )")
+    .eq("month", month)
+    .order("cost_usd", { ascending: false })
+    .limit(50);
   const rows: DocRow[] = (docs ?? []).map((d) => ({
     id: d.id,
     title: d.title,
@@ -51,6 +62,12 @@ async function Body() {
       searchConfigured={hasSearchKey()}
       webVerify={settings?.web_verify ?? false}
       domains={settings?.official_domains ?? []}
+      budget={{
+        base: Number(settings?.budget_base_usd ?? 0.1),
+        perMillion: Number(settings?.budget_per_million_cop_usd ?? 0.08),
+        max: Number(settings?.budget_max_usd ?? 2),
+      }}
+      usage={(usage ?? []).map((u) => ({ email: u.profiles?.email ?? "—", cost: Number(u.cost_usd), requests: u.requests }))}
       telegramConfigured={!!process.env.TELEGRAM_BOT_TOKEN && !!process.env.TELEGRAM_WEBHOOK_SECRET}
     />
   );

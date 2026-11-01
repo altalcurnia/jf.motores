@@ -35,6 +35,12 @@ export async function POST(request: NextRequest) {
       signal: AbortSignal.timeout(10_000),
     }).catch(() => null);
 
+  // Bot de pruebas: solo responde a los chats autorizados en TELEGRAM_ALLOWED_CHATS (IDs separados por coma)
+  const allowed = (process.env.TELEGRAM_ALLOWED_CHATS ?? "").split(/[\s,]+/).filter(Boolean);
+  if (!allowed.includes(String(chatId))) {
+    await send(t.telegramPrivate.replace("{id}", String(chatId)));
+    return NextResponse.json({ ok: true });
+  }
   if (text.startsWith("/start")) {
     await send(t.welcome);
     return NextResponse.json({ ok: true });

@@ -17,6 +17,9 @@ export type Database = {
           updated_at: string;
           updated_by: string | null;
           web_verify: boolean;
+          budget_base_usd: number;
+          budget_per_million_cop_usd: number;
+          budget_max_usd: number;
         };
         Insert: {
           enabled?: boolean;
@@ -26,9 +29,20 @@ export type Database = {
           updated_at?: string;
           updated_by?: string | null;
           web_verify?: boolean;
+          budget_base_usd?: number;
+          budget_per_million_cop_usd?: number;
+          budget_max_usd?: number;
         };
         Update: Partial<Database["public"]["Tables"]["ai_settings"]["Insert"]>;
         Relationships: [];
+      };
+      ai_usage: {
+        Row: { cost_usd: number; month: string; requests: number; tokens_in: number; tokens_out: number; updated_at: string; user_id: string };
+        Insert: { cost_usd?: number; month: string; requests?: number; tokens_in?: number; tokens_out?: number; updated_at?: string; user_id: string };
+        Update: Partial<Database["public"]["Tables"]["ai_usage"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "ai_usage_user_id_fkey"; columns: ["user_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ];
       };
       ai_documents: {
         Row: {
@@ -566,6 +580,8 @@ export type Database = {
         Returns: string;
       };
       assistant_context: { Args: Record<string, never>; Returns: Json };
+      ai_budget: { Args: Record<string, never>; Returns: Json };
+      ai_charge: { Args: { cost: number; tokens_in: number; tokens_out: number }; Returns: undefined };
       list_customers: {
         Args: Record<string, never>;
         Returns: { id: string; email: string; full_name: string | null; phone: string | null; purchases: number }[];

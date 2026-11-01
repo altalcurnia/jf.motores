@@ -22,7 +22,10 @@ export function AssistantAdmin(props: {
   searchConfigured: boolean;
   webVerify: boolean;
   domains: string[];
+  budget: { base: number; perMillion: number; max: number };
+  usage: { email: string; cost: number; requests: number }[];
 }) {
+  const [budget, setBudget] = useState(props.budget);
   const [webVerify, setWebVerify] = useState(props.webVerify);
   const [domains, setDomains] = useState(props.domains.join("\n"));
   const router = useRouter();
@@ -111,11 +114,60 @@ export function AssistantAdmin(props: {
                 setNote({ ok: false, text: "Para encenderlo hace falta la clave de DeepSeek y al menos un documento activo." });
                 return;
               }
-              run(() => saveSettings({ enabled, model, webVerify, domains }));
+              run(() =>
+                saveSettings({ enabled, model, webVerify, domains, budgetBase: budget.base, budgetPerMillion: budget.perMillion, budgetMax: budget.max }),
+              );
             }}
           >
             Guardar
           </button>
+        </section>
+
+        <section className="panel">
+          <h2>Cupos por cliente (al mes)</h2>
+          <p className="muted small">
+            Solo clientes con cuenta pueden usar el chat. Cupo = base + (compras en millones de COP × valor por millón), sin pasar del tope.
+            Ej.: con 0,10 + 0,08 por millón, un cliente que compró una motobomba de 25 millones llega al tope. Cada respuesta cuesta
+            alrededor de US$ 0,001 con deepseek-flash; una búsqueda en fuentes oficiales, US$ 0,008.
+          </p>
+          <div className="contact-row">
+            <label className="field">
+              <span className="field-label">Base (US$)</span>
+              <input type="number" step="0.01" min="0" value={budget.base} onChange={(e) => setBudget({ ...budget, base: Number(e.target.value) })} />
+            </label>
+            <label className="field">
+              <span className="field-label">Por millón comprado (US$)</span>
+              <input type="number" step="0.01" min="0" value={budget.perMillion} onChange={(e) => setBudget({ ...budget, perMillion: Number(e.target.value) })} />
+            </label>
+            <label className="field">
+              <span className="field-label">Tope por cliente (US$)</span>
+              <input type="number" step="0.1" min="0" value={budget.max} onChange={(e) => setBudget({ ...budget, max: Number(e.target.value) })} />
+            </label>
+          </div>
+          <p className="muted small">Se guarda con el botón Guardar de “Estado”.</p>
+          <h3>Consumo de este mes</h3>
+          {props.usage.length ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Preguntas</th>
+                  <th>Costo (US$)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {props.usage.map((u) => (
+                  <tr key={u.email}>
+                    <td>{u.email}</td>
+                    <td>{u.requests}</td>
+                    <td>{u.cost.toFixed(4)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="muted small">Aún no hay consumo este mes.</p>
+          )}
         </section>
 
         <section className="panel">
