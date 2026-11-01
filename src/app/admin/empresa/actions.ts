@@ -57,3 +57,17 @@ export async function saveContact(input: ContactInput): Promise<SaveResult> {
   updateTag("company");
   return { ok: true };
 }
+
+/** Cambia la imagen de Beneficios del inicio (ya subida a catalogo/sitio/…) o vuelve a la predeterminada (null). */
+export async function saveBenefitsImage(path: string | null): Promise<SaveResult> {
+  const session = await getSession();
+  if (!session || !session.role.isInternal || !can(session, "empresa.editar")) {
+    return { ok: false, error: "No tienes permiso para cambiar las imágenes del sitio." };
+  }
+  if (path !== null && !/^sitio\/[a-z0-9-]+\.(jpg|png|webp)$/.test(path)) return { ok: false, error: "Archivo inválido." };
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.from("company_settings").update({ home_benefits_image: path }).eq("id", true);
+  if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
+  updateTag("company");
+  return { ok: true };
+}

@@ -302,3 +302,9 @@ test("guías: subpestañas oficiales (por defecto) y nuestras guías, también d
   await page.goto("/es/guias#pedir-repuesto");
   await expect(page.locator("#pedir-repuesto")).toBeVisible();
 });
+
+test("inicio: la imagen de beneficios usa la del panel o la predeterminada", async ({ page }) => {
+  await page.goto("/es");
+  const src = await page.locator(".b-visual img").getAttribute("src");
+  expect(src).toMatch(/motobomba-isometrica\.jpg|\/storage\/v1\/object\/public\/catalogo\/sitio\//);
+});

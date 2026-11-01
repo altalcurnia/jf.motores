@@ -235,6 +235,7 @@ export type Database = {
       company_settings: {
         Row: {
           email: string | null;
+          home_benefits_image: string | null;
           id: boolean;
           legal_name: string | null;
           nit: string | null;
@@ -247,6 +248,7 @@ export type Database = {
         };
         Insert: {
           email?: string | null;
+          home_benefits_image?: string | null;
           id?: boolean;
           legal_name?: string | null;
           nit?: string | null;

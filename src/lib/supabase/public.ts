@@ -101,3 +101,22 @@ export function formatPhone(digits: string): string {
   if (d.startsWith("57") && d.length === 12) return `+57 ${d.slice(2, 5)} ${d.slice(5)}`;
   return `+${d}`;
 }
+
+/** Imagen predeterminada de la sección Beneficios del inicio (se cambia en /admin/empresa). */
+export const DEFAULT_BENEFITS_IMAGE = "/demo/motobomba-isometrica.jpg";
+
+/** Imágenes del inicio editables desde el panel. Cacheadas; se refrescan al guardar. */
+export async function getHomeImages(): Promise<{ benefits: string }> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("company");
+  try {
+    const supabase = createSupabasePublicClient();
+    const { data } = await supabase.from("company_settings").select("home_benefits_image").maybeSingle();
+    const path = data?.home_benefits_image;
+    const base = supabasePublicEnv().NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, "");
+    return { benefits: path ? `${base}/storage/v1/object/public/catalogo/${path}` : DEFAULT_BENEFITS_IMAGE };
+  } catch {
+    return { benefits: DEFAULT_BENEFITS_IMAGE };
+  }
+}

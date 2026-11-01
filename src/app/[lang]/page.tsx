@@ -2,14 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { formatPhone, getContact } from "@/lib/supabase/public";
+import { formatPhone, getContact, getHomeImages } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
 import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 
 // Ilustración de referencia local (public/demo). Se reemplaza por una foto real de la empresa.
-const BENEFITS_IMAGE = "/demo/motobomba-isometrica.jpg";
 
 const catalogKeys = ["motobombas", "motores", "repuestos"] as const;
 // Miniaturas de referencia por categoría (public/demo); se cambian por fotos reales.
@@ -24,7 +23,7 @@ export default async function HomePage() {
   const dict = await getDictionary();
   const t = dict.hero;
   const b = dict.benefits;
-  const contact = await getContact();
+  const [contact, homeImages] = await Promise.all([getContact(), getHomeImages()]);
   const wa = buildWhatsAppUrl(contact.whatsapp, dict.whatsapp.general);
 
   return (
@@ -118,7 +117,7 @@ export default async function HomePage() {
           <div className="b-grid">
             <div className="b-left">
               <div className="b-visual reveal">
-                <FallbackImage src={BENEFITS_IMAGE} alt={b.imageAlt} />
+                <FallbackImage src={homeImages.benefits} alt={b.imageAlt} />
                 {/* Barra inferior con el estado de prueba */}
                 <div className="bv-bar" style={{ justifyContent: "flex-end" }}>
                   <span>{b.bar2}</span>

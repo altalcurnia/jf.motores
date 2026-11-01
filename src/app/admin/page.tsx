@@ -88,8 +88,8 @@ async function Dashboard() {
         )}
         {can(session, "empresa.editar") && (
           <Link href="/admin/empresa" className="card link">
-            <h3>Contacto y sedes</h3>
-            <p>Líneas directas y de WhatsApp, correo de soporte y sedes que se muestran en el sitio.</p>
+            <h3>Contacto, sedes e imagen del inicio</h3>
+            <p>Líneas directas y de WhatsApp, correo de soporte, sedes y la imagen grande de la sección de beneficios.</p>
             <span className="pill ok">Disponible</span>
           </Link>
         )}
