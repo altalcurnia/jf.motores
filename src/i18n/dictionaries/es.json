@@ -543,62 +543,55 @@
     "waGuide": "Hola JF Motores, leí la guía y tengo una pregunta: ",
     "library": {
       "kicker": "Biblioteca técnica gratuita",
-      "title": "Manuales y guías oficiales para cuidar tu motobomba",
-      "intro": "13 documentos de fabricantes y entidades de seguridad minera, seleccionados por nuestro taller. Gratis para clientes registrados.",
+      "title": "Cursos y guías oficiales para cuidar tu motobomba",
+      "intro": "10 cursos y guías de entidades públicas (SENA, Agencia Nacional de Minería y autoridades de seguridad minera), seleccionados por nuestro taller. Gratis para clientes registrados.",
       "loginNote": "Inicia sesión o crea tu cuenta gratis para abrirlos.",
       "open": "Abrir PDF",
       "openOfficial": "Ver en el sitio oficial",
       "hosted": "Documento público",
-      "official": "Del fabricante: se abre en su sitio oficial",
+      "official": "Se abre en el sitio oficial de la entidad",
       "langEn": "En inglés",
       "langEs": "En español",
       "groups": {
-        "manuales": "Manuales de operación y mantenimiento",
-        "diagnostico": "Diagnóstico de fallas y filtros",
+        "motor": "Motor diésel",
+        "bombas": "Bombas",
+        "mantenimiento": "Mantenimiento",
         "seguridad": "Seguridad en minería"
       },
       "criteriaTitle": "Antes de pedir un repuesto",
       "criteria": "No compres filtros, sellos, impulsores, rodamientos ni correas solo por su apariencia. Anota marca, modelo y número de serie del motor y de la bomba, el código del repuesto y las horas de trabajo.",
       "items": {
-        "mq62tdd-operacion": {
-          "h": "Multiquip MQ62TDD — operación, seguridad y mantenimiento",
-          "p": "Lista diaria, cebado, arranque y parada, mantenimiento de bomba y motor, almacenamiento y diagnóstico."
+        "sena-motor-diesel": {
+          "h": "Funcionamiento del motor diésel",
+          "p": "Ciclo de trabajo, admisión, combustible, escape, lubricación y refrigeración."
         },
-        "mq62tdd-partes": {
-          "h": "Multiquip MQ62TDD — manual de partes",
-          "p": "Despiece y referencias de repuestos del conjunto de bomba."
+        "sena-bombas-centrifugas": {
+          "h": "Mantenimiento de bombas centrífugas",
+          "p": "Fallas, cebado, arranque y parada, alineación, empaques, sellos, cojinetes y cavitación."
         },
-        "bba-ba": {
-          "h": "BBA Pumps serie BA — manual de usuario",
-          "p": "Operación, instalación, seguridad y mantenimiento de bombas de achique."
+        "sena-alimentacion-combustible": {
+          "h": "Revisión del sistema de alimentación de combustible",
+          "p": "Recorrido del combustible, bomba de alimentación, fallas comunes y cambio de filtro."
         },
-        "perkins-400": {
-          "h": "Perkins 403D / 404D — operación y mantenimiento",
-          "p": "Fluidos, filtros, refrigeración, lubricación, combustible y plan de mantenimiento del motor."
+        "sena-mantenimiento-motor": {
+          "h": "Mantenimiento preventivo del motor",
+          "p": "Cómo programarlo: niveles de mantenimiento, hojas de registro y control."
         },
-        "godwin-cd": {
-          "h": "Godwin CD y DPC — instalación, operación y mantenimiento",
-          "p": "Bombas autocebantes de achique: instalación, cebado, inspección y servicio."
+        "sena-filtros-aceite": {
+          "h": "Cambio de filtros de aceite",
+          "p": "Cuándo cambiarlos y el paso a paso para hacerlo bien."
         },
-        "global-motor": {
-          "h": "Global Pump — diagnóstico del motor",
-          "p": "Arranque, combustible, aire, refrigeración, presión de aceite e inyección."
+        "sena-talleres-diesel": {
+          "h": "Mantenimiento preventivo en talleres diésel",
+          "p": "Organización y control del mantenimiento de máquinas y equipos."
         },
-        "global-bomba": {
-          "h": "Global Pump — diagnóstico de la bomba",
-          "p": "Cebado, caudal, presión, impulsor, anillos, sello mecánico, vibración y cavitación."
+        "sena-reparador-diesel": {
+          "h": "Curso de mecánico reparador de motores diésel",
+          "p": "Material extenso para profundizar en reparación y mantenimiento (unidades 9 a 16)."
         },
-        "global-cebado": {
-          "h": "Global Pump — diagnóstico del sistema de cebado",
-          "p": "Venturi, fugas, válvulas y compresor."
-        },
-        "fleetguard-combustible": {
-          "h": "Fleetguard — filtración de combustible",
-          "p": "Cómo elegir el separador de agua, el micraje, el flujo y su mantenimiento."
-        },
-        "fleetguard-filtros": {
-          "h": "Fleetguard — especificaciones de filtros",
-          "p": "Referencia técnica de filtros; confirma siempre con el número de serie del motor."
+        "anm-metano": {
+          "h": "ANM — prevención de explosiones por metano y polvo de carbón",
+          "p": "Guía de seguridad para minas subterráneas de carbón en Colombia."
         },
         "msha-toolbox": {
           "h": "MSHA — cómo reducir el escape diésel en minería",
@@ -607,16 +600,16 @@
         "wa-diesel-subterraneo": {
           "h": "Australia Occidental — equipos diésel en minería subterránea",
           "p": "Compra, operación y mantenimiento de equipos con motor diésel bajo tierra."
-        },
-        "anm-metano": {
-          "h": "ANM Colombia — prevención de explosiones por metano y polvo de carbón",
-          "p": "Guía de seguridad para minas subterráneas de carbón."
         }
+      },
+      "langTitle": {
+        "es": "En español",
+        "en": "En inglés"
       }
     },
     "videos": {
       "title": "Videos de mantenimiento",
-      "intro": "Videos de fabricantes y tutoriales en español, seleccionados por nuestro taller.",
+      "intro": "Tutoriales en español sobre motor diésel, motobombas y filtros, seleccionados por nuestro taller.",
       "play": "Ver video",
       "openSite": "Ver en el sitio oficial",
       "modes": {
@@ -629,29 +622,29 @@
       },
       "note": "Los videos pertenecen a sus autores y se reproducen desde YouTube.",
       "items": {
-        "mq-sello": {
-          "h": "Multiquip — reemplazo del sello mecánico en bomba QP"
+        "diesel-cuatro-tiempos": {
+          "h": "Motor diésel: ciclo de cuatro tiempos"
         },
-        "mq-instalacion": {
-          "h": "Multiquip — instalación del conjunto de bomba MQ62TDD"
+        "diesel-lubricacion": {
+          "h": "Funcionamiento del motor diésel y su sistema de lubricación"
         },
-        "mq-impulsor": {
-          "h": "Multiquip — servicio del MQ600-TD80 y holgura del impulsor"
+        "bomba-centrifuga-motor": {
+          "h": "Cómo funciona una bomba centrífuga acoplada a un motor"
         },
-        "godwin-cebado": {
-          "h": "Xylem Godwin — problemas de cebado en bombas Dri-Prime"
+        "sello-mecanico": {
+          "h": "Reparación y prueba del sello mecánico"
         },
-        "cummins-consejos": {
-          "h": "Cummins — consejos de mantenimiento de motores diésel"
+        "motobomba-preventivo": {
+          "h": "Mantenimiento preventivo de una motobomba"
         },
-        "cummins-regular": {
-          "h": "Cummins — mantenimiento regular del motor diésel"
-        },
-        "filtros-diesel": {
-          "h": "Mantenimiento y cambio de filtros de motores diésel"
+        "motobomba-guia-rapida": {
+          "h": "Guía rápida de mantenimiento preventivo de motobomba"
         },
         "filtro-combustible": {
           "h": "Cambio del filtro de combustible en maquinaria pesada"
+        },
+        "filtros-diesel": {
+          "h": "Mantenimiento y cambio de filtros de motores diésel"
         }
       }
     }

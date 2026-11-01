@@ -4,7 +4,7 @@ import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
-import { libraryGroups, libraryItems } from "@/features/library/items";
+import { libraryItems, libraryLangs } from "@/features/library/items";
 import { GuideTabs } from "@/features/library/GuideTabs";
 
 export async function generateMetadata() {
@@ -39,12 +39,12 @@ export default async function GuidesPage() {
               <p>{t.library.intro}</p>
               <p className="library-login">🔒 {t.library.loginNote}</p>
             </div>
-            {libraryGroups.map((g) => (
-              <div key={g} className="library-group">
-                <h3>{t.library.groups[g]}</h3>
+            {libraryLangs(locale).map((lang) => (
+              <div key={lang} className="library-group">
+                <h3>{t.library.langTitle[lang]}</h3>
                 <div className="library-grid">
                   {libraryItems
-                    .filter((i) => i.group === g)
+                    .filter((i) => i.lang === lang)
                     .map((i) => {
                       const text =
                         t.library.items[i.id as keyof typeof t.library.items];
@@ -52,11 +52,7 @@ export default async function GuidesPage() {
                         <article key={i.id} className="library-card">
                           <div className="library-meta">
                             <span>{i.source}</span>
-                            <span>
-                              {i.lang === "es"
-                                ? t.library.langEs
-                                : t.library.langEn}
-                            </span>
+                            <span>{t.library.groups[i.group]}</span>
                           </div>
                           <h4>{text.h}</h4>
                           <p>{text.p}</p>

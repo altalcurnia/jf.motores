@@ -1132,3 +1132,4 @@ body.in-journey.app-open #hud { opacity: 0; }
 .guide-subtabs button.on { color: var(--yellow); border-bottom-color: var(--yellow); }
 .guide-subtabs + [role="tabpanel"] .library { margin-top: 18px; }
 [role="tabpanel"] > .guide:first-child { border-top: 0; padding-top: 18px; }
+.video-lang h2 { font-family: var(--mono); font-size: 12px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); margin: 26px 0 0; }
