@@ -88,7 +88,8 @@ export function SupportFab({
   async function ask(q: string) {
     const question = q.trim().slice(0, 800);
     if (!question || busy) return;
-    const history: Msg[] = [...msgs.filter((m) => !m.kind), { role: "user", content: question }];
+    // Se envían también las respuestas de traspaso para que el modelo vea la conversación completa
+    const history: Msg[] = [...msgs.filter((m) => !m.kind || m.kind === "handoff"), { role: "user", content: question }];
     setMsgs((m) => [...m, { role: "user", content: question }]);
     setText("");
     setBusy(true);
@@ -99,9 +100,9 @@ export function SupportFab({
         body: JSON.stringify({ locale, messages: history.map(({ role, content }) => ({ role, content })) }),
       });
       const data = (await res.json().catch(() => ({}))) as { reply?: string; code?: string; summary?: string };
-      if (data.reply) setMsgs((m) => [...m, { role: "assistant", content: data.reply!, summary: question }]);
-      else if (data.code === "handoff")
-        setMsgs((m) => [...m, { role: "assistant", content: t.handoff, kind: "handoff", summary: data.summary || question }]);
+      if (data.code === "handoff")
+        setMsgs((m) => [...m, { role: "assistant", content: data.reply || t.handoff, kind: "handoff", summary: data.summary || question }]);
+      else if (data.reply) setMsgs((m) => [...m, { role: "assistant", content: data.reply!, summary: question }]);
       else {
         if (data.code === "login") setSession({ login: false });
         if (data.code === "quota") setSession({ login: true, leftPct: 0 });
@@ -148,7 +149,7 @@ export function SupportFab({
             )}
             {msgs.map((m, i) => (
               <div key={i} className={`ai-msg ${m.role}${m.kind ? ` ${m.kind}` : ""}`}>
-                {m.role === "assistant" && !m.kind ? <Linkified text={m.content} waHref={waChatHref(m.summary)} /> : m.content}
+                {m.role === "assistant" && (!m.kind || m.kind === "handoff") ? <Linkified text={m.content} waHref={waChatHref(m.summary)} /> : m.content}
                 {(m.kind || (m.role === "assistant" && /whatsapp/i.test(m.content))) && (
                   <a className="ai-wa" href={waChatHref(m.summary)} target="_blank" rel="noopener">
                     <WaIcon /> {m.kind === "handoff" ? t.toAdvisor : t.toWhatsapp}

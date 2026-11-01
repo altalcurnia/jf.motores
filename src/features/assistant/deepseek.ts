@@ -1,5 +1,5 @@
 import "server-only";
-import { handoffSummary, isNoInfo, isOfficialUrl, systemPrompt, type AssistantLocale, type ChatTurn, type KnowledgeDoc } from "./harness";
+import { handoffSummary, isNoInfo, isOfficialUrl, siteMap, systemPrompt, visibleReply, type AssistantLocale, type ChatTurn, type KnowledgeDoc } from "./harness";
 
 export const DEEPSEEK_URL = "https://api.deepseek.com/chat/completions";
 export const DEFAULT_MODEL = "deepseek-flash";
@@ -90,13 +90,23 @@ export async function askAssistant(input: {
   catalog?: string;
   webVerify?: boolean;
   officialDomains?: string[];
+  /** URL pública del sitio para armar los enlaces del mapa. */
+  siteUrl?: string;
 }): Promise<AskResult> {
   const key = (process.env.DEEPSEEK_API_KEY ?? "").trim();
   if (!key) return { ok: false, reason: "no_key" };
   if (!input.docs.length && !input.catalog) return { ok: false, reason: "no_docs" };
   const web = !!input.webVerify && hasSearchKey() && !!input.officialDomains?.length;
   const messages: Msg[] = [
-    { role: "system", content: systemPrompt(input.docs, input.locale, { catalog: input.catalog, webVerify: web, officialDomains: input.officialDomains }) },
+    {
+      role: "system",
+      content: systemPrompt(input.docs, input.locale, {
+        catalog: input.catalog,
+        webVerify: web,
+        officialDomains: input.officialDomains,
+        siteMap: siteMap(input.siteUrl ?? "", input.locale),
+      }),
+    },
     ...input.history,
   ];
   const sources: string[] = [];
@@ -155,9 +165,10 @@ export async function askAssistant(input: {
         }
         continue;
       }
-      const reply = (msg?.content ?? "").trim();
-      const handoff = handoffSummary(reply);
-      return { ok: true, reply, noInfo: handoff === null && isNoInfo(reply), handoff, sources, usage };
+      const raw = (msg?.content ?? "").trim();
+      const handoff = handoffSummary(raw);
+      const reply = visibleReply(raw);
+      return { ok: true, reply, noInfo: handoff === null && isNoInfo(raw) && !reply, handoff, sources, usage };
     }
     return { ok: true, reply: "", noInfo: false, handoff: "No se pudo verificar la información a tiempo.", sources, usage };
   } catch (err) {

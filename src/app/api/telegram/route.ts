@@ -1,3 +1,4 @@
+import { site } from "@/lib/site";
 import { NextResponse, type NextRequest } from "next/server";
 import { askAssistant } from "@/features/assistant/deepseek";
 import { getAssistantContext, rateLimited } from "@/features/assistant/context";
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   }
   const r = await askAssistant({
+    siteUrl: site.url,
     docs: ctx.docs,
     model: ctx.model,
     history: [{ role: "user", content: text.slice(0, 800) }],
@@ -70,7 +72,7 @@ export async function POST(request: NextRequest) {
   } else {
     const contact = (await getContact()).whatsapp;
     if (r.handoff !== null) {
-      await send(`${t.handoff}\n${buildWhatsAppUrl(contact, `${t.waMessage}\n${t.waSummary}${r.handoff}`)}`);
+      await send(`${r.reply ? plainLinks(r.reply) : t.handoff}\n\n${buildWhatsAppUrl(contact, `${t.waMessage}\n${t.waSummary}${r.handoff}`)}`);
     } else {
       await send(r.noInfo ? `${t.noInfo}\n${wa}` : plainLinks(r.reply));
     }

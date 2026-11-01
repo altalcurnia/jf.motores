@@ -44,7 +44,9 @@ ul([
  "Responder corto, claro y en el idioma del cliente, con el tono de la marca: «Tranquilidad y confianza».",
  "Compartir el enlace exacto de la ficha o de la página que responde la pregunta (sección 2).",
  "Para recomendar un equipo, pedir primero los datos que falten: caudal, altura total, altitud, tipo de agua y horas de trabajo (sección 6).",
- "Pasar la conversación a un asesor humano cuando el cliente quiere comprar, cotizar formalmente, pagar o pedir envío o factura; cuando hay un reclamo, una garantía, una falla concreta o un riesgo de seguridad; y cuando algo no cuadra entre las fuentes.",
+ "Objetivo: resolver la duda, enseñar lo justo y llevar al cliente al repuesto o equipo del catálogo que de verdad le conviene, con su enlace. El material gratuito (guías, biblioteca y videos) se regala para generar confianza.",
+ "Venta consultiva: entender la necesidad con una o dos preguntas, explicar el porqué, recomendar del catálogo (precio y enlace), sugerir lo que conviene cambiar a la vez o el mantenimiento preventivo, y cerrar con un paso claro: abrir la ficha y pulsar «Cotizar por WhatsApp».",
+ "Pasar a un asesor humano (siempre después de ayudar) solo cuando el cliente pide comprar, reservar, pagar, una cotización formal, envío o factura; ante un reclamo o garantía; o ante un riesgo de seguridad en curso.",
  "Nunca inventar precios, plazos, descuentos, garantías ni especificaciones.",
 ])
 
@@ -69,6 +71,8 @@ table([
  ["Guía: elegir motobomba", "Paso a paso para definir caudal, altura y tipo de fluido", B+"/es/guias#elegir-motobomba"],
  ["Guía: mantenimiento", "Rutina básica de un motor diésel", B+"/es/guias#mantenimiento"],
  ["Guía: pedir repuesto", "Qué fotos y datos enviar", B+"/es/guias#pedir-repuesto"],
+ ["Biblioteca técnica gratuita", "Manuales oficiales de fabricantes y guías de seguridad minera (se abre con cuenta gratis)", B+"/es/guias#biblioteca"],
+ ["Videos de mantenimiento", "Videos de fabricantes y tutoriales: sello mecánico, impulsor, filtros, consejos de motor diésel", B+"/es/videos"],
  ["Mi cuenta", "Equipos comprados, garantía, guía de uso, pedir repuestos", B+"/es/cuenta"],
  ["Crear cuenta", "Registro con correo o con Google", B+"/es/cuenta/registro"],
  ["Entrar", "Iniciar sesión", B+"/es/cuenta/entrar"],
@@ -230,7 +234,9 @@ table([["Término","Significado"],
 ],[3.6*cm,13.6*cm])
 
 h2("14. Cuándo pasar a un asesor humano")
-ul(["Cotización formal, reserva, compra o fecha de entrega.","Envío, importación, formas de pago y factura.","Garantías y reclamos.","Diagnóstico de una falla concreta o mantenimiento.","Recomendación final de un equipo para un sitio específico.","Cualquier dato que no esté en el catálogo, en los documentos de JF Motores ni en una fuente oficial del fabricante.","Cuando algo no cuadra: precios o especificaciones que parecen errados, o datos que no coinciden entre fuentes."])
+p("El asesor virtual primero ayuda (orienta, recomienda del catálogo, comparte enlaces) y pasa a una persona solo en estos casos:")
+ul(["El cliente pide comprar, reservar, pagar o una cotización formal, o pregunta la fecha de entrega.","Envío, importación, formas de pago y factura.","Garantías y reclamos.","Un riesgo de seguridad en curso: primero indicar detener el equipo.","Confirmar la selección final de un equipo para un sitio, después de haber recomendado opciones del catálogo.","Un dato que no está en el catálogo, en los documentos ni en una fuente oficial, o precios y especificaciones que no coinciden entre fuentes."])
+p("Un saludo, una pregunta general, una comparación de productos o una falla que se puede orientar no son motivo para pasar a un asesor.")
 p("WhatsApp y línea directa: +57 312 2110262.")
 doc.build(s)
 print("ok")

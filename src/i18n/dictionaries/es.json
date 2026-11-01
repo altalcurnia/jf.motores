@@ -890,11 +890,12 @@
     "send": "Enviar",
     "thinking": "Buscando en nuestra información…",
     "close": "Cerrar chat",
-    "welcome": "Hola, soy el asistente de JF Motores. Pregúntame por motobombas, motores, repuestos o cómo elegir tu equipo.",
+    "welcome": "Hola, soy el asesor virtual de JF Motores. Te ayudo a elegir tu motobomba, encontrar el repuesto exacto para tu motor, resolver una falla o entender cómo comprar en la página.",
     "suggestions": [
       "¿Qué motobomba necesito para mi mina?",
-      "¿El precio incluye el envío?",
-      "¿Cómo pido un repuesto?"
+      "Busco un repuesto para mi motor",
+      "Mi motobomba no ceba, ¿qué reviso?",
+      "¿Cómo compro en la página?"
     ],
     "noInfo": "No tengo ese dato en nuestra información oficial. Un asesor te responde por WhatsApp.",
     "limit": "Enviaste muchas preguntas seguidas. Espera unos minutos o escríbenos por WhatsApp.",
@@ -902,7 +903,7 @@
     "disabled": "El chat con IA está apagado. Escríbenos por WhatsApp.",
     "toWhatsapp": "Seguir por WhatsApp",
     "waMessage": "Hola JF Motores, vengo del chat de su página web y quiero hablar con un asesor.",
-    "handoff": "Esto lo revisa mejor un asesor. Te paso con él por WhatsApp con el resumen de lo que hablamos.",
+    "handoff": "Un asesor te confirma esto por WhatsApp; ya le dejo el resumen de lo que hablamos.",
     "waSummary": "Resumen del chat: ",
     "toAdvisor": "Hablar con un asesor",
     "loginTitle": "Inicia sesión para usar el asistente",

@@ -136,6 +136,7 @@ export async function testAssistant(
     m.supabase.from("ai_settings").select("model, web_verify, official_domains").maybeSingle(),
   ]);
   const r = await askAssistant({
+    siteUrl: site.url,
     docs: docs ?? [],
     model: settings?.model,
     history,

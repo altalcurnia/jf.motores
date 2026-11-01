@@ -1,3 +1,4 @@
+import { site } from "@/lib/site";
 import { NextResponse, type NextRequest } from "next/server";
 import { askAssistant } from "@/features/assistant/deepseek";
 import { getAssistantContext, rateLimited } from "@/features/assistant/context";
@@ -55,6 +56,7 @@ export async function POST(request: NextRequest) {
   if (budget.left <= 0.0005) return NextResponse.json({ code: "quota" }, { status: 402 });
 
   const r = await askAssistant({
+    siteUrl: site.url,
     docs: ctx.docs,
     model: ctx.model,
     history,
@@ -75,7 +77,8 @@ export async function POST(request: NextRequest) {
     console.error("Asistente IA:", r.reason, r.detail ?? "");
     return NextResponse.json({ code: "unavailable" }, { status: 503 });
   }
-  if (r.handoff !== null) return NextResponse.json({ code: "handoff", summary: r.handoff });
+  // Traspaso a un asesor: se muestra la respuesta útil (si la hay) con el botón de WhatsApp
+  if (r.handoff !== null) return NextResponse.json({ code: "handoff", summary: r.handoff, reply: r.reply || undefined });
   if (r.noInfo) return NextResponse.json({ code: "no_info" });
   return NextResponse.json({ reply: r.reply });
 }

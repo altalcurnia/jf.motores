@@ -890,11 +890,12 @@
     "send": "Send",
     "thinking": "Searching our information…",
     "close": "Close chat",
-    "welcome": "Hi, I'm the JF Motores assistant. Ask me about pump sets, engines, spare parts or how to choose your equipment.",
+    "welcome": "Hi, I'm the JF Motores virtual advisor. I can help you choose a pump set, find the exact spare part for your engine, troubleshoot a failure or explain how buying on the site works.",
     "suggestions": [
       "Which pump set do I need for my mine?",
-      "Does the price include shipping?",
-      "How do I order a spare part?"
+      "I need a spare part for my engine",
+      "My pump won't prime, what should I check?",
+      "How do I buy on the site?"
     ],
     "noInfo": "I don't have that in our official information. An advisor will answer you on WhatsApp.",
     "limit": "You sent many questions in a row. Wait a few minutes or message us on WhatsApp.",
@@ -902,7 +903,7 @@
     "disabled": "The AI chat is turned off. Message us on WhatsApp.",
     "toWhatsapp": "Continue on WhatsApp",
     "waMessage": "Hi JF Motores, I'm coming from your website chat and would like to talk to an advisor.",
-    "handoff": "An advisor should look at this. I'll pass you to them on WhatsApp with a summary of our chat.",
+    "handoff": "An advisor will confirm this on WhatsApp; I'll pass them a summary of our chat.",
     "waSummary": "Chat summary: ",
     "toAdvisor": "Talk to an advisor",
     "loginTitle": "Sign in to use the assistant",
