@@ -40,7 +40,15 @@ export function startEngine(opts) {
         glow: 0,
         shake: 0,
         atmo: 0,
+        // Encendido mientras se recorre la portada (antes del recorrido)
+        preRpm: 0,
+        preSmoke: 0,
+        preGlow: 0,
+        // 0 → manda el encendido de la portada; 1 → manda el recorrido
+        handoff: 0,
       };
+      // Valores efectivos que usa el render (mezcla de portada y recorrido)
+      const R = { rpm: 0, smoke: 0, glow: 0 };
       let heat = 0,
         pistonPhase = 0,
         flyRot = 0;
@@ -764,7 +772,7 @@ export function startEngine(opts) {
           const s = 0.35 + t * 2.6;
           p.sp.scale.set(s, s, s);
           p.sp.material.opacity =
-            Math.sin(Math.min(t, 1) * Math.PI) * (0.55 + S.smoke * 0.35);
+            Math.sin(Math.min(t, 1) * Math.PI) * (0.55 + R.smoke * 0.35);
         }
       }
 
@@ -813,7 +821,7 @@ export function startEngine(opts) {
         );
         rim.intensity =
           THREE.MathUtils.lerp(ATMO[i].rim, ATMO[i + 1].rim, f) *
-          (0.6 + S.glow * 0.7);
+          (0.6 + R.glow * 0.7);
       }
 
       /* master timeline */
@@ -825,13 +833,13 @@ export function startEngine(opts) {
           scrub: 1,
         },
       });
-      // Escala de tiempo 0–100 = progreso del scroll (ver stages.js). El encendido empieza en 0.
-      tl.to(S, { camTheta: 1.9, camR: 10.5, camPhi: 1.32, duration: 15, ease: "none" }, 0)
-        .to(S, { rpm: 0.14, duration: 2.5, ease: "power2.in" }, 0)
-        .to(S, { rpm: 0.05, duration: 2, ease: "power1.out" }, 2.5)
-        .to(S, { rpm: 0.55, duration: 7, ease: "power2.out" }, 4.5)
-        .to(S, { smoke: 0.7, duration: 4, ease: "power1.in" }, 3)
-        .to(S, { glow: 0.7, duration: 6, ease: "power1.inOut" }, 3)
+      // Escala de tiempo 0–100 = progreso del scroll del recorrido (ver stages.js).
+      // El arranque ya ocurrió en la portada; aquí sube de ralentí a media carga.
+      tl.to(S, { handoff: 1, duration: 2, ease: "none" }, 0)
+        .to(S, { camTheta: 1.9, camR: 10.5, camPhi: 1.32, duration: 15, ease: "none" }, 0)
+        .fromTo(S, { rpm: 0.12 }, { rpm: 0.55, duration: 11.5, ease: "power1.inOut", immediateRender: false }, 0)
+        .fromTo(S, { smoke: 0.4 }, { smoke: 0.7, duration: 7, ease: "power1.inOut", immediateRender: false }, 0)
+        .fromTo(S, { glow: 0.3 }, { glow: 0.7, duration: 9, ease: "power1.inOut", immediateRender: false }, 0)
         .to(S, { atmo: 1, duration: 10, ease: "power1.inOut" }, 2)
         // Revolución: llega a 2400 rpm justo antes de pasar a la siguiente tarjeta
         .to(S, { camTheta: 3.7, camR: 7.6, camPhi: 1.42, camTY: 1.7, duration: 18, ease: "none" }, 15)
@@ -855,6 +863,17 @@ export function startEngine(opts) {
         .to(S, { smoke: 0, duration: 6, ease: "power2.in" }, 80)
         .to(S, { glow: 0, duration: 8, ease: "power2.in" }, 80)
         .set({}, {}, 100);
+
+      // Encendido desde el primer milímetro de scroll en la portada:
+      // marcha de arranque, tose, y queda en ralentí al llegar al recorrido.
+      gsap.timeline({
+        scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.6 },
+      })
+        .to(S, { preRpm: 0.16, duration: 0.25, ease: "power2.out" }, 0)
+        .to(S, { preRpm: 0.06, duration: 0.2, ease: "power1.out" }, 0.25)
+        .to(S, { preRpm: 0.12, duration: 0.55, ease: "power1.inOut" }, 0.45)
+        .to(S, { preSmoke: 0.4, duration: 0.6, ease: "power1.out" }, 0.05)
+        .to(S, { preGlow: 0.3, duration: 0.7, ease: "power1.inOut" }, 0.3);
 
       ScrollTrigger.create({
         trigger: "#journey",
@@ -911,6 +930,10 @@ export function startEngine(opts) {
         rafId = requestAnimationFrame(tick);
         const dt = Math.min(clock.getDelta(), 0.05);
         const t = clock.elapsedTime;
+        const hk = S.handoff;
+        R.rpm = S.preRpm * (1 - hk) + S.rpm * hk;
+        R.smoke = S.preSmoke * (1 - hk) + S.smoke * hk;
+        R.glow = S.preGlow * (1 - hk) + S.glow * hk;
         mouse.x += (mouse.tx - mouse.x) * 0.05;
         mouse.y += (mouse.ty - mouse.y) * 0.05;
 
@@ -927,7 +950,7 @@ export function startEngine(opts) {
           rEff * Math.cos(ph) + S.camTY,
           rEff * Math.sin(ph) * Math.cos(th),
         );
-        const sh = S.shake * S.rpm;
+        const sh = S.shake * R.rpm;
         camera.position.x += noise(t, 1) * 0.028 * sh;
         camera.position.y += noise(t, 2) * 0.02 * sh;
         camera.lookAt(0, S.camTY, 0);
@@ -942,25 +965,25 @@ export function startEngine(opts) {
         for (const p of parts)
           p.position.copy(p.userData.base).addScaledVector(p.userData.dir, e);
 
-        const run = THREE.MathUtils.clamp(S.rpm * 4, 0, 1);
-        pistonPhase += dt * (2 + S.rpm * 26);
+        const run = THREE.MathUtils.clamp(R.rpm * 4, 0, 1);
+        pistonPhase += dt * (2 + R.rpm * 26);
         for (let i = 0; i < 4; i++)
           pistonBodies[i].position.y =
             1.92 + Math.sin(pistonPhase + PISTON_PHASE[i]) * 0.14 * run;
-        flyRot += dt * S.rpm * 16;
+        flyRot += dt * R.rpm * 16;
         flyG.rotation.x = flyRot;
         fanG.rotation.z = -flyRot * 1.6;
         tNeedles[0].rotation.z = -0.9 + run * 1.5 + noise(t, 9) * 0.08 * run;
         tNeedles[1].rotation.z = 0.9 - run * 1.5 - noise(t, 10) * 0.08 * run;
 
-        MAT.glow.emissiveIntensity = S.glow * (1.6 + Math.sin(t * 3) * 0.25);
-        MAT.screen.emissiveIntensity = 0.3 + S.glow * 1.4;
-        underGlow.intensity = S.glow * 2.2;
-        floorRing.material.opacity = 0.1 + S.glow * 0.3;
+        MAT.glow.emissiveIntensity = R.glow * (1.6 + Math.sin(t * 3) * 0.25);
+        MAT.screen.emissiveIntensity = 0.3 + R.glow * 1.4;
+        underGlow.intensity = R.glow * 2.2;
+        floorRing.material.opacity = 0.1 + R.glow * 0.3;
 
-        if (S.smoke > 0.02) spawnSmoke(S.smoke * (12 + S.rpm * 30), dt);
+        if (R.smoke > 0.02) spawnSmoke(R.smoke * (12 + R.rpm * 30), dt);
         updateSmoke(dt);
-        smokeLight.intensity = S.smoke * (0.7 + Math.abs(noise(t, 4)) * 0.5);
+        smokeLight.intensity = R.smoke * (0.7 + Math.abs(noise(t, 4)) * 0.5);
 
         dust.rotation.y += dt * 0.012;
         dust.position.y = Math.sin(t * 0.3) * 0.2;
@@ -991,16 +1014,16 @@ export function startEngine(opts) {
           d.el.style.top = (-wv.y * 0.5 + 0.5) * H + "px";
         }
 
-        heat += (S.rpm - heat) * dt * 0.25;
-        const rpmVal = Math.round(S.rpm * 2400 + noise(t, 11) * 30 * run);
+        heat += (R.rpm - heat) * dt * 0.25;
+        const rpmVal = Math.round(R.rpm * 2400 + noise(t, 11) * 30 * run);
         const tempVal = Math.round(21 + heat * 74);
         const ang =
           -80 +
-          THREE.MathUtils.clamp(S.rpm, 0, 1) * 160 +
+          THREE.MathUtils.clamp(R.rpm, 0, 1) * 160 +
           noise(t, 12) * 3 * run;
         needleRpm.setAttribute("transform", "rotate(" + ang + " 60 66)");
         rpmArc.style.strokeDashoffset =
-          151 - THREE.MathUtils.clamp(S.rpm, 0, 1) * 151;
+          151 - THREE.MathUtils.clamp(R.rpm, 0, 1) * 151;
         needleTemp.setAttribute(
           "transform",
           "rotate(" +
@@ -1014,16 +1037,16 @@ export function startEngine(opts) {
         bigRpm.textContent = String(Math.max(0, rpmVal)).padStart(4, "0");
         // El celular de la tarjeta "app" muestra las mismas rpm que el motor
         if (phoneRpm) phoneRpm.textContent = String(Math.max(0, rpmVal));
-        stTorque.textContent = Math.round(S.rpm * 92) + " N·m";
+        stTorque.textContent = Math.round(R.rpm * 92) + " N·m";
         stTemp.textContent = tempVal + " °C";
         stFlow.textContent =
-          Math.round(S.rpm * 4000).toLocaleString(opts.numberLocale) + " L/min";
+          Math.round(R.rpm * 4000).toLocaleString(opts.numberLocale) + " L/min";
         hudState.textContent =
-          S.rpm < 0.03
+          R.rpm < 0.03
             ? opts.hud.standby
-            : S.rpm < 0.3
+            : R.rpm < 0.3
               ? opts.hud.start
-              : S.rpm < 0.7
+              : R.rpm < 0.7
                 ? opts.hud.running
                 : opts.hud.full;
 
