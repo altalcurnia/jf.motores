@@ -1038,3 +1038,4 @@ body.in-journey.app-open #hud { opacity: 0; }
 @media (min-width: 761px) { .jcard-parts { width: min(380px, 28vw); } .jcard-parts h2 { font-size: clamp(22px, 2.2vw, 32px); } }
 /* En PC, las tarjetas de la derecha dejan sitio a los nombres del riel */
 @media (min-width: 761px) { .jcard.right { right: calc(6vw + 64px); } }
+.ai-msg a { color: var(--yellow); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }

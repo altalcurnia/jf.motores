@@ -4,6 +4,31 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
 
 type Msg = { role: "user" | "assistant"; content: string; kind?: "info" | "error" };
+
+/** Convierte los enlaces del texto en vínculos (los del propio sitio abren en la misma pestaña). */
+function Linkified({ text }: { text: string }) {
+  const parts = text.split(/(https?:\/\/[^\s<>()]+[^\s<>().,;:!?¿¡"'])/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (i % 2 === 0) return part;
+        let internal = false;
+        try {
+          internal = new URL(part).host === window.location.host;
+        } catch {}
+        return internal ? (
+          <a key={i} href={new URL(part).pathname + new URL(part).hash}>
+            {part.replace(/^https?:\/\/[^/]+/, "")}
+          </a>
+        ) : (
+          <a key={i} href={part} target="_blank" rel="noopener nofollow">
+            {part}
+          </a>
+        );
+      })}
+    </>
+  );
+}
 type T = Dictionary["assistant"];
 
 const WaIcon = () => (
@@ -113,7 +138,7 @@ export function SupportFab({ locale, waHref, waChatHref, aiEnabled, t }: { local
             )}
             {msgs.map((m, i) => (
               <div key={i} className={`ai-msg ${m.role}${m.kind ? ` ${m.kind}` : ""}`}>
-                {m.content}
+                {m.role === "assistant" && !m.kind ? <Linkified text={m.content} /> : m.content}
                 {m.kind && (
                   <a className="ai-wa" href={waChatHref} target="_blank" rel="noopener">
                     <WaIcon /> {t.toWhatsapp}
