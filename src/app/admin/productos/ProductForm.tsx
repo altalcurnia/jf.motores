@@ -273,7 +273,7 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
             <span>
               Nombre {lang === "es" && <span className="req">obligatorio</span>}
             </span>
-            <input required={lang === "es"} value={v.name[lang]} onChange={(e) => setText("name", e.target.value)} maxLength={140} placeholder={lang === "es" ? "Motobomba JF-M25" : v.name.es} />
+            <input required={lang === "es"} value={v.name[lang]} onChange={(e) => setText("name", e.target.value)} maxLength={140} placeholder={lang === "es" ? "Motobomba JF Jaguar 25" : v.name.es} />
           </label>
           <label>
             <span>

@@ -36,7 +36,7 @@ export default async function AppPreviewPage() {
         <span className="app-scroll">{t.scroll} ↓</span>
       </section>
 
-      <AppStory phases={t.phases} screen={t.screen} unit="JF-M40 · #0042" />
+      <AppStory phases={t.phases} screen={t.screen} unit="Cóndor 40 · #0042" />
 
       <section className="block app-features">
         <h2 className="info-h2">{t.featuresTitle}</h2>

@@ -40,7 +40,7 @@
     "ctaPrimary": "Cotizar por WhatsApp",
     "ctaSecondary": "Ver catálogo",
     "scrollHint": "Desliza para explorar",
-    "spec1": "UNIDAD JF-M25 · 4 CILINDROS",
+    "spec1": "JAGUAR 25 · 4 CILINDROS",
     "spec2": "DIÉSEL · 25 HP · SUCCIÓN 6″",
     "spec3": "LISTA PARA TAJO ABIERTO"
   },
@@ -130,7 +130,7 @@
       "badge": "Aún no disponible",
       "cta": "Conoce JF Monitor",
       "screen": {
-        "unit": "JF-M40 · #0042",
+        "unit": "Cóndor 40 · #0042",
         "on": "En marcha",
         "stopping": "Apagando",
         "off": "Detenida",
@@ -165,8 +165,8 @@
     "Probadas en taller",
     "Repuestos compatibles",
     "Línea directa por WhatsApp",
-    "Hasta 25 HP",
-    "Caudal 4 000 L/min",
+    "Hasta 40 HP",
+    "Hasta 3 600 L/min",
     "JF Motores Medellín"
   ],
   "benefits": {
@@ -176,7 +176,7 @@
     "title2": ", confianza que se ve.",
     "intro": "Por qué nuestros clientes nos recomiendan.",
     "imageAlt": "Motobomba diésel JF Motores",
-    "bar1": "Unidad JF-M25",
+    "bar1": "Jaguar 25",
     "bar2": "Prueba de taller · OK",
     "rows": [
       {
@@ -202,11 +202,11 @@
         "span": "Potencia nominal"
       },
       {
-        "b": "4 000",
-        "span": "L/min de caudal"
+        "b": "3 000",
+        "span": "L/min máx."
       },
       {
-        "b": "80 m",
+        "b": "30 m",
         "span": "Cabeza máxima"
       },
       {
@@ -419,7 +419,7 @@
       "hp": "Potencia",
       "succion_in": "Succión",
       "descarga_in": "Descarga",
-      "caudal_lpm": "Caudal",
+      "caudal_lpm": "Caudal máximo",
       "cabeza_m": "Cabeza máxima",
       "rpm": "Régimen",
       "arranque": "Arranque",
@@ -435,7 +435,11 @@
       "aspas": "Aspas",
       "dientes": "Dientes",
       "caras": "Caras",
-      "voltaje_v": "Voltaje"
+      "voltaje_v": "Voltaje",
+      "solidos_mm": "Paso de sólidos",
+      "cilindrada_l": "Cilindrada",
+      "aspiracion": "Aspiración",
+      "consumo_lh": "Consumo al 75 % de carga"
     },
     "featuredKicker": "Destacados",
     "featuredTitle": "Equipos listos para entregar",
@@ -698,7 +702,7 @@
       "waApp": "WhatsApp",
       "waFrom": "JF Monitor",
       "waTime": "ahora",
-      "waMsg": "⚠ JF-M40 #0042 · Temperatura 104 °C. Revisa radiador y refrigerante.",
+      "waMsg": "⚠ Cóndor 40 #0042 · Temperatura 104 °C. Revisa radiador y refrigerante.",
       "waOpen": "Abrir en la app",
       "rpm": "Régimen",
       "control": "Control remoto",

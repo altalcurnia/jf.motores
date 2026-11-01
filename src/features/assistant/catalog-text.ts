@@ -20,6 +20,15 @@ const LABEL: Record<string, [string, string]> = {
   diametro_in: ["Diámetro", "″"],
   capacidad_l: ["Capacidad", " L"],
   voltaje_v: ["Voltaje", " V"],
+  solidos_mm: ["Paso de sólidos", " mm"],
+  cilindrada_l: ["Cilindrada", " L"],
+  aspiracion: ["Aspiración", ""],
+  consumo_lh: ["Consumo al 75 % de carga", " L/h"],
+  filas: ["Filas", ""],
+  aspas: ["Aspas", ""],
+  dientes: ["Dientes", ""],
+  unidades: ["Unidades", ""],
+  caras: ["Caras del sello", ""],
 };
 const KIND = { motobomba: "Motobomba", motor: "Motor", repuesto: "Repuesto" } as const;
 
@@ -61,7 +70,7 @@ export async function catalogForAssistant(locale: AssistantLocale): Promise<stri
       return "- " + parts.filter(Boolean).join(" · ");
     });
 
-  // Índice por modelo de motor: qué repuestos le sirven (para preguntas como "pistón para JF D25-4C")
+  // Índice por modelo de motor: qué repuestos le sirven (para preguntas como "pistón para JF Andes 4D24")
   const index = data.engineModels
     .map((m) => {
       const parts = data.compat

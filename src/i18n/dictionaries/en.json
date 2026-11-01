@@ -40,7 +40,7 @@
     "ctaPrimary": "Quote on WhatsApp",
     "ctaSecondary": "View catalogue",
     "scrollHint": "Scroll to explore",
-    "spec1": "UNIT JF-M25 · 4 CYLINDERS",
+    "spec1": "JAGUAR 25 · 4 CYLINDERS",
     "spec2": "DIESEL · 25 HP · 6″ SUCTION",
     "spec3": "READY FOR OPEN-PIT MINING"
   },
@@ -130,7 +130,7 @@
       "badge": "Not available yet",
       "cta": "Discover JF Monitor",
       "screen": {
-        "unit": "JF-M40 · #0042",
+        "unit": "Cóndor 40 · #0042",
         "on": "Running",
         "stopping": "Stopping",
         "off": "Stopped",
@@ -165,8 +165,8 @@
     "Workshop-tested",
     "Compatible spare parts",
     "Direct line on WhatsApp",
-    "Up to 25 HP",
-    "4,000 L/min flow",
+    "Up to 40 HP",
+    "Up to 3,600 L/min",
     "JF Motores Medellín"
   ],
   "benefits": {
@@ -176,7 +176,7 @@
     "title2": ", trust you can see.",
     "intro": "Why our customers recommend us.",
     "imageAlt": "JF Motores diesel pump set",
-    "bar1": "Unit JF-M25",
+    "bar1": "Jaguar 25",
     "bar2": "Workshop test · OK",
     "rows": [
       {
@@ -202,11 +202,11 @@
         "span": "Rated power"
       },
       {
-        "b": "4,000",
-        "span": "L/min flow"
+        "b": "3,000",
+        "span": "L/min max"
       },
       {
-        "b": "80 m",
+        "b": "30 m",
         "span": "Max head"
       },
       {
@@ -419,7 +419,7 @@
       "hp": "Power",
       "succion_in": "Suction",
       "descarga_in": "Discharge",
-      "caudal_lpm": "Flow",
+      "caudal_lpm": "Max flow",
       "cabeza_m": "Max head",
       "rpm": "Speed",
       "arranque": "Start",
@@ -435,7 +435,11 @@
       "aspas": "Blades",
       "dientes": "Teeth",
       "caras": "Faces",
-      "voltaje_v": "Voltage"
+      "voltaje_v": "Voltage",
+      "solidos_mm": "Solids handling",
+      "cilindrada_l": "Displacement",
+      "aspiracion": "Aspiration",
+      "consumo_lh": "Fuel use at 75% load"
     },
     "featuredKicker": "Featured",
     "featuredTitle": "Units ready to ship",
@@ -698,7 +702,7 @@
       "waApp": "WhatsApp",
       "waFrom": "JF Monitor",
       "waTime": "now",
-      "waMsg": "⚠ JF-M40 #0042 · Temperature 104 °C. Check radiator and coolant.",
+      "waMsg": "⚠ Cóndor 40 #0042 · Temperature 104 °C. Check radiator and coolant.",
       "waOpen": "Open in the app",
       "rpm": "Speed",
       "control": "Remote control",

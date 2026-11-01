@@ -13,9 +13,9 @@ export type ProductFormValue = ProductInput & { isDemo: boolean };
 
 /** Especificaciones sugeridas (la clave es la que traduce el sitio a cada idioma). */
 export const SPEC_KEYS: Record<CatalogType, [string, string][]> = {
-  motobomba: [["hp", "Potencia (HP)"], ["succion_in", "Succión (pulgadas)"], ["descarga_in", "Descarga (pulgadas)"], ["caudal_lpm", "Caudal (L/min)"], ["cabeza_m", "Cabeza máxima (m)"], ["rpm", "Régimen (rpm)"], ["arranque", "Arranque"], ["peso_kg", "Peso (kg)"]],
-  motor: [["hp", "Potencia (HP)"], ["cilindros", "Cilindros"], ["rpm", "Régimen (rpm)"], ["refrigeracion", "Refrigeración"], ["arranque", "Arranque"], ["peso_kg", "Peso (kg)"]],
-  repuesto: [["material", "Material"], ["diametro_mm", "Diámetro (mm)"], ["diametro_in", "Diámetro (pulgadas)"], ["unidades", "Unidades"], ["capacidad_l", "Capacidad (L)"], ["voltaje_v", "Voltaje (V)"], ["filas", "Filas"], ["aspas", "Aspas"], ["dientes", "Dientes"]],
+  motobomba: [["hp", "Potencia (HP)"], ["succion_in", "Succión (pulgadas)"], ["descarga_in", "Descarga (pulgadas)"], ["caudal_lpm", "Caudal máximo (L/min)"], ["cabeza_m", "Cabeza máxima (m)"], ["solidos_mm", "Paso de sólidos (mm)"], ["rpm", "Régimen (rpm)"], ["arranque", "Arranque"], ["consumo_lh", "Consumo al 75 % (L/h)"], ["peso_kg", "Peso (kg)"]],
+  motor: [["hp", "Potencia (HP)"], ["cilindros", "Cilindros"], ["cilindrada_l", "Cilindrada (L)"], ["rpm", "Régimen (rpm)"], ["aspiracion", "Aspiración"], ["refrigeracion", "Refrigeración"], ["arranque", "Arranque"], ["consumo_lh", "Consumo al 75 % (L/h)"], ["peso_kg", "Peso (kg)"]],
+  repuesto: [["material", "Material"], ["diametro_mm", "Diámetro (mm)"], ["diametro_in", "Diámetro (pulgadas)"], ["unidades", "Unidades"], ["capacidad_l", "Capacidad (L)"], ["voltaje_v", "Voltaje (V)"], ["filas", "Filas"], ["aspas", "Aspas"], ["dientes", "Dientes"], ["caras", "Caras del sello"]],
 };
 
 export const emptyProduct = (): ProductFormValue => ({

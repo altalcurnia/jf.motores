@@ -171,6 +171,9 @@ const specUnits: Record<string, string> = {
   diametro_mm: " mm",
   capacidad_l: " L",
   voltaje_v: " V",
+  solidos_mm: " mm",
+  cilindrada_l: " L",
+  consumo_lh: " L/h",
 };
 
 export function specValue(key: string, value: string | number | undefined, locale: Locale = "es"): string {

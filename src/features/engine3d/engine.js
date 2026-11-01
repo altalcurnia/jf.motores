@@ -1122,10 +1122,10 @@ export function startEngine(opts) {
         bigRpm.textContent = String(Math.max(0, rpmVal)).padStart(4, "0");
         // El celular de la tarjeta "app" muestra las mismas rpm que el motor
         if (phoneRpm) phoneRpm.textContent = String(Math.max(0, rpmVal));
-        stTorque.textContent = Math.round(R.rpm * 92) + " N·m";
+        stTorque.textContent = Math.round(R.rpm * 68) + " N·m";
         stTemp.textContent = tempVal + " °C";
         stFlow.textContent =
-          Math.round(R.rpm * 4000).toLocaleString(opts.numberLocale) + " L/min";
+          Math.round(R.rpm * 3000).toLocaleString(opts.numberLocale) + " L/min";
         hudState.textContent =
           R.rpm < 0.03
             ? opts.hud.standby
