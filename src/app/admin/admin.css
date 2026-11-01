@@ -272,3 +272,15 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .picker-list li.on { background: rgba(247, 198, 0, 0.1); }
 .picker-list li.on b { color: var(--yellow); }
 .picker-list .picker-empty { cursor: default; color: var(--mut); font-size: 13px; }
+
+/* Interesados en la app */
+.wl-summary { margin: 16px 0 6px; }
+.bars { list-style: none; display: grid; gap: 8px; }
+.bars li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; font-size: 13px; }
+.bars li span { color: var(--ink); }
+.bars li b { color: var(--yellow); }
+.bars li i { grid-column: 1 / -1; display: block; height: 5px; border-radius: 5px; background: var(--yellow); opacity: 0.75; }
+.wl-row-item { cursor: pointer; }
+.wl-row-item:hover { background: rgba(255, 255, 255, 0.02); }
+.wl-detail { margin-top: 8px; display: grid; gap: 4px; color: var(--mut); max-width: 380px; }
+.wl-detail b { color: var(--ink); }

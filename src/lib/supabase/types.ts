@@ -8,6 +8,54 @@ export type Database = {
   __InternalSupabase: { PostgrestVersion: "14.18" };
   public: {
     Tables: {
+      app_waitlist: {
+        Row: {
+          id: string;
+          user_id: string;
+          full_name: string;
+          phone: string;
+          country: string | null;
+          company: string | null;
+          role: string | null;
+          units_count: string | null;
+          site_type: string[];
+          signal: string | null;
+          plan: string | null;
+          priorities: string[];
+          site_visits: string | null;
+          budget: string | null;
+          comments: string | null;
+          contact_ok: boolean;
+          locale: "es" | "en" | "pt";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          full_name: string;
+          phone: string;
+          country?: string | null;
+          company?: string | null;
+          role?: string | null;
+          units_count?: string | null;
+          site_type?: string[];
+          signal?: string | null;
+          plan?: string | null;
+          priorities?: string[];
+          site_visits?: string | null;
+          budget?: string | null;
+          comments?: string | null;
+          contact_ok?: boolean;
+          locale?: "es" | "en" | "pt";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["app_waitlist"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "app_waitlist_user_id_fkey"; columns: ["user_id"]; isOneToOne: true; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ];
+      };
       admin_bootstrap: {
         Row: { email: string };
         Insert: { email: string };

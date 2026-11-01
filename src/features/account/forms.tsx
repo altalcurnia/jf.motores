@@ -14,7 +14,7 @@ type T = Dictionary["account"];
 type Props = { locale: Locale; t: T };
 
 /** Países con presencia minera prioritaria primero; el resto se puede agregar sin tocar la base de datos. */
-const COUNTRIES = ["CO", "PE", "EC", "BO", "CL", "BR", "VE", "PA", "MX", "AR", "GT", "HN", "NI", "CR", "DO", "US", "ES"];
+export const COUNTRIES = ["CO", "PE", "EC", "BO", "CL", "BR", "VE", "PA", "MX", "AR", "GT", "HN", "NI", "CR", "DO", "US", "ES"];
 const MIN_PASSWORD = 10;
 
 function errorMessage(t: T, error: AuthError | null): string {
@@ -130,7 +130,8 @@ export function SignInForm({ locale, t }: Props) {
         <Link href={`/${locale}/cuenta/recuperar`}>{t.forgot}</Link>
       </div>
       <p className="acc-switch">
-        {t.noAccount} <Link href={`/${locale}/cuenta/registro`}>{t.createOne}</Link>
+        {t.noAccount}{" "}
+        <Link href={`/${locale}/cuenta/registro${params.get("next") ? `?next=${encodeURIComponent(next)}` : ""}`}>{t.createOne}</Link>
       </p>
     </form>
   );
@@ -138,6 +139,8 @@ export function SignInForm({ locale, t }: Props) {
 
 /* ---------------- Crear cuenta ---------------- */
 export function SignUpForm({ locale, t }: Props) {
+  const signUpParams = useSearchParams();
+  const signUpNext = safeNextPath(signUpParams.get("next"), `/${locale}/cuenta`);
   const router = useRouter();
   const countryNames = useMemo(() => {
     const dn = new Intl.DisplayNames([localeTags[locale]], { type: "region" });
@@ -166,7 +169,7 @@ export function SignUpForm({ locale, t }: Props) {
       email: form.email.trim(),
       password: form.password,
       options: {
-        emailRedirectTo: callbackUrl(`/${locale}/cuenta`),
+        emailRedirectTo: callbackUrl(signUpNext),
         data: {
           full_name: form.fullName.trim(),
           phone: form.phone.trim(),
@@ -182,7 +185,7 @@ export function SignUpForm({ locale, t }: Props) {
     // Supabase oculta si el correo ya existe: devuelve un usuario sin identidades
     if (data.user && data.user.identities?.length === 0) return setError(t.errors.exists);
     if (data.session) {
-      router.replace(`/${locale}/cuenta`);
+      router.replace(signUpNext);
       router.refresh();
       return;
     }
@@ -193,7 +196,7 @@ export function SignUpForm({ locale, t }: Props) {
 
   return (
     <form className="acc-form" onSubmit={onSubmit}>
-      <GoogleBlock locale={locale} t={t} next={`/${locale}/cuenta`} />
+      <GoogleBlock locale={locale} t={t} next={signUpNext} />
       <label>
         {t.fullName}
         <input required autoComplete="name" maxLength={120} value={form.fullName} onChange={set("fullName")} />

@@ -79,6 +79,13 @@ async function Dashboard() {
             <span className="pill ok">Disponible</span>
           </Link>
         )}
+        {can(session, "interesados.ver") && (
+          <Link href="/admin/interesados" className="card link">
+            <h3>Interesados en la app</h3>
+            <p>Quienes se anotaron para JF Monitor: datos de contacto, plan que les interesa y cuánto pagarían.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
         {(session.isOwner || can(session, "usuarios.ver")) && (
           <>
             <Link href="/admin/usuarios" className="card link">

@@ -625,5 +625,79 @@
       }
     ],
     "plansNote": "As câmeras são pensadas para equipamentos na superfície (céu aberto, boca da mina, dragas); dentro de galerias cada caso é avaliado. São instaladas com aviso de área videomonitorada, como exige a lei de dados pessoais."
+  },
+  "appForm": {
+    "title": "Quero saber",
+    "intro": "Deixe seus dados e avisaremos primeiro quando o JF Monitor estiver pronto. As perguntas opcionais nos ajudam a construir o app que você realmente precisa.",
+    "needLogin": "Para se inscrever você precisa da sua conta JF Motores: assim, quando o app estiver pronto, seus equipamentos aparecerão sozinhos.",
+    "signIn": "Entrar",
+    "signUp": "Criar conta",
+    "required": "Seus dados",
+    "optional": "Perguntas opcionais",
+    "name": "Nome completo",
+    "phone": "Celular / WhatsApp",
+    "country": "País",
+    "company": "Empresa ou mina (opcional)",
+    "role": "Qual é a sua função?",
+    "roles": {
+      "dueno": "Proprietário",
+      "administrador": "Gerente de mina",
+      "operador": "Operador",
+      "tecnico": "Técnico / mecânico",
+      "otro": "Outro"
+    },
+    "units": "Quantas motobombas você opera?",
+    "siteType": "Onde seus equipamentos trabalham? (pode escolher vários)",
+    "sites": {
+      "tajo": "Céu aberto",
+      "socavon": "Galeria subterrânea",
+      "draga": "Draga ou rio",
+      "otro": "Outro"
+    },
+    "signal": "Há sinal de celular onde estão as bombas?",
+    "signals": {
+      "buena": "Sim, bom",
+      "debil": "Fraco ou às vezes",
+      "ninguna": "Sem sinal",
+      "no_se": "Não sei"
+    },
+    "plan": "Qual plano mais te interessa?",
+    "plans": {
+      "esencial": "Essencial (dados e alertas)",
+      "vision": "Visão (câmera ao vivo)",
+      "vision_pro": "Visão Pro (24/7)",
+      "no_se": "Ainda não sei"
+    },
+    "priorities": "O que você gostaria de ver primeiro? (escolha quantos quiser)",
+    "prio": {
+      "video": "Vídeo ao vivo",
+      "alertas": "Alertas no celular",
+      "control": "Ligar e desligar à distância",
+      "combustible": "Nível de combustível",
+      "mantenimiento": "Lembretes de manutenção",
+      "termica": "Câmera térmica",
+      "seguridad": "Aviso de pessoas perto do equipamento"
+    },
+    "visits": "Quantas vezes por mês você vai ao local só para verificar as bombas?",
+    "budget": "Quanto você pagaria por mês por equipamento com câmera ao vivo?",
+    "budgets": {
+      "lt100": "Menos de COP 100.000",
+      "100-250": "COP 100.000 – 250.000",
+      "250-500": "COP 250.000 – 500.000",
+      "gt500": "Mais de COP 500.000",
+      "no_se": "Não sei"
+    },
+    "comments": "Algo mais que queira nos contar?",
+    "contactOk": "Aceito que a JF Motores entre em contato por WhatsApp ou e-mail sobre o app.",
+    "submit": "Quero me inscrever",
+    "update": "Atualizar minhas respostas",
+    "saving": "Salvando…",
+    "saved": "Pronto! Você está na lista. Avisaremos quando o JF Monitor estiver pronto.",
+    "updatedOk": "Suas respostas foram atualizadas.",
+    "already": "Você já está na lista. Pode atualizar suas respostas quando quiser.",
+    "error": "Não foi possível salvar. Verifique os dados e tente novamente.",
+    "phoneError": "Digite um número de celular válido.",
+    "privacy": "Usamos estes dados só para o app e conforme nossa política de dados.",
+    "select": "Escolha uma opção"
   }
 }

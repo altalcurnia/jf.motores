@@ -625,5 +625,79 @@
       }
     ],
     "plansNote": "Cameras are designed for surface units (open pit, mine entrance, dredges); inside underground workings each case is assessed. They are installed with a video-surveillance notice, as personal data law requires."
+  },
+  "appForm": {
+    "title": "Let me know",
+    "intro": "Leave your details and we'll tell you first when JF Monitor is ready. The optional questions help us build the app you really need.",
+    "needLogin": "You need your JF Motores account to sign up: that way, when the app is ready, your units will appear automatically.",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "required": "Your details",
+    "optional": "Optional questions",
+    "name": "Full name",
+    "phone": "Mobile / WhatsApp",
+    "country": "Country",
+    "company": "Company or mine (optional)",
+    "role": "What is your role?",
+    "roles": {
+      "dueno": "Owner",
+      "administrador": "Mine manager",
+      "operador": "Operator",
+      "tecnico": "Technician / mechanic",
+      "otro": "Other"
+    },
+    "units": "How many pump sets do you run?",
+    "siteType": "Where do your units work? (choose any)",
+    "sites": {
+      "tajo": "Open pit",
+      "socavon": "Underground",
+      "draga": "Dredge or river",
+      "otro": "Other"
+    },
+    "signal": "Is there mobile signal where the pumps are?",
+    "signals": {
+      "buena": "Yes, good",
+      "debil": "Weak or patchy",
+      "ninguna": "No signal",
+      "no_se": "Not sure"
+    },
+    "plan": "Which plan interests you most?",
+    "plans": {
+      "esencial": "Essential (data and alerts)",
+      "vision": "Vision (live camera)",
+      "vision_pro": "Vision Pro (24/7)",
+      "no_se": "Not sure yet"
+    },
+    "priorities": "What would you like to see first? (choose any)",
+    "prio": {
+      "video": "Live video",
+      "alertas": "Phone alerts",
+      "control": "Remote start and stop",
+      "combustible": "Fuel level",
+      "mantenimiento": "Maintenance reminders",
+      "termica": "Thermal camera",
+      "seguridad": "Alert when people approach"
+    },
+    "visits": "How many times a month do you go to the site just to check the pumps?",
+    "budget": "How much would you pay per unit per month for live camera?",
+    "budgets": {
+      "lt100": "Less than COP 100,000",
+      "100-250": "COP 100,000 – 250,000",
+      "250-500": "COP 250,000 – 500,000",
+      "gt500": "More than COP 500,000",
+      "no_se": "Not sure"
+    },
+    "comments": "Anything else you'd like to tell us?",
+    "contactOk": "I agree that JF Motores may contact me by WhatsApp or email about the app.",
+    "submit": "Sign me up",
+    "update": "Update my answers",
+    "saving": "Saving…",
+    "saved": "Done! You're on the list. We'll let you know when JF Monitor is ready.",
+    "updatedOk": "Your answers were updated.",
+    "already": "You're already on the list. You can update your answers anytime.",
+    "error": "Could not save. Check your details and try again.",
+    "phoneError": "Enter a valid mobile number.",
+    "privacy": "We use this data only for the app and according to our data policy.",
+    "select": "Choose an option"
   }
 }

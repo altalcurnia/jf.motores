@@ -79,7 +79,7 @@ test("cuentas de clientes: registro, entrar y protección de Mi cuenta", async (
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Entra a tu cuenta");
 
   await page.getByRole("link", { name: "Créala aquí" }).click();
-  await expect(page).toHaveURL(/\/es\/cuenta\/registro$/);
+  await expect(page).toHaveURL(/\/es\/cuenta\/registro(\?next=%2Fes%2Fcuenta)?$/);
   // Sin autorizar el tratamiento de datos no se puede enviar
   await expect(page.getByRole("checkbox").first()).toHaveAttribute("required", "");
   await expect(page.locator(".acc-check a")).toHaveAttribute("href", "/es/legal/privacidad");
@@ -195,4 +195,11 @@ test("la página de la app (en construcción) responde y anima con el scroll", a
     window.scrollTo(0, el.offsetTop + (el.offsetHeight - innerHeight) * 0.6);
   });
   await expect(story).toHaveClass(/s-alert/);
+});
+
+test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ page }) => {
+  await page.goto("/es/app");
+  await page.locator(".app-hero-cta a").click();
+  await expect(page).toHaveURL(/\/es\/app\/registro$/);
+  await expect(page.locator(".wl-login a.btn.y")).toHaveAttribute("href", /\/es\/cuenta\/entrar\?next=%2Fes%2Fapp%2Fregistro/);
 });

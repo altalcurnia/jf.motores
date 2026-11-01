@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
 import { AppStory } from "@/features/app-preview/AppStory";
 
@@ -27,6 +25,12 @@ export default async function AppPreviewPage() {
         <h1>{t.title}</h1>
         <p className="app-sub">{t.subtitle}</p>
         <p className="app-intro">{t.intro}</p>
+        <div className="cat-actions app-hero-cta">
+          <Link className="btn y" href={`/${locale}/app/registro`}>
+            {t.cta}
+            <Arrow />
+          </Link>
+        </div>
         <span className="app-scroll">{t.scroll} ↓</span>
       </section>
 
@@ -66,10 +70,10 @@ export default async function AppPreviewPage() {
         <p className="app-disclaimer">{t.plansNote}</p>
         <p className="app-disclaimer">{t.disclaimer}</p>
         <div className="cat-actions">
-          <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, t.wa)} target="_blank" rel="noopener">
+          <Link className="btn y" href={`/${locale}/app/registro`}>
             {t.cta}
             <Arrow />
-          </a>
+          </Link>
           <Link className="btn g" href={`/${locale}/cuenta`}>
             {t.back}
           </Link>

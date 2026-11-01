@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
 import { AccountShell } from "@/features/account/AccountShell";
@@ -24,7 +25,9 @@ export default async function SignUpPage() {
         </ul>
       }
     >
-      <SignUpForm locale={locale} t={t} />
+      <Suspense>
+        <SignUpForm locale={locale} t={t} />
+      </Suspense>
     </AccountShell>
   );
 }

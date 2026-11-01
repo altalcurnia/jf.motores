@@ -625,5 +625,79 @@
       }
     ],
     "plansNote": "Las cámaras están pensadas para equipos en superficie (tajo abierto, bocamina, dragas); dentro del socavón se estudia cada caso. Se instalan con aviso de zona videovigilada, como exige la ley de datos personales."
+  },
+  "appForm": {
+    "title": "Quiero enterarme",
+    "intro": "Déjanos tus datos y te avisamos primero cuando JF Monitor esté listo. Las preguntas opcionales nos ayudan a construir la app que de verdad necesitas.",
+    "needLogin": "Para anotarte necesitas tu cuenta de JF Motores: así, cuando la app esté lista, tus equipos aparecerán solos.",
+    "signIn": "Entrar",
+    "signUp": "Crear cuenta",
+    "required": "Tus datos",
+    "optional": "Preguntas opcionales",
+    "name": "Nombre completo",
+    "phone": "Celular / WhatsApp",
+    "country": "País",
+    "company": "Empresa o mina (opcional)",
+    "role": "¿Cuál es tu rol?",
+    "roles": {
+      "dueno": "Dueño",
+      "administrador": "Administrador de mina",
+      "operador": "Operador",
+      "tecnico": "Técnico / mecánico",
+      "otro": "Otro"
+    },
+    "units": "¿Cuántas motobombas operas?",
+    "siteType": "¿Dónde trabajan tus equipos? (puedes elegir varios)",
+    "sites": {
+      "tajo": "Tajo abierto",
+      "socavon": "Socavón",
+      "draga": "Draga o río",
+      "otro": "Otro"
+    },
+    "signal": "¿Hay señal de celular donde están las bombas?",
+    "signals": {
+      "buena": "Sí, buena",
+      "debil": "Débil o a ratos",
+      "ninguna": "No hay señal",
+      "no_se": "No sé"
+    },
+    "plan": "¿Qué plan te interesa más?",
+    "plans": {
+      "esencial": "Esencial (datos y alertas)",
+      "vision": "Visión (cámara en vivo)",
+      "vision_pro": "Visión Pro (24/7)",
+      "no_se": "Aún no sé"
+    },
+    "priorities": "¿Qué te gustaría ver primero? (elige las que quieras)",
+    "prio": {
+      "video": "Video en vivo",
+      "alertas": "Alertas al celular",
+      "control": "Encender y apagar a distancia",
+      "combustible": "Nivel de combustible",
+      "mantenimiento": "Recordatorios de mantenimiento",
+      "termica": "Cámara térmica",
+      "seguridad": "Aviso de personas cerca del equipo"
+    },
+    "visits": "¿Cuántas veces al mes vas al sitio solo para revisar las bombas?",
+    "budget": "¿Cuánto pagarías al mes por equipo con cámara en vivo?",
+    "budgets": {
+      "lt100": "Menos de $100.000",
+      "100-250": "$100.000 – $250.000",
+      "250-500": "$250.000 – $500.000",
+      "gt500": "Más de $500.000",
+      "no_se": "No sé"
+    },
+    "comments": "¿Algo más que quieras contarnos?",
+    "contactOk": "Acepto que JF Motores me contacte por WhatsApp o correo sobre la app.",
+    "submit": "Anotarme",
+    "update": "Actualizar mis datos",
+    "saving": "Guardando…",
+    "saved": "¡Listo! Quedaste en la lista. Te avisaremos cuando JF Monitor esté listo.",
+    "updatedOk": "Tus respuestas se actualizaron.",
+    "already": "Ya estás en la lista. Puedes actualizar tus respuestas cuando quieras.",
+    "error": "No se pudo guardar. Revisa los datos e intenta de nuevo.",
+    "phoneError": "Escribe un número de celular válido.",
+    "privacy": "Usamos estos datos solo para la app y según nuestra política de datos.",
+    "select": "Elige una opción"
   }
 }
