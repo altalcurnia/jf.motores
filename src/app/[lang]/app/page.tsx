@@ -67,6 +67,17 @@ export default async function AppPreviewPage() {
             </article>
           ))}
         </div>
+        <h3 className="extras-title">{t.extrasTitle}</h3>
+        <p className="app-intro">{t.extrasIntro}</p>
+        <div className="extras-grid">
+          {t.extras.map((x) => (
+            <div key={x.h} className="extra">
+              <b>+ {x.h}</b>
+              <p>{x.p}</p>
+            </div>
+          ))}
+        </div>
+        <p className="app-disclaimer">{t.extrasNote}</p>
         <p className="app-disclaimer">{t.plansNote}</p>
         <p className="app-disclaimer">{t.disclaimer}</p>
         <div className="cat-actions">

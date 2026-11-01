@@ -563,6 +563,10 @@
         "p": "Avisos no celular quando um valor sai da faixa: temperatura, pressão, vazão ou parada do equipamento."
       },
       {
+        "h": "Controle remoto",
+        "p": "Ligue, desligue, acelere ou desacelere o motor pelo celular, com confirmação e registro de quem fez."
+      },
+      {
         "h": "Histórico",
         "p": "Gráficos por dia e por turno para entender o desempenho e planejar a manutenção."
       },
@@ -618,13 +622,34 @@
           "Vídeo ao vivo e gravação na nuvem 24 horas",
           "Várias câmeras, incluindo uma térmica para detectar superaquecimento",
           "Aviso se pessoas ou veículos se aproximam do equipamento à noite",
-          "Liga e desliga remoto",
+          "Controle remoto incluído: ligar, desligar e ajustar a velocidade",
           "Assistência de um técnico da JF vendo o mesmo vídeo"
         ],
         "needs": "Requer conexão via satélite ilimitada e energia permanente (solar ou rede)."
       }
     ],
-    "plansNote": "As câmeras são pensadas para equipamentos na superfície (céu aberto, boca da mina, dragas); dentro de galerias cada caso é avaliado. São instaladas com aviso de área videomonitorada, como exige a lei de dados pessoais."
+    "plansNote": "As câmeras são pensadas para equipamentos na superfície (céu aberto, boca da mina, dragas); dentro de galerias cada caso é avaliado. São instaladas com aviso de área videomonitorada, como exige a lei de dados pessoais.",
+    "extrasTitle": "Extras para qualquer plano",
+    "extrasIntro": "Vai funcionar como nos equipamentos de bombeamento profissionais: um plano base necessário e extras que você adiciona conforme sua operação.",
+    "extras": [
+      {
+        "h": "Controle remoto",
+        "p": "Ligar, desligar, acelerar e desacelerar o motor pelo app, com confirmação e registro de cada comando."
+      },
+      {
+        "h": "Alarmes por ligação",
+        "p": "Se ninguém vir a notificação, o sistema liga para o celular dos responsáveis, um após o outro."
+      },
+      {
+        "h": "Conexão via satélite",
+        "p": "Para locais sem sinal de celular: dados e alertas chegam via satélite."
+      },
+      {
+        "h": "Dados avançados",
+        "p": "Histórico detalhado com mais leituras por minuto e relatórios para baixar por turno ou mês."
+      }
+    ],
+    "extrasNote": "O plano Essencial é a base: os extras e os planos com câmera são somados a ele."
   },
   "appForm": {
     "title": "Quero saber",

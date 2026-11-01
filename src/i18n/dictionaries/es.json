@@ -563,6 +563,10 @@
         "p": "Avisos al celular cuando un valor sale de su rango: temperatura, presión, caudal o paro del equipo."
       },
       {
+        "h": "Control remoto",
+        "p": "Enciende, apaga, acelera o desacelera el motor desde el celular, con confirmación y registro de quién lo hizo."
+      },
+      {
         "h": "Historial",
         "p": "Gráficas por día y por turno para entender el rendimiento y planear el mantenimiento."
       },
@@ -618,13 +622,34 @@
           "Video en vivo y grabación en la nube las 24 horas",
           "Varias cámaras, incluida una térmica para detectar recalentamiento",
           "Aviso si hay personas o vehículos cerca del equipo de noche",
-          "Encendido y apagado remoto",
+          "Control remoto incluido: encender, apagar y ajustar la velocidad",
           "Asistencia de un técnico de JF viendo el mismo video"
         ],
         "needs": "Requiere conexión satelital ilimitada y energía permanente (solar o red)."
       }
     ],
-    "plansNote": "Las cámaras están pensadas para equipos en superficie (tajo abierto, bocamina, dragas); dentro del socavón se estudia cada caso. Se instalan con aviso de zona videovigilada, como exige la ley de datos personales."
+    "plansNote": "Las cámaras están pensadas para equipos en superficie (tajo abierto, bocamina, dragas); dentro del socavón se estudia cada caso. Se instalan con aviso de zona videovigilada, como exige la ley de datos personales.",
+    "extrasTitle": "Extras para cualquier plan",
+    "extrasIntro": "Funcionará como en los equipos de bombeo profesionales: un plan base necesario y extras que agregas según tu operación.",
+    "extras": [
+      {
+        "h": "Control remoto",
+        "p": "Encender, apagar, acelerar y desacelerar el motor desde la app, con confirmación y registro de cada orden."
+      },
+      {
+        "h": "Alarmas por llamada",
+        "p": "Si nadie ve la notificación, el sistema llama al celular de los responsables, uno tras otro."
+      },
+      {
+        "h": "Conexión satelital",
+        "p": "Para sitios sin señal de celular: los datos y las alertas llegan por satélite."
+      },
+      {
+        "h": "Datos avanzados",
+        "p": "Historial detallado con más lecturas por minuto y reportes descargables por turno o por mes."
+      }
+    ],
+    "extrasNote": "El plan Esencial es la base: los extras y los planes con cámara se suman sobre él."
   },
   "appForm": {
     "title": "Quiero enterarme",

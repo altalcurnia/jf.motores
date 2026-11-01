@@ -563,6 +563,10 @@
         "p": "Phone notifications when a value leaves its range: temperature, pressure, flow or a stopped unit."
       },
       {
+        "h": "Remote control",
+        "p": "Start, stop, speed up or slow down the engine from your phone, with confirmation and a log of who did it."
+      },
+      {
         "h": "History",
         "p": "Charts by day and shift to understand performance and plan maintenance."
       },
@@ -618,13 +622,34 @@
           "Live video and cloud recording around the clock",
           "Several cameras, including a thermal one to detect overheating",
           "Alert if people or vehicles approach the unit at night",
-          "Remote start and stop",
+          "Remote control included: start, stop and adjust speed",
           "Assistance from a JF technician watching the same video"
         ],
         "needs": "Requires unlimited satellite connection and permanent power (solar or grid)."
       }
     ],
-    "plansNote": "Cameras are designed for surface units (open pit, mine entrance, dredges); inside underground workings each case is assessed. They are installed with a video-surveillance notice, as personal data law requires."
+    "plansNote": "Cameras are designed for surface units (open pit, mine entrance, dredges); inside underground workings each case is assessed. They are installed with a video-surveillance notice, as personal data law requires.",
+    "extrasTitle": "Add-ons for any plan",
+    "extrasIntro": "It will work like professional pumping equipment: a required base plan plus add-ons you choose for your operation.",
+    "extras": [
+      {
+        "h": "Remote control",
+        "p": "Start, stop, speed up and slow down the engine from the app, with confirmation and a log of every command."
+      },
+      {
+        "h": "Call alarms",
+        "p": "If nobody sees the notification, the system calls the people in charge, one after another."
+      },
+      {
+        "h": "Satellite connection",
+        "p": "For sites without mobile signal: data and alerts arrive via satellite."
+      },
+      {
+        "h": "Advanced data",
+        "p": "Detailed history with more readings per minute and downloadable reports by shift or month."
+      }
+    ],
+    "extrasNote": "The Essential plan is the base: add-ons and camera plans are added on top of it."
   },
   "appForm": {
     "title": "Let me know",

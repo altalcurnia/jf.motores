@@ -706,3 +706,10 @@ body.drawer-open { overflow: hidden; }
 @media (max-width: 760px) { .wl-row { grid-template-columns: 1fr; } .wl-form fieldset { padding: 16px; } }
 .app-hero-cta { margin-top: 6px; }
 .cat-head .app-badge { justify-self: start; }
+.extras-title { font-family: var(--disp); font-weight: 900; font-size: clamp(22px, 2.6vw, 30px); margin-top: 48px; }
+.extras-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.extra { padding: 18px; border: 1px dashed rgba(247, 198, 0, 0.45); border-radius: 14px; background: rgba(14, 17, 21, 0.92); display: grid; gap: 6px; align-content: start; }
+.extra b { color: var(--yellow); font-size: 16px; }
+.extra p { color: #c9d0d7; font-size: 14px; line-height: 1.5; }
+@media (max-width: 1000px) { .extras-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .extras-grid { grid-template-columns: 1fr; } }
