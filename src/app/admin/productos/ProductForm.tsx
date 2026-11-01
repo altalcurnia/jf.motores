@@ -20,6 +20,10 @@ const CATALOGS: { key: CatalogType; label: string }[] = [
   { key: "repuesto", label: "Repuesto" },
 ];
 const MAX_IMAGE_SIDE = 2000;
+/** Modelo 3D: tamaño máximo del archivo original y del ya comprimido */
+const MAX_3D_INPUT = 300 * 1024 * 1024;
+const MAX_3D = 15 * 1024 * 1024;
+const mb = (n: number) => `${(n / 1048576).toFixed(1)} MB`;
 
 /** Reduce fotos grandes del celular (máx. 2000 px, JPG) antes de subirlas. */
 async function shrink(file: File): Promise<Blob> {
@@ -44,6 +48,7 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
   const [lang, setLang] = useState<Lang>("es");
   const [slugTouched, setSlugTouched] = useState(!!initial.id);
   const [busy, setBusy] = useState<string | null>(null);
+  const [progress, setProgress] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [models, setModels] = useState(options.engineModels);
   const [newModel, setNewModel] = useState({ brand: "", model: "" });
@@ -100,29 +105,51 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
     const name = file.name.toLowerCase();
     const isStl = name.endsWith(".stl");
     if (!isStl && !name.endsWith(".glb")) return setMsg({ ok: false, text: "El modelo 3D debe ser un archivo .glb o .stl" });
-    if (file.size > 80 * 1024 * 1024) return setMsg({ ok: false, text: "El archivo pesa más de 80 MB. Redúcelo antes de subirlo." });
+    if (file.size > MAX_3D_INPUT) return setMsg({ ok: false, text: "El archivo pesa más de 300 MB. Redúcelo antes de subirlo." });
     setBusy("glb");
     setMsg(null);
-    let body: Blob = file;
+    let source: ArrayBuffer = await file.arrayBuffer();
     let note = "";
     if (isStl) {
       try {
+        setProgress("Convirtiendo el STL…");
         const { stlToGlb } = await import("@/features/catalog/stl-to-glb");
-        const { glb, triangles } = await stlToGlb(await file.arrayBuffer());
-        body = new Blob([glb], { type: "model/gltf-binary" });
-        note = ` Convertido de STL (${triangles.toLocaleString("es-CO")} triángulos, ${(body.size / 1048576).toFixed(1)} MB).`;
+        const { glb, triangles } = await stlToGlb(source);
+        source = glb;
+        note = ` Convertido de STL (${triangles.toLocaleString("es-CO")} triángulos).`;
       } catch (err) {
         setBusy(null);
+        setProgress(null);
         return setMsg({ ok: false, text: `No se pudo leer el STL: ${err instanceof Error ? err.message : "archivo dañado"}` });
       }
     }
-    if (body.size > 15 * 1024 * 1024) {
-      setBusy(null);
-      return setMsg({ ok: false, text: "El modelo pesa más de 15 MB. Simplifícalo (menos triángulos) antes de subirlo." });
+    // Compresión en el navegador: texturas a WebP y geometría con meshopt
+    let body: Blob = new Blob([source], { type: "model/gltf-binary" });
+    try {
+      const { compressGlb } = await import("@/features/catalog/compress-glb");
+      const r = await compressGlb(source, { maxBytes: MAX_3D, onStep: setProgress });
+      if (r.after < body.size) {
+        body = new Blob([r.glb as BlobPart], { type: "model/gltf-binary" });
+        note += ` Comprimido de ${mb(r.before)} a ${mb(r.after)}${r.textures ? ` (${r.textures} textura${r.textures === 1 ? "" : "s"} en WebP)` : ""}.`;
+      }
+    } catch (err) {
+      console.error("Compresión del modelo 3D:", err);
+      if (body.size > MAX_3D) {
+        setBusy(null);
+        setProgress(null);
+        return setMsg({ ok: false, text: `No se pudo comprimir el modelo: ${err instanceof Error ? err.message : "formato no compatible"}` });
+      }
     }
+    if (body.size > MAX_3D) {
+      setBusy(null);
+      setProgress(null);
+      return setMsg({ ok: false, text: `Aun comprimido pesa ${mb(body.size)} (máximo ${mb(MAX_3D)}). Simplifica la malla en tu programa 3D y vuelve a subirlo.` });
+    }
+    setProgress("Subiendo…");
     const path = `modelos/${crypto.randomUUID()}.glb`;
     const { error } = await createSupabaseBrowserClient().storage.from("catalogo").upload(path, body, { contentType: "model/gltf-binary", cacheControl: "31536000" });
     setBusy(null);
+    setProgress(null);
     if (error) return setMsg({ ok: false, text: `No se pudo subir el modelo 3D: ${error.message}` });
     set("glbPath", path);
     setMsg({ ok: true, text: `Modelo 3D listo.${note} Guarda el producto para publicarlo.` });
@@ -475,12 +502,13 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
           ) : (
             <label className="img-add wide">
               <input type="file" accept=".glb,.stl,model/gltf-binary,model/stl" hidden onChange={(e) => (upload3d(e.target.files?.[0]), (e.target.value = ""))} />
-              {busy === "glb" ? "Procesando…" : "+ Subir modelo 3D (.glb o .stl)"}
+              {busy === "glb" ? (progress ?? "Procesando…") : "+ Subir modelo 3D (.glb o .stl)"}
             </label>
           )}
           <p className="hint">
             Opcional. GLB (con colores y texturas) o STL (de CAD o impresión 3D; se convierte solo y se muestra en gris metálico).
-            Máximo 15 MB ya convertido. En la ficha aparece el botón “Ver en 3D”.
+            Se comprime solo al subirlo: texturas a WebP y geometría comprimida. Acepta archivos de hasta 300 MB y deben quedar en
+            15 MB o menos. En la ficha aparece el botón “Ver en 3D”.
           </p>
         </section>
       </fieldset>
