@@ -14,3 +14,14 @@ describe("enlaces clicables del chat", () => {
     expect(html).toContain("<b>cotiza</b>");
   });
 });
+
+describe("WhatsApp en el chat", () => {
+  it("convierte «WhatsApp» y el teléfono en enlaces al chat", () => {
+    const html = renderToStaticMarkup(
+      <Linkified text="Si tienes duda, envía por WhatsApp (+57 312 2110262) una foto de la placa." waHref="https://wa.me/573122110262?text=hola" />,
+    );
+    expect(html.match(/href="https:\/\/wa\.me\/573122110262\?text=hola"/g)?.length).toBe(2);
+    expect(html).toContain(">WhatsApp</a>");
+    expect(html).toContain(">+57 312 2110262</a>");
+  });
+});

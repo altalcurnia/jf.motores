@@ -1,8 +1,9 @@
 "use client";
 import { Fragment } from "react";
 
-// [texto](https://…) o https://… suelto (sin la puntuación final)
-const LINK = /\[([^\]\n]{1,120})\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<>()]+[^\s<>().,;:!?¿¡"'*])/g;
+// [texto](https://…), https://… suelto (sin la puntuación final), «WhatsApp» o un teléfono (+57 312 2110262)
+const LINK =
+  /\[([^\]\n]{1,120})\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<>()]+[^\s<>().,;:!?¿¡"'*])|(\bWhatsApp\b|\+\d{1,3}[\s.-]?\d{2,4}[\s.-]?\d{3,4}[\s.-]?\d{0,4})/gi;
 
 function sameSite(url: string): string | null {
   try {
@@ -13,12 +14,26 @@ function sameSite(url: string): string | null {
   }
 }
 
-/** Texto con enlaces clicables (markdown o URL sueltas) y **negritas**. Los del propio sitio abren en la misma pestaña. */
-export function Linkified({ text }: { text: string }) {
+/** Texto con enlaces clicables (markdown, URL sueltas, «WhatsApp» y teléfonos) y **negritas**. Los del propio sitio abren en la misma pestaña. */
+export function Linkified({ text, waHref }: { text: string; waHref?: string }) {
   const out: React.ReactNode[] = [];
   let last = 0;
   for (const m of text.matchAll(LINK)) {
     if (m.index! > last) out.push(...bold(text.slice(last, m.index), out.length));
+    if (m[4]) {
+      // «WhatsApp» o un número: lleva al chat de WhatsApp de la línea directa
+      out.push(
+        waHref ? (
+          <a key={`w${out.length}`} className="wa-inline" href={waHref} target="_blank" rel="noopener">
+            {m[4]}
+          </a>
+        ) : (
+          m[4]
+        ),
+      );
+      last = m.index! + m[0].length;
+      continue;
+    }
     const url = m[2] ?? m[3];
     const label = m[1] ?? url.replace(/^https?:\/\/(www\.)?/, "");
     const internal = sameSite(url);

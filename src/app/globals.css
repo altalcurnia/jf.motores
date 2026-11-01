@@ -1039,3 +1039,7 @@ body.in-journey.app-open #hud { opacity: 0; }
 /* En PC, las tarjetas de la derecha dejan sitio a los nombres del riel */
 @media (min-width: 761px) { .jcard.right { right: calc(6vw + 64px); } }
 .ai-msg a { color: var(--yellow); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+.ai-msg { overflow-wrap: anywhere; word-break: break-word; min-width: 0; }
+.ai-list > * { min-width: 0; }
+.ai-list { overflow-x: hidden; }
+.ai-msg a.wa-inline { color: #25d366; font-weight: 700; }
