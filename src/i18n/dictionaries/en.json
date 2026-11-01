@@ -582,6 +582,48 @@
     "disclaimer": "The app is in development. Features and launch date may change; the images are a simulation.",
     "cta": "Let me know when it's ready",
     "wa": "Hello JF Motores, I'd like to know when the JF Monitor app is ready.",
-    "back": "Back to my equipment"
+    "back": "Back to my equipment",
+    "plansTitle": "Planned plans",
+    "plansIntro": "Three levels depending on what you need to see. Prices will be set at launch: they depend on the connection available at your site (cellular or satellite).",
+    "recommended": "Recommended",
+    "includesPrev": "Everything in the previous plan, plus:",
+    "plans": [
+      {
+        "name": "Essential",
+        "tag": "Telemetry",
+        "items": [
+          "Running hours, temperature, pressure and flow",
+          "Phone alerts when something goes out of range",
+          "Unit location and history by shift",
+          "Maintenance reminders by hour meter"
+        ],
+        "needs": "Cellular connection; satellite optional for areas without signal."
+      },
+      {
+        "name": "Vision",
+        "tag": "Live camera",
+        "items": [
+          "Water- and dust-proof industrial camera",
+          "Live video at 30 frames per second when you open the app",
+          "Continuous on-device recording to review later",
+          "Video clip attached to every alert",
+          "Night vision"
+        ],
+        "needs": "Requires good 4G signal or a satellite antenna on site."
+      },
+      {
+        "name": "Vision Pro",
+        "tag": "Live 24/7",
+        "items": [
+          "Live video and cloud recording around the clock",
+          "Several cameras, including a thermal one to detect overheating",
+          "Alert if people or vehicles approach the unit at night",
+          "Remote start and stop",
+          "Assistance from a JF technician watching the same video"
+        ],
+        "needs": "Requires unlimited satellite connection and permanent power (solar or grid)."
+      }
+    ],
+    "plansNote": "Cameras are designed for surface units (open pit, mine entrance, dredges); inside underground workings each case is assessed. They are installed with a video-surveillance notice, as personal data law requires."
   }
 }

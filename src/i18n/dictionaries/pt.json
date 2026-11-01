@@ -582,6 +582,48 @@
     "disclaimer": "O app está em desenvolvimento. Funções e data de lançamento podem mudar; as imagens são uma simulação.",
     "cta": "Quero saber quando estiver pronto",
     "wa": "Olá JF Motores, quero saber quando o app de monitoramento JF Monitor estiver pronto.",
-    "back": "Voltar aos meus equipamentos"
+    "back": "Voltar aos meus equipamentos",
+    "plansTitle": "Planos previstos",
+    "plansIntro": "Três níveis conforme o que você precisa ver. Os preços serão definidos no lançamento: dependem da conexão disponível no seu local (celular ou satélite).",
+    "recommended": "Recomendado",
+    "includesPrev": "Tudo do plano anterior, mais:",
+    "plans": [
+      {
+        "name": "Essencial",
+        "tag": "Telemetria",
+        "items": [
+          "Horas de trabalho, temperatura, pressão e vazão",
+          "Alertas no celular quando algo sai da faixa",
+          "Localização do equipamento e histórico por turno",
+          "Lembretes de manutenção pelo horímetro"
+        ],
+        "needs": "Conexão celular; satélite opcional para áreas sem sinal."
+      },
+      {
+        "name": "Visão",
+        "tag": "Câmera ao vivo",
+        "items": [
+          "Câmera industrial à prova d'água e de poeira",
+          "Vídeo ao vivo a 30 quadros por segundo quando você abre o app",
+          "Gravação contínua no equipamento para rever depois",
+          "Clipe de vídeo anexado a cada alerta",
+          "Visão noturna"
+        ],
+        "needs": "Requer bom sinal 4G ou uma antena via satélite no local."
+      },
+      {
+        "name": "Visão Pro",
+        "tag": "Ao vivo 24/7",
+        "items": [
+          "Vídeo ao vivo e gravação na nuvem 24 horas",
+          "Várias câmeras, incluindo uma térmica para detectar superaquecimento",
+          "Aviso se pessoas ou veículos se aproximam do equipamento à noite",
+          "Liga e desliga remoto",
+          "Assistência de um técnico da JF vendo o mesmo vídeo"
+        ],
+        "needs": "Requer conexão via satélite ilimitada e energia permanente (solar ou rede)."
+      }
+    ],
+    "plansNote": "As câmeras são pensadas para equipamentos na superfície (céu aberto, boca da mina, dragas); dentro de galerias cada caso é avaliado. São instaladas com aviso de área videomonitorada, como exige a lei de dados pessoais."
   }
 }
