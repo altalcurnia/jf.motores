@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { Linkified } from "@/components/Linkified";
 import { addDocument, connectTelegram, deleteDocument, newDocumentPath, saveSettings, setDocumentActive, testAssistant } from "./actions";
 
 export type DocRow = { id: string; title: string; chars: number; active: boolean; isTest: boolean; createdAt: string };
@@ -146,7 +147,11 @@ export function AssistantAdmin(props: {
           >
             {pending ? "Pensando…" : "Preguntar"}
           </button>
-          {answer && <div className={`ai-answer ${answer.ok ? "" : "err-text"}`}>{answer.text}</div>}
+          {answer && (
+            <div className={`ai-answer ${answer.ok ? "" : "err-text"}`}>
+              <Linkified text={answer.text} />
+            </div>
+          )}
         </section>
 
         <section className="panel full">

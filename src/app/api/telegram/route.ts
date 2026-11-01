@@ -5,6 +5,7 @@ import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { dictionaryFor } from "@/i18n/dictionaries";
 import { getContact } from "@/lib/supabase/public";
 import { catalogForAssistant } from "@/features/assistant/catalog-text";
+import { plainLinks } from "@/features/assistant/links";
 
 /**
  * Webhook del bot de Telegram (pruebas del asistente fuera de la página).
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     if (r.handoff !== null) {
       await send(`${t.handoff}\n${buildWhatsAppUrl(contact, `${t.waMessage}\n${t.waSummary}${r.handoff}`)}`);
     } else {
-      await send(r.noInfo ? `${t.noInfo}\n${wa}` : r.reply);
+      await send(r.noInfo ? `${t.noInfo}\n${wa}` : plainLinks(r.reply));
     }
   }
   return NextResponse.json({ ok: true });

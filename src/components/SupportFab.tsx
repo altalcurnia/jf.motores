@@ -3,33 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { Linkified } from "./Linkified";
 
 type Msg = { role: "user" | "assistant"; content: string; kind?: "info" | "error" | "handoff"; summary?: string };
 
-/** Convierte los enlaces del texto en vínculos (los del propio sitio abren en la misma pestaña). */
-function Linkified({ text }: { text: string }) {
-  const parts = text.split(/(https?:\/\/[^\s<>()]+[^\s<>().,;:!?¿¡"'])/g);
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (i % 2 === 0) return part;
-        let internal = false;
-        try {
-          internal = new URL(part).host === window.location.host;
-        } catch {}
-        return internal ? (
-          <a key={i} href={new URL(part).pathname + new URL(part).hash}>
-            {part.replace(/^https?:\/\/[^/]+/, "")}
-          </a>
-        ) : (
-          <a key={i} href={part} target="_blank" rel="noopener nofollow">
-            {part}
-          </a>
-        );
-      })}
-    </>
-  );
-}
 type T = Dictionary["assistant"];
 
 const WaIcon = () => (
@@ -142,7 +119,9 @@ export function SupportFab({
             </button>
           </header>
           <div className="ai-list" ref={listRef} aria-live="polite">
-            <p className="ai-msg assistant">{t.welcome}</p>
+            <p className="ai-msg assistant">
+              <Linkified text={t.welcome} />
+            </p>
             {msgs.length === 0 && (
               <div className="ai-sugs">
                 {t.suggestions.map((s) => (

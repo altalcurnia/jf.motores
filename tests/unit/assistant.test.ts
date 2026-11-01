@@ -85,3 +85,12 @@ describe("pase a un asesor y fuentes oficiales", () => {
     expect(cleanDomains(["https://www.Cummins.com/es", "perkins.com", "foro", "perkins.com"])).toEqual(["cummins.com", "perkins.com"]);
   });
 });
+
+import { plainLinks } from "@/features/assistant/links";
+describe("enlaces en canales sin formato", () => {
+  it("convierte enlaces markdown en texto con la URL", () => {
+    expect(plainLinks("Mira la [ficha JF-M25](https://jfmotores.altalcurnia.com/es/motobombas/jf-m25) y **cotiza**.")).toBe(
+      "Mira la ficha JF-M25: https://jfmotores.altalcurnia.com/es/motobombas/jf-m25 y cotiza.",
+    );
+  });
+});
