@@ -34,6 +34,8 @@ export const emptyProduct = (): ProductFormValue => ({
   specs: SPEC_KEYS.motobomba.slice(0, 5).map(([key]) => ({ key, value: "" })),
   engineModelId: null,
   glbPath: null,
+  manualPath: null,
+  manualPublic: false,
   images: [],
   compatModels: [],
   compatProducts: [],

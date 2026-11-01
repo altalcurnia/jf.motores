@@ -263,6 +263,8 @@ export type Database = {
           id: string;
           is_demo: boolean;
           model_glb_path: string | null;
+          manual_path: string | null;
+          manual_public: boolean;
           name: Json;
           price_cop: number | null;
           published_at: string | null;
@@ -285,6 +287,8 @@ export type Database = {
           id?: string;
           is_demo?: boolean;
           model_glb_path?: string | null;
+          manual_path?: string | null;
+          manual_public?: boolean;
           name: Json;
           price_cop?: number | null;
           published_at?: string | null;
@@ -399,8 +403,11 @@ export type Database = {
           notes: string | null;
           owner_id: string | null;
           product_id: string | null;
-          serial: string;
+          serial: string | null;
           sold_at: string | null;
+          price_cop: number | null;
+          channel: "presencial" | "whatsapp" | "web" | "otro";
+          sold_by: string | null;
         };
         Insert: {
           created_at?: string;
@@ -408,13 +415,17 @@ export type Database = {
           notes?: string | null;
           owner_id?: string | null;
           product_id?: string | null;
-          serial: string;
+          serial?: string | null;
           sold_at?: string | null;
+          price_cop?: number | null;
+          channel?: "presencial" | "whatsapp" | "web" | "otro";
+          sold_by?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["units"]["Insert"]>;
         Relationships: [
           { foreignKeyName: "units_owner_id_fkey"; columns: ["owner_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
           { foreignKeyName: "units_product_id_fkey"; columns: ["product_id"]; isOneToOne: false; referencedRelation: "products"; referencedColumns: ["id"] },
+          { foreignKeyName: "units_sold_by_fkey"; columns: ["sold_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
         ];
       };
     };
@@ -430,6 +441,24 @@ export type Database = {
       owner_unlock: { Args: { password: string }; Returns: Json };
       owner_lock: { Args: Record<string, never>; Returns: undefined };
       owner_unlock_status: { Args: Record<string, never>; Returns: string | null };
+      find_customer: {
+        Args: { customer_email: string };
+        Returns: { id: string; full_name: string | null; email: string; phone: string | null; country: string | null; purchases: number }[];
+      };
+      register_sale: {
+        Args: {
+          product: string;
+          customer_email: string;
+          serial?: string | null;
+          price_cop?: number | null;
+          channel?: string;
+          sold_on?: string | null;
+          notes?: string | null;
+          mark_sold?: boolean;
+        };
+        Returns: string;
+      };
+      delete_sale: { Args: { unit: string }; Returns: undefined };
     };
     Enums: {
       catalog_type: "motobomba" | "motor" | "repuesto";

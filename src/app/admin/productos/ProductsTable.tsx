@@ -52,6 +52,11 @@ export function ProductsTable({ rows, canEdit, supabaseUrl }: { rows: AdminProdu
     setMsg(null);
     const res = await fn();
     setBusy(null);
+    if (!res.ok && res.error === "needs_sale") {
+      if (confirm("Las motobombas y motores pasan a Vendido registrando la venta a la cuenta del cliente. ¿Ir a registrar la venta?"))
+        router.push(`/admin/ventas?producto=${key}`);
+      return;
+    }
     if (!res.ok) setMsg({ ok: false, text: res.error ?? "Error" });
     else if (res.message || okText) setMsg({ ok: true, text: res.message ?? okText! });
     startTransition(() => router.refresh());

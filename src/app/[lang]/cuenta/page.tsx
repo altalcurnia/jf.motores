@@ -7,6 +7,7 @@ import { getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PasswordForm, ProfileForm } from "@/features/account/forms";
 import { ConsentBanner } from "@/features/account/ConsentBanner";
+import { catalogPaths } from "@/features/catalog/shared";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
@@ -48,7 +49,7 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
     supabase.from("profiles").select("full_name, phone, country, marketing_opt_in, privacy_accepted_at").eq("id", session.userId).single(),
     supabase
       .from("units")
-      .select("id, serial, sold_at, products ( ref, name )")
+      .select("id, serial, sold_at, products ( id, ref, name, slug, catalog, manual_path )")
       .eq("owner_id", session.userId)
       .order("sold_at", { ascending: false }),
     supabase
@@ -96,9 +97,19 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
                 <li key={u.id}>
                   <b>{u.products ? pick(u.products.name, locale) || u.products.ref : "—"}</b>
                   <span>
-                    {t.serial}: {u.serial}
-                    {u.sold_at ? ` · ${t.soldOn} ${dateFmt.format(new Date(u.sold_at))}` : ""}
+                    {u.serial ? `${t.serial}: ${u.serial}` : u.products?.ref}
+                    {u.sold_at ? ` · ${t.soldOn} ${dateFmt.format(new Date(`${u.sold_at}T12:00:00`))}` : ""}
                   </span>
+                  {u.products && (
+                    <span className="acc-unit-links">
+                      <Link href={`/${locale}/${catalogPaths[u.products.catalog]}/${u.products.slug}`}>{t.viewProduct}</Link>
+                      {u.products.manual_path && (
+                        <a href={`/api/manual/${u.products.id}`} target="_blank" rel="noopener">
+                          {t.manual}
+                        </a>
+                      )}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>

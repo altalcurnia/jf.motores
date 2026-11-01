@@ -228,3 +228,34 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .role-form input, .role-form select { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; }
 .role-form .check { display: flex; align-items: center; gap: 6px; grid-column: 1 / -1; color: var(--ink); font-size: 14px; }
 @media (max-width: 760px) { .role-form { grid-template-columns: 1fr; } }
+
+/* ================= Ventas ================= */
+.sale-form { gap: 14px; }
+.sale-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.sale-grid .span2 { grid-column: span 2; }
+.sale-grid .span3 { grid-column: 1 / -1; }
+.sale-grid label { display: grid; gap: 6px; font-size: 13px; color: var(--mut); }
+.sale-grid input:not([type="checkbox"]), .sale-grid select { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; font: inherit; font-size: 15px; width: 100%; min-width: 0; }
+.sale-grid input:focus, .sale-grid select:focus { border-color: var(--yellow); outline: none; }
+.sale-grid .check { display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 14px; }
+.sale-grid .check input { width: 18px; height: 18px; accent-color: var(--yellow); }
+.find-row { display: flex; gap: 8px; }
+.find-row .btn-ghost { white-space: nowrap; }
+.customer-box { align-self: end; min-height: 46px; display: flex; align-items: center; }
+.customer { display: grid; gap: 2px; padding: 8px 12px; border-radius: 10px; width: 100%; }
+.customer.ok { border: 1px solid color-mix(in srgb, var(--ok) 50%, transparent); background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.customer.ok b { color: var(--ok); }
+.no-account { display: flex; gap: 18px; align-items: center; justify-content: space-between; padding: 14px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--yellow) 45%, transparent); background: color-mix(in srgb, var(--yellow) 6%, transparent); }
+.no-account p { margin-top: 6px; font-size: 14px; }
+.no-account a { color: var(--yellow); word-break: break-all; }
+.no-account img { border-radius: 8px; flex: none; }
+.link { background: none; border: 0; color: var(--ink); text-decoration: underline; font: inherit; cursor: pointer; padding: 0; }
+.sale-actions { display: flex; justify-content: flex-end; }
+.stats.compact { margin: 0 0 14px; }
+.stats.compact .stat b { font-size: 24px; }
+@media (max-width: 860px) {
+  .sale-grid { grid-template-columns: 1fr; }
+  .sale-grid .span2, .sale-grid .span3 { grid-column: auto; }
+  .no-account { flex-direction: column; align-items: flex-start; }
+}
+.table a.small { color: var(--yellow); }

@@ -128,6 +128,20 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
     setMsg({ ok: true, text: `Modelo 3D listo.${note} Guarda el producto para publicarlo.` });
   }
 
+  async function uploadManual(file: File | undefined) {
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) return setMsg({ ok: false, text: "La guía debe ser un PDF." });
+    if (file.size > 30 * 1024 * 1024) return setMsg({ ok: false, text: "El PDF pesa más de 30 MB. Comprímelo antes de subirlo." });
+    setBusy("manual");
+    setMsg(null);
+    const path = `guias/${crypto.randomUUID()}.pdf`;
+    const { error } = await createSupabaseBrowserClient().storage.from("manuales").upload(path, file, { contentType: "application/pdf" });
+    setBusy(null);
+    if (error) return setMsg({ ok: false, text: `No se pudo subir la guía: ${error.message}` });
+    set("manualPath", path);
+    setMsg({ ok: true, text: `Guía "${file.name}" lista. Guarda el producto para aplicarla.` });
+  }
+
   function moveImage(i: number, dir: -1 | 1) {
     setV((p) => {
       const imgs = [...p.images];
@@ -158,6 +172,15 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
     void _demo;
     const res = await saveProduct(input);
     setBusy(null);
+    if (!res.ok && res.error === "needs_sale") {
+      setMsg({
+        ok: false,
+        text: v.id
+          ? "Para marcarlo como Vendido registra la venta a la cuenta del cliente (Panel → Ventas). Así queda en tu base de clientes y el cliente ve su equipo y su guía."
+          : "Crea el producto como Disponible y luego registra la venta en Panel → Ventas.",
+      });
+      return;
+    }
     if (!res.ok) return setMsg({ ok: false, text: res.error });
     setMsg({ ok: true, text: v.status === "borrador" ? "Guardado como borrador (no se ve en el sitio)." : "Guardado. Ya se ve en el sitio." });
     if (!v.id && res.id) router.replace(`/admin/productos/${res.id}?nuevo=1`);
@@ -398,6 +421,32 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               + Crear motor
             </button>
           </div>
+        </section>
+
+        <section className="panel">
+          <h2>Guía de usuario (PDF)</h2>
+          {v.manualPath ? (
+            <p>
+              <a href={v.id ? `/api/manual/${v.id}` : "#"} target="_blank" rel="noopener">
+                {v.id ? "Ver guía actual" : v.manualPath.split("/").pop()}
+              </a>{" "}
+              <button type="button" className="link-danger" onClick={() => set("manualPath", null)}>
+                Quitar
+              </button>
+            </p>
+          ) : (
+            <label className="img-add wide">
+              <input type="file" accept="application/pdf,.pdf" hidden onChange={(e) => (uploadManual(e.target.files?.[0]), (e.target.value = ""))} />
+              {busy === "manual" ? "Subiendo…" : "+ Subir guía en PDF"}
+            </label>
+          )}
+          <label className="check">
+            <input type="checkbox" checked={v.manualPublic} onChange={(e) => set("manualPublic", e.target.checked)} />
+            <span>
+              Pública <span className="hint">(cualquiera la descarga desde la ficha; si no, solo quienes compraron este producto)</span>
+            </span>
+          </label>
+          <p className="hint">Quien compra el producto la ve en “Mi cuenta → Tus equipos”. Máximo 30 MB.</p>
         </section>
 
         <section className="panel">

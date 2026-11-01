@@ -72,6 +72,13 @@ async function Dashboard() {
             <span className="pill ok">Disponible</span>
           </Link>
         )}
+        {can(session, "equipos.ver") && (
+          <Link href="/admin/ventas" className="card link">
+            <h3>Ventas y clientes</h3>
+            <p>Registra cada venta a la cuenta del cliente: el equipo y su guía quedan en su cuenta. Descarga el historial.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
         {(session.isOwner || can(session, "usuarios.ver")) && (
           <>
             <Link href="/admin/usuarios" className="card link">

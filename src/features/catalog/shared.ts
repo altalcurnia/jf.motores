@@ -33,6 +33,8 @@ export type CatalogProduct = {
   engineModelId: string | null;
   images: { path: string; alt: I18nText; isReference: boolean }[];
   glbPath: string | null;
+  /** La guía de usuario (PDF) se puede descargar desde la ficha. */
+  hasPublicManual?: boolean;
 };
 
 export type CatalogCategory = { id: string; catalog: CatalogType; slug: string; name: I18nText; partKey: string | null; sort: number };

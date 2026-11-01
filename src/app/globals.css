@@ -490,3 +490,5 @@ body.drawer-open { overflow: hidden; }
 .guide ol { display: grid; gap: 12px; padding-left: 22px; color: #c9d0d7; line-height: 1.65; }
 .guide ol li::marker { color: var(--yellow); font-family: var(--mono); }
 .footer-links { display: inline-flex; gap: 16px; flex-wrap: wrap; }
+.pd-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.acc-unit-links { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; } .acc-unit-links a { color: var(--yellow); }

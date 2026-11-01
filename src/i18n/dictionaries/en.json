@@ -295,7 +295,9 @@
     "googleError": "Could not connect to Google. Please try again.",
     "optional": "optional",
     "googleNoPassword": "You sign in with Google: your account is ready and you don't need a password.",
-    "optionalPassword": "Create a password (optional, to also sign in with your email)"
+    "optionalPassword": "Create a password (optional, to also sign in with your email)",
+    "manual": "User guide (PDF)",
+    "viewProduct": "View product"
   },
   "legal": {
     "privacyTitle": "Personal data processing policy",
@@ -389,7 +391,8 @@
       "voltaje_v": "Voltage"
     },
     "featuredKicker": "Featured",
-    "featuredTitle": "Units ready to ship"
+    "featuredTitle": "Units ready to ship",
+    "manual": "User guide (PDF)"
   },
   "notFound": {
     "title": "We couldn't find that page",

@@ -295,7 +295,9 @@
     "googleError": "Não foi possível conectar com o Google. Tente novamente.",
     "optional": "opcional",
     "googleNoPassword": "Você entra com o Google: sua conta já está pronta e não precisa de senha.",
-    "optionalPassword": "Criar uma senha (opcional, para entrar também com seu e-mail)"
+    "optionalPassword": "Criar uma senha (opcional, para entrar também com seu e-mail)",
+    "manual": "Guia do usuário (PDF)",
+    "viewProduct": "Ver produto"
   },
   "legal": {
     "privacyTitle": "Política de tratamento de dados pessoais",
@@ -389,7 +391,8 @@
       "voltaje_v": "Tensão"
     },
     "featuredKicker": "Destaques",
-    "featuredTitle": "Equipamentos prontos para entrega"
+    "featuredTitle": "Equipamentos prontos para entrega",
+    "manual": "Guia do usuário (PDF)"
   },
   "notFound": {
     "title": "Não encontramos essa página",

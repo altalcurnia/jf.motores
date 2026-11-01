@@ -86,10 +86,17 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
           </div>
           {p.status === "vendido" && <p className="pd-sold">{t.soldNotice}</p>}
 
-          <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, message)} target="_blank" rel="noopener">
-            {t.quote}
-            <Arrow />
-          </a>
+          <div className="pd-actions">
+            <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, message)} target="_blank" rel="noopener">
+              {t.quote}
+              <Arrow />
+            </a>
+            {p.hasPublicManual && (
+              <a className="btn g" href={`/api/manual/${p.id}`} target="_blank" rel="noopener">
+                {t.manual}
+              </a>
+            )}
+          </div>
 
           {specs.length > 0 && (
             <>

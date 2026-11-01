@@ -168,3 +168,8 @@ test("soporte y guías responden en los tres idiomas", async ({ page }) => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   }
 });
+
+test("la guía de usuario no se entrega con un enlace inválido", async ({ request }) => {
+  const res = await request.get("/api/manual/no-existe");
+  expect(res.status()).toBe(404);
+});

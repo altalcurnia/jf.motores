@@ -12,6 +12,7 @@ export type UserRow = {
   isOwner: boolean;
   createdAt: string;
   consent: boolean;
+  purchases: number;
 };
 type Role = { key: string; name: string; isInternal: boolean };
 
@@ -69,6 +70,7 @@ export function UsersTable({ users, roles, canEdit, me }: { users: UserRow[]; ro
               <th>Rol</th>
               <th>Registro</th>
               <th>Datos</th>
+              <th>Compras</th>
             </tr>
           </thead>
           <tbody>
@@ -97,11 +99,12 @@ export function UsersTable({ users, roles, canEdit, me }: { users: UserRow[]; ro
                 </td>
                 <td className="muted">{fmt.format(new Date(u.createdAt))}</td>
                 <td>{u.consent ? <span className="pill ok">Autorizó</span> : <span className="pill">Pendiente</span>}</td>
+                <td>{u.purchases ? <b>{u.purchases}</b> : <span className="muted">—</span>}</td>
               </tr>
             ))}
             {shown.length === 0 && (
               <tr>
-                <td colSpan={4} className="muted">
+                <td colSpan={5} className="muted">
                   Sin resultados.
                 </td>
               </tr>

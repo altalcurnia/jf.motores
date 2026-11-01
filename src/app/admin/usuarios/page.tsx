@@ -28,14 +28,17 @@ async function Users() {
     return <div className="notice err">No tienes permiso para ver los usuarios.</div>;
   }
   const supabase = await createSupabaseServerClient();
-  const [{ data: profiles }, { data: roles }, unlock] = await Promise.all([
+  const [{ data: profiles }, { data: roles }, unlock, { data: units }] = await Promise.all([
     supabase
       .from("profiles")
       .select("id, email, full_name, is_owner, created_at, privacy_accepted_at, roles ( key )")
       .order("created_at", { ascending: false }),
     supabase.from("roles").select("key, name, is_internal").order("id"),
     session.isOwner ? supabase.rpc("owner_unlock_status") : Promise.resolve({ data: null }),
+    supabase.from("units").select("owner_id"),
   ]);
+  const purchases = new Map<string, number>();
+  for (const u of units ?? []) if (u.owner_id) purchases.set(u.owner_id, (purchases.get(u.owner_id) ?? 0) + 1);
 
   const users: UserRow[] = (profiles ?? []).map((p) => ({
     id: p.id,
@@ -45,6 +48,7 @@ async function Users() {
     isOwner: p.is_owner,
     createdAt: p.created_at,
     consent: !!p.privacy_accepted_at,
+    purchases: purchases.get(p.id) ?? 0,
   }));
 
   return (

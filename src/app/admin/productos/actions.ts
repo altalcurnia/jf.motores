@@ -22,14 +22,28 @@ const DENIED: ActionResult = { ok: false, error: "No tienes permiso para editar 
 /** Archivos propios en Storage (no las imágenes de ejemplo /demo ni enlaces externos). */
 const isStoragePath = (p: string | null | undefined): p is string => !!p && !p.startsWith("/") && !/^https?:\/\//.test(p);
 
-async function removeFiles(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, paths: (string | null | undefined)[]) {
+async function removeFiles(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  paths: (string | null | undefined)[],
+  bucket: "catalogo" | "manuales" = "catalogo",
+) {
   const own = paths.filter(isStoragePath);
-  if (own.length) await supabase.storage.from("catalogo").remove(own);
+  if (own.length) await supabase.storage.from(bucket).remove(own);
 }
+
+/** Motobombas y motores solo pasan a Vendido registrando la venta a una cuenta de cliente. */
+async function needsSale(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, id: string) {
+  const { data: p } = await supabase.from("products").select("catalog, status").eq("id", id).single();
+  if (!p || p.status === "vendido" || p.catalog === "repuesto") return false;
+  const { count } = await supabase.from("units").select("id", { count: "exact", head: true }).eq("product_id", id);
+  return !count;
+}
+const NEEDS_SALE = "needs_sale";
 
 export async function setProductStatus(id: string, status: "borrador" | "disponible" | "vendido"): Promise<ActionResult> {
   const ctx = await editor();
   if (!ctx) return DENIED;
+  if (status === "vendido" && (await needsSale(ctx.supabase, id))) return { ok: false, error: NEEDS_SALE };
   const patch: { status: typeof status; sold_at?: string | null; published_at?: string } = { status };
   patch.sold_at = status === "vendido" ? new Date().toISOString() : null;
   const { data: current } = await ctx.supabase.from("products").select("published_at").eq("id", id).single();
@@ -43,10 +57,13 @@ export async function setProductStatus(id: string, status: "borrador" | "disponi
 export async function deleteProduct(id: string): Promise<ActionResult> {
   const ctx = await editor();
   if (!ctx) return DENIED;
-  const { data: p } = await ctx.supabase.from("products").select("model_glb_path, product_images(path)").eq("id", id).single();
+  const { count } = await ctx.supabase.from("units").select("id", { count: "exact", head: true }).eq("product_id", id);
+  if (count) return { ok: false, error: `Este producto tiene ${count} venta(s) registrada(s). Márcalo como Vendido en lugar de borrarlo.` };
+  const { data: p } = await ctx.supabase.from("products").select("model_glb_path, manual_path, product_images(path)").eq("id", id).single();
   const { error } = await ctx.supabase.from("products").delete().eq("id", id);
   if (error) return { ok: false, error: error.message };
   await removeFiles(ctx.supabase, [p?.model_glb_path, ...(p?.product_images ?? []).map((i) => i.path)]);
+  await removeFiles(ctx.supabase, [p?.manual_path], "manuales");
   updateTag("catalog");
   return { ok: true };
 }
@@ -89,6 +106,8 @@ const productInput = z.object({
   specs: z.array(z.object({ key: z.string().trim().max(40), value: z.string().trim().max(120) })).max(30),
   engineModelId: z.uuid().nullable(),
   glbPath: z.string().max(300).nullable(),
+  manualPath: z.string().max(300).nullable(),
+  manualPublic: z.boolean(),
   images: z
     .array(z.object({ path: z.string().min(1).max(500), isReference: z.boolean() }))
     .max(20),
@@ -140,13 +159,19 @@ export async function saveProduct(raw: ProductInput): Promise<ActionResult> {
     specs: toSpecs(p.specs),
     engine_model_id: p.catalog === "repuesto" ? null : p.engineModelId,
     model_glb_path: p.glbPath,
+    manual_path: p.manualPath,
+    manual_public: p.manualPublic,
   };
 
   let id = p.id;
   let oldFiles: (string | null)[] = [];
+  let oldManual: string | null = null;
+  if (id && p.status === "vendido" && (await needsSale(supabase, id))) return { ok: false, error: NEEDS_SALE };
+  if (!id && p.status === "vendido" && p.catalog !== "repuesto") return { ok: false, error: NEEDS_SALE };
   if (id) {
-    const { data: before } = await supabase.from("products").select("status, model_glb_path, product_images(path)").eq("id", id).single();
+    const { data: before } = await supabase.from("products").select("status, model_glb_path, manual_path, product_images(path)").eq("id", id).single();
     oldFiles = [before?.model_glb_path ?? null, ...(before?.product_images ?? []).map((i) => i.path)];
+    oldManual = before?.manual_path ?? null;
     const soldAt = p.status === "vendido" ? (before?.status === "vendido" ? undefined : new Date().toISOString()) : null;
     // Editar un producto de ejemplo lo convierte en real (ya no se borra con "Borrar datos de ejemplo")
     const { error } = await supabase
@@ -191,6 +216,7 @@ export async function saveProduct(raw: ProductInput): Promise<ActionResult> {
   // Archivos que ya no se usan
   const keep = new Set([p.glbPath, ...p.images.map((i) => i.path)]);
   await removeFiles(supabase, oldFiles.filter((f) => f && !keep.has(f)));
+  if (oldManual && oldManual !== p.manualPath) await removeFiles(supabase, [oldManual], "manuales");
 
   updateTag("catalog");
   return { ok: true, id };
