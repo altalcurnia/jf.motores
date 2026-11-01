@@ -70,16 +70,19 @@
     "title1": "¿Listo para operar",
     "title2": "sin pausas?",
     "cta": "Cotizar por WhatsApp",
-    "workshop": "Taller",
-    "phone": "Línea directa"
+    "workshop": "Sedes",
+    "phone": "Línea directa",
+    "email": "Soporte por correo",
+    "emailHint": "Escríbenos a nuestro correo"
   },
   "footer": {
     "slogan": "Tranquilidad y confianza",
-    "priceNotice": "Los precios corresponden únicamente al artículo. No incluyen envío, impuestos ni costos de importación o exportación.",
     "privacy": "Política de datos"
   },
   "whatsapp": {
-    "general": "Hola JF Motores, quiero información sobre sus equipos."
+    "general": "Hola JF Motores, quiero información sobre sus equipos.",
+    "fromWeb": "Hola JF Motores, les escribo desde su página web. Quisiera más información.",
+    "floatLabel": "Escríbenos por WhatsApp"
   },
   "journey": {
     "a": {
@@ -136,7 +139,9 @@
       }
     },
     "partsTitle": "Piezas",
-    "partsHint": "Toca una para ver sus repuestos"
+    "partsHint": "Toca una para ver sus repuestos",
+    "sheetOpen": "Abrir catálogo",
+    "sheetContinue": "Continuar explorando"
   },
   "hud": {
     "state": "Estado",
@@ -396,7 +401,7 @@
     "statusSold": "Vendido",
     "reference": "Imagen de referencia",
     "ref": "REF",
-    "priceNote": "Solo el artículo. No incluye envío, impuestos ni costos de importación o exportación.",
+    "shippingNote": "El precio no incluye el envío. Cotiza el envío por WhatsApp.",
     "specsTitle": "Especificaciones",
     "descriptionTitle": "Descripción",
     "compatTitle": "Compatible con",
@@ -489,7 +494,12 @@
         "q": "¿Necesito una cuenta para comprar?",
         "a": "Para comprar una motobomba sí: así registramos el equipo a tu nombre y puedes hacerle seguimiento. Para cotizar no necesitas cuenta."
       }
-    ]
+    ],
+    "emailCard": {
+      "h": "Soporte por correo",
+      "p": "Para casos con fotos, documentos o que necesitan seguimiento por escrito.",
+      "cta": "Escribir correo"
+    }
   },
   "guides": {
     "title": "Guías",

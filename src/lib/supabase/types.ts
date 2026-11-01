@@ -178,6 +178,7 @@ export type Database = {
           id: boolean;
           legal_name: string | null;
           nit: string | null;
+          phones: Json;
           socials: Json;
           stats: Json;
           texts: Json;
@@ -189,6 +190,7 @@ export type Database = {
           id?: boolean;
           legal_name?: string | null;
           nit?: string | null;
+          phones?: Json;
           socials?: Json;
           stats?: Json;
           texts?: Json;

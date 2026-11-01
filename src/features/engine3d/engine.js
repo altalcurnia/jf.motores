@@ -13,7 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * @param {{ canvas: HTMLCanvasElement, isMobile: boolean, numberLocale: string,
  *   hud: { standby: string, start: string, running: string, full: string },
- *   onPartClick: (partKey: string) => void, onContextLost?: () => void }} opts
+ *   onPartClick: (partKey: string, touch: boolean) => void, onPartHover?: (partKey: string | null) => void,
+ *   onContextLost?: () => void }} opts
  * @returns {(() => void) & { highlight: (partKey: string | null) => void }} limpieza + resaltar pieza
  */
 export function startEngine(opts) {
@@ -657,10 +658,17 @@ export function startEngine(opts) {
       function isUiTarget(el) {
         return !!(el && el.closest && el.closest("a,button,select,input,textarea,.card,nav"));
       }
+      let overKey = null;
       listen("pointermove", (e) => {
         if (e.pointerType !== "mouse") return;
-        const k = isUiTarget(e.target) ? null : partAt(e.clientX, e.clientY);
+        // Sobre botones o etiquetas manda la interfaz (ellas avisan su propia pieza)
+        if (isUiTarget(e.target)) return;
+        const k = partAt(e.clientX, e.clientY);
         document.body.classList.toggle("over-part", !!k);
+        if (k !== overKey) {
+          overKey = k;
+          opts.onPartHover?.(k);
+        }
       }, { passive: true });
       // Resaltar una pieza (desde la fila de botones del despiece)
       const hlMats = new Map();
@@ -698,7 +706,8 @@ export function startEngine(opts) {
       listen("click", (e) => {
         if (isUiTarget(e.target)) return;
         const k = partAt(e.clientX, e.clientY);
-        if (k) opts.onPartClick(k);
+        const touch = e.pointerType ? e.pointerType !== "mouse" : window.matchMedia("(hover: none)").matches;
+        if (k) opts.onPartClick(k, touch);
       });
 
       /* smoke */
@@ -948,6 +957,11 @@ export function startEngine(opts) {
       const fitC = new THREE.Vector3();
       const WORLD_UP = new THREE.Vector3(0, 1, 0);
       let viewOffsetOn = false;
+      // Acercamiento lento a la pieza resaltada (botón, etiqueta o la pieza misma)
+      let focusAmt = 0;
+      let focusKey = null;
+      const focusBox = new THREE.Box3();
+      const focusC = new THREE.Vector3();
       // Márgenes (px) que ocupan encabezado, franjas, fila de piezas y riel en el despiece
       function freeArea(W, H) {
         const lb = H * 0.07;
@@ -1012,6 +1026,14 @@ export function startEngine(opts) {
         } else if (viewOffsetOn) {
           camera.clearViewOffset();
           viewOffsetOn = false;
+        }
+        if (hlKey) focusKey = hlKey;
+        const focusGoal = hlKey && S.explode > 0.5 ? 1 : 0;
+        focusAmt += (focusGoal - focusAmt) * Math.min(1, dt * 0.9);
+        if (focusAmt > 0.002 && focusKey && PART_GROUPS[focusKey]) {
+          focusBox.setFromObject(PART_GROUPS[focusKey]).getCenter(focusC);
+          fitT.lerp(focusC, focusAmt * 0.6);
+          rEff *= 1 - 0.38 * focusAmt;
         }
         camera.position.copy(fitT).addScaledVector(fitDir, rEff);
         const sh = S.shake * R.rpm;

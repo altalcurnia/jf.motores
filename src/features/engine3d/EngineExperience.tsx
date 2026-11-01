@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Hand } from "@/features/app-preview/AppStory";
 import { STOP_AT, STOP_END, stageAt, type StageKey } from "./stages.js";
 import type { Locale } from "@/i18n/config";
 import { localeTags } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { engineLabels } from "./parts";
+import { engineLabels, isPartKey, type PartKey } from "./parts";
 
 type Props = {
   locale: Locale;
@@ -25,6 +25,8 @@ export function EngineExperience({ locale, t }: Props) {
   const [p, setP] = useState(0);
   const [active, setActive] = useState(false);
   const [hover, setHover] = useState<string | null>(null);
+  // En celular, tocar una pieza abre este menú (abrir catálogo o seguir explorando)
+  const [sheet, setSheet] = useState<PartKey | null>(null);
 
   // Progreso del recorrido: decide qué tarjeta se ve (independiente del 3D)
   useEffect(() => {
@@ -35,8 +37,12 @@ export function EngineExperience({ locale, t }: Props) {
       if (!el) return;
       const r = el.getBoundingClientRect();
       const total = Math.max(1, r.height - window.innerHeight);
-      setP(Math.min(1, Math.max(0, -r.top / total)));
-      setActive(r.top < window.innerHeight * 0.35 && r.bottom > window.innerHeight * 0.65);
+      const prog = Math.min(1, Math.max(0, -r.top / total));
+      setP(prog);
+      // Al salir del despiece se cierra el menú de pieza
+      if (stageAt(prog).key !== "x") setSheet(null);
+      // Las tarjetas se van justo antes de que entre la cinta amarilla de la siguiente sección
+      setActive(r.top < window.innerHeight * 0.35 && prog < 0.985);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -80,7 +86,17 @@ export function EngineExperience({ locale, t }: Props) {
             isMobile: window.matchMedia("(max-width:760px)").matches,
             numberLocale: localeTags[locale],
             hud: hudRef.current,
-            onPartClick: (part: string) => routerRef.current.push(`/${locale}/repuestos/${part}`),
+            onPartClick: (part: string, touch: boolean) => {
+              if (!touch) return routerRef.current.push(`/${locale}/repuestos/${part}`);
+              if (!isPartKey(part)) return;
+              setHover(part);
+              started.highlight(part);
+              setSheet(part);
+            },
+            onPartHover: (part: string | null) => {
+              setHover(part);
+              started.highlight(part);
+            },
             // El celular liberó la memoria gráfica: ocultar el 3D y dejar el fondo fijo (el texto sigue visible)
             onContextLost: () => {
               canvas.classList.remove("ready");
@@ -120,8 +136,24 @@ export function EngineExperience({ locale, t }: Props) {
   }, [exploded, appOn]);
 
   function lightPart(part: string | null) {
+    if (sheet && part === null) return; // con el menú abierto la pieza sigue resaltada
     setHover(part);
     engineRef.current?.highlight?.(part);
+  }
+
+  /** En pantallas táctiles el toque no navega: resalta, acerca y ofrece el menú. */
+  function onPartTap(e: MouseEvent, part: PartKey) {
+    if (!window.matchMedia("(hover: none)").matches) return;
+    e.preventDefault();
+    setHover(part);
+    engineRef.current?.highlight?.(part);
+    setSheet(part);
+  }
+
+  function closeSheet() {
+    setSheet(null);
+    setHover(null);
+    engineRef.current?.highlight?.(null);
   }
 
   return (
@@ -213,16 +245,40 @@ export function EngineExperience({ locale, t }: Props) {
               onMouseLeave={() => lightPart(null)}
               onFocus={() => lightPart(l.part)}
               onBlur={() => lightPart(null)}
+              onTouchStart={() => lightPart(l.part)}
+              onClick={(e) => onPartTap(e, l.part)}
             >
               <b>{String(i + 1).padStart(2, "0")}</b> {t.parts[l.part]}
             </Link>
           ))}
         </div>
+        {sheet && exploded && (
+          <div className="part-sheet" role="dialog" aria-label={t.parts[sheet]}>
+            <b>{t.parts[sheet]}</b>
+            <div className="part-sheet-actions">
+              <Link className="btn y" href={`/${locale}/repuestos/${sheet}`}>
+                {j.sheetOpen}
+              </Link>
+              <button type="button" className="btn g" onClick={closeSheet}>
+                {j.sheetContinue}
+              </button>
+            </div>
+          </div>
+        )}
       </section>
 
       <div id="labels">
         {engineLabels.map((l, i) => (
-          <a className={`lbl${hover === l.part ? " hl" : ""}`} id={l.id} key={l.id} href={`/${locale}/repuestos/${l.part}`}>
+          <a
+            className={`lbl${hover === l.part ? " hl" : ""}`}
+            id={l.id}
+            key={l.id}
+            href={`/${locale}/repuestos/${l.part}`}
+            onMouseEnter={() => lightPart(l.part)}
+            onMouseLeave={() => lightPart(null)}
+            onTouchStart={() => lightPart(l.part)}
+            onClick={(e) => onPartTap(e, l.part)}
+          >
             <div className="tag">
               <b>{String(i + 1).padStart(2, "0")}</b> {t.parts[l.part]}
             </div>

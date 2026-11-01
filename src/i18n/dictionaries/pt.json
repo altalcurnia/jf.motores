@@ -70,16 +70,19 @@
     "title1": "Pronto para operar",
     "title2": "sem paradas?",
     "cta": "Orçamento no WhatsApp",
-    "workshop": "Oficina",
-    "phone": "Linha direta"
+    "workshop": "Sedes",
+    "phone": "Linha direta",
+    "email": "Suporte por e-mail",
+    "emailHint": "Escreva para o nosso e-mail"
   },
   "footer": {
     "slogan": "Tranquilidade e confiança",
-    "priceNotice": "Os preços referem-se apenas ao item. Não incluem frete, impostos nem custos de importação ou exportação.",
     "privacy": "Política de dados"
   },
   "whatsapp": {
-    "general": "Olá JF Motores, gostaria de informações sobre seus equipamentos."
+    "general": "Olá JF Motores, gostaria de informações sobre seus equipamentos.",
+    "fromWeb": "Olá JF Motores, estou escrevendo pelo site de vocês. Gostaria de mais informações.",
+    "floatLabel": "Fale conosco no WhatsApp"
   },
   "journey": {
     "a": {
@@ -136,7 +139,9 @@
       }
     },
     "partsTitle": "Peças",
-    "partsHint": "Toque em uma para ver as peças de reposição"
+    "partsHint": "Toque em uma para ver as peças de reposição",
+    "sheetOpen": "Abrir catálogo",
+    "sheetContinue": "Continuar explorando"
   },
   "hud": {
     "state": "Estado",
@@ -396,7 +401,7 @@
     "statusSold": "Vendido",
     "reference": "Imagem de referência",
     "ref": "REF",
-    "priceNote": "Somente o item. Não inclui frete, impostos nem custos de importação ou exportação.",
+    "shippingNote": "O preço não inclui o frete. Cote o frete pelo WhatsApp.",
     "specsTitle": "Especificações",
     "descriptionTitle": "Descrição",
     "compatTitle": "Compatível com",
@@ -489,7 +494,12 @@
         "q": "Preciso de uma conta para comprar?",
         "a": "Para comprar uma motobomba, sim: assim registramos o equipamento em seu nome e você pode acompanhá-lo. Para pedir orçamento não precisa de conta."
       }
-    ]
+    ],
+    "emailCard": {
+      "h": "Suporte por e-mail",
+      "p": "Para casos com fotos, documentos ou que precisam de acompanhamento por escrito.",
+      "cta": "Enviar e-mail"
+    }
   },
   "guides": {
     "title": "Guias",

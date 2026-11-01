@@ -874,3 +874,54 @@ body.in-journey.app-open #hud { opacity: 0; }
 .plan ul.plan-inherited li { color: var(--mut); font-size: 13px; }
 .plan ul.plan-inherited li::before { color: rgba(62, 207, 142, 0.55); }
 .plan-plus { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--yellow); }
+
+/* Inicio: secciones de beneficios, catálogo y destacados más juntas */
+#beneficios, #catalogos, #destacados { padding-top: 9vh; padding-bottom: 9vh; }
+#beneficios { padding-top: 12vh; }
+#beneficios .sec-head { margin-bottom: 5vh; }
+@media (max-width: 760px) {
+  #beneficios, #catalogos, #destacados { padding-top: 7vh; padding-bottom: 7vh; }
+}
+
+/* Contacto: sedes, líneas y correo */
+.c-meta .c-line { display: block; color: var(--mut); text-decoration: none; line-height: 2; }
+.c-meta a.c-line:hover { color: var(--yellow); }
+.c-meta .c-line strong { color: var(--ink); font-weight: 600; }
+.c-meta .c-line small { font-size: 10px; letter-spacing: 0.12em; }
+.c-meta a[href^="mailto:"] { text-transform: none; letter-spacing: 0.06em; }
+
+/* Botón flotante de WhatsApp */
+.wa-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 30; width: 58px; height: 58px; border-radius: 50%;
+  display: grid; place-items: center; background: #25d366; color: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: wa-pulse 2.8s ease-out infinite;
+}
+.wa-float:hover { transform: scale(1.07); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55); }
+.wa-float:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+@keyframes wa-pulse {
+  0% { box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(37, 211, 102, 0.45); }
+  70% { box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 0 16px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+@media (max-width: 760px) {
+  .wa-float { right: 14px; bottom: 14px; width: 52px; height: 52px; }
+  .part-row { padding-right: 80px; }
+}
+@media (prefers-reduced-motion: reduce) { .wa-float { animation: none; } }
+
+/* Menú al tocar una pieza en celular */
+.part-sheet {
+  position: fixed; left: 50%; bottom: calc(var(--lbh, 0px) + 70px); transform: translateX(-50%); z-index: 8;
+  width: min(92vw, 420px); padding: 16px; border-radius: 14px; display: grid; gap: 12px;
+  background: rgba(10, 12, 15, 0.96); border: 1px solid rgba(247, 198, 0, 0.5); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  animation: sheet-in 0.25s ease-out;
+}
+.part-sheet b { font-family: var(--disp); font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+.part-sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.part-sheet-actions .btn { justify-content: center; padding: 13px 10px; font-size: 11px; cursor: pointer; }
+@keyframes sheet-in { from { opacity: 0; transform: translate(-50%, 14px); } }
+@media (max-width: 760px) {
+  /* En el despiece el botón de WhatsApp sube para no tapar la fila de piezas */
+  body.parts-open .wa-float { bottom: calc(var(--lbh, 0px) + 74px); }
+}

@@ -8,11 +8,13 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AccountNavLink } from "@/features/account/AccountNavLink";
 import { CatalogMenu } from "./CatalogMenu";
 import { MobileMenu } from "./MobileMenu";
+import { formatPhone, getContact } from "@/lib/supabase/public";
 
-export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+  const contact = await getContact();
   const t = dict.nav;
   const l = (path: string) => `/${locale}${path}`;
-  const wa = buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general);
+  const wa = buildWhatsAppUrl(contact.whatsapp, dict.whatsapp.general);
   const catalogItems = [
     ...(["motobombas", "motores", "repuestos"] as const).map((k) => ({
       href: l(`/${k}`),
@@ -62,9 +64,14 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               <a className="btn y drawer-cta" href={wa} target="_blank" rel="noopener">
                 {t.writeUs}
               </a>
-              <a className="drawer-phone" href={`tel:+${site.whatsappFallback}`}>
-                {site.phoneDisplay}
+              <a className="drawer-phone" href={`tel:+${contact.phones[0].number}`}>
+                {formatPhone(contact.phones[0].number)}
               </a>
+              {contact.email && (
+                <a className="drawer-phone" href={`mailto:${contact.email}`}>
+                  {contact.email}
+                </a>
+              )}
             </>
           }
         />

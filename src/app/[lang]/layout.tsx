@@ -12,6 +12,7 @@ import { localizedAlternates } from "@/i18n/metadata";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { site } from "@/lib/site";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteEffects } from "@/components/SiteEffects";
 
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <SiteHeader locale={locale} dict={dict} />
         <main>{children}</main>
         <SiteFooter dict={dict} locale={locale} />
+        <WhatsAppFloat message={dict.whatsapp.fromWeb} label={dict.whatsapp.floatLabel} />
         <SiteEffects />
       </body>
     </html>

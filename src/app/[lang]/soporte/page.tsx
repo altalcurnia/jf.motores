@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { site } from "@/lib/site";
+import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
 
@@ -14,8 +14,9 @@ export async function generateMetadata() {
 export default async function SupportPage() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
   const t = dict.support;
+  const contact = await getContact();
   const hrefs = [
-    buildWhatsAppUrl(site.whatsappFallback, t.waTech),
+    buildWhatsAppUrl(contact.whatsapp, t.waTech),
     `/${locale}/repuestos`,
     `/${locale}/cuenta`,
     `/${locale}/guias`,
@@ -57,6 +58,15 @@ export default async function SupportPage() {
             </Link>
           );
         })}
+        {contact.email && (
+          <a className="help-card" href={`mailto:${contact.email}`}>
+            <h2>{t.emailCard.h}</h2>
+            <p>{t.emailCard.p}</p>
+            <span className="catalog-card-cta">
+              {contact.email} <Arrow />
+            </span>
+          </a>
+        )}
       </div>
 
       <h2 className="info-h2" id="faq">

@@ -70,16 +70,19 @@
     "title1": "Ready to run",
     "title2": "without downtime?",
     "cta": "Quote on WhatsApp",
-    "workshop": "Workshop",
-    "phone": "Direct line"
+    "workshop": "Locations",
+    "phone": "Direct line",
+    "email": "Email support",
+    "emailHint": "Write to our email"
   },
   "footer": {
     "slogan": "Peace of mind and reliability",
-    "priceNotice": "Prices cover the item only. They do not include shipping, taxes or import/export costs.",
     "privacy": "Data policy"
   },
   "whatsapp": {
-    "general": "Hello JF Motores, I would like information about your equipment."
+    "general": "Hello JF Motores, I would like information about your equipment.",
+    "fromWeb": "Hi JF Motores, I'm writing from your website. I'd like more information.",
+    "floatLabel": "Message us on WhatsApp"
   },
   "journey": {
     "a": {
@@ -136,7 +139,9 @@
       }
     },
     "partsTitle": "Parts",
-    "partsHint": "Tap one to see its spare parts"
+    "partsHint": "Tap one to see its spare parts",
+    "sheetOpen": "Open catalog",
+    "sheetContinue": "Keep exploring"
   },
   "hud": {
     "state": "Status",
@@ -396,7 +401,7 @@
     "statusSold": "Sold",
     "reference": "Reference image",
     "ref": "REF",
-    "priceNote": "Item only. Shipping, taxes and import/export costs not included.",
+    "shippingNote": "Price does not include shipping. Get a shipping quote on WhatsApp.",
     "specsTitle": "Specifications",
     "descriptionTitle": "Description",
     "compatTitle": "Compatible with",
@@ -489,7 +494,12 @@
         "q": "Do I need an account to buy?",
         "a": "For a pump set, yes: that way we register the unit in your name and you can track it. You don't need an account to request a quote."
       }
-    ]
+    ],
+    "emailCard": {
+      "h": "Email support",
+      "p": "For cases with photos, documents or that need written follow-up.",
+      "cta": "Send an email"
+    }
   },
   "guides": {
     "title": "Guides",

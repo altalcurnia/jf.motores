@@ -1,7 +1,7 @@
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { site } from "@/lib/site";
+import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
 
@@ -13,6 +13,7 @@ export async function generateMetadata() {
 export default async function GuidesPage() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
   const t = dict.guides;
+  const contact = await getContact();
   return (
     <section className="block cat-page info-page">
       <SupportTabs current="guias" locale={locale} dict={dict} />
@@ -40,7 +41,7 @@ export default async function GuidesPage() {
               <li key={s}>{s}</li>
             ))}
           </ol>
-          <a className="btn g" href={buildWhatsAppUrl(site.whatsappFallback, t.waGuide + g.h)} target="_blank" rel="noopener">
+          <a className="btn g" href={buildWhatsAppUrl(contact.whatsapp, t.waGuide + g.h)} target="_blank" rel="noopener">
             {t.cta}
             <Arrow />
           </a>

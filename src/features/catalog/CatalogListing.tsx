@@ -45,7 +45,7 @@ export async function CatalogListing({ catalog, searchParams }: { catalog: Tab; 
         <div className="sk">{dict.catalogs.kicker}</div>
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
-        <p className="price-notice">{dict.catalog.priceNote}</p>
+        <p className="price-notice">{dict.catalog.shippingNote}</p>
       </header>
       <Suspense fallback={<GridSkeleton />}>
         <Results catalog={catalog} searchParams={searchParams} />

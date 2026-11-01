@@ -8,7 +8,7 @@ import { getCatalog } from "@/features/catalog/data";
 import { ProductCard } from "@/features/catalog/ProductCard";
 import { CatalogTabs } from "@/features/catalog/CatalogListing";
 import { ProductDetail, productMetadata, productStaticParams } from "@/features/catalog/ProductDetail";
-import { site } from "@/lib/site";
+import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 
 /**
@@ -43,6 +43,7 @@ async function PartCategory({ part }: { part: PartKey }) {
   if (!category && !partKeys.includes(part)) notFound();
   const products = category ? data.products.filter((p) => p.categoryId === category.id) : [];
   const name = dict.parts[part];
+  const waHref = buildWhatsAppUrl((await getContact()).whatsapp, dict.partPage.whatsapp + name);
   const t = dict.catalog;
 
   return (
@@ -55,7 +56,7 @@ async function PartCategory({ part }: { part: PartKey }) {
           {name}
         </h1>
         <p>{t.partCategoryIntro}</p>
-        <p className="price-notice">{t.priceNote}</p>
+        <p className="price-notice">{t.shippingNote}</p>
       </header>
       {products.length ? (
         <div className="pc-grid">
@@ -67,7 +68,7 @@ async function PartCategory({ part }: { part: PartKey }) {
         <p className="cat-empty">{t.empty}</p>
       )}
       <div className="cat-actions">
-        <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, dict.partPage.whatsapp + name)} target="_blank" rel="noopener">
+        <a className="btn y" href={waHref} target="_blank" rel="noopener">
           {dict.nav.cta}
           <Arrow />
         </a>

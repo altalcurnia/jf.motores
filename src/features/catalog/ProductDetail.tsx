@@ -12,6 +12,7 @@ import { ProductCard } from "./ProductCard";
 import { Viewer3D } from "./Viewer3D";
 import { OwnerBanner, StatusPill } from "./owned";
 import { catalogPaths, fill, formatPrice, productHref, specValue, storageUrl, tr, type CatalogType } from "./shared";
+import { getContact } from "@/lib/supabase/public";
 
 const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
 
@@ -43,6 +44,7 @@ export async function productMetadata(catalog: CatalogType, slug: string) {
 export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; slug: string }) {
   const [{ data, product: p }, locale, dict] = await Promise.all([findProduct(catalog, slug), getLocale(), getDictionary()]);
   if (!p) notFound();
+  const contact = await getContact();
   const t = dict.catalog;
   const name = tr(p.name, locale);
   const price = formatPrice(p.priceCop, locale);
@@ -89,13 +91,13 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
 
           <div className="pd-price">
             <b>{price ?? t.askPrice}</b>
-            {price && <small>{t.priceNote}</small>}
+            {price && <small>{t.shippingNote}</small>}
             {p.warrantyMonths && <small className="pd-warranty">✓ {fill(t.warrantyMonths, { n: p.warrantyMonths })}</small>}
           </div>
           {p.status === "vendido" && <p className="pd-sold sold-note">{t.soldNotice}</p>}
 
           <div className="pd-actions">
-            <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, message)} target="_blank" rel="noopener">
+            <a className="btn y" href={buildWhatsAppUrl(contact.whatsapp, message)} target="_blank" rel="noopener">
               {t.quote}
               <Arrow />
             </a>

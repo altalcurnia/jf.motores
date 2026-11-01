@@ -6,7 +6,7 @@ import { localeTags, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { site } from "@/lib/site";
+import { getContact } from "@/lib/supabase/public";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { compatibleParts, getCatalogData } from "@/features/catalog/data";
 import { ProductCard } from "@/features/catalog/ProductCard";
@@ -75,7 +75,7 @@ async function Equipment({ params, locale, dict }: { params: Promise<{ id: strin
   const catalogProduct = data.products.find((x) => x.id === p.id);
   const parts = catalogProduct ? compatibleParts(data, catalogProduct) : [];
   const partsHref = `/${locale}/repuestos?equipo=${p.id}`;
-  const wa = buildWhatsAppUrl(site.whatsappFallback, fill(t.requestPartWa, { name, serial: u.serial ?? p.ref }));
+  const wa = buildWhatsAppUrl((await getContact()).whatsapp, fill(t.requestPartWa, { name, serial: u.serial ?? p.ref }));
 
   return (
     <>

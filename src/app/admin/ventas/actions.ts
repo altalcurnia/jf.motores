@@ -1,11 +1,13 @@
 "use server";
-import { updateTag } from "next/cache";import { can, getSession } from "@/lib/auth";
+import { updateTag } from "next/cache";
+import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
 import { site } from "@/lib/site";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { purchaseEmail } from "@/features/sales/purchase-email";
+import { getContact } from "@/lib/supabase/public";
 
 export type SaleInput = {
   product: string;
@@ -97,7 +99,7 @@ async function notify(supabase: Awaited<ReturnType<typeof createSupabaseServerCl
     warrantyEnd: u.warranty_end,
     accountUrl: `${base}/${locale}/cuenta`,
     manualUrl: u.products.manual_path ? `${base}/api/manual/${u.products.id}` : null,
-    whatsappUrl: buildWhatsAppUrl(site.whatsappFallback, `JF Motores · ${u.products.ref}${u.serial ? ` · ${u.serial}` : ""}`),
+    whatsappUrl: buildWhatsAppUrl((await getContact()).whatsapp, `JF Motores · ${u.products.ref}${u.serial ? ` · ${u.serial}` : ""}`),
   });
   const res = await sendEmail({ to: u.owner.email, ...msg });
   if (!res.ok) return { status: res.reason, detail: res.detail };

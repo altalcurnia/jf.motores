@@ -233,3 +233,23 @@ test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ p
   await expect(page).toHaveURL(/\/es\/app\/registro$/);
   await expect(page.locator(".wl-login a.btn.y")).toHaveAttribute("href", /\/es\/cuenta\/entrar\?next=%2Fes%2Fapp%2Fregistro/);
 });
+
+test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de envío en el catálogo", async ({ page }) => {
+  await page.goto("/es");
+  const float = page.locator("a.wa-float");
+  await expect(float).toBeVisible();
+  await expect(float).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=.*p%C3%A1gina%20web/);
+  const meta = page.locator("#contacto .c-meta");
+  await expect(meta).toContainText("Sedes");
+  await expect(meta.locator('a[href^="mailto:"]')).toHaveCount(1);
+  await expect(page.locator("footer")).not.toContainText("No incluyen envío");
+  await page.goto("/es/motobombas");
+  await expect(page.locator(".price-notice")).toContainText("no incluye el envío");
+  await page.goto("/es/soporte");
+  await expect(page.locator('.help-card[href^="mailto:"]')).toHaveCount(1);
+});
+
+test("el panel de contacto y sedes exige iniciar sesión", async ({ page }) => {
+  await page.goto("/admin/empresa");
+  await expect(page).toHaveURL(/\/admin\/login/);
+});

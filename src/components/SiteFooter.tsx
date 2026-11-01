@@ -14,8 +14,6 @@ export function SiteFooter({ dict, locale }: { dict: Dictionary; locale: Locale 
       <p>
         © {site.name} — Medellín, Colombia · <em>{dict.footer.slogan}</em>
         <br />
-        <small className="price-notice">{dict.footer.priceNotice}</small>
-        <br />
         <span className="footer-links">
           <Link className="footer-link" href={`/${locale}/soporte`}>
             {dict.nav.soporte}

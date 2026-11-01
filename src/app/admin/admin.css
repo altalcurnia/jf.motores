@@ -284,3 +284,13 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .wl-row-item:hover { background: rgba(255, 255, 255, 0.02); }
 .wl-detail { margin-top: 8px; display: grid; gap: 4px; color: var(--mut); max-width: 380px; }
 .wl-detail b { color: var(--ink); }
+
+/* Contacto y sedes */
+.panel.full { grid-column: 1 / -1; }
+.contact-row { display: grid; grid-template-columns: 1.2fr 1.4fr auto auto; gap: 10px; align-items: end; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.contact-row.branch { grid-template-columns: 1fr 1fr 1.6fr 1fr auto auto; }
+.contact-row .check { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; padding-bottom: 10px; white-space: nowrap; }
+.contact-row .row-actions { display: inline-flex; gap: 6px; padding-bottom: 6px; }
+@media (max-width: 900px) {
+  .contact-row, .contact-row.branch { grid-template-columns: 1fr 1fr; }
+}

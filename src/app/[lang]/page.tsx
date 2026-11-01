@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { site } from "@/lib/site";
+import { formatPhone, getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
@@ -24,7 +24,8 @@ export default async function HomePage() {
   const dict = await getDictionary();
   const t = dict.hero;
   const b = dict.benefits;
-  const wa = buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general);
+  const contact = await getContact();
+  const wa = buildWhatsAppUrl(contact.whatsapp, dict.whatsapp.general);
 
   return (
     <>
@@ -190,12 +191,29 @@ export default async function HomePage() {
         <div className="c-meta reveal">
           <div>
             <b>{dict.contact.workshop}</b>
-            {site.workshopAddress}
+            {contact.branches.map((br) => (
+              <span className="c-line" key={br.id}>
+                <strong>{br.city}</strong> · {br.address}
+              </span>
+            ))}
           </div>
           <div>
             <b>{dict.contact.phone}</b>
-            {site.phoneDisplay}
+            {contact.phones.map((ph) => (
+              <a className="c-line" key={ph.number} href={`tel:+${ph.number}`}>
+                {formatPhone(ph.number)}
+                {ph.label && <small> · {ph.label}</small>}
+              </a>
+            ))}
           </div>
+          {contact.email && (
+            <div>
+              <b>{dict.contact.email}</b>
+              <a className="c-line" href={`mailto:${contact.email}`} title={dict.contact.emailHint}>
+                {contact.email}
+              </a>
+            </div>
+          )}
         </div>
       </section>
       </div>
