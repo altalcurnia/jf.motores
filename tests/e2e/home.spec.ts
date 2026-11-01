@@ -151,7 +151,7 @@ test("menú: Catálogo agrupa las categorías y el menú lateral abre en celular
     await burger.click();
     const drawer = page.locator("#drawer");
     await expect(drawer).toHaveClass(/open/);
-    await drawer.getByRole("link", { name: "Soporte" }).click();
+    await drawer.getByRole("link", { name: "Soporte técnico" }).click();
     await expect(page).toHaveURL(/\/es\/soporte$/);
     await expect(drawer).not.toHaveClass(/open/);
   } else {
@@ -172,4 +172,15 @@ test("soporte y guías responden en los tres idiomas", async ({ page }) => {
 test("la guía de usuario no se entrega con un enlace inválido", async ({ request }) => {
   const res = await request.get("/api/manual/no-existe");
   expect(res.status()).toBe(404);
+});
+
+test("catálogo: pestañas Todo/Motobombas/Motores/Repuestos y título del inicio enlazado", async ({ page }) => {
+  await page.goto("/es");
+  await page.locator("#catalogos .title-link").click();
+  await expect(page).toHaveURL(/\/es\/catalogo$/);
+  const tabs = page.locator(".cat-tabs:visible");
+  await expect(tabs.locator("a.on")).toHaveText("Todo");
+  await tabs.getByRole("link", { name: "Repuestos" }).click();
+  await expect(page).toHaveURL(/\/es\/repuestos$/);
+  await expect(page.locator(".cat-tabs a.on:visible")).toHaveText("Repuestos");
 });

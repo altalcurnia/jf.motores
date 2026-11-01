@@ -4,6 +4,7 @@ import { localizedAlternates } from "@/i18n/metadata";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
+import { SupportTabs } from "@/components/SupportTabs";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
@@ -27,8 +28,9 @@ export default async function SupportPage() {
 
   return (
     <section className="block cat-page info-page">
+      <SupportTabs current="soporte" locale={locale} dict={dict} />
       <header className="cat-head">
-        <div className="sk">{dict.nav.secHelp}</div>
+        <div className="sk">{dict.nav.soporte}</div>
         <h1>{t.title}</h1>
         <p>{t.intro}</p>
       </header>

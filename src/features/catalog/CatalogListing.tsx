@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { Suspense } from "react";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
 import { getCatalog } from "./data";
@@ -7,13 +10,37 @@ import { ProductCard } from "./ProductCard";
 import { catalogPaths, fill, filterProducts, parseCatalogQuery, tr, type CatalogType } from "./shared";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type Tab = CatalogType | "all";
 
-/** Página de un catálogo: encabezado fijo + resultados filtrados según la URL. */
-export async function CatalogListing({ catalog, searchParams }: { catalog: CatalogType; searchParams: SearchParams }) {
-  const dict = await getDictionary();
-  const item = dict.catalogs.items[catalogPaths[catalog]];
+/** Pestañas del catálogo: Todo · Motobombas · Motores · Repuestos (sin volver al menú). */
+export function CatalogTabs({ current, locale, dict }: { current: Tab | null; locale: Locale; dict: Dictionary }) {
+  const tabs: { key: Tab; href: string; label: string }[] = [
+    { key: "all", href: `/${locale}/catalogo`, label: dict.catalogs.all },
+    ...(["motobomba", "motor", "repuesto"] as const).map((c) => ({
+      key: c,
+      href: `/${locale}/${catalogPaths[c]}`,
+      label: dict.nav[catalogPaths[c]],
+    })),
+  ];
+  return (
+    <div className="cat-tabs" role="navigation" aria-label={dict.nav.catalog}>
+      {tabs.map((t) => (
+        <Link key={t.key} href={t.href} className={t.key === current ? "on" : ""} aria-current={t.key === current ? "page" : undefined}>
+          {t.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+/** Página de un catálogo: pestañas, encabezado fijo y resultados filtrados según la URL. */
+export async function CatalogListing({ catalog, searchParams }: { catalog: Tab; searchParams: SearchParams }) {
+  const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
+  const item =
+    catalog === "all" ? { title: dict.nav.catalog, desc: dict.catalogs.allDesc } : dict.catalogs.items[catalogPaths[catalog]];
   return (
     <section className="block cat-page">
+      <CatalogTabs current={catalog} locale={locale} dict={dict} />
       <header className="cat-head">
         <div className="sk">{dict.catalogs.kicker}</div>
         <h1>{item.title}</h1>
@@ -27,7 +54,7 @@ export async function CatalogListing({ catalog, searchParams }: { catalog: Catal
   );
 }
 
-async function Results({ catalog, searchParams }: { catalog: CatalogType; searchParams: SearchParams }) {
+async function Results({ catalog, searchParams }: { catalog: Tab; searchParams: SearchParams }) {
   const [locale, dict, data, raw] = await Promise.all([getLocale(), getDictionary(), getCatalog(catalog), searchParams]);
   const t = dict.catalog;
   const query = parseCatalogQuery(raw);
@@ -55,7 +82,7 @@ async function Results({ catalog, searchParams }: { catalog: CatalogType; search
         <div className="cat-empty">
           <p>{t.empty}</p>
           {filtered && (
-            <a className="btn g" href={`/${locale}/${catalogPaths[catalog]}`}>
+            <a className="btn g" href={catalog === "all" ? `/${locale}/catalogo` : `/${locale}/${catalogPaths[catalog]}`}>
               {t.clear}
             </a>
           )}
@@ -75,9 +102,12 @@ function GridSkeleton() {
   );
 }
 
-export async function catalogMetadata(catalog: CatalogType) {
+export async function catalogMetadata(catalog: Tab) {
   const locale = await getLocale();
   const dict = await getDictionary();
+  if (catalog === "all") {
+    return { title: dict.nav.catalog, description: dict.catalogs.allDesc, alternates: localizedAlternates(locale, "/catalogo") };
+  }
   const item = dict.catalogs.items[catalogPaths[catalog]];
   return { title: item.title, description: item.desc, alternates: localizedAlternates(locale, `/${catalogPaths[catalog]}`) };
 }

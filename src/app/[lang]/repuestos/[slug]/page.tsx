@@ -6,6 +6,7 @@ import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { isPartKey, partKeys, type PartKey } from "@/features/engine3d/parts";
 import { getCatalog } from "@/features/catalog/data";
 import { ProductCard } from "@/features/catalog/ProductCard";
+import { CatalogTabs } from "@/features/catalog/CatalogListing";
 import { ProductDetail, productMetadata, productStaticParams } from "@/features/catalog/ProductDetail";
 import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
@@ -46,6 +47,7 @@ async function PartCategory({ part }: { part: PartKey }) {
 
   return (
     <section className="block cat-page">
+      <CatalogTabs current="repuesto" locale={locale} dict={dict} />
       <header className="cat-head">
         <div className="sk">{dict.catalogs.items.repuestos.title}</div>
         <h1>

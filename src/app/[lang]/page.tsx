@@ -143,7 +143,12 @@ export default async function HomePage() {
 
       <section className="block" id="catalogos">
         <div className="sk reveal">{dict.catalogs.kicker}</div>
-        <h2 className="reveal">{dict.catalogs.title}</h2>
+        <h2 className="reveal">
+          <Link href={`/${locale}/catalogo`} className="title-link">
+            {dict.catalogs.title}
+            <Arrow />
+          </Link>
+        </h2>
         <div className="catalog-cards">
           {catalogKeys.map((key) => (
             <Link key={key} href={`/${locale}/${key}`} className="catalog-card reveal">

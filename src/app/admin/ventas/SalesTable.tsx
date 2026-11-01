@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { resendPurchaseEmail } from "./actions";
 
 export type SaleRow = {
   id: string;
@@ -16,6 +17,7 @@ export type SaleRow = {
   customerPhone: string | null;
   customerCountry: string | null;
   seller: string | null;
+  notifiedAt: string | null;
 };
 
 const channelLabel = { presencial: "En persona", whatsapp: "WhatsApp", web: "Página web", otro: "Otro" } as const;
@@ -45,6 +47,8 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
   const [q, setQ] = useState("");
   const [channel, setChannel] = useState<"todos" | SaleRow["channel"]>("todos");
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+  const [sending, setSending] = useState<string | null>(null);
   const shown = rows.filter((r) => {
     if (channel !== "todos" && r.channel !== channel) return false;
     const text = `${r.product} ${r.serial ?? ""} ${r.customerName ?? ""} ${r.customerEmail} ${r.customerPhone ?? ""}`.toLowerCase();
@@ -58,6 +62,23 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
     const a = Object.assign(document.createElement("a"), { href: url, download: `ventas-jf-motores-${new Date().toISOString().slice(0, 10)}.csv` });
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function resend(r: SaleRow) {
+    setSending(r.id);
+    setError(null);
+    setInfo(null);
+    const res = await resendPurchaseEmail(r.id);
+    setSending(null);
+    if (res.ok) {
+      setInfo(`Correo enviado a ${r.customerEmail}.`);
+      router.refresh();
+    } else
+      setError(
+        res.email === "not_configured"
+          ? "Falta configurar el envío de correos (RESEND_API_KEY en Vercel)."
+          : `No se pudo enviar: ${res.detail ?? "error"}`,
+      );
   }
 
   async function voidSale(r: SaleRow) {
@@ -100,6 +121,7 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
         </button>
       </div>
       {error && <div className="notice err">{error}</div>}
+      {info && <div className="notice ok">{info}</div>}
       <div className="table-wrap">
         <table className="table">
           <thead>
@@ -124,6 +146,9 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
                 <td>
                   <b>{r.customerName || "—"}</b>
                   <span className="muted block small">{r.customerEmail}</span>
+                  <span className={`small block ${r.notifiedAt ? "mail-ok" : "muted"}`}>
+                    {r.notifiedAt ? "✓ Correo enviado" : "Sin correo enviado"}
+                  </span>
                   {r.customerPhone && (
                     <a className="small" href={`https://wa.me/${waNumber(r.customerPhone)}`} target="_blank" rel="noopener">
                       {r.customerPhone}
@@ -137,6 +162,9 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
                 <td>{r.price == null ? <span className="muted">—</span> : money.format(r.price)}</td>
                 {canEdit && (
                   <td className="actions">
+                    <button className="link" disabled={sending === r.id} onClick={() => resend(r)}>
+                      {sending === r.id ? "Enviando…" : r.notifiedAt ? "Reenviar correo" : "Enviar correo"}
+                    </button>
                     <button className="link-danger" onClick={() => voidSale(r)}>
                       Anular
                     </button>

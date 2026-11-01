@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
       // País aproximado por la conexión (Vercel), solo si la cuenta aún no tiene uno. Se puede cambiar en Mi cuenta.
       const country = countryFromRequest(request);
       if (country) await supabase.from("profiles").update({ country }).eq("id", data.user.id).is("country", null);
+      // Idioma en el que navega: se usa para escribirle (p. ej. el correo de cada compra)
+      await supabase.from("profiles").update({ locale }).eq("id", data.user.id);
       const isStaff = await isStaffUser(supabase, data.user.id);
       return NextResponse.redirect(new URL(resolveDestination({ requested, isStaff, locale }), origin));
     }

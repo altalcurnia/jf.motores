@@ -85,8 +85,9 @@ export async function getCatalogData(): Promise<CatalogData> {
   }
 }
 
-export async function getCatalog(catalog: CatalogType) {
+export async function getCatalog(catalog: CatalogType | "all") {
   const data = await getCatalogData();
+  if (catalog === "all") return data;
   const categories = data.categories.filter((c) => c.catalog === catalog);
   return { ...data, products: data.products.filter((p) => p.catalog === catalog), categories };
 }

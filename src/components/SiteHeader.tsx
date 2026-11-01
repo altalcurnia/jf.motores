@@ -13,11 +13,14 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
   const t = dict.nav;
   const l = (path: string) => `/${locale}${path}`;
   const wa = buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general);
-  const catalogItems = (["motobombas", "motores", "repuestos"] as const).map((k) => ({
-    href: l(`/${k}`),
-    title: dict.catalogs.items[k].title,
-    desc: dict.catalogs.items[k].desc,
-  }));
+  const catalogItems = [
+    ...(["motobombas", "motores", "repuestos"] as const).map((k) => ({
+      href: l(`/${k}`),
+      title: dict.catalogs.items[k].title,
+      desc: dict.catalogs.items[k].desc,
+    })),
+    { href: l("/catalogo"), title: `${t.viewAll} →`, desc: dict.catalogs.allDesc },
+  ];
 
   return (
     <nav id="nav">
@@ -25,9 +28,11 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
         <MobileMenu
           labels={{ open: t.menu, close: t.close }}
           sections={[
+            { links: [{ href: l(""), label: t.home }] },
             {
               title: t.secCatalog,
               links: [
+                { href: l("/catalogo"), label: t.viewAll },
                 { href: l("/motobombas"), label: t.motobombas },
                 { href: l("/motores"), label: t.motores },
                 { href: l("/repuestos"), label: t.repuestos },
@@ -35,9 +40,9 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               ],
             },
             {
-              title: t.secHelp,
+              title: t.soporte,
               links: [
-                { href: l("/soporte"), label: t.soporte },
+                { href: l("/soporte"), label: t.techSupport },
                 { href: l("/guias"), label: t.guias },
                 { href: l("/soporte#faq"), label: t.faq },
                 { href: l("#contacto"), label: t.contacto },
@@ -71,9 +76,9 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
         </Link>
       </div>
       <div className="nlinks">
+        <Link href={l("")}>{t.home}</Link>
         <CatalogMenu label={t.catalog} items={catalogItems} />
         <Link href={l("/soporte")}>{t.soporte}</Link>
-        <Link href={l("/guias")}>{t.guias}</Link>
         <Link href={l("#contacto")}>{t.contacto}</Link>
       </div>
       <div className="nav-right">

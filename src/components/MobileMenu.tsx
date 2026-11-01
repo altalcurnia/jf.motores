@@ -12,7 +12,7 @@ import {
 import { createPortal } from "react-dom";
 
 type LinkItem = { href: string; label: string; external?: boolean };
-export type MenuSection = { title: string; links: LinkItem[] };
+export type MenuSection = { title?: string; links: LinkItem[] };
 
 /**
  * Menú de celular: botón a la izquierda del logo que abre un panel lateral.
@@ -97,8 +97,8 @@ export function MobileMenu({
               </div>
               <div className="drawer-body">
                 {sections.map((s) => (
-                  <div key={s.title} className="drawer-sec">
-                    <span className="drawer-title">{s.title}</span>
+                  <div key={s.title ?? s.links[0]?.href} className="drawer-sec">
+                    {s.title && <span className="drawer-title">{s.title}</span>}
                     {s.links.map((l) =>
                       l.external ? (
                         <a

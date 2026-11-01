@@ -23,7 +23,9 @@
     "secAccount": "Your account",
     "findPart": "Find parts by engine",
     "faq": "FAQ",
-    "writeUs": "Message us on WhatsApp"
+    "writeUs": "Message us on WhatsApp",
+    "techSupport": "Technical support",
+    "faqShort": "FAQ"
   },
   "hero": {
     "kicker": "Medellín · Colombia — Mining pump sets",
@@ -59,7 +61,9 @@
       }
     },
     "cta": "View catalogue",
-    "soon": "We are loading the catalogue. In the meantime, request a quote directly on WhatsApp."
+    "soon": "We are loading the catalogue. In the meantime, request a quote directly on WhatsApp.",
+    "all": "All",
+    "allDesc": "Pump sets, engines and spare parts in one place."
   },
   "contact": {
     "kicker": "Contact",

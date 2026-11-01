@@ -12,6 +12,7 @@ export function CatalogMenu({ label, items }: { label: string; items: Item[] }) 
   const ref = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const active = items.some((i) => pathname.startsWith(i.href));
+  const last = items.length - 1;
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- cerrar al cambiar de página
   useEffect(() => setOpen(false), [pathname]);
@@ -49,8 +50,8 @@ export function CatalogMenu({ label, items }: { label: string; items: Item[] }) 
         </svg>
       </button>
       <div className="cat-menu-panel" role="menu">
-        {items.map((i) => (
-          <Link key={i.href} href={i.href} role="menuitem" onClick={() => setOpen(false)}>
+        {items.map((i, n) => (
+          <Link key={i.href} href={i.href} role="menuitem" className={n === last ? "all" : ""} onClick={() => setOpen(false)}>
             <b>{i.title}</b>
             <span>{i.desc}</span>
           </Link>

@@ -39,7 +39,7 @@ async function Sales({ searchParams }: Pick<PageProps<"/admin/ventas">, "searchP
     supabase
       .from("units")
       .select(
-        "id, serial, sold_at, price_cop, channel, notes, created_at, products ( id, ref, name, catalog ), owner:profiles!units_owner_id_fkey ( full_name, email, phone, country ), seller:profiles!units_sold_by_fkey ( full_name, email )",
+        "id, serial, sold_at, price_cop, channel, notes, created_at, notified_at, products ( id, ref, name, catalog ), owner:profiles!units_owner_id_fkey ( full_name, email, phone, country ), seller:profiles!units_sold_by_fkey ( full_name, email )",
       )
       .order("sold_at", { ascending: false })
       .order("created_at", { ascending: false }),
@@ -62,6 +62,7 @@ async function Sales({ searchParams }: Pick<PageProps<"/admin/ventas">, "searchP
     customerPhone: u.owner?.phone ?? null,
     customerCountry: u.owner?.country ?? null,
     seller: u.seller?.full_name || u.seller?.email || null,
+    notifiedAt: u.notified_at,
   }));
   const preselect = typeof sp.producto === "string" ? sp.producto : null;
 

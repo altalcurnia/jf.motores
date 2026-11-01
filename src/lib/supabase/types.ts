@@ -320,6 +320,7 @@ export type Database = {
           privacy_accepted_at: string | null;
           marketing_opt_in: boolean;
           is_owner: boolean;
+          locale: "es" | "en" | "pt";
         };
         Insert: {
           country?: string | null;
@@ -333,6 +334,7 @@ export type Database = {
           privacy_accepted_at?: string | null;
           marketing_opt_in?: boolean;
           is_owner?: boolean;
+          locale?: "es" | "en" | "pt";
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
         Relationships: [
@@ -408,6 +410,7 @@ export type Database = {
           price_cop: number | null;
           channel: "presencial" | "whatsapp" | "web" | "otro";
           sold_by: string | null;
+          notified_at: string | null;
         };
         Insert: {
           created_at?: string;
@@ -420,6 +423,7 @@ export type Database = {
           price_cop?: number | null;
           channel?: "presencial" | "whatsapp" | "web" | "otro";
           sold_by?: string | null;
+          notified_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["units"]["Insert"]>;
         Relationships: [

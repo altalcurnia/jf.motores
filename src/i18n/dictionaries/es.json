@@ -23,7 +23,9 @@
     "secAccount": "Tu cuenta",
     "findPart": "Buscar repuesto por motor",
     "faq": "Preguntas frecuentes",
-    "writeUs": "Escríbenos por WhatsApp"
+    "writeUs": "Escríbenos por WhatsApp",
+    "techSupport": "Soporte técnico",
+    "faqShort": "Preguntas"
   },
   "hero": {
     "kicker": "Medellín · Colombia — Motobombas mineras",
@@ -59,7 +61,9 @@
       }
     },
     "cta": "Ver catálogo",
-    "soon": "Estamos cargando el catálogo. Mientras tanto, cotiza directamente por WhatsApp."
+    "soon": "Estamos cargando el catálogo. Mientras tanto, cotiza directamente por WhatsApp.",
+    "all": "Todo",
+    "allDesc": "Motobombas, motores y repuestos en un solo lugar."
   },
   "contact": {
     "kicker": "Contacto",

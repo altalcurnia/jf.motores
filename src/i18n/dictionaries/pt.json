@@ -23,7 +23,9 @@
     "secAccount": "Sua conta",
     "findPart": "Buscar peças por motor",
     "faq": "Perguntas frequentes",
-    "writeUs": "Fale conosco pelo WhatsApp"
+    "writeUs": "Fale conosco pelo WhatsApp",
+    "techSupport": "Suporte técnico",
+    "faqShort": "Perguntas"
   },
   "hero": {
     "kicker": "Medellín · Colômbia — Motobombas para mineração",
@@ -59,7 +61,9 @@
       }
     },
     "cta": "Ver catálogo",
-    "soon": "Estamos carregando o catálogo. Enquanto isso, peça seu orçamento diretamente pelo WhatsApp."
+    "soon": "Estamos carregando o catálogo. Enquanto isso, peça seu orçamento diretamente pelo WhatsApp.",
+    "all": "Tudo",
+    "allDesc": "Motobombas, motores e peças em um só lugar."
   },
   "contact": {
     "kicker": "Contato",

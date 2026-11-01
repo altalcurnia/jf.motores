@@ -4,6 +4,7 @@ import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { CatalogType } from "@/features/catalog/shared";
+import { registerSale } from "./actions";
 
 type ProductOption = { id: string; label: string; catalog: CatalogType; price: number | null };
 type Customer = { id: string; full_name: string | null; email: string; phone: string | null; country: string | null; purchases: number };
@@ -57,19 +58,26 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
     if (!customer || customer === "none") return setMsg({ ok: false, text: "Busca primero la cuenta del cliente." });
     setBusy("save");
     setMsg(null);
-    const { error } = await createSupabaseBrowserClient().rpc("register_sale", {
+    const res = await registerSale({
       product: product.id,
-      customer_email: customer.email,
+      customerEmail: customer.email,
       serial: serial || null,
-      price_cop: price,
+      priceCop: price,
       channel,
-      sold_on: date,
+      soldOn: date,
       notes: notes || null,
-      mark_sold: markSold,
+      markSold,
     });
     setBusy(null);
-    if (error) return setMsg({ ok: false, text: error.message });
-    setMsg({ ok: true, text: `Venta registrada: ${product.label} quedó a nombre de ${customer.full_name || customer.email}.` });
+    if (!res.ok) return setMsg({ ok: false, text: res.error });
+    const who = customer.full_name || customer.email;
+    const mailText =
+      res.email === "sent"
+        ? ` Le enviamos un correo a ${customer.email}.`
+        : res.email === "not_configured"
+          ? " No se envió el correo: falta configurar el envío de correos (RESEND_API_KEY en Vercel)."
+          : ` No se pudo enviar el correo (${res.emailDetail ?? "error"}); puedes reenviarlo desde el historial.`;
+    setMsg({ ok: true, text: `Venta registrada: ${product.label} quedó a nombre de ${who}.${mailText}` });
     setSerial("");
     setNotes("");
     setEmail("");

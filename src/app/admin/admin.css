@@ -259,3 +259,4 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
   .no-account { flex-direction: column; align-items: flex-start; }
 }
 .table a.small { color: var(--yellow); }
+.mail-ok { color: var(--ok); } .table .actions .link { font-size: 13px; }
