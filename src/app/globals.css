@@ -772,10 +772,10 @@ body.drawer-open { overflow: hidden; }
 /* Teléfono en la mano que apaga la motobomba */
 .mini-remote {
   position: absolute; left: 8vw; top: 50%; width: 300px; height: 600px;
-  transform: translateY(-50%) scale(0.62) translateX(-40px); transform-origin: left center;
+  transform: translateY(-50%) scale(0.8) translateX(-40px); transform-origin: left center;
   opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.mini-remote.on { opacity: 1; transform: translateY(-50%) scale(0.62); }
+.mini-remote.on { opacity: 1; transform: translateY(-50%) scale(0.8); }
 .mini-remote .hand-phone { width: 300px; height: 600px; }
 .mini-remote .screen { display: flex; flex-direction: column; gap: 14px; }
 .mr-rpm { margin-top: 26px; text-align: center; font-family: var(--mono); }
@@ -827,8 +827,8 @@ body.drawer-open { overflow: hidden; }
   #journey { height: 600vh; }
   .jcard, .jcard.right { top: 12vh; left: 5vw; right: 5vw; width: auto; }
   .jcard-app { padding-bottom: 18px; }
-  .mini-remote { left: 50%; top: auto; bottom: calc(var(--lbh, 0px) + 70px); transform-origin: center bottom; transform: translateX(-50%) scale(0.46) translateY(40px); }
-  .mini-remote.on { transform: translateX(-50%) scale(0.46); }
+  .mini-remote { left: 50%; top: auto; bottom: calc(var(--lbh, 0px) + 64px); transform-origin: center bottom; transform: translateX(-50%) scale(0.64) translateY(40px); }
+  .mini-remote.on { transform: translateX(-50%) scale(0.64); }
   .part-row {
     left: 0; right: 0; top: auto; bottom: calc(var(--lbh, 0px) + 10px); transform: translateY(12px);
     flex-direction: row; overflow-x: auto; padding: 0 5vw; gap: 6px; scrollbar-width: none;
@@ -924,4 +924,71 @@ body.in-journey.app-open #hud { opacity: 0; }
 @media (max-width: 760px) {
   /* En el despiece el botón de WhatsApp sube para no tapar la fila de piezas */
   body.parts-open .wa-float { bottom: calc(var(--lbh, 0px) + 74px); }
+}
+
+/* ---------- Toque en el celular (inicio y página de la app) ---------- */
+.hand.front .thumb { transform-box: view-box; transform-origin: 124px 690px; }
+.hand-phone.tapping .hand.front .thumb { animation: thumb-tap 1.25s cubic-bezier(0.3, 0.7, 0.3, 1) 1 both; }
+@keyframes thumb-tap {
+  0% { transform: none; }
+  32% { transform: translate(6px, -30px) rotate(29deg); }
+  44% { transform: translate(6px, -24px) rotate(28deg); }
+  72% { transform: translate(6px, -24px) rotate(28deg); }
+  100% { transform: none; }
+}
+.mr-btn { position: relative; }
+.mr-btn.pressed { animation: mr-press 1.25s ease-out 1 both; }
+@keyframes mr-press {
+  0%, 30% { transform: none; background: #ff5a4a; color: #0b0d10; }
+  44% { transform: scale(0.92); }
+  60%, 100% { transform: scale(0.97); background: #7a2e27; color: #f3d3cf; }
+}
+.tap-ring { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.mr-btn.pressed .tap-ring { animation: tap-ring 0.9s 0.4s ease-out 2; }
+@keyframes tap-ring {
+  0% { box-shadow: 0 0 0 0 rgba(255, 90, 74, 0.7); }
+  100% { box-shadow: 0 0 0 22px rgba(255, 90, 74, 0); }
+}
+/* Yema del dedo que toca el botón en la página de la app */
+.rb { position: relative; }
+.rb .tap { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at 38% 32%, #6b737e, #3a4048 55%, #22262c); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.55); }
+.rb .tap::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--yellow); opacity: 0; }
+.rb.pressed .tap { animation: fingertip 1.5s 0.35s ease-in-out 1 both; }
+.rb.pressed .tap::after { animation: fingertip-ring 0.8s 0.85s ease-out 1 both; }
+.rb.pressed { animation: press 1.5s 0.35s ease-in-out 1 both; }
+@keyframes fingertip {
+  0% { opacity: 0; transform: translate(36px, 70px) scale(1.25); }
+  35% { opacity: 0.95; transform: translate(0, 0) scale(1.1); }
+  48% { opacity: 0.95; transform: scale(0.88); }
+  70% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: translate(30px, 60px) scale(1.2); }
+}
+@keyframes fingertip-ring {
+  0% { opacity: 0.9; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(2.2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hand-phone.tapping .hand.front .thumb, .mr-btn.pressed, .mr-btn.pressed .tap-ring, .rb.pressed .tap, .rb.pressed .tap::after { animation: none !important; }
+}
+
+/* ---------- Celular: tarjetas del recorrido compactas (no tapan el motor) ---------- */
+@media (max-width: 760px) {
+  .jcard, .jcard.right { top: calc(var(--lbh, 7vh) + 58px); padding: 14px 16px; border-radius: 10px; }
+  .jcard .pk { font-size: 9px; letter-spacing: 0.28em; margin-bottom: 6px; }
+  .jcard h2 { font-size: 19px; margin-bottom: 6px; }
+  .jcard p { font-size: 12.5px; line-height: 1.45; }
+  .jcard .chips { flex-direction: row; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .jcard .chip { padding: 5px 9px; gap: 6px; font-size: 9px; letter-spacing: 0.08em; border-radius: 999px; }
+  .jcard .chip b { margin-left: 2px; font-size: 9px; }
+  .jcard .chip .dot { display: none; }
+  .jcard .big-rpm { font-size: 44px; }
+  .jcard .statline { margin-top: 8px; gap: 14px; font-size: 9px; }
+  .jcard .statline b { font-size: 13px; }
+  .jcard .hint-down { display: none; }
+  .jcard .soon-badge { margin-bottom: 6px; font-size: 8.5px; padding: 3px 8px; }
+  .jcard-app .app-cta { margin-top: 10px; padding: 10px 16px; font-size: 10px; }
+  .jcard-app { padding-bottom: 14px; }
+  /* El párrafo largo de la tarjeta de revolución sobra en celular: el número habla solo */
+  .jcard .rpm-p { display: none; }
 }

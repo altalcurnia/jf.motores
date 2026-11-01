@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "JF Motores — Motobombas diésel para minería | Medellín, Colombia",
-    "description": "Motobombas diésel, motores y repuestos para minería. Potencia constante en lodo, abrasión y altura. Cotiza por WhatsApp."
+    "description": "Motobombas diésel, motores y repuestos para minería, probados en taller. Tranquilidad y confianza: cotiza por WhatsApp."
   },
   "nav": {
     "home": "Inicio",
@@ -28,14 +28,14 @@
     "faqShort": "Preguntas"
   },
   "hero": {
-    "kicker": "Medellín · Colombia — Motobombas mineras",
+    "kicker": "Motobombas diésel para minería · Medellín, Colombia",
     "slogan": "Tranquilidad y confianza",
     "line1": "Motobombas diésel",
-    "line2a": "que ",
-    "line2b": "no se detienen",
-    "line2c": ",",
-    "line3": "ni a 4 000 metros.",
-    "copy": "Fabricamos y mantenemos motobombas para minería con motores diésel de alto torque: potencia constante en lodo, abrasión y altura. Ingeniería que responde antes de fallar.",
+    "line2a": "que te dan ",
+    "line2b": "tranquilidad",
+    "line2c": "",
+    "line3": "turno tras turno.",
+    "copy": "Equipos probados en nuestro taller antes de salir, repuestos con compatibilidad clara y una línea directa que responde. Así se gana la confianza.",
     "ctaPrimary": "Cotizar por WhatsApp",
     "ctaSecondary": "Ver catálogo",
     "scrollHint": "Desliza para explorar",
@@ -67,8 +67,8 @@
   },
   "contact": {
     "kicker": "Contacto",
-    "title1": "¿Listo para operar",
-    "title2": "sin pausas?",
+    "title1": "¿Hablamos de tu",
+    "title2": "próxima motobomba?",
     "cta": "Cotizar por WhatsApp",
     "workshop": "Sedes",
     "phone": "Línea directa",
@@ -86,47 +86,47 @@
   },
   "journey": {
     "a": {
-      "pk": "01 / Encendido",
-      "h2": "Tranquilidad y confianza en nuestros motores.",
-      "p": "Un giro de llave. Los cuatro cilindros respiran en secuencia 1-3-4-2, el escape libera su primer aliento y todo el sistema cobra vida.",
+      "pk": "01 · Arranque",
+      "h2": "Arranca a la primera.",
+      "p": "Tranquilidad es saber que tu bomba enciende en cada turno.",
       "chips": [
         {
-          "label": "Mecánica de excelencia",
-          "value": "PROBADO EN BANCO"
+          "label": "Probado en taller",
+          "value": "✓"
         },
         {
-          "label": "Potencia sin igual",
+          "label": "Potencia",
           "value": "25 HP"
         },
         {
-          "label": "Asesoría directa",
-          "value": "WHATSAPP"
+          "label": "Asesoría",
+          "value": "WhatsApp"
         }
       ]
     },
     "b": {
-      "pk": "02 / Revolución",
+      "pk": "02 · Plena carga",
       "torque": "Torque",
       "temp": "Temp",
       "flow": "Caudal",
-      "p": "Régimen pleno. Dos pistones suben, dos bajan: equilibrio perfecto de cigüeñal para sostener la bomba donde otros motores se rinden."
+      "p": "Caudal constante para sacar el agua y seguir produciendo."
     },
     "c": {
-      "pk": "03 / Explora el interior",
-      "h2": "Ingeniería por dentro.",
-      "p": "Despiece técnico en vivo: cada pieza etiquetada. Toca cualquier pieza para ver sus repuestos.",
-      "hint": "▼ Continúa el despiece"
+      "pk": "03 · Por dentro",
+      "h2": "Confianza que se puede ver.",
+      "p": "Toca una pieza para ver sus repuestos.",
+      "hint": "▼ Sigue bajando"
     },
     "d": {
-      "pk": "04 / Ensamble",
-      "h2": "Cada pieza en su sitio.",
-      "p": "Las piezas vuelven a su lugar: cada componente se fabrica y se prueba para trabajar junto a los demás, turno tras turno, en la mina."
+      "pk": "04 · Ensamble",
+      "h2": "Cada pieza, en su sitio.",
+      "p": "Repuestos con compatibilidad clara: pides lo correcto a la primera."
     },
     "e": {
-      "pk": "05 / Apagado remoto",
-      "h2": "Y pronto, teledirigida desde tu celular.",
-      "p": "Con la app JF Monitor podrás apagarla, encenderla y ver cómo trabaja desde cualquier lugar, con alertas por WhatsApp.",
-      "badge": "Aún no disponible · en desarrollo",
+      "pk": "05 · Muy pronto",
+      "h2": "Y pronto, desde tu celular.",
+      "p": "Con JF Monitor la verás trabajar y podrás apagarla desde donde estés, con alertas por WhatsApp.",
+      "badge": "Aún no disponible",
       "cta": "Conoce JF Monitor",
       "screen": {
         "unit": "JF-M40 · #0042",
@@ -139,7 +139,7 @@
       }
     },
     "partsTitle": "Piezas",
-    "partsHint": "Toca una para ver sus repuestos",
+    "partsHint": "Pasa el cursor o toca una pieza",
     "sheetOpen": "Abrir catálogo",
     "sheetContinue": "Continuar explorando"
   },
@@ -160,40 +160,39 @@
     "e": "App"
   },
   "marquee": [
-    "JF Motores Medellín",
     "Tranquilidad y confianza",
-    "Succión 6″",
+    "Probadas en taller",
+    "Repuestos compatibles",
+    "Línea directa por WhatsApp",
     "Hasta 25 HP",
-    "Arranque eléctrico",
     "Caudal 4 000 L/min",
-    "Cabeza 80 m",
-    "Repuestos"
+    "JF Motores Medellín"
   ],
   "benefits": {
-    "kicker": "Beneficios",
-    "title1": "Construidas para la ",
-    "titleEm": "mina",
-    "title2": ", no para la vitrina.",
-    "intro": "Cada unidad JF sale del taller probada bajo carga real. Esto es lo que obtienes desde el primer arranque.",
+    "kicker": "Por qué JF",
+    "title1": "Tranquilidad que se ",
+    "titleEm": "prueba",
+    "title2": ", confianza que se ve.",
+    "intro": "Por qué nuestros clientes nos recomiendan.",
     "imageAlt": "Motobomba diésel JF Motores",
     "bar1": "Unidad JF-M25",
     "bar2": "Prueba de taller · OK",
     "rows": [
       {
-        "h3": "Mecánica de excelencia",
-        "p": "Bloques fundidos de grado minero, torque verificado en banco y tolerancias revisadas pieza por pieza antes del despacho."
+        "h3": "Probada antes de salir",
+        "p": "Cada unidad se prueba en nuestro taller antes del despacho. Llega lista para trabajar."
       },
       {
-        "h3": "Potencia sin igual",
-        "p": "Curva de torque plana desde 1 200 rpm: la bomba mantiene caudal constante incluso con lodo denso y sólidos en suspensión."
+        "h3": "Repuestos sin adivinar",
+        "p": "Cada repuesto dice con qué motor y motobomba es compatible. Pides lo correcto a la primera."
       },
       {
-        "h3": "Repuestos y servicio técnico",
-        "p": "Repuestos para tu motor y motobomba con información de compatibilidad. Cotiza y coordina directamente por WhatsApp."
+        "h3": "Tu equipo, a tu nombre",
+        "p": "Al comprar, tu equipo queda registrado en tu cuenta con su serie, su garantía y su guía de uso."
       },
       {
-        "h3": "ADN de altura",
-        "p": "Calibración para operación sobre 2 500 m s. n. m.: inyección compensada, arranque en frío y refrigeración sobredimensionada."
+        "h3": "Una línea directa",
+        "p": "Hablas con quien conoce tu equipo, por WhatsApp o por correo. Sin conmutadores."
       }
     ],
     "specs": [

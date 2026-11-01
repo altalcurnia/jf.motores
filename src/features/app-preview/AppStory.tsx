@@ -162,7 +162,10 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
                     </i>
                   </div>
                   <div className="remote-btns">
-                    <span className={`rb primary ${phase === 4 ? "pressed" : ""}`}>{screen.reduce}</span>
+                    <span className={`rb primary ${phase === 4 ? "pressed" : ""}`}>
+                      {screen.reduce}
+                      <i className="tap" />
+                    </span>
                     <span className="rb">{screen.stop}</span>
                   </div>
                   <span className={`remote-ok ${sent ? "show" : ""}`}>✓ {screen.sent}</span>
@@ -286,8 +289,8 @@ export function Hand({ part }: { part: "back" | "front" }) {
           </g>
         ))}
       </g>
-      {/* Pulgar apoyado sobre el borde izquierdo */}
-      <g filter="url(#soft)">
+      {/* Pulgar apoyado sobre el borde izquierdo (gira desde su base para tocar la pantalla) */}
+      <g filter="url(#soft)" className="thumb">
         <path
           d="M 40 676 C 20 630 14 560 28 505 C 38 482 64 476 76 494 C 88 512 82 542 76 574 C 70 610 84 650 124 690 Z"
           fill="url(#thumb)"

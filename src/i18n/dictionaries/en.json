@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "JF Motores — Diesel pump sets for mining | Medellín, Colombia",
-    "description": "Diesel pump sets, engines and spare parts for mining. Steady power in slurry, abrasion and high altitude. Get a quote on WhatsApp."
+    "description": "Diesel pump sets, engines and spare parts for mining, tested in our workshop. Peace of mind and reliability: get a quote on WhatsApp."
   },
   "nav": {
     "home": "Home",
@@ -28,14 +28,14 @@
     "faqShort": "FAQ"
   },
   "hero": {
-    "kicker": "Medellín · Colombia — Mining pump sets",
+    "kicker": "Diesel pump sets for mining · Medellín, Colombia",
     "slogan": "Peace of mind and reliability",
     "line1": "Diesel pump sets",
-    "line2a": "that ",
-    "line2b": "never stop",
-    "line2c": ",",
-    "line3": "not even at 4,000 metres.",
-    "copy": "We build and service mining pump sets driven by high-torque diesel engines: steady power in slurry, abrasion and altitude. Engineering that responds before it fails.",
+    "line2a": "that give you ",
+    "line2b": "peace of mind",
+    "line2c": "",
+    "line3": "shift after shift.",
+    "copy": "Units tested in our workshop before they ship, spare parts with clear compatibility and a direct line that answers. That's how trust is earned.",
     "ctaPrimary": "Quote on WhatsApp",
     "ctaSecondary": "View catalogue",
     "scrollHint": "Scroll to explore",
@@ -67,8 +67,8 @@
   },
   "contact": {
     "kicker": "Contact",
-    "title1": "Ready to run",
-    "title2": "without downtime?",
+    "title1": "Shall we talk about",
+    "title2": "your next pump set?",
     "cta": "Quote on WhatsApp",
     "workshop": "Locations",
     "phone": "Direct line",
@@ -86,47 +86,47 @@
   },
   "journey": {
     "a": {
-      "pk": "01 / Start-up",
-      "h2": "Peace of mind and reliability in every engine.",
-      "p": "One turn of the key. Four cylinders breathe in a 1-3-4-2 sequence, the exhaust lets out its first breath and the whole system comes alive.",
+      "pk": "01 · Start-up",
+      "h2": "Starts first time.",
+      "p": "Peace of mind is knowing your pump starts every shift.",
       "chips": [
         {
-          "label": "Mechanical excellence",
-          "value": "BENCH-TESTED"
+          "label": "Workshop-tested",
+          "value": "✓"
         },
         {
-          "label": "Unmatched power",
+          "label": "Power",
           "value": "25 HP"
         },
         {
-          "label": "Direct advice",
-          "value": "WHATSAPP"
+          "label": "Advice",
+          "value": "WhatsApp"
         }
       ]
     },
     "b": {
-      "pk": "02 / Revving",
+      "pk": "02 · Full load",
       "torque": "Torque",
       "temp": "Temp",
       "flow": "Flow",
-      "p": "Full load. Two pistons up, two down: a perfectly balanced crankshaft to keep the pump going where other engines give up."
+      "p": "Steady flow to get the water out and keep producing."
     },
     "c": {
-      "pk": "03 / Look inside",
-      "h2": "Engineering from the inside.",
-      "p": "Live technical exploded view: every part labelled. Tap any part to see its spare parts.",
+      "pk": "03 · Inside",
+      "h2": "Trust you can see.",
+      "p": "Tap a part to see its spare parts.",
       "hint": "▼ Keep scrolling"
     },
     "d": {
-      "pk": "04 / Assembly",
+      "pk": "04 · Assembly",
       "h2": "Every part in its place.",
-      "p": "The parts return to their places: each component is built and tested to work with the rest, shift after shift, at the mine."
+      "p": "Spare parts with clear compatibility: order the right one first time."
     },
     "e": {
-      "pk": "05 / Remote shutdown",
-      "h2": "And soon, remote-controlled from your phone.",
-      "p": "With the JF Monitor app you'll be able to stop it, start it and see how it's working from anywhere, with WhatsApp alerts.",
-      "badge": "Not available yet · in development",
+      "pk": "05 · Coming soon",
+      "h2": "And soon, from your phone.",
+      "p": "With JF Monitor you'll watch it work and shut it down from anywhere, with WhatsApp alerts.",
+      "badge": "Not available yet",
       "cta": "Discover JF Monitor",
       "screen": {
         "unit": "JF-M40 · #0042",
@@ -139,7 +139,7 @@
       }
     },
     "partsTitle": "Parts",
-    "partsHint": "Tap one to see its spare parts",
+    "partsHint": "Hover or tap a part",
     "sheetOpen": "Open catalog",
     "sheetContinue": "Keep exploring"
   },
@@ -160,40 +160,39 @@
     "e": "App"
   },
   "marquee": [
-    "JF Motores Medellín",
     "Peace of mind and reliability",
-    "6″ suction",
+    "Workshop-tested",
+    "Compatible spare parts",
+    "Direct line on WhatsApp",
     "Up to 25 HP",
-    "Electric start",
     "4,000 L/min flow",
-    "80 m head",
-    "Spare parts"
+    "JF Motores Medellín"
   ],
   "benefits": {
-    "kicker": "Benefits",
-    "title1": "Built for the ",
-    "titleEm": "mine",
-    "title2": ", not the showroom.",
-    "intro": "Every JF unit leaves the workshop tested under real load. This is what you get from the very first start.",
+    "kicker": "Why JF",
+    "title1": "Peace of mind you can ",
+    "titleEm": "test",
+    "title2": ", trust you can see.",
+    "intro": "Why our customers recommend us.",
     "imageAlt": "JF Motores diesel pump set",
     "bar1": "Unit JF-M25",
     "bar2": "Workshop test · OK",
     "rows": [
       {
-        "h3": "Mechanical excellence",
-        "p": "Mining-grade cast blocks, bench-verified torque and tolerances checked part by part before shipping."
+        "h3": "Tested before it ships",
+        "p": "Every unit is tested in our workshop before dispatch. It arrives ready to work."
       },
       {
-        "h3": "Unmatched power",
-        "p": "Flat torque curve from 1,200 rpm: the pump holds steady flow even with dense slurry and suspended solids."
+        "h3": "Spare parts, no guesswork",
+        "p": "Each part states which engine and pump set it fits. You order the right one the first time."
       },
       {
-        "h3": "Spare parts and service",
-        "p": "Parts for your engine and pump set with compatibility information. Get quotes and arrange everything on WhatsApp."
+        "h3": "Your unit, in your name",
+        "p": "When you buy, your unit is registered to your account with its serial number, warranty and user guide."
       },
       {
-        "h3": "Built for altitude",
-        "p": "Calibrated to operate above 2,500 m: compensated injection, cold start and oversized cooling."
+        "h3": "A direct line",
+        "p": "You talk to people who know your equipment, on WhatsApp or by email. No call centres."
       }
     ],
     "specs": [

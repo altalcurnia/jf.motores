@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "JF Motores — Motobombas a diesel para mineração | Medellín, Colômbia",
-    "description": "Motobombas a diesel, motores e peças de reposição para mineração. Potência constante em lama, abrasão e altitude. Faça seu orçamento pelo WhatsApp."
+    "description": "Motobombas a diesel, motores e peças para mineração, testados na oficina. Tranquilidade e confiança: peça seu orçamento pelo WhatsApp."
   },
   "nav": {
     "home": "Início",
@@ -28,14 +28,14 @@
     "faqShort": "Perguntas"
   },
   "hero": {
-    "kicker": "Medellín · Colômbia — Motobombas para mineração",
+    "kicker": "Motobombas a diesel para mineração · Medellín, Colômbia",
     "slogan": "Tranquilidade e confiança",
     "line1": "Motobombas a diesel",
-    "line2a": "que ",
-    "line2b": "não param",
-    "line2c": ",",
-    "line3": "nem a 4.000 metros.",
-    "copy": "Fabricamos e fazemos a manutenção de motobombas para mineração com motores a diesel de alto torque: potência constante em lama, abrasão e altitude. Engenharia que responde antes de falhar.",
+    "line2a": "que dão ",
+    "line2b": "tranquilidade",
+    "line2c": "",
+    "line3": "turno após turno.",
+    "copy": "Equipamentos testados na nossa oficina antes de sair, peças com compatibilidade clara e uma linha direta que responde. É assim que se conquista a confiança.",
     "ctaPrimary": "Orçamento no WhatsApp",
     "ctaSecondary": "Ver catálogo",
     "scrollHint": "Role para explorar",
@@ -67,8 +67,8 @@
   },
   "contact": {
     "kicker": "Contato",
-    "title1": "Pronto para operar",
-    "title2": "sem paradas?",
+    "title1": "Vamos falar da sua",
+    "title2": "próxima motobomba?",
     "cta": "Orçamento no WhatsApp",
     "workshop": "Sedes",
     "phone": "Linha direta",
@@ -86,47 +86,47 @@
   },
   "journey": {
     "a": {
-      "pk": "01 / Partida",
-      "h2": "Tranquilidade e confiança em nossos motores.",
-      "p": "Um giro da chave. Os quatro cilindros respiram na sequência 1-3-4-2, o escapamento solta o primeiro sopro e todo o sistema ganha vida.",
+      "pk": "01 · Partida",
+      "h2": "Liga na primeira.",
+      "p": "Tranquilidade é saber que sua bomba liga em todo turno.",
       "chips": [
         {
-          "label": "Mecânica de excelência",
-          "value": "TESTADO EM BANCADA"
+          "label": "Testada na oficina",
+          "value": "✓"
         },
         {
-          "label": "Potência sem igual",
+          "label": "Potência",
           "value": "25 HP"
         },
         {
-          "label": "Atendimento direto",
-          "value": "WHATSAPP"
+          "label": "Atendimento",
+          "value": "WhatsApp"
         }
       ]
     },
     "b": {
-      "pk": "02 / Rotação",
+      "pk": "02 · Carga plena",
       "torque": "Torque",
       "temp": "Temp",
       "flow": "Vazão",
-      "p": "Regime pleno. Dois pistões sobem, dois descem: virabrequim perfeitamente equilibrado para sustentar a bomba onde outros motores desistem."
+      "p": "Vazão constante para tirar a água e continuar produzindo."
     },
     "c": {
-      "pk": "03 / Explore o interior",
-      "h2": "Engenharia por dentro.",
-      "p": "Vista explodida ao vivo: cada peça identificada. Toque em qualquer peça para ver as peças de reposição.",
-      "hint": "▼ Continue rolando"
+      "pk": "03 · Por dentro",
+      "h2": "Confiança que se vê.",
+      "p": "Toque numa peça para ver as peças de reposição.",
+      "hint": "▼ Continue descendo"
     },
     "d": {
-      "pk": "04 / Montagem",
+      "pk": "04 · Montagem",
       "h2": "Cada peça no seu lugar.",
-      "p": "As peças voltam ao lugar: cada componente é fabricado e testado para trabalhar junto aos demais, turno após turno, na mina."
+      "p": "Peças com compatibilidade clara: você pede a certa na primeira vez."
     },
     "e": {
-      "pk": "05 / Desligamento remoto",
-      "h2": "E em breve, controlada pelo seu celular.",
-      "p": "Com o app JF Monitor você poderá desligá-la, ligá-la e ver como está trabalhando de qualquer lugar, com alertas pelo WhatsApp.",
-      "badge": "Ainda não disponível · em desenvolvimento",
+      "pk": "05 · Em breve",
+      "h2": "E em breve, pelo celular.",
+      "p": "Com o JF Monitor você vai ver ela trabalhar e desligá-la de onde estiver, com alertas pelo WhatsApp.",
+      "badge": "Ainda não disponível",
       "cta": "Conheça o JF Monitor",
       "screen": {
         "unit": "JF-M40 · #0042",
@@ -139,7 +139,7 @@
       }
     },
     "partsTitle": "Peças",
-    "partsHint": "Toque em uma para ver as peças de reposição",
+    "partsHint": "Passe o cursor ou toque numa peça",
     "sheetOpen": "Abrir catálogo",
     "sheetContinue": "Continuar explorando"
   },
@@ -160,40 +160,39 @@
     "e": "App"
   },
   "marquee": [
-    "JF Motores Medellín",
     "Tranquilidade e confiança",
-    "Sucção 6″",
+    "Testadas na oficina",
+    "Peças compatíveis",
+    "Linha direta no WhatsApp",
     "Até 25 HP",
-    "Partida elétrica",
     "Vazão 4.000 L/min",
-    "Altura 80 m",
-    "Peças de reposição"
+    "JF Motores Medellín"
   ],
   "benefits": {
-    "kicker": "Benefícios",
-    "title1": "Feitas para a ",
-    "titleEm": "mina",
-    "title2": ", não para a vitrine.",
-    "intro": "Cada unidade JF sai da oficina testada sob carga real. É isso que você recebe desde a primeira partida.",
+    "kicker": "Por que JF",
+    "title1": "Tranquilidade que se ",
+    "titleEm": "testa",
+    "title2": ", confiança que se vê.",
+    "intro": "Por que nossos clientes nos recomendam.",
     "imageAlt": "Motobomba a diesel JF Motores",
     "bar1": "Unidade JF-M25",
     "bar2": "Teste de oficina · OK",
     "rows": [
       {
-        "h3": "Mecânica de excelência",
-        "p": "Blocos fundidos de grau mineração, torque verificado em bancada e tolerâncias revisadas peça por peça antes do envio."
+        "h3": "Testada antes de sair",
+        "p": "Cada unidade é testada na nossa oficina antes do despacho. Chega pronta para trabalhar."
       },
       {
-        "h3": "Potência sem igual",
-        "p": "Curva de torque plana desde 1.200 rpm: a bomba mantém vazão constante mesmo com lama densa e sólidos em suspensão."
+        "h3": "Peças sem adivinhação",
+        "p": "Cada peça indica com qual motor e motobomba é compatível. Você pede a certa na primeira vez."
       },
       {
-        "h3": "Peças e assistência técnica",
-        "p": "Peças para seu motor e motobomba com informação de compatibilidade. Faça orçamento e combine tudo pelo WhatsApp."
+        "h3": "Seu equipamento, no seu nome",
+        "p": "Ao comprar, seu equipamento fica registrado na sua conta com número de série, garantia e guia de uso."
       },
       {
-        "h3": "DNA de altitude",
-        "p": "Calibrada para operar acima de 2.500 m: injeção compensada, partida a frio e arrefecimento superdimensionado."
+        "h3": "Uma linha direta",
+        "p": "Você fala com quem conhece seu equipamento, pelo WhatsApp ou por e-mail. Sem centrais de atendimento."
       }
     ],
     "specs": [

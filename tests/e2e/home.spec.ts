@@ -78,7 +78,7 @@ test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el d
   // Desde el primer tramo ya se ve la tarjeta de encendido
   await at(0.05);
   await expect(page.locator(".jcard.on")).toHaveCount(1);
-  await expect(page.locator(".jcard.on h2")).toContainText("Tranquilidad");
+  await expect(page.locator(".jcard.on h2")).toContainText("Arranca");
   await at(0.25);
   await expect(page.locator(".jcard.on #bigRpm")).toHaveCount(1);
   // Despiece: ninguna tarjeta, botones de piezas visibles

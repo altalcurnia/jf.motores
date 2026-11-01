@@ -201,7 +201,7 @@ export function EngineExperience({ locale, t }: Props) {
                 <b id="stFlow">0 L/min</b>
               </span>
             </div>
-            <p style={{ marginTop: 18 }}>{j.b.p}</p>
+            <p className="rpm-p" style={{ marginTop: 18 }}>{j.b.p}</p>
           </div>
 
           <div className={"card jcard" + show("c")}>
@@ -315,7 +315,7 @@ function MiniRemote({ on, p, s }: { on: boolean; p: number; s: Dictionary["journ
   const state = !pressed ? s.on : k < 1 ? s.stopping : s.off;
   return (
     <div className={`mini-remote${on ? " on" : ""}`} aria-hidden="true">
-      <div className="hand-phone small">
+      <div className={`hand-phone small${pressed ? " tapping" : ""}`}>
         <Hand part="back" />
         <div className="phone">
           <div className="notch" />
@@ -331,7 +331,10 @@ function MiniRemote({ on, p, s }: { on: boolean; p: number; s: Dictionary["journ
               <b id="phoneRpm">840</b>
               <small>RPM</small>
             </div>
-            <span className={`mr-btn${pressed ? " pressed" : ""}`}>⏻ {s.button}</span>
+            <span className={`mr-btn${pressed ? " pressed" : ""}`}>
+              ⏻ {s.button}
+              <i className="tap-ring" />
+            </span>
             <span className={`mr-ok${pressed ? " show" : ""}`}>{k >= 1 ? s.stopped : s.sent}</span>
           </div>
           <div className="glass" />
