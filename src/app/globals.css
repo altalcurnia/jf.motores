@@ -1089,6 +1089,39 @@ body.in-journey.app-open #hud { opacity: 0; }
 .video-play { position: relative; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); color: #0b0d10; font-size: 22px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
 .video-ext { gap: 10px; align-content: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
 .video-note { margin-top: 18px; color: var(--mut); font-size: 12.5px; }
+
+/* Tamaños del reproductor (al estilo YouTube): el video activo sube al inicio y los demás quedan debajo */
+.video-grid { --page-w: 100vw; }
+.video-card.is-large, .video-card.is-cinema { grid-column: 1 / -1; order: -1; scroll-margin-top: 96px; margin-bottom: 18px; }
+.video-card.is-large h3, .video-card.is-cinema h3 { font-size: clamp(18px, 2vw, 22px); }
+.video-card.is-large { justify-self: center; width: min(100%, max(560px, calc((100svh - 240px) * 16 / 9))); }
+.video-card.is-large .video-frame { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
+.video-card.is-cinema .video-frame {
+  margin-inline: calc(50% - var(--page-w) / 2);
+  aspect-ratio: auto; height: min(calc(var(--page-w) * 9 / 16), calc(100svh - 190px)); min-height: 200px;
+  border-radius: 0; border-left: 0; border-right: 0; background: #000;
+}
+.video-frame:fullscreen { margin: 0; width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: #000; }
+
+.video-modes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.vm-group { display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.03); }
+.vm-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04); color: var(--ink); cursor: pointer;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.vm-group .vm-btn { border-color: transparent; background: transparent; }
+.vm-btn:hover { border-color: rgba(247, 198, 0, 0.6); color: var(--yellow); }
+.vm-btn[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: #0b0d10; }
+.vm-close { margin-left: auto; padding: 6px; }
+/* En tarjetas angostas solo se ven los íconos (el nombre queda en el título del botón) */
+.video-card:not(.is-large):not(.is-cinema) .vm-txt { display: none; }
+.video-card:not(.is-large):not(.is-cinema) .vm-btn { padding: 6px 8px; }
+@media (max-width: 560px) {
+  .vm-txt { display: none; }
+  .vm-btn { padding: 6px 8px; }
+}
 @media (max-width: 760px) { .library { padding: 18px 14px; } }
 
 /* ---------- Subpestañas de Guías ---------- */

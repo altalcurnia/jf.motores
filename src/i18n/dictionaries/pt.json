@@ -624,6 +624,14 @@
       "intro": "Vídeos de fabricantes e tutoriais em espanhol, selecionados pela nossa oficina.",
       "play": "Ver vídeo",
       "openSite": "Ver no site oficial",
+      "modes": {
+        "label": "Tamanho do vídeo",
+        "normal": "Normal",
+        "large": "Ampliado",
+        "cinema": "Modo cinema",
+        "fullscreen": "Tela cheia",
+        "close": "Fechar"
+      },
       "note": "Os vídeos pertencem aos seus autores e são reproduzidos pelo YouTube.",
       "items": {
         "mq-sello": {

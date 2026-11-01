@@ -624,6 +624,14 @@
       "intro": "Videos de fabricantes y tutoriales en español, seleccionados por nuestro taller.",
       "play": "Ver video",
       "openSite": "Ver en el sitio oficial",
+      "modes": {
+        "label": "Tamaño del video",
+        "normal": "Normal",
+        "large": "Ampliado",
+        "cinema": "Modo cine",
+        "fullscreen": "Pantalla completa",
+        "close": "Cerrar"
+      },
       "note": "Los videos pertenecen a sus autores y se reproducen desde YouTube.",
       "items": {
         "mq-sello": {

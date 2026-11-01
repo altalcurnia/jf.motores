@@ -624,6 +624,14 @@
       "intro": "Manufacturer videos and Spanish-language tutorials, selected by our workshop.",
       "play": "Watch video",
       "openSite": "View on the official site",
+      "modes": {
+        "label": "Video size",
+        "normal": "Normal",
+        "large": "Enlarged",
+        "cinema": "Theater mode",
+        "fullscreen": "Full screen",
+        "close": "Close"
+      },
       "note": "Videos belong to their authors and play from YouTube.",
       "items": {
         "mq-sello": {
