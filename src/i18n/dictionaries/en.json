@@ -451,7 +451,7 @@
     "home": "Go to home"
   },
   "support": {
-    "title": "Support",
+    "title": "Technical support",
     "intro": "Does your equipment need help? A workshop technician will assist you on WhatsApp.",
     "waTech": "Hello JF Motores, I need technical support for my equipment. Model: ___ Serial: ___ Issue: ___",
     "cards": [
@@ -469,11 +469,6 @@
         "h": "Your equipment",
         "p": "With your account you can see the units you bought and your quotes.",
         "cta": "Go to my account"
-      },
-      {
-        "h": "Guides",
-        "p": "How to choose a pump set, basic maintenance and how to order the right part.",
-        "cta": "Read the guides"
       }
     ],
     "faqTitle": "Frequently asked questions",

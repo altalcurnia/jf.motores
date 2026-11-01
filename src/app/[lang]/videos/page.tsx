@@ -16,7 +16,6 @@ export default async function VideosPage() {
     <section className="block cat-page info-page">
       <SupportTabs current="videos" locale={locale} dict={dict} />
       <header className="cat-head">
-        <div className="sk">{dict.nav.soporte}</div>
         <h1>{t.title}</h1>
         <p>{t.intro}</p>
       </header>

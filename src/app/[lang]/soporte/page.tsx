@@ -19,7 +19,6 @@ export default async function SupportPage() {
     buildWhatsAppUrl(contact.whatsapp, t.waTech),
     `/${locale}/repuestos`,
     `/${locale}/cuenta`,
-    `/${locale}/guias`,
   ];
   const faqLd = {
     "@context": "https://schema.org",
@@ -31,7 +30,6 @@ export default async function SupportPage() {
     <section className="block cat-page info-page">
       <SupportTabs current="soporte" locale={locale} dict={dict} />
       <header className="cat-head">
-        <div className="sk">{dict.nav.soporte}</div>
         <h1>{t.title}</h1>
         <p>{t.intro}</p>
       </header>

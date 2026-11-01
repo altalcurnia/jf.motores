@@ -451,7 +451,7 @@
     "home": "Ir para o início"
   },
   "support": {
-    "title": "Suporte",
+    "title": "Suporte técnico",
     "intro": "Seu equipamento precisa de ajuda? Um técnico da oficina atende você pelo WhatsApp.",
     "waTech": "Olá JF Motores, preciso de suporte técnico para meu equipamento. Modelo: ___ Série: ___ Problema: ___",
     "cards": [
@@ -469,11 +469,6 @@
         "h": "Seus equipamentos",
         "p": "Com sua conta você vê os equipamentos que comprou e seus orçamentos.",
         "cta": "Ir para minha conta"
-      },
-      {
-        "h": "Guias",
-        "p": "Como escolher uma motobomba, manutenção básica e como pedir a peça certa.",
-        "cta": "Ler os guias"
       }
     ],
     "faqTitle": "Perguntas frequentes",
