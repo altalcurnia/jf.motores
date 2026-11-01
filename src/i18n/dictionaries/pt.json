@@ -25,7 +25,8 @@
     "faq": "Perguntas frequentes",
     "writeUs": "Fale conosco pelo WhatsApp",
     "techSupport": "Suporte técnico",
-    "faqShort": "Perguntas"
+    "faqShort": "Perguntas",
+    "videos": "Vídeos"
   },
   "hero": {
     "kicker": "Motobombas a diesel para mineração · Medellín, Colômbia",
@@ -540,7 +541,113 @@
       }
     ],
     "cta": "Dúvidas? Fale conosco",
-    "waGuide": "Olá JF Motores, li o guia e tenho uma pergunta: "
+    "waGuide": "Olá JF Motores, li o guia e tenho uma pergunta: ",
+    "library": {
+      "kicker": "Biblioteca técnica gratuita",
+      "title": "Manuais e guias oficiais para cuidar da sua motobomba",
+      "intro": "13 documentos de fabricantes e entidades de segurança em mineração, selecionados pela nossa oficina. Grátis para clientes cadastrados.",
+      "loginNote": "Entre ou crie sua conta grátis para abri-los.",
+      "open": "Abrir PDF",
+      "openOfficial": "Ver no site oficial",
+      "hosted": "Documento público",
+      "official": "Do fabricante: abre no site oficial",
+      "langEn": "Em inglês",
+      "langEs": "Em espanhol",
+      "groups": {
+        "manuales": "Manuais de operação e manutenção",
+        "diagnostico": "Diagnóstico de falhas e filtros",
+        "seguridad": "Segurança na mineração"
+      },
+      "criteriaTitle": "Antes de pedir uma peça",
+      "criteria": "Não compre filtros, selos, rotores, rolamentos nem correias só pela aparência. Anote marca, modelo e número de série do motor e da bomba, o código da peça e as horas de trabalho.",
+      "items": {
+        "mq62tdd-operacion": {
+          "h": "Multiquip MQ62TDD — operação, segurança e manutenção",
+          "p": "Checklist diário, escorva, partida e parada, manutenção da bomba e do motor, armazenamento e diagnóstico."
+        },
+        "mq62tdd-partes": {
+          "h": "Multiquip MQ62TDD — manual de peças",
+          "p": "Vistas explodidas e referências de peças do conjunto da bomba."
+        },
+        "bba-ba": {
+          "h": "BBA Pumps série BA — manual do usuário",
+          "p": "Operação, instalação, segurança e manutenção de bombas de drenagem."
+        },
+        "perkins-400": {
+          "h": "Perkins 403D / 404D — operação e manutenção",
+          "p": "Fluidos, filtros, arrefecimento, lubrificação, combustível e plano de manutenção do motor."
+        },
+        "godwin-cd": {
+          "h": "Godwin CD e DPC — instalação, operação e manutenção",
+          "p": "Bombas autoescorvantes de drenagem: instalação, escorva, inspeção e serviço."
+        },
+        "global-motor": {
+          "h": "Global Pump — diagnóstico do motor",
+          "p": "Partida, combustível, ar, arrefecimento, pressão de óleo e injeção."
+        },
+        "global-bomba": {
+          "h": "Global Pump — diagnóstico da bomba",
+          "p": "Escorva, vazão, pressão, rotor, anéis, selo mecânico, vibração e cavitação."
+        },
+        "global-cebado": {
+          "h": "Global Pump — diagnóstico do sistema de escorva",
+          "p": "Venturi, vazamentos, válvulas e compressor."
+        },
+        "fleetguard-combustible": {
+          "h": "Fleetguard — filtração de combustível",
+          "p": "Como escolher o separador de água, a micragem, a vazão e a manutenção."
+        },
+        "fleetguard-filtros": {
+          "h": "Fleetguard — especificações de filtros",
+          "p": "Referência técnica de filtros; confirme sempre com o número de série do motor."
+        },
+        "msha-toolbox": {
+          "h": "MSHA — como reduzir a exposição ao escape diesel na mineração",
+          "p": "Manutenção de admissão, arrefecimento, lubrificação, injeção e escape para reduzir emissões."
+        },
+        "wa-diesel-subterraneo": {
+          "h": "Austrália Ocidental — equipamentos diesel na mineração subterrânea",
+          "p": "Compra, operação e manutenção de equipamentos com motor diesel no subsolo."
+        },
+        "anm-metano": {
+          "h": "ANM Colômbia — prevenção de explosões por metano e pó de carvão",
+          "p": "Guia de segurança para minas subterrâneas de carvão."
+        }
+      }
+    },
+    "videos": {
+      "title": "Vídeos de manutenção",
+      "intro": "Vídeos de fabricantes e tutoriais em espanhol, selecionados pela nossa oficina.",
+      "play": "Ver vídeo",
+      "openSite": "Ver no site oficial",
+      "note": "Os vídeos pertencem aos seus autores e são reproduzidos pelo YouTube.",
+      "items": {
+        "mq-sello": {
+          "h": "Multiquip — troca do selo mecânico na bomba QP"
+        },
+        "mq-instalacion": {
+          "h": "Multiquip — instalação do conjunto da bomba MQ62TDD"
+        },
+        "mq-impulsor": {
+          "h": "Multiquip — serviço do MQ600-TD80 e folga do rotor"
+        },
+        "godwin-cebado": {
+          "h": "Xylem Godwin — problemas de escorva em bombas Dri-Prime"
+        },
+        "cummins-consejos": {
+          "h": "Cummins — dicas de manutenção de motores diesel"
+        },
+        "cummins-regular": {
+          "h": "Cummins — manutenção regular do motor diesel"
+        },
+        "filtros-diesel": {
+          "h": "Manutenção e troca de filtros de motores diesel (em espanhol)"
+        },
+        "filtro-combustible": {
+          "h": "Troca do filtro de combustível em máquinas pesadas (em espanhol)"
+        }
+      }
+    }
   },
   "app": {
     "kicker": "Em breve",

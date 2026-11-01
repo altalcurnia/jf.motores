@@ -269,3 +269,23 @@ test("el webhook de Telegram rechaza llamadas sin la firma secreta", async ({ re
   const res = await request.post("/api/telegram", { data: { message: { chat: { id: 1 }, text: "hola" } } });
   expect(res.status()).toBe(403);
 });
+
+test("guías: biblioteca técnica con documentos que piden iniciar sesión", async ({ page, request }) => {
+  await page.goto("/es/guias");
+  await expect(page.locator("#biblioteca h2")).toBeVisible();
+  expect(await page.locator("#biblioteca .library-card").count()).toBeGreaterThanOrEqual(10);
+  const res = await request.get("/api/biblioteca/msha-toolbox?lang=es", { maxRedirects: 0 });
+  expect(res.status()).toBe(307);
+  expect(res.headers()["location"]).toContain("/es/cuenta/entrar?next=");
+  const missing = await request.get("/api/biblioteca/no-existe", { maxRedirects: 0 });
+  expect(missing.status()).toBe(404);
+});
+
+test("videos: página con reproductores que cargan al tocar", async ({ page }) => {
+  await page.goto("/es/videos");
+  await expect(page.locator(".cat-tabs a[aria-current='page']")).toContainText("Videos");
+  expect(await page.locator(".video-card").count()).toBe(8);
+  await expect(page.locator(".video-frame iframe")).toHaveCount(0);
+  await page.locator("button.video-thumb").first().click();
+  await expect(page.locator(".video-frame iframe")).toHaveCount(1);
+});

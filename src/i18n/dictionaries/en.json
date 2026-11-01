@@ -25,7 +25,8 @@
     "faq": "FAQ",
     "writeUs": "Message us on WhatsApp",
     "techSupport": "Technical support",
-    "faqShort": "FAQ"
+    "faqShort": "FAQ",
+    "videos": "Videos"
   },
   "hero": {
     "kicker": "Diesel pump sets for mining · Medellín, Colombia",
@@ -540,7 +541,113 @@
       }
     ],
     "cta": "Questions? Message us",
-    "waGuide": "Hello JF Motores, I read the guide and have a question: "
+    "waGuide": "Hello JF Motores, I read the guide and have a question: ",
+    "library": {
+      "kicker": "Free technical library",
+      "title": "Official manuals and guides to look after your pump set",
+      "intro": "13 documents from manufacturers and mining safety agencies, selected by our workshop. Free for registered customers.",
+      "loginNote": "Sign in or create your free account to open them.",
+      "open": "Open PDF",
+      "openOfficial": "View on the official site",
+      "hosted": "Public document",
+      "official": "From the manufacturer: opens on its official site",
+      "langEn": "In English",
+      "langEs": "In Spanish",
+      "groups": {
+        "manuales": "Operation and maintenance manuals",
+        "diagnostico": "Troubleshooting and filters",
+        "seguridad": "Mining safety"
+      },
+      "criteriaTitle": "Before ordering a spare part",
+      "criteria": "Don't buy filters, seals, impellers, bearings or belts by looks alone. Note the brand, model and serial number of the engine and the pump, the part code and the running hours.",
+      "items": {
+        "mq62tdd-operacion": {
+          "h": "Multiquip MQ62TDD — operation, safety and maintenance",
+          "p": "Daily checklist, priming, start-up and shutdown, pump and engine maintenance, storage and troubleshooting."
+        },
+        "mq62tdd-partes": {
+          "h": "Multiquip MQ62TDD — parts manual",
+          "p": "Exploded views and spare-part references for the pump assembly."
+        },
+        "bba-ba": {
+          "h": "BBA Pumps BA series — user manual",
+          "p": "Operation, installation, safety and maintenance of dewatering pumps."
+        },
+        "perkins-400": {
+          "h": "Perkins 403D / 404D — operation and maintenance",
+          "p": "Fluids, filters, cooling, lubrication, fuel and engine maintenance schedule."
+        },
+        "godwin-cd": {
+          "h": "Godwin CD and DPC — installation, operation and maintenance",
+          "p": "Self-priming dewatering pumps: installation, priming, inspection and service."
+        },
+        "global-motor": {
+          "h": "Global Pump — engine troubleshooting",
+          "p": "Starting, fuel, air, cooling, oil pressure and injection."
+        },
+        "global-bomba": {
+          "h": "Global Pump — pump troubleshooting",
+          "p": "Priming, flow, pressure, impeller, wear rings, mechanical seal, vibration and cavitation."
+        },
+        "global-cebado": {
+          "h": "Global Pump — priming system troubleshooting",
+          "p": "Venturi, leaks, valves and compressor."
+        },
+        "fleetguard-combustible": {
+          "h": "Fleetguard — fuel filtration",
+          "p": "Choosing the water separator, micron rating, flow and maintenance."
+        },
+        "fleetguard-filtros": {
+          "h": "Fleetguard — filter specifications",
+          "p": "Technical filter reference; always confirm with the engine serial number."
+        },
+        "msha-toolbox": {
+          "h": "MSHA — reducing diesel exhaust exposure in mining",
+          "p": "Intake, cooling, lubrication, injection and exhaust maintenance to cut emissions."
+        },
+        "wa-diesel-subterraneo": {
+          "h": "Western Australia — diesel equipment in underground mining",
+          "p": "Purchase, operation and maintenance of diesel-engined equipment underground."
+        },
+        "anm-metano": {
+          "h": "ANM Colombia — preventing methane and coal dust explosions",
+          "p": "Safety guide for underground coal mines."
+        }
+      }
+    },
+    "videos": {
+      "title": "Maintenance videos",
+      "intro": "Manufacturer videos and Spanish-language tutorials, selected by our workshop.",
+      "play": "Watch video",
+      "openSite": "View on the official site",
+      "note": "Videos belong to their authors and play from YouTube.",
+      "items": {
+        "mq-sello": {
+          "h": "Multiquip — replacing the mechanical seal on a QP pump"
+        },
+        "mq-instalacion": {
+          "h": "Multiquip — installing the MQ62TDD pump assembly"
+        },
+        "mq-impulsor": {
+          "h": "Multiquip — servicing the MQ600-TD80 and impeller clearance"
+        },
+        "godwin-cebado": {
+          "h": "Xylem Godwin — Dri-Prime priming troubleshooting"
+        },
+        "cummins-consejos": {
+          "h": "Cummins — diesel engine maintenance tips"
+        },
+        "cummins-regular": {
+          "h": "Cummins — regular diesel engine maintenance"
+        },
+        "filtros-diesel": {
+          "h": "Diesel engine filter maintenance and replacement (Spanish)"
+        },
+        "filtro-combustible": {
+          "h": "Replacing the fuel filter on heavy machinery (Spanish)"
+        }
+      }
+    }
   },
   "app": {
     "kicker": "Coming soon",

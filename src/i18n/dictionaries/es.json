@@ -25,7 +25,8 @@
     "faq": "Preguntas frecuentes",
     "writeUs": "Escríbenos por WhatsApp",
     "techSupport": "Soporte técnico",
-    "faqShort": "Preguntas"
+    "faqShort": "Preguntas",
+    "videos": "Videos"
   },
   "hero": {
     "kicker": "Motobombas diésel para minería · Medellín, Colombia",
@@ -540,7 +541,113 @@
       }
     ],
     "cta": "¿Tienes dudas? Escríbenos",
-    "waGuide": "Hola JF Motores, leí la guía y tengo una pregunta: "
+    "waGuide": "Hola JF Motores, leí la guía y tengo una pregunta: ",
+    "library": {
+      "kicker": "Biblioteca técnica gratuita",
+      "title": "Manuales y guías oficiales para cuidar tu motobomba",
+      "intro": "13 documentos de fabricantes y entidades de seguridad minera, seleccionados por nuestro taller. Gratis para clientes registrados.",
+      "loginNote": "Inicia sesión o crea tu cuenta gratis para abrirlos.",
+      "open": "Abrir PDF",
+      "openOfficial": "Ver en el sitio oficial",
+      "hosted": "Documento público",
+      "official": "Del fabricante: se abre en su sitio oficial",
+      "langEn": "En inglés",
+      "langEs": "En español",
+      "groups": {
+        "manuales": "Manuales de operación y mantenimiento",
+        "diagnostico": "Diagnóstico de fallas y filtros",
+        "seguridad": "Seguridad en minería"
+      },
+      "criteriaTitle": "Antes de pedir un repuesto",
+      "criteria": "No compres filtros, sellos, impulsores, rodamientos ni correas solo por su apariencia. Anota marca, modelo y número de serie del motor y de la bomba, el código del repuesto y las horas de trabajo.",
+      "items": {
+        "mq62tdd-operacion": {
+          "h": "Multiquip MQ62TDD — operación, seguridad y mantenimiento",
+          "p": "Lista diaria, cebado, arranque y parada, mantenimiento de bomba y motor, almacenamiento y diagnóstico."
+        },
+        "mq62tdd-partes": {
+          "h": "Multiquip MQ62TDD — manual de partes",
+          "p": "Despiece y referencias de repuestos del conjunto de bomba."
+        },
+        "bba-ba": {
+          "h": "BBA Pumps serie BA — manual de usuario",
+          "p": "Operación, instalación, seguridad y mantenimiento de bombas de achique."
+        },
+        "perkins-400": {
+          "h": "Perkins 403D / 404D — operación y mantenimiento",
+          "p": "Fluidos, filtros, refrigeración, lubricación, combustible y plan de mantenimiento del motor."
+        },
+        "godwin-cd": {
+          "h": "Godwin CD y DPC — instalación, operación y mantenimiento",
+          "p": "Bombas autocebantes de achique: instalación, cebado, inspección y servicio."
+        },
+        "global-motor": {
+          "h": "Global Pump — diagnóstico del motor",
+          "p": "Arranque, combustible, aire, refrigeración, presión de aceite e inyección."
+        },
+        "global-bomba": {
+          "h": "Global Pump — diagnóstico de la bomba",
+          "p": "Cebado, caudal, presión, impulsor, anillos, sello mecánico, vibración y cavitación."
+        },
+        "global-cebado": {
+          "h": "Global Pump — diagnóstico del sistema de cebado",
+          "p": "Venturi, fugas, válvulas y compresor."
+        },
+        "fleetguard-combustible": {
+          "h": "Fleetguard — filtración de combustible",
+          "p": "Cómo elegir el separador de agua, el micraje, el flujo y su mantenimiento."
+        },
+        "fleetguard-filtros": {
+          "h": "Fleetguard — especificaciones de filtros",
+          "p": "Referencia técnica de filtros; confirma siempre con el número de serie del motor."
+        },
+        "msha-toolbox": {
+          "h": "MSHA — cómo reducir el escape diésel en minería",
+          "p": "Mantenimiento de admisión, refrigeración, lubricación, inyección y escape para bajar emisiones."
+        },
+        "wa-diesel-subterraneo": {
+          "h": "Australia Occidental — equipos diésel en minería subterránea",
+          "p": "Compra, operación y mantenimiento de equipos con motor diésel bajo tierra."
+        },
+        "anm-metano": {
+          "h": "ANM Colombia — prevención de explosiones por metano y polvo de carbón",
+          "p": "Guía de seguridad para minas subterráneas de carbón."
+        }
+      }
+    },
+    "videos": {
+      "title": "Videos de mantenimiento",
+      "intro": "Videos de fabricantes y tutoriales en español, seleccionados por nuestro taller.",
+      "play": "Ver video",
+      "openSite": "Ver en el sitio oficial",
+      "note": "Los videos pertenecen a sus autores y se reproducen desde YouTube.",
+      "items": {
+        "mq-sello": {
+          "h": "Multiquip — reemplazo del sello mecánico en bomba QP"
+        },
+        "mq-instalacion": {
+          "h": "Multiquip — instalación del conjunto de bomba MQ62TDD"
+        },
+        "mq-impulsor": {
+          "h": "Multiquip — servicio del MQ600-TD80 y holgura del impulsor"
+        },
+        "godwin-cebado": {
+          "h": "Xylem Godwin — problemas de cebado en bombas Dri-Prime"
+        },
+        "cummins-consejos": {
+          "h": "Cummins — consejos de mantenimiento de motores diésel"
+        },
+        "cummins-regular": {
+          "h": "Cummins — mantenimiento regular del motor diésel"
+        },
+        "filtros-diesel": {
+          "h": "Mantenimiento y cambio de filtros de motores diésel"
+        },
+        "filtro-combustible": {
+          "h": "Cambio del filtro de combustible en maquinaria pesada"
+        }
+      }
+    }
   },
   "app": {
     "kicker": "Próximamente",

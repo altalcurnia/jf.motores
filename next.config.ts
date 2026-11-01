@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" }],
   },
   // Nada del sitio original (legacy/) se publica: solo se usa como referencia.
+  // Los PDF públicos de la biblioteca se sirven desde esta ruta (solo con sesión)
+  outputFileTracingIncludes: { "/api/biblioteca/[id]": ["./content/biblioteca/**"] },
   // Cabeceras de seguridad para todas las páginas
   async headers() {
     return [

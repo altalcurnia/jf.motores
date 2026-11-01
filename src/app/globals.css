@@ -1057,3 +1057,36 @@ body.in-journey.app-open #hud { opacity: 0; }
 .ai-login div { display: flex; gap: 8px; flex-wrap: wrap; }
 .ai-login .btn { padding: 11px 18px; font-size: 11px; }
 .ai-low { margin: 0; padding: 0 14px 6px; font-size: 11.5px; color: var(--yellow); }
+
+/* ---------- Biblioteca técnica (Guías) ---------- */
+.library { scroll-margin-top: 90px; margin: 34px 0 54px; padding: 28px; border: 1px solid rgba(247, 198, 0, 0.35); border-radius: 18px;
+  background: linear-gradient(160deg, rgba(247, 198, 0, 0.08), rgba(14, 17, 21, 0.6) 45%); }
+.library-head { max-width: 760px; margin-bottom: 18px; }
+.library-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--yellow); }
+.library-head h2 { font-family: var(--disp); font-weight: 900; font-size: clamp(24px, 3vw, 36px); line-height: 1.1; margin: 8px 0 10px; }
+.library-head p { color: var(--mut); margin: 0 0 6px; }
+.library-login { color: var(--ink) !important; font-size: 14px; }
+.library-group h3 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mut); margin: 22px 0 10px; }
+.library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.library-card { display: grid; gap: 8px; align-content: start; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(10, 12, 15, 0.7); }
+.library-card h4 { margin: 0; font-size: 15.5px; line-height: 1.3; }
+.library-card p { margin: 0; color: var(--mut); font-size: 13.5px; line-height: 1.45; }
+.library-card small { color: var(--mut); font-size: 11.5px; }
+.library-card .btn { justify-self: start; margin-top: 4px; padding: 10px 16px; font-size: 11px; }
+.library-meta, .video-meta { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
+.library-tip { margin-top: 20px; padding: 14px 16px; border-left: 3px solid var(--yellow); background: rgba(255, 255, 255, 0.03); border-radius: 8px; }
+.library-tip p { margin: 6px 0 0; color: var(--mut); font-size: 14px; }
+
+/* ---------- Videos ---------- */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 24px; }
+.video-card { display: grid; gap: 8px; align-content: start; }
+.video-card h3 { margin: 0; font-size: 15.5px; line-height: 1.35; }
+.video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #0d1014; border: 1px solid var(--line); }
+.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-thumb { position: absolute; inset: 0; display: grid; place-items: center; border: 0; padding: 0; cursor: pointer; background: #0d1014; color: var(--ink); text-decoration: none; width: 100%; }
+.video-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: opacity 0.2s, transform 0.4s; }
+.video-thumb:hover img { opacity: 1; transform: scale(1.03); }
+.video-play { position: relative; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); color: #0b0d10; font-size: 22px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+.video-ext { gap: 10px; align-content: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+.video-note { margin-top: 18px; color: var(--mut); font-size: 12.5px; }
+@media (max-width: 760px) { .library { padding: 18px 14px; } }
