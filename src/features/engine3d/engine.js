@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
  * @param {{ canvas: HTMLCanvasElement, isMobile: boolean, numberLocale: string,
  *   hud: { standby: string, start: string, running: string, full: string },
  *   onPartClick: (partKey: string) => void, onContextLost?: () => void }} opts
- * @returns {() => void} función de limpieza
+ * @returns {(() => void) & { highlight: (partKey: string | null) => void }} limpieza + resaltar pieza
  */
 export function startEngine(opts) {
   const isMobile = opts.isMobile;
@@ -25,6 +25,8 @@ export function startEngine(opts) {
     disposers.push(() => window.removeEventListener(type, fn, o));
   }
   let renderer;
+  /** Funciones que la página puede llamar mientras el motor está activo */
+  const api = { highlight: /** @param {string | null} _k */ () => {} };
   const ctx = gsap.context(() => {
 /* ================= STATE ================= */
       const S = {
@@ -649,6 +651,39 @@ export function startEngine(opts) {
         const k = isUiTarget(e.target) ? null : partAt(e.clientX, e.clientY);
         document.body.classList.toggle("over-part", !!k);
       }, { passive: true });
+      // Resaltar una pieza (desde la fila de botones del despiece)
+      const hlMats = new Map();
+      let hlKey = null;
+      function paint(key, on) {
+        const g = PART_GROUPS[key];
+        if (!g) return;
+        g.traverse((o) => {
+          if (!o.isMesh) return;
+          if (on) {
+            if (!o.userData.baseMat) o.userData.baseMat = o.material;
+            let m = hlMats.get(o.userData.baseMat);
+            if (!m) {
+              m = o.userData.baseMat.clone();
+              if (m.emissive) {
+                m.emissive.set(0xf7c600);
+                m.emissiveIntensity = 0.55;
+              }
+              hlMats.set(o.userData.baseMat, m);
+            }
+            o.material = m;
+          } else if (o.userData.baseMat) {
+            o.material = o.userData.baseMat;
+          }
+        });
+      }
+      api.highlight = (key) => {
+        if (hlKey === key) return;
+        if (hlKey) paint(hlKey, false);
+        hlKey = key && PART_GROUPS[key] ? key : null;
+        if (hlKey) paint(hlKey, true);
+      };
+      disposers.push(() => hlMats.forEach((m) => m.dispose()));
+
       listen("click", (e) => {
         if (isUiTarget(e.target)) return;
         const k = partAt(e.clientX, e.clientY);
@@ -790,67 +825,36 @@ export function startEngine(opts) {
           scrub: 1,
         },
       });
-      tl.to(
-        S,
-        { camTheta: 1.9, camR: 10.5, camPhi: 1.32, duration: 22, ease: "none" },
-        0,
-      )
-        .to(S, { rpm: 0.14, duration: 5, ease: "power2.in" }, 2)
-        .to(S, { rpm: 0.05, duration: 3, ease: "power1.out" }, 7)
-        .to(S, { rpm: 0.55, duration: 6, ease: "power2.out" }, 11)
-        .to(S, { smoke: 0.7, duration: 5, ease: "power1.in" }, 10)
-        .to(S, { glow: 0.7, duration: 8, ease: "power1.inOut" }, 10)
-        .to(S, { atmo: 1, duration: 12, ease: "power1.inOut" }, 8)
-        .to(
-          S,
-          {
-            camTheta: 3.7,
-            camR: 7.6,
-            camPhi: 1.42,
-            camTY: 1.7,
-            duration: 20,
-            ease: "none",
-          },
-          22,
-        )
-        .to(S, { rpm: 1, duration: 12, ease: "power2.inOut" }, 24)
-        .to(S, { smoke: 1, duration: 10, ease: "power1.inOut" }, 26)
-        .to(S, { shake: 1, duration: 10, ease: "power1.inOut" }, 24)
-        .to(S, { atmo: 2, duration: 12, ease: "power1.inOut" }, 22)
-        .to(
-          S,
-          {
-            camTheta: 6.283,
-            camR: 15.5,
-            camPhi: 1.12,
-            camTY: 1.7,
-            duration: 34,
-            ease: "power1.inOut",
-          },
-          42,
-        )
-        .to(S, { rpm: 0.35, duration: 10, ease: "power2.inOut" }, 44)
-        .to(S, { smoke: 0.5, duration: 8, ease: "power1.inOut" }, 44)
-        .to(S, { shake: 0.12, duration: 8, ease: "power2.out" }, 44)
-        .to(S, { explode: 1, duration: 18, ease: "power2.inOut" }, 52)
-        .to(S, { atmo: 3, duration: 12, ease: "power1.inOut" }, 42)
-        .to(S, { explode: 0, duration: 10, ease: "power2.inOut" }, 80)
-        .to(S, { rpm: 0, duration: 8, ease: "power2.in" }, 86)
-        .to(S, { smoke: 0, duration: 6, ease: "power2.in" }, 86)
-        .to(S, { glow: 0, duration: 8, ease: "power2.in" }, 86)
-        .to(S, { atmo: 4, duration: 10, ease: "power1.inOut" }, 84)
-        .to(
-          S,
-          {
-            camTheta: 6.7,
-            camR: 13,
-            camPhi: 1.24,
-            camTY: 1.5,
-            duration: 24,
-            ease: "power1.inOut",
-          },
-          76,
-        );
+      // Escala de tiempo 0–100 = progreso del scroll (ver stages.js). El encendido empieza en 0.
+      tl.to(S, { camTheta: 1.9, camR: 10.5, camPhi: 1.32, duration: 15, ease: "none" }, 0)
+        .to(S, { rpm: 0.14, duration: 2.5, ease: "power2.in" }, 0)
+        .to(S, { rpm: 0.05, duration: 2, ease: "power1.out" }, 2.5)
+        .to(S, { rpm: 0.55, duration: 7, ease: "power2.out" }, 4.5)
+        .to(S, { smoke: 0.7, duration: 4, ease: "power1.in" }, 3)
+        .to(S, { glow: 0.7, duration: 6, ease: "power1.inOut" }, 3)
+        .to(S, { atmo: 1, duration: 10, ease: "power1.inOut" }, 2)
+        // Revolución: llega a 2400 rpm justo antes de pasar a la siguiente tarjeta
+        .to(S, { camTheta: 3.7, camR: 7.6, camPhi: 1.42, camTY: 1.7, duration: 18, ease: "none" }, 15)
+        .to(S, { rpm: 1, duration: 16, ease: "power2.inOut" }, 15)
+        .to(S, { smoke: 1, duration: 10, ease: "power1.inOut" }, 16)
+        .to(S, { shake: 1, duration: 10, ease: "power1.inOut" }, 15)
+        .to(S, { atmo: 2, duration: 12, ease: "power1.inOut" }, 15)
+        // Despiece
+        .to(S, { camTheta: 6.283, camR: 15.5, camPhi: 1.12, camTY: 1.7, duration: 30, ease: "power1.inOut" }, 33)
+        .to(S, { rpm: 0.35, duration: 8, ease: "power2.inOut" }, 33)
+        .to(S, { smoke: 0.5, duration: 8, ease: "power1.inOut" }, 33)
+        .to(S, { shake: 0.12, duration: 8, ease: "power2.out" }, 33)
+        .to(S, { explode: 1, duration: 12, ease: "power2.inOut" }, 36)
+        .to(S, { atmo: 3, duration: 12, ease: "power1.inOut" }, 33)
+        // Las piezas vuelven a su sitio
+        .to(S, { explode: 0, duration: 9, ease: "power2.inOut" }, 63)
+        .to(S, { camTheta: 6.7, camR: 13, camPhi: 1.24, camTY: 1.5, duration: 22, ease: "power1.inOut" }, 62)
+        .to(S, { atmo: 4, duration: 10, ease: "power1.inOut" }, 72)
+        // Apagado desde el celular (tarjeta de la app)
+        .to(S, { rpm: 0, duration: 8, ease: "power2.in" }, 80)
+        .to(S, { smoke: 0, duration: 6, ease: "power2.in" }, 80)
+        .to(S, { glow: 0, duration: 8, ease: "power2.in" }, 80)
+        .set({}, {}, 100);
 
       ScrollTrigger.create({
         trigger: "#journey",
@@ -873,37 +877,8 @@ export function startEngine(opts) {
           document.body.classList.remove("in-journey");
         },
       });
-      ["a", "b", "c", "d"].forEach((k) => {
-        ScrollTrigger.create({
-          trigger: "#ph-" + k,
-          start: "top 55%",
-          end: "bottom 45%",
-          onEnter: () => setRail(k),
-          onEnterBack: () => setRail(k),
-        });
-      });
-      function setRail(k) {
-        document
-          .querySelectorAll("#rail .rd")
-          .forEach((d) => d.classList.toggle("on", d.dataset.r === k));
-      }
 
-      ScrollTrigger.create({
-        trigger: "#ph-a",
-        start: "top 55%",
-        onEnter: () =>
-          gsap.to(".chip", {
-            opacity: 1,
-            x: 0,
-            duration: 0.7,
-            stagger: 0.15,
-            ease: "power3.out",
-          }),
-        onLeaveBack: () => gsap.set(".chip", { opacity: 0, x: -24 }),
-      });
-
-      
-listen("mousemove", (e) => {
+      listen("mousemove", (e) => {
         mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
         mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
       });
@@ -921,6 +896,7 @@ listen("mousemove", (e) => {
       const stTemp = document.getElementById("stTemp");
       const stFlow = document.getElementById("stFlow");
       const hudState = document.getElementById("hudState");
+      const phoneRpm = document.getElementById("phoneRpm");
 
       /* loop */
       const clock = new THREE.Clock();
@@ -1036,6 +1012,8 @@ listen("mousemove", (e) => {
         txtRpm.textContent = rpmVal;
         txtTemp.textContent = tempVal + "°";
         bigRpm.textContent = String(Math.max(0, rpmVal)).padStart(4, "0");
+        // El celular de la tarjeta "app" muestra las mismas rpm que el motor
+        if (phoneRpm) phoneRpm.textContent = String(Math.max(0, rpmVal));
         stTorque.textContent = Math.round(S.rpm * 92) + " N·m";
         stTemp.textContent = tempVal + " °C";
         stFlow.textContent =
@@ -1069,7 +1047,7 @@ listen("mousemove", (e) => {
       }
   });
 
-  return () => {
+  const cleanup = () => {
     cancelAnimationFrame(rafId);
     disposers.forEach((d) => d());
     ctx.revert();
@@ -1079,4 +1057,6 @@ listen("mousemove", (e) => {
       renderer.forceContextLoss();
     }
   };
+  cleanup.highlight = (key) => api.highlight(key);
+  return cleanup;
 }

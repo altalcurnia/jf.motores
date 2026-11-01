@@ -61,8 +61,38 @@ test("cada pieza del motor tiene su página de repuestos", async ({ page }) => {
 
 test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async ({ page }) => {
   await page.goto("/en");
-  await expect(page.locator("#journey .phase")).toHaveCount(4);
+  await expect(page.locator("#journey .jcard")).toHaveCount(5);
   await expect(page.locator("#lbl-pistones")).toHaveAttribute("href", "/en/repuestos/pistones");
+  await expect(page.locator(".part-row a")).toHaveCount(6);
+});
+
+test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el despiece", async ({ page }) => {
+  await page.goto("/es");
+  const journey = page.locator("#journey");
+  const at = async (p: number) => {
+    await journey.evaluate((el, p) => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, top + (el.getBoundingClientRect().height - window.innerHeight) * p);
+    }, p);
+  };
+  // Desde el primer tramo ya se ve la tarjeta de encendido
+  await at(0.05);
+  await expect(page.locator(".jcard.on")).toHaveCount(1);
+  await expect(page.locator(".jcard.on h2")).toContainText("Tranquilidad");
+  await at(0.25);
+  await expect(page.locator(".jcard.on #bigRpm")).toHaveCount(1);
+  // Despiece: ninguna tarjeta, botones de piezas visibles
+  await at(0.5);
+  await expect(page.locator(".jcard.on")).toHaveCount(0);
+  await expect(page.locator(".part-row.on")).toHaveCount(1);
+  await page.locator(".part-row a", { hasText: "Pistones" }).hover();
+  await expect(page.locator("#lbl-pistones")).toHaveClass(/hl/);
+  // Final: aviso de la app, aún no disponible, con enlace a /app
+  await at(0.9);
+  await expect(page.locator(".part-row.on")).toHaveCount(0);
+  await expect(page.locator(".jcard-app.on .soon-badge")).toBeVisible();
+  await expect(page.locator(".jcard-app.on a.app-cta")).toHaveAttribute("href", "/es/app");
+  await expect(page.locator(".mini-remote .mr-btn.pressed")).toHaveCount(1);
 });
 
 test("el panel exige iniciar sesión", async ({ page }) => {

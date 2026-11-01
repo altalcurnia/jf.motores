@@ -744,3 +744,130 @@ body.drawer-open { overflow: hidden; }
 .back-btn:hover { border-color: var(--yellow); color: var(--yellow); }
 .back-btn.as-btn { margin: 0; padding: 18px 26px; }
 .app-hero .back-btn { margin-bottom: 8px; }
+
+/* ---------- Recorrido del motor: tarjetas fijas una tras otra ---------- */
+/* Un solo tramo de scroll; las tarjetas aparecen según el progreso (stages.js) */
+#journey { height: 640vh; }
+.jcards { position: fixed; inset: 0; z-index: 5; pointer-events: none; visibility: hidden; }
+.jcards.active { visibility: visible; }
+.jcard {
+  position: absolute; top: 20vh; left: 6vw; width: min(480px, 88vw);
+  opacity: 0; transform: translateY(26px); pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.jcard.right { left: auto; right: 6vw; }
+.jcard.on { opacity: 1; transform: none; pointer-events: auto; }
+.jcard .chip { transition: opacity 0.4s ease, transform 0.4s ease; }
+.jcard.on .chip { opacity: 1; transform: none; }
+.jcard.on .chip:nth-child(2) { transition-delay: 0.12s; }
+.jcard.on .chip:nth-child(3) { transition-delay: 0.24s; }
+.jcard.on .chip:nth-child(4) { transition-delay: 0.36s; }
+.soon-badge {
+  display: inline-block; margin-bottom: 12px; padding: 5px 10px; border-radius: 999px;
+  border: 1px dashed rgba(247, 198, 0, 0.6); color: var(--yellow);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+}
+.jcard-app .app-cta { margin-top: 20px; display: inline-flex; }
+
+/* Teléfono en la mano que apaga la motobomba */
+.mini-remote {
+  position: absolute; left: 8vw; top: 50%; width: 300px; height: 600px;
+  transform: translateY(-50%) scale(0.62) translateX(-40px); transform-origin: left center;
+  opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.mini-remote.on { opacity: 1; transform: translateY(-50%) scale(0.62); }
+.mini-remote .hand-phone { width: 300px; height: 600px; }
+.mini-remote .screen { display: flex; flex-direction: column; gap: 14px; }
+.mr-rpm { margin-top: 26px; text-align: center; font-family: var(--mono); }
+.mr-rpm b { display: block; font-size: 54px; line-height: 1; color: var(--yellow); }
+.mr-rpm small { font-size: 11px; letter-spacing: 0.3em; color: #98a2ad; }
+.mr-btn {
+  margin: auto 8px 0; text-align: center; padding: 16px; border-radius: 16px;
+  background: #ff5a4a; color: #0b0d10; font-weight: 800; font-size: 15px; letter-spacing: 0.04em;
+  transition: transform 0.2s, background 0.3s, box-shadow 0.3s; box-shadow: 0 0 0 0 rgba(255, 90, 74, 0.5);
+}
+.mr-btn.pressed { transform: scale(0.94); background: #7a2e27; color: #f3d3cf; box-shadow: 0 0 0 10px rgba(255, 90, 74, 0.18); }
+.mr-ok {
+  text-align: center; font-size: 12px; color: #3ecf8e; min-height: 18px; margin-bottom: 70px;
+  opacity: 0; transition: opacity 0.3s;
+}
+.mr-ok.show { opacity: 1; }
+
+/* Fila de piezas del despiece (botones laterales sutiles) */
+.part-row {
+  position: fixed; left: 2.4vw; top: 50%; transform: translate(-12px, -50%); z-index: 6;
+  display: flex; flex-direction: column; gap: 6px; opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.part-row.on { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+.part-row-title {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; color: var(--yellow);
+  text-transform: uppercase; margin-bottom: 6px; display: grid; gap: 4px;
+}
+.part-row-title small { color: var(--mut); letter-spacing: 0.12em; font-size: 9px; }
+.part-row a {
+  display: flex; align-items: center; gap: 10px; padding: 8px 14px 8px 10px; border-radius: 3px;
+  background: rgba(8, 10, 12, 0.55); border: 1px solid var(--line); border-left: 2px solid transparent;
+  color: var(--ink); text-decoration: none; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase; backdrop-filter: blur(8px);
+  transition: border-color 0.25s, background 0.25s, color 0.25s, transform 0.25s;
+}
+.part-row a b { color: var(--yellow); font-weight: 700; }
+.part-row a:hover, .part-row a.hl, .part-row a:focus-visible {
+  border-color: var(--yellow); background: rgba(247, 198, 0, 0.14); transform: translateX(4px); outline: none;
+}
+/* Etiqueta sobre el modelo que corresponde al botón resaltado */
+.lbl.hl .tag {
+  border-color: var(--yellow); background: rgba(247, 198, 0, 0.22); color: #fff;
+  box-shadow: 0 0 24px rgba(247, 198, 0, 0.45);
+}
+.lbl.hl { z-index: 2; }
+
+@media (max-width: 760px) {
+  #journey { height: 600vh; }
+  .jcard, .jcard.right { top: 12vh; left: 5vw; right: 5vw; width: auto; }
+  .jcard-app { padding-bottom: 18px; }
+  .mini-remote { left: 50%; top: auto; bottom: calc(var(--lbh, 0px) + 70px); transform-origin: center bottom; transform: translateX(-50%) scale(0.46) translateY(40px); }
+  .mini-remote.on { transform: translateX(-50%) scale(0.46); }
+  .part-row {
+    left: 0; right: 0; top: auto; bottom: calc(var(--lbh, 0px) + 10px); transform: translateY(12px);
+    flex-direction: row; overflow-x: auto; padding: 0 5vw; gap: 6px; scrollbar-width: none;
+  }
+  .part-row.on { transform: none; }
+  .part-row-title { display: none; }
+  .part-row a { flex: none; font-size: 10px; padding: 8px 10px; }
+  body.in-journey.parts-open #hud { opacity: 0; }
+}
+/* Con el celular en pantalla, el tacómetro lo muestra el propio teléfono */
+body.in-journey.app-open #hud { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .jcard, .mini-remote, .part-row, .jcard .chip { transition: none; }
+}
+
+/* Beneficios: imagen y datos clave en la misma columna */
+.b-left { display: grid; gap: 14px; align-content: start; }
+.b-left .b-visual { position: relative; top: auto; }
+.spec-strip.compact { grid-template-columns: repeat(4, 1fr); margin-top: 0; }
+.spec-strip.compact div { padding: 16px 14px; }
+.spec-strip.compact b { font-size: clamp(20px, 1.8vw, 28px); }
+.spec-strip.compact span { font-size: 9px; letter-spacing: 0.18em; margin-top: 6px; }
+@media (max-width: 760px) {
+  .spec-strip.compact { grid-template-columns: 1fr 1fr; }
+  .spec-strip.compact div:nth-child(2) { border-right: none; }
+  .spec-strip.compact div:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+}
+
+/* Miniatura en las tarjetas de catálogo del inicio */
+.catalog-card { padding-top: 14px; }
+.catalog-thumb {
+  display: block; aspect-ratio: 16 / 9; margin: 0 -14px 4px; border-radius: 10px; overflow: hidden;
+  background: #0d1014; border: 1px solid var(--line);
+}
+.catalog-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+.catalog-card:hover .catalog-thumb img { transform: scale(1.05); }
+
+/* Planes: lo heredado se lista completo pero en tono discreto */
+.plan ul.plan-inherited { flex: none; gap: 6px; padding-bottom: 12px; border-bottom: 1px dashed var(--line); }
+.plan ul.plan-inherited li { color: var(--mut); font-size: 13px; }
+.plan ul.plan-inherited li::before { color: rgba(62, 207, 142, 0.55); }
+.plan-plus { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--yellow); }

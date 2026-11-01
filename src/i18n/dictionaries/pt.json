@@ -115,10 +115,28 @@
       "hint": "▼ Continue rolando"
     },
     "d": {
-      "pk": "04 / Desligamento",
-      "h2": "O silêncio também é confiança.",
-      "p": "Fim do ciclo: as peças voltam ao lugar, o bloco esfria e fica pronto para o próximo turno. Assim termina cada jornada — e assim começa a sua."
-    }
+      "pk": "04 / Montagem",
+      "h2": "Cada peça no seu lugar.",
+      "p": "As peças voltam ao lugar: cada componente é fabricado e testado para trabalhar junto aos demais, turno após turno, na mina."
+    },
+    "e": {
+      "pk": "05 / Desligamento remoto",
+      "h2": "E em breve, controlada pelo seu celular.",
+      "p": "Com o app JF Monitor você poderá desligá-la, ligá-la e ver como está trabalhando de qualquer lugar, com alertas pelo WhatsApp.",
+      "badge": "Ainda não disponível · em desenvolvimento",
+      "cta": "Conheça o JF Monitor",
+      "screen": {
+        "unit": "JF-M40 · #0042",
+        "on": "Funcionando",
+        "stopping": "Desligando",
+        "off": "Parada",
+        "button": "Desligar motobomba",
+        "sent": "Comando enviado",
+        "stopped": "Motor parado ✓"
+      }
+    },
+    "partsTitle": "Peças",
+    "partsHint": "Toque em uma para ver as peças de reposição"
   },
   "hud": {
     "state": "Estado",
@@ -133,7 +151,8 @@
     "a": "Partida",
     "b": "Rotação",
     "c": "Vista explodida",
-    "d": "Desligamento"
+    "d": "Montagem",
+    "e": "App"
   },
   "marquee": [
     "JF Motores Medellín",
@@ -609,7 +628,8 @@
     "plansTitle": "Planos previstos",
     "plansIntro": "Três níveis conforme o que você precisa ver. Os preços serão definidos no lançamento: dependem da conexão disponível no seu local (celular ou satélite).",
     "recommended": "Recomendado",
-    "includesPrev": "Tudo do plano anterior, mais:",
+    "includesPrev": "Inclui tudo do {plan}:",
+    "plusTitle": "E ainda:",
     "plans": [
       {
         "name": "Essencial",

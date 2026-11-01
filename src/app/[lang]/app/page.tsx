@@ -59,7 +59,18 @@ export default async function AppPreviewPage() {
               {i === 1 && <span className="plan-flag">{t.recommended}</span>}
               <span className="plan-tag">{plan.tag}</span>
               <h3>{plan.name}</h3>
-              {i > 0 && <p className="plan-prev">{t.includesPrev}</p>}
+              {i > 0 && (
+                <>
+                  {/* Cada plan muestra explícitamente todo lo que hereda de los anteriores */}
+                  <p className="plan-prev">{t.includesPrev.replace("{plan}", t.plans[i - 1].name)}</p>
+                  <ul className="plan-inherited">
+                    {t.plans.slice(0, i).flatMap((prev) => prev.items).map((it) => (
+                      <li key={it}>{it}</li>
+                    ))}
+                  </ul>
+                  <p className="plan-plus">{t.plusTitle}</p>
+                </>
+              )}
               <ul>
                 {plan.items.map((it) => (
                   <li key={it}>{it}</li>

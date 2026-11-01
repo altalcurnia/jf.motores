@@ -12,6 +12,12 @@ import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 const BENEFITS_IMAGE = "/demo/jf-m25.jpg";
 
 const catalogKeys = ["motobombas", "motores", "repuestos"] as const;
+// Miniaturas de referencia por categoría (public/demo); se cambian por fotos reales.
+const catalogThumbs: Record<(typeof catalogKeys)[number], string> = {
+  motobombas: "/demo/jf-m25.jpg",
+  motores: "/demo/jf-d25.jpg",
+  repuestos: "/demo/radiador-d25.jpg",
+};
 
 export default async function HomePage() {
   const locale = await getLocale();
@@ -109,11 +115,22 @@ export default async function HomePage() {
             <p className="reveal">{b.intro}</p>
           </div>
           <div className="b-grid">
-            <div className="b-visual reveal">
-              <FallbackImage src={BENEFITS_IMAGE} alt={b.imageAlt} />
-              <div className="bv-bar">
-                <span>{b.bar1}</span>
-                <span>{b.bar2}</span>
+            <div className="b-left">
+              <div className="b-visual reveal">
+                <FallbackImage src={BENEFITS_IMAGE} alt={b.imageAlt} />
+                {/* La referencia ya viene en la ilustración; la barra solo lleva el estado de prueba */}
+                <div className="bv-bar" style={{ justifyContent: "flex-end" }}>
+                  <span>{b.bar2}</span>
+                </div>
+              </div>
+              {/* Datos clave compactos, justo debajo de la imagen */}
+              <div className="spec-strip compact reveal" id="specs">
+                {b.specs.map((sp) => (
+                  <div key={sp.span}>
+                    <b>{sp.b}</b>
+                    <span>{sp.span}</span>
+                  </div>
+                ))}
               </div>
             </div>
             <div>
@@ -129,17 +146,7 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
-          <div className="spec-strip" id="specs">
-            {b.specs.map((sp) => (
-              <div className="reveal" key={sp.span}>
-                <b>{sp.b}</b>
-                <span>{sp.span}</span>
-              </div>
-            ))}
-          </div>
         </section>
-
-      <FeaturedProducts locale={locale} dict={dict} />
 
       <section className="block" id="catalogos">
         <div className="sk reveal">{dict.catalogs.kicker}</div>
@@ -152,6 +159,9 @@ export default async function HomePage() {
         <div className="catalog-cards">
           {catalogKeys.map((key) => (
             <Link key={key} href={`/${locale}/${key}`} className="catalog-card reveal">
+              <span className="catalog-thumb">
+                <FallbackImage src={catalogThumbs[key]} alt="" />
+              </span>
               <h3>{dict.catalogs.items[key].title}</h3>
               <p>{dict.catalogs.items[key].desc}</p>
               <span className="catalog-card-cta">
@@ -161,6 +171,8 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      <FeaturedProducts locale={locale} dict={dict} />
 
       <section className="block" id="contacto">
         <div className="sk reveal">{dict.contact.kicker}</div>

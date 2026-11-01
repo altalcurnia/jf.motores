@@ -227,7 +227,7 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
  * teléfono; los dedos (que abrazan el borde derecho) y el pulgar (borde izquierdo) van delante.
  * Coordenadas en el mismo sistema que la caja del teléfono (300 × 600).
  */
-function Hand({ part }: { part: "back" | "front" }) {
+export function Hand({ part }: { part: "back" | "front" }) {
   if (part === "back") {
     return (
       <svg className="hand back" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">

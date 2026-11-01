@@ -115,10 +115,28 @@
       "hint": "▼ Keep scrolling"
     },
     "d": {
-      "pk": "04 / Shutdown",
-      "h2": "Silence is reliability too.",
-      "p": "End of cycle: parts return to place, the block cools down and is ready for the next shift. That's how every workday ends — and how yours begins."
-    }
+      "pk": "04 / Assembly",
+      "h2": "Every part in its place.",
+      "p": "The parts return to their places: each component is built and tested to work with the rest, shift after shift, at the mine."
+    },
+    "e": {
+      "pk": "05 / Remote shutdown",
+      "h2": "And soon, remote-controlled from your phone.",
+      "p": "With the JF Monitor app you'll be able to stop it, start it and see how it's working from anywhere, with WhatsApp alerts.",
+      "badge": "Not available yet · in development",
+      "cta": "Discover JF Monitor",
+      "screen": {
+        "unit": "JF-M40 · #0042",
+        "on": "Running",
+        "stopping": "Stopping",
+        "off": "Stopped",
+        "button": "Stop pump set",
+        "sent": "Command sent",
+        "stopped": "Engine stopped ✓"
+      }
+    },
+    "partsTitle": "Parts",
+    "partsHint": "Tap one to see its spare parts"
   },
   "hud": {
     "state": "Status",
@@ -133,7 +151,8 @@
     "a": "Start-up",
     "b": "Revving",
     "c": "Exploded",
-    "d": "Shutdown"
+    "d": "Assembly",
+    "e": "App"
   },
   "marquee": [
     "JF Motores Medellín",
@@ -609,7 +628,8 @@
     "plansTitle": "Planned plans",
     "plansIntro": "Three levels depending on what you need to see. Prices will be set at launch: they depend on the connection available at your site (cellular or satellite).",
     "recommended": "Recommended",
-    "includesPrev": "Everything in the previous plan, plus:",
+    "includesPrev": "Includes everything in {plan}:",
+    "plusTitle": "Plus:",
     "plans": [
       {
         "name": "Essential",
