@@ -504,6 +504,10 @@
   "guides": {
     "title": "Guides",
     "intro": "Practical guides to choose, care for and repair your equipment. They are general guidance: always follow your equipment manufacturer's manual.",
+    "tabs": {
+      "official": "Official guides",
+      "ours": "Our guides"
+    },
     "items": [
       {
         "id": "elegir-motobomba",

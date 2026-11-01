@@ -504,6 +504,10 @@
   "guides": {
     "title": "Guias",
     "intro": "Guias práticos para escolher, cuidar e consertar seus equipamentos. São orientações gerais: siga sempre o manual do fabricante do seu equipamento.",
+    "tabs": {
+      "official": "Guias oficiais",
+      "ours": "Nossos guias"
+    },
     "items": [
       {
         "id": "elegir-motobomba",

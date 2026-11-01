@@ -289,3 +289,16 @@ test("videos: página con reproductores que cargan al tocar", async ({ page }) =
   await page.locator("button.video-thumb").first().click();
   await expect(page.locator(".video-frame iframe")).toHaveCount(1);
 });
+
+test("guías: subpestañas oficiales (por defecto) y nuestras guías, también desde un ancla", async ({ page }) => {
+  await page.goto("/es/guias");
+  await expect(page.locator(".guide-subtabs button.on")).toHaveText("Guías oficiales");
+  await expect(page.locator("#biblioteca")).toBeVisible();
+  await expect(page.locator("#mantenimiento")).toBeHidden();
+  await expect(page.locator(".guide-toc")).toHaveCount(0);
+  await page.locator(".guide-subtabs button", { hasText: "Nuestras guías" }).click();
+  await expect(page.locator("#mantenimiento")).toBeVisible();
+  await expect(page.locator("#biblioteca")).toBeHidden();
+  await page.goto("/es/guias#pedir-repuesto");
+  await expect(page.locator("#pedir-repuesto")).toBeVisible();
+});

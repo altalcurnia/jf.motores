@@ -1090,3 +1090,12 @@ body.in-journey.app-open #hud { opacity: 0; }
 .video-ext { gap: 10px; align-content: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
 .video-note { margin-top: 18px; color: var(--mut); font-size: 12.5px; }
 @media (max-width: 760px) { .library { padding: 18px 14px; } }
+
+/* ---------- Subpestañas de Guías ---------- */
+.guide-subtabs { display: flex; gap: 6px; margin: 22px 0 6px; border-bottom: 1px solid var(--line); }
+.guide-subtabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--mut); font: inherit; font-weight: 700; font-size: 15px;
+  padding: 10px 14px; margin-bottom: -1px; cursor: pointer; }
+.guide-subtabs button:hover { color: var(--ink); }
+.guide-subtabs button.on { color: var(--yellow); border-bottom-color: var(--yellow); }
+.guide-subtabs + [role="tabpanel"] .library { margin-top: 18px; }
+[role="tabpanel"] > .guide:first-child { border-top: 0; padding-top: 18px; }
