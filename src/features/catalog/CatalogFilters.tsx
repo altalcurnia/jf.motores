@@ -7,6 +7,9 @@ type Labels = {
   all: string;
   available: string;
   sold: string;
+  inStock: string;
+  outOfStock: string;
+  unavailable: string;
   search: string;
   category: string;
   allCategories: string;
@@ -20,7 +23,18 @@ type Labels = {
 };
 
 /** Filtros del catálogo. Todo vive en la URL para poder compartir o volver atrás. */
-export function CatalogFilters({ t, categories, models }: { t: Labels; categories: Option[]; models: Option[] }) {
+export function CatalogFilters({
+  t,
+  categories,
+  models,
+  catalog,
+}: {
+  t: Labels;
+  categories: Option[];
+  models: Option[];
+  /** Repuestos se filtran por existencias; la vista «Todo» mezcla ambos. */
+  catalog: "all" | "motobomba" | "motor" | "repuesto";
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -46,8 +60,8 @@ export function CatalogFilters({ t, categories, models }: { t: Labels; categorie
   const status = params.get("estado") ?? "all";
   const statuses: Option[] = [
     { value: "all", label: t.all },
-    { value: "disponible", label: t.available },
-    { value: "vendido", label: t.sold },
+    { value: "disponible", label: catalog === "repuesto" ? t.inStock : t.available },
+    { value: "vendido", label: catalog === "repuesto" ? t.outOfStock : catalog === "all" ? t.unavailable : t.sold },
   ];
 
   return (

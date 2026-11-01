@@ -50,7 +50,7 @@ export async function catalogForAssistant(locale: AssistantLocale): Promise<stri
       const parts = [
         `${KIND[p.catalog]} ${p.ref}`,
         tr(p.name, locale),
-        p.status === "vendido" ? "VENDIDO" : "Disponible",
+        p.catalog === "repuesto" ? (p.status === "vendido" ? "SIN STOCK" : "En stock") : p.status === "vendido" ? "VENDIDO" : "Disponible",
         price ? `Precio ${price} COP (envío aparte)` : "Precio a consultar",
         p.warrantyMonths ? `Garantía ${p.warrantyMonths} meses` : "",
         specs(p),

@@ -81,6 +81,7 @@ async function Results({ catalog, searchParams }: { catalog: Tab; searchParams: 
     <>
       <CatalogFilters
         t={t}
+        catalog={catalog}
         categories={usedCategories.map((c) => ({ value: c.slug, label: tr(c.name, locale) }))}
         models={models}
       />

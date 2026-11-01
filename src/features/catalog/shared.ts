@@ -181,3 +181,13 @@ export function specValue(key: string, value: string | number | undefined, local
   const v = typeof value === "number" ? value.toLocaleString(localeTags[locale]) : value;
   return `${v}${specUnits[key] ?? ""}`;
 }
+
+/** Etiquetas de estado: los repuestos se manejan por existencias (En stock / Sin stock); los equipos, Disponible / Vendido. */
+export function statusLabels(
+  t: { statusAvailable: string; statusSold: string; statusInStock: string; statusOutOfStock: string },
+  catalog: CatalogType,
+): { available: string; sold: string } {
+  return catalog === "repuesto"
+    ? { available: t.statusInStock, sold: t.statusOutOfStock }
+    : { available: t.statusAvailable, sold: t.statusSold };
+}

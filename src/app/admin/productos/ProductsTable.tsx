@@ -28,6 +28,8 @@ const tabs: { key: "todos" | CatalogType; label: string }[] = [
 ];
 const catalogSingular: Record<CatalogType, string> = { motobomba: "Motobomba", motor: "Motor", repuesto: "Repuesto" };
 const statusLabel: Record<ProductStatus, string> = { borrador: "Borrador", disponible: "Disponible", vendido: "Vendido" };
+/** Los repuestos se manejan por existencias */
+const partStatusLabel: Record<ProductStatus, string> = { borrador: "Borrador", disponible: "En stock", vendido: "Sin stock" };
 const money = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
 
 export function ProductsTable({ rows, canEdit, supabaseUrl }: { rows: AdminProductRow[]; canEdit: boolean; supabaseUrl: string }) {
@@ -95,8 +97,8 @@ export function ProductsTable({ rows, canEdit, supabaseUrl }: { rows: AdminProdu
         <input className="search" placeholder="Buscar por nombre, referencia o categoría" value={q} onChange={(e) => setQ(e.target.value)} />
         <select className="select" value={status} onChange={(e) => setStatus(e.target.value as typeof status)} aria-label="Estado">
           <option value="todos">Todos los estados</option>
-          <option value="disponible">Disponibles</option>
-          <option value="vendido">Vendidos</option>
+          <option value="disponible">Disponibles / en stock</option>
+          <option value="vendido">Vendidos / sin stock</option>
           <option value="borrador">Borradores</option>
         </select>
       </div>
@@ -145,7 +147,7 @@ export function ProductsTable({ rows, canEdit, supabaseUrl }: { rows: AdminProdu
                   >
                     {(Object.keys(statusLabel) as ProductStatus[]).map((s) => (
                       <option key={s} value={s}>
-                        {statusLabel[s]}
+                        {(r.catalog === "repuesto" ? partStatusLabel : statusLabel)[s]}
                       </option>
                     ))}
                   </select>

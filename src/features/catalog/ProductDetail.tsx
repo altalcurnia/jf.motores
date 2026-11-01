@@ -10,7 +10,7 @@ import { compatibleParts, compatibleWith, getCatalogData } from "./data";
 import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
 import { OwnerBanner, StatusPill } from "./owned";
-import { catalogPaths, fill, formatPrice, productHref, specValue, storageUrl, tr, type CatalogType } from "./shared";
+import { catalogPaths, fill, formatPrice, productHref, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
 import { getContact } from "@/lib/supabase/public";
 
 const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -50,7 +50,8 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
   const category = data.categories.find((c) => c.id === p.categoryId);
   const model = data.engineModels.find((m) => m.id === p.engineModelId);
   const pageUrl = `${site.url}${productHref(locale, p)}`;
-  const message = fill(p.status === "vendido" ? t.whatsappSold : t.whatsapp, { name, ref: p.ref, url: pageUrl });
+  const isPart = p.catalog === "repuesto";
+  const message = fill(p.status === "vendido" ? (isPart ? t.whatsappOutOfStock : t.whatsappSold) : t.whatsapp, { name, ref: p.ref, url: pageUrl });
   const images = p.images.length
     ? p.images.map((i) => ({ url: storageUrl(i.path, supabaseUrl()), alt: tr(i.alt, locale) || name, isReference: i.isReference }))
     : [{ url: BRAND_PLACEHOLDER, alt: name, isReference: false }];
@@ -85,7 +86,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
             className="static"
             productId={p.id}
             status={p.status}
-            labels={{ available: t.statusAvailable, sold: t.statusSold, owned: t.owned }}
+            labels={{ ...statusLabels(t, p.catalog), owned: t.owned }}
           />
           <OwnerBanner productId={p.id} locale={locale} text={t.ownedBanner} link={t.ownedLink} />
 
@@ -94,7 +95,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
             {price && <small>{t.shippingNote}</small>}
             {p.warrantyMonths && <small className="pd-warranty">✓ {fill(t.warrantyMonths, { n: p.warrantyMonths })}</small>}
           </div>
-          {p.status === "vendido" && <p className="pd-sold sold-note">{t.soldNotice}</p>}
+          {p.status === "vendido" && <p className="pd-sold sold-note">{isPart ? t.outOfStockNotice : t.soldNotice}</p>}
 
           <div className="pd-actions">
             <a className="btn y" href={buildWhatsAppUrl(contact.whatsapp, message)} target="_blank" rel="noopener">

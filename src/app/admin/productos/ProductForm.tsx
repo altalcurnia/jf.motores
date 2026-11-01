@@ -321,8 +321,8 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               Estado
               <select value={v.status} onChange={(e) => set("status", e.target.value as ProductStatus)}>
                 <option value="borrador">Borrador (oculto)</option>
-                <option value="disponible">Disponible</option>
-                <option value="vendido">Vendido</option>
+                <option value="disponible">{v.catalog === "repuesto" ? "En stock" : "Disponible"}</option>
+                <option value="vendido">{v.catalog === "repuesto" ? "Sin stock" : "Vendido"}</option>
               </select>
             </label>
           </div>

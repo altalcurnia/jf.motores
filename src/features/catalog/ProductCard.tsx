@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { BRAND_PLACEHOLDER } from "@/components/placeholder";
 import { StatusPill } from "./owned";
-import { formatPrice, productHref, specValue, storageUrl, tr, type CatalogProduct } from "./shared";
+import { formatPrice, productHref, specValue, statusLabels, storageUrl, tr, type CatalogProduct } from "./shared";
 
 const CARD_SPECS = ["hp", "caudal_lpm", "cabeza_m", "cilindros", "diametro_mm", "capacidad_l"];
 
@@ -23,7 +23,7 @@ export function ProductCard({ p, locale, t }: { p: CatalogProduct; locale: Local
           sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw"
           unoptimized={!img}
         />
-        <StatusPill productId={p.id} status={p.status} labels={{ available: t.statusAvailable, sold: t.statusSold, owned: t.owned }} />
+        <StatusPill productId={p.id} status={p.status} labels={{ ...statusLabels(t, p.catalog), owned: t.owned }} />
         {img?.isReference && <span className="pc-ref-tag">{t.reference}</span>}
       </div>
       <div className="pc-body">

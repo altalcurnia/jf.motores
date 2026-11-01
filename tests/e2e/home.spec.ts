@@ -308,3 +308,14 @@ test("inicio: la imagen de beneficios usa la del panel o la predeterminada", asy
   const src = await page.locator(".b-visual img").getAttribute("src");
   expect(src).toMatch(/motobomba-isometrica\.jpg|\/storage\/v1\/object\/public\/catalogo\/sitio\//);
 });
+
+test("repuestos: estados En stock / Sin stock en lugar de Disponible / Vendido", async ({ page }) => {
+  await page.goto("/es/repuestos");
+  const seg = page.locator(".cf-seg");
+  await expect(seg).toContainText("En stock");
+  await expect(seg).toContainText("Sin stock");
+  await expect(seg).not.toContainText("Vendidos");
+  await expect(page.locator(".pc-status").first()).toHaveText(/En stock|Sin stock/);
+  await page.goto("/es/motobombas");
+  await expect(page.locator(".cf-seg")).toContainText("Vendidos");
+});

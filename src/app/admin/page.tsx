@@ -57,7 +57,7 @@ async function Dashboard() {
 
       <section className="stats">
         <Stat value={byStatus("disponible")} label="Disponibles" />
-        <Stat value={byStatus("vendido")} label="Vendidos" />
+        <Stat value={byStatus("vendido")} label="Vendidos / sin stock" />
         <Stat value={byStatus("borrador")} label="Borradores" />
         <Stat value={leads.count ?? 0} label="Cotizaciones" />
         <Stat value={advisors.count ?? 0} label="Asesores activos" />
@@ -68,7 +68,7 @@ async function Dashboard() {
         {can(session, "catalogo.ver") && (
           <Link href="/admin/productos" className="card link">
             <h3>Productos</h3>
-            <p>Motobombas, motores y repuestos: fotos, modelo 3D, precio, disponible/vendido y compatibilidad.</p>
+            <p>Motobombas, motores y repuestos: fotos, modelo 3D, precio, estado (disponible/vendido o en stock/sin stock) y compatibilidad.</p>
             <span className="pill ok">Disponible</span>
           </Link>
         )}
