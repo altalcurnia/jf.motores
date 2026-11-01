@@ -2,12 +2,11 @@
 import { useRouter } from "next/navigation";
 import QRCode from "qrcode";
 import { useEffect, useState } from "react";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { CatalogType } from "@/features/catalog/shared";
 import { registerSale } from "./actions";
+import { CustomerPicker, type Customer } from "./CustomerPicker";
 
-type ProductOption = { id: string; label: string; catalog: CatalogType; price: number | null };
-type Customer = { id: string; full_name: string | null; email: string; phone: string | null; country: string | null; purchases: number };
+type ProductOption = { id: string; label: string; catalog: CatalogType; price: number | null; warranty: number | null };
 
 const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota" }).format(new Date());
 
@@ -17,8 +16,10 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
   const initial = products.find((p) => p.id === initialProductId) ?? null;
   const [productId, setProductId] = useState(initial?.id ?? "");
   const [serial, setSerial] = useState("");
-  const [email, setEmail] = useState("");
-  const [customer, setCustomer] = useState<Customer | null | "none">(null);
+  const [typed, setTyped] = useState("");
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [pickerKey, setPickerKey] = useState(0);
+  const [warranty, setWarranty] = useState<number | null>(initial?.warranty ?? null);
   const [price, setPrice] = useState<number | null>(initial?.price ?? null);
   const [channel, setChannel] = useState("presencial");
   const [date, setDate] = useState(today);
@@ -30,32 +31,26 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
   const product = products.find((p) => p.id === productId);
   const needsSerial = product && product.catalog !== "repuesto";
 
+  // Escribió un correo completo que no corresponde a ninguna cuenta
+  const noAccount = !customer && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(typed.trim());
+
   useEffect(() => {
-    if (customer !== "none" || qr) return;
+    if (!noAccount || qr) return;
     QRCode.toDataURL(registerUrl, { margin: 1, width: 220, color: { dark: "#0b0d10", light: "#ffffff" } }).then(setQr);
-  }, [customer, qr, registerUrl]);
+  }, [noAccount, qr, registerUrl]);
 
   function chooseProduct(id: string) {
     setProductId(id);
     const p = products.find((x) => x.id === id);
     setPrice(p?.price ?? null);
+    setWarranty(p?.warranty ?? null);
     setMarkSold(p ? p.catalog !== "repuesto" : true);
-  }
-
-  async function findCustomer() {
-    if (!email.includes("@")) return setMsg({ ok: false, text: "Escribe el correo completo del cliente." });
-    setBusy("find");
-    setMsg(null);
-    const { data, error } = await createSupabaseBrowserClient().rpc("find_customer", { customer_email: email });
-    setBusy(null);
-    if (error) return setMsg({ ok: false, text: error.message });
-    setCustomer(data?.[0] ?? "none");
   }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!product) return setMsg({ ok: false, text: "Elige el producto vendido." });
-    if (!customer || customer === "none") return setMsg({ ok: false, text: "Busca primero la cuenta del cliente." });
+    if (!customer) return setMsg({ ok: false, text: "Elige la cuenta del cliente en la lista." });
     setBusy("save");
     setMsg(null);
     const res = await registerSale({
@@ -67,6 +62,7 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
       soldOn: date,
       notes: notes || null,
       markSold,
+      warrantyMonths: warranty,
     });
     setBusy(null);
     if (!res.ok) return setMsg({ ok: false, text: res.error });
@@ -80,8 +76,9 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
     setMsg({ ok: true, text: `Venta registrada: ${product.label} quedó a nombre de ${who}.${mailText}` });
     setSerial("");
     setNotes("");
-    setEmail("");
+    setTyped("");
     setCustomer(null);
+    setPickerKey((k) => k + 1);
     router.refresh();
   }
 
@@ -113,44 +110,38 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
           <input value={serial} required={!!needsSerial} maxLength={60} onChange={(e) => setSerial(e.target.value.toUpperCase())} placeholder="Ej. JF-M25-0042" />
         </label>
 
-        <label className="span2">
-          Correo del cliente
-          <div className="find-row">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setCustomer(null);
-              }}
-              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), findCustomer())}
-              placeholder="correo@cliente.com"
-            />
-            <button type="button" className="btn-ghost" onClick={findCustomer} disabled={busy === "find"}>
-              {busy === "find" ? "Buscando…" : "Buscar cuenta"}
-            </button>
-          </div>
-        </label>
+        <div className="span2 field">
+          <span className="field-label">Cliente (correo de su cuenta)</span>
+          <CustomerPicker
+            key={pickerKey}
+            value={customer}
+            onChange={(c, text) => {
+              setCustomer(c);
+              setTyped(text);
+            }}
+          />
+        </div>
         <div className="customer-box">
-          {customer && customer !== "none" && (
+          {customer ? (
             <div className="customer ok">
-              <b>✓ {customer.full_name || "Sin nombre"}</b>
-              <span>{customer.email}</span>
+              <b>✓ Cuenta verificada</b>
+              <span>{customer.full_name || "Sin nombre"}</span>
               <span className="muted small">
-                {[customer.phone, customer.country].filter(Boolean).join(" · ") || "Sin teléfono"} · {customer.purchases} compra(s) antes
+                {customer.phone || "Sin teléfono"} · {customer.purchases} compra(s) antes
               </span>
             </div>
+          ) : (
+            <span className="muted small">Elige el correo del cliente en la lista.</span>
           )}
-          {!customer && <span className="muted small">Busca la cuenta del cliente por su correo.</span>}
         </div>
 
-        {customer === "none" && (
+        {noAccount && (
           <div className="no-account span3">
             <div>
               <b>Ese correo no tiene cuenta.</b>
               <p className="muted">
                 Para registrar la venta, el cliente debe crear su cuenta en la página (con Google tarda menos de un minuto). Que escanee este código
-                con su celular o envíale el enlace, y luego vuelve a buscar su correo.
+                con su celular o envíale el enlace; cuando la cree, vuelve a tocar el campo y aparecerá en la lista.
               </p>
               <p>
                 <a href={registerUrl} target="_blank" rel="noopener">
@@ -191,7 +182,21 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
           Fecha
           <input type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} />
         </label>
-        <label className="span3">
+        <label>
+          <span>
+            Garantía <span className="hint">(meses; vacío = sin garantía)</span>
+          </span>
+          <input
+            inputMode="numeric"
+            value={warranty ?? ""}
+            placeholder="Sin garantía"
+            onChange={(e) => {
+              const d = e.target.value.replace(/\D/g, "").slice(0, 3);
+              setWarranty(d ? Math.min(Number(d), 120) : null);
+            }}
+          />
+        </label>
+        <label className="span2">
           <span>
             Notas <span className="hint">(opcional: garantía, forma de pago, entrega…)</span>
           </span>
@@ -206,7 +211,7 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
       </div>
       {msg && <div className={`notice ${msg.ok ? "ok" : "err"}`}>{msg.text}</div>}
       <div className="sale-actions">
-        <button className="btn-primary" disabled={busy === "save" || !customer || customer === "none"}>
+        <button className="btn-primary" disabled={busy === "save" || !customer}>
           {busy === "save" ? "Registrando…" : "Registrar venta"}
         </button>
       </div>

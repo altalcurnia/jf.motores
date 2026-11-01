@@ -39,12 +39,12 @@ async function Sales({ searchParams }: Pick<PageProps<"/admin/ventas">, "searchP
     supabase
       .from("units")
       .select(
-        "id, serial, sold_at, price_cop, channel, notes, created_at, notified_at, products ( id, ref, name, catalog ), owner:profiles!units_owner_id_fkey ( full_name, email, phone, country ), seller:profiles!units_sold_by_fkey ( full_name, email )",
+        "id, serial, sold_at, price_cop, channel, notes, created_at, notified_at, warranty_start, warranty_end, products ( id, ref, name, catalog ), owner:profiles!units_owner_id_fkey ( full_name, email, phone, country ), seller:profiles!units_sold_by_fkey ( full_name, email )",
       )
       .order("sold_at", { ascending: false })
       .order("created_at", { ascending: false }),
     canEdit
-      ? supabase.from("products").select("id, ref, name, catalog, price_cop, status").neq("status", "borrador").order("ref")
+      ? supabase.from("products").select("id, ref, name, catalog, price_cop, status, warranty_months").neq("status", "borrador").order("ref")
       : Promise.resolve({ data: [] }),
   ]);
   if (sales.error) return <div className="notice err">No se pudieron leer las ventas: {sales.error.message}</div>;
@@ -63,6 +63,8 @@ async function Sales({ searchParams }: Pick<PageProps<"/admin/ventas">, "searchP
     customerCountry: u.owner?.country ?? null,
     seller: u.seller?.full_name || u.seller?.email || null,
     notifiedAt: u.notified_at,
+    warrantyStart: u.warranty_start,
+    warrantyEnd: u.warranty_end,
   }));
   const preselect = typeof sp.producto === "string" ? sp.producto : null;
 
@@ -75,6 +77,7 @@ async function Sales({ searchParams }: Pick<PageProps<"/admin/ventas">, "searchP
             label: `${p.ref} · ${es(p.name)}${p.status === "vendido" ? " (vendido)" : ""}`,
             catalog: p.catalog,
             price: p.price_cop == null ? null : Number(p.price_cop),
+            warranty: p.warranty_months,
           }))}
           initialProductId={preselect}
           registerUrl={`${site.url}/es/cuenta/registro`}

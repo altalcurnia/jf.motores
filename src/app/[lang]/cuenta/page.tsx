@@ -7,7 +7,8 @@ import { getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PasswordForm, ProfileForm } from "@/features/account/forms";
 import { ConsentBanner } from "@/features/account/ConsentBanner";
-import { catalogPaths } from "@/features/catalog/shared";
+import { catalogPaths, fill } from "@/features/catalog/shared";
+import { warrantyState } from "@/features/account/warranty";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
@@ -49,7 +50,7 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
     supabase.from("profiles").select("full_name, phone, country, marketing_opt_in, privacy_accepted_at").eq("id", session.userId).single(),
     supabase
       .from("units")
-      .select("id, serial, sold_at, products ( id, ref, name, slug, catalog, manual_path )")
+      .select("id, serial, sold_at, warranty_start, warranty_end, products ( id, ref, name, slug, catalog, manual_path )")
       .eq("owner_id", session.userId)
       .order("sold_at", { ascending: false }),
     supabase
@@ -93,25 +94,40 @@ async function AccountDashboard({ locale, t }: { locale: Locale; t: Dictionary["
           <h2>{t.equipmentTitle}</h2>
           {units && units.length > 0 ? (
             <ul className="acc-list">
-              {units.map((u) => (
-                <li key={u.id}>
-                  <b>{u.products ? pick(u.products.name, locale) || u.products.ref : "—"}</b>
-                  <span>
-                    {u.serial ? `${t.serial}: ${u.serial}` : u.products?.ref}
-                    {u.sold_at ? ` · ${t.soldOn} ${dateFmt.format(new Date(`${u.sold_at}T12:00:00`))}` : ""}
-                  </span>
-                  {u.products && (
-                    <span className="acc-unit-links">
-                      <Link href={`/${locale}/${catalogPaths[u.products.catalog]}/${u.products.slug}`}>{t.viewProduct}</Link>
-                      {u.products.manual_path && (
-                        <a href={`/api/manual/${u.products.id}`} target="_blank" rel="noopener">
-                          {t.manual}
-                        </a>
-                      )}
+              {units.map((u) => {
+                const w = warrantyState(u.warranty_start, u.warranty_end);
+                return (
+                  <li key={u.id}>
+                    <Link href={`/${locale}/cuenta/equipos/${u.id}`} className="acc-unit-title">
+                      <b>{u.products ? pick(u.products.name, locale) || u.products.ref : "—"}</b>
+                    </Link>
+                    <span>
+                      {u.serial ? `${t.serial}: ${u.serial}` : u.products?.ref}
+                      {u.sold_at ? ` · ${t.soldOn} ${dateFmt.format(new Date(`${u.sold_at}T12:00:00`))}` : ""}
                     </span>
-                  )}
-                </li>
-              ))}
+                    <span className={`acc-unit-status ${w.kind}`}>
+                      {t.warranty}:{" "}
+                      {w.kind === "none"
+                        ? t.noWarranty
+                        : w.kind === "active"
+                          ? `${t.warrantyActive} · ${fill(t.daysLeft, { n: w.daysLeft })}`
+                          : t.warrantyExpired}
+                    </span>
+                    {u.products && (
+                      <span className="acc-unit-links">
+                        <Link href={`/${locale}/cuenta/equipos/${u.id}`}>{t.open}</Link>
+                        <Link href={`/${locale}/repuestos?equipo=${u.products.id}`}>{t.requestPart}</Link>
+                        {u.products.manual_path && (
+                          <a href={`/api/manual/${u.products.id}`} target="_blank" rel="noopener">
+                            {t.manual}
+                          </a>
+                        )}
+                        <Link href={`/${locale}/${catalogPaths[u.products.catalog]}/${u.products.slug}`}>{t.viewProduct}</Link>
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <p className="acc-muted">{t.equipmentEmpty}</p>

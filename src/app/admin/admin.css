@@ -260,3 +260,15 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 }
 .table a.small { color: var(--yellow); }
 .mail-ok { color: var(--ok); } .table .actions .link { font-size: 13px; }
+.field { display: grid; gap: 6px; }
+.field-label { font-size: 13px; color: var(--mut); }
+.picker { position: relative; }
+.picker input { width: 100%; background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; font: inherit; font-size: 15px; }
+.picker input:focus { border-color: var(--yellow); outline: none; }
+.picker-list { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); max-height: 320px; overflow-y: auto; list-style: none; background: #12161b; border: 1px solid var(--line); border-radius: 12px; padding: 6px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5); }
+.picker-list li { display: grid; gap: 2px; padding: 9px 10px; border-radius: 8px; cursor: pointer; }
+.picker-list li b { font-size: 14px; font-weight: 600; }
+.picker-list li span { font-size: 12px; color: var(--mut); }
+.picker-list li.on { background: rgba(247, 198, 0, 0.1); }
+.picker-list li.on b { color: var(--yellow); }
+.picker-list .picker-empty { cursor: default; color: var(--mut); font-size: 13px; }

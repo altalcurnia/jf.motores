@@ -301,7 +301,25 @@
     "googleNoPassword": "You sign in with Google: your account is ready and you don't need a password.",
     "optionalPassword": "Create a password (optional, to also sign in with your email)",
     "manual": "User guide (PDF)",
-    "viewProduct": "View product"
+    "viewProduct": "View product",
+    "warranty": "Warranty",
+    "warrantyFrom": "From",
+    "warrantyUntil": "Until",
+    "warrantyActive": "Active",
+    "warrantyExpired": "Expired",
+    "noWarranty": "No warranty",
+    "daysLeft": "{n} days left",
+    "requestPart": "Request a spare part",
+    "requestPartWa": "Hello JF Motores, I need a spare part for my {name}, serial {serial}.",
+    "appButton": "Manage from the app",
+    "appSoon": "Coming soon",
+    "compatibleParts": "Spare parts compatible with your unit",
+    "noCompatible": "No spare parts listed for this unit yet. Ask us on WhatsApp.",
+    "backToAccount": "Back to my account",
+    "purchaseDate": "Purchase date",
+    "viewAllParts": "See all compatible parts",
+    "open": "Open",
+    "notFoundUnit": "We couldn't find that unit in your account."
   },
   "legal": {
     "privacyTitle": "Personal data processing policy",
@@ -396,7 +414,12 @@
     },
     "featuredKicker": "Featured",
     "featuredTitle": "Units ready to ship",
-    "manual": "User guide (PDF)"
+    "manual": "User guide (PDF)",
+    "owned": "Your unit",
+    "ownedBanner": "This unit is yours.",
+    "ownedLink": "See it in my equipment",
+    "compatibleFor": "Compatible with your {name}",
+    "warrantyMonths": "{n}-month warranty"
   },
   "notFound": {
     "title": "We couldn't find that page",
@@ -490,5 +513,75 @@
     ],
     "cta": "Questions? Message us",
     "waGuide": "Hello JF Motores, I read the guide and have a question: "
+  },
+  "app": {
+    "kicker": "Coming soon",
+    "title": "JF Monitor",
+    "subtitle": "Your pump sets in your pocket, in real time.",
+    "badge": "Under construction",
+    "intro": "We are building an app to see from your phone how your JF units are working, with the same account you use on this site.",
+    "scroll": "Scroll to see how it will work",
+    "phases": [
+      {
+        "h": "All good",
+        "p": "Flow, pressure and temperature of every unit, from the mine entrance or from the city."
+      },
+      {
+        "h": "Something starts to change",
+        "p": "The app watches trends: if pressure drops or temperature rises, you see it before it becomes a problem."
+      },
+      {
+        "h": "Instant alert",
+        "p": "A notification tells you the unit, the value and what to check first."
+      },
+      {
+        "h": "Back to normal",
+        "p": "Adjust the operation and confirm in seconds that everything is back in range."
+      }
+    ],
+    "screen": {
+      "flow": "Flow",
+      "pressure": "Pressure",
+      "temp": "Temperature",
+      "hours": "Hour meter",
+      "normal": "Normal",
+      "warning": "Check",
+      "alert": "Alert",
+      "recovered": "Recovered",
+      "notifTitle": "Alert · High temperature",
+      "notifBody": "104 °C · check radiator and coolant level",
+      "live": "Live"
+    },
+    "featuresTitle": "What we are building",
+    "features": [
+      {
+        "h": "Real time",
+        "p": "Readings from sensors installed on the pump set, sent over cellular, LoRa or satellite depending on the site."
+      },
+      {
+        "h": "Alerts",
+        "p": "Phone notifications when a value leaves its range: temperature, pressure, flow or a stopped unit."
+      },
+      {
+        "h": "History",
+        "p": "Charts by day and shift to understand performance and plan maintenance."
+      },
+      {
+        "h": "Maintenance by hours",
+        "p": "Reminders based on the real hour meter: oil change, filters and inspections."
+      },
+      {
+        "h": "All your units",
+        "p": "Several sites and pump sets on one screen, only for you and JF Motores."
+      },
+      {
+        "h": "Same account",
+        "p": "Sign in with the same email or Google; the units you bought appear automatically."
+      }
+    ],
+    "disclaimer": "The app is in development. Features and launch date may change; the images are a simulation.",
+    "cta": "Let me know when it's ready",
+    "wa": "Hello JF Motores, I'd like to know when the JF Monitor app is ready.",
+    "back": "Back to my equipment"
   }
 }

@@ -35,6 +35,7 @@ export type CatalogProduct = {
   glbPath: string | null;
   /** La guía de usuario (PDF) se puede descargar desde la ficha. */
   hasPublicManual?: boolean;
+  warrantyMonths?: number | null;
 };
 
 export type CatalogCategory = { id: string; catalog: CatalogType; slug: string; name: I18nText; partKey: string | null; sort: number };
@@ -81,6 +82,8 @@ export type CatalogQuery = {
   model: string | null;
   q: string;
   sort: SortKey;
+  /** Repuestos compatibles con un equipo concreto (id del producto). */
+  equipment: string | null;
 };
 
 type RawParams = Record<string, string | string[] | undefined>;
@@ -95,6 +98,7 @@ export function parseCatalogQuery(params: RawParams): CatalogQuery {
     model: first(params.motor) || null,
     q: first(params.q).trim().slice(0, 80),
     sort: (sortKeys as readonly string[]).includes(sort) ? (sort as SortKey) : "new",
+    equipment: /^[0-9a-f-]{36}$/i.test(first(params.equipo)) ? first(params.equipo) : null,
   };
 }
 
@@ -109,7 +113,13 @@ const hp = (p: CatalogProduct) => Number(p.specs.hp) || 0;
 export function filterProducts(
   products: CatalogProduct[],
   query: CatalogQuery,
-  ctx: { locale: Locale; categories: CatalogCategory[]; compat: Compatibility[] },
+  ctx: {
+    locale: Locale;
+    categories: CatalogCategory[];
+    compat: Compatibility[];
+    /** Motor del equipo elegido en ?equipo= (para incluir repuestos compatibles por motor). */
+    equipmentEngine?: string | null;
+  },
 ): CatalogProduct[] {
   const categoryId = query.category ? ctx.categories.find((c) => c.slug === query.category)?.id : null;
   const needle = normalize(query.q);
@@ -120,6 +130,14 @@ export function filterProducts(
       const direct = p.engineModelId === query.model;
       const viaCompat = ctx.compat.some((c) => c.partId === p.id && c.engineModelId === query.model);
       if (!direct && !viaCompat) return false;
+    }
+    if (query.equipment) {
+      const fits = ctx.compat.some(
+        (c) =>
+          c.partId === p.id &&
+          (c.productId === query.equipment || (!!ctx.equipmentEngine && c.engineModelId === ctx.equipmentEngine)),
+      );
+      if (!fits) return false;
     }
     if (needle) {
       const hay = normalize([p.ref, tr(p.name, ctx.locale), tr(p.summary, ctx.locale)].join(" "));

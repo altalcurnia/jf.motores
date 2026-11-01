@@ -108,6 +108,7 @@ const productInput = z.object({
   glbPath: z.string().max(300).nullable(),
   manualPath: z.string().max(300).nullable(),
   manualPublic: z.boolean(),
+  warrantyMonths: z.number().int().min(1).max(120).nullable(),
   images: z
     .array(z.object({ path: z.string().min(1).max(500), isReference: z.boolean() }))
     .max(20),
@@ -161,6 +162,7 @@ export async function saveProduct(raw: ProductInput): Promise<ActionResult> {
     model_glb_path: p.glbPath,
     manual_path: p.manualPath,
     manual_public: p.manualPublic,
+    warranty_months: p.warrantyMonths,
   };
 
   let id = p.id;

@@ -36,6 +36,7 @@ export const emptyProduct = (): ProductFormValue => ({
   glbPath: null,
   manualPath: null,
   manualPublic: false,
+  warrantyMonths: null,
   images: [],
   compatModels: [],
   compatProducts: [],

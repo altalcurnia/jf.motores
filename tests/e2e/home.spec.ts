@@ -184,3 +184,15 @@ test("catálogo: pestañas Todo/Motobombas/Motores/Repuestos y título del inici
   await expect(page).toHaveURL(/\/es\/repuestos$/);
   await expect(page.locator(".cat-tabs a.on:visible")).toHaveText("Repuestos");
 });
+
+test("la página de la app (en construcción) responde y anima con el scroll", async ({ page }) => {
+  const res = await page.goto("/es/app");
+  expect(res?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("JF Monitor");
+  const story = page.locator(".app-story");
+  await page.evaluate(() => {
+    const el = document.querySelector<HTMLElement>(".app-story")!;
+    window.scrollTo(0, el.offsetTop + (el.offsetHeight - innerHeight) * 0.6);
+  });
+  await expect(story).toHaveClass(/s-alert/);
+});

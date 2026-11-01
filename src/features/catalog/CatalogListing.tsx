@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
-import { getCatalog } from "./data";
+import { getCatalog, getCatalogData } from "./data";
 import { CatalogFilters } from "./CatalogFilters";
 import { ProductCard } from "./ProductCard";
 import { catalogPaths, fill, filterProducts, parseCatalogQuery, tr, type CatalogType } from "./shared";
@@ -55,14 +55,27 @@ export async function CatalogListing({ catalog, searchParams }: { catalog: Tab; 
 }
 
 async function Results({ catalog, searchParams }: { catalog: Tab; searchParams: SearchParams }) {
-  const [locale, dict, data, raw] = await Promise.all([getLocale(), getDictionary(), getCatalog(catalog), searchParams]);
+  const [locale, dict, data, raw, all] = await Promise.all([
+    getLocale(),
+    getDictionary(),
+    getCatalog(catalog),
+    searchParams,
+    getCatalogData(),
+  ]);
   const t = dict.catalog;
   const query = parseCatalogQuery(raw);
-  const list = filterProducts(data.products, query, { locale, categories: data.categories, compat: data.compat });
+  const equipment = query.equipment ? all.products.find((p) => p.id === query.equipment) : null;
+  const list = filterProducts(data.products, query, {
+    locale,
+    categories: data.categories,
+    compat: data.compat,
+    equipmentEngine: equipment?.engineModelId ?? null,
+  });
+  const basePath = catalog === "all" ? `/${locale}/catalogo` : `/${locale}/${catalogPaths[catalog]}`;
   const usedCategories = data.categories.filter((c) => data.products.some((p) => p.categoryId === c.id));
   const models =
     catalog === "motobomba" ? [] : data.engineModels.map((m) => ({ value: m.id, label: `${m.brand} ${m.model}` }));
-  const filtered = query.status !== "all" || query.category || query.model || query.q;
+  const filtered = query.status !== "all" || query.category || query.model || query.q || query.equipment;
 
   return (
     <>
@@ -71,6 +84,14 @@ async function Results({ catalog, searchParams }: { catalog: Tab; searchParams: 
         categories={usedCategories.map((c) => ({ value: c.slug, label: tr(c.name, locale) }))}
         models={models}
       />
+      {equipment && (
+        <p className="equip-chip">
+          ★ {fill(t.compatibleFor, { name: tr(equipment.name, locale) })}
+          <a href={basePath} aria-label={t.clear}>
+            ✕
+          </a>
+        </p>
+      )}
       <p className="cat-count">{fill(t.results, { n: list.length })}</p>
       {list.length ? (
         <div className="pc-grid">
@@ -82,7 +103,7 @@ async function Results({ catalog, searchParams }: { catalog: Tab; searchParams: 
         <div className="cat-empty">
           <p>{t.empty}</p>
           {filtered && (
-            <a className="btn g" href={catalog === "all" ? `/${locale}/catalogo` : `/${locale}/${catalogPaths[catalog]}`}>
+            <a className="btn g" href={basePath}>
               {t.clear}
             </a>
           )}

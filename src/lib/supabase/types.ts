@@ -265,6 +265,7 @@ export type Database = {
           model_glb_path: string | null;
           manual_path: string | null;
           manual_public: boolean;
+          warranty_months: number | null;
           name: Json;
           price_cop: number | null;
           published_at: string | null;
@@ -289,6 +290,7 @@ export type Database = {
           model_glb_path?: string | null;
           manual_path?: string | null;
           manual_public?: boolean;
+          warranty_months?: number | null;
           name: Json;
           price_cop?: number | null;
           published_at?: string | null;
@@ -411,6 +413,8 @@ export type Database = {
           channel: "presencial" | "whatsapp" | "web" | "otro";
           sold_by: string | null;
           notified_at: string | null;
+          warranty_start: string | null;
+          warranty_end: string | null;
         };
         Insert: {
           created_at?: string;
@@ -424,6 +428,8 @@ export type Database = {
           channel?: "presencial" | "whatsapp" | "web" | "otro";
           sold_by?: string | null;
           notified_at?: string | null;
+          warranty_start?: string | null;
+          warranty_end?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["units"]["Insert"]>;
         Relationships: [
@@ -459,9 +465,15 @@ export type Database = {
           sold_on?: string | null;
           notes?: string | null;
           mark_sold?: boolean;
+          warranty_months?: number | null;
         };
         Returns: string;
       };
+      list_customers: {
+        Args: Record<string, never>;
+        Returns: { id: string; email: string; full_name: string | null; phone: string | null; purchases: number }[];
+      };
+      set_unit_warranty: { Args: { unit: string; starts: string; months: number | null }; Returns: undefined };
       delete_sale: { Args: { unit: string }; Returns: undefined };
     };
     Enums: {

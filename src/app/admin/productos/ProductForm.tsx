@@ -299,6 +299,20 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               </select>
             </label>
           </div>
+          <label>
+            <span>
+              Garantía <span className="hint">(meses; vacío = sin garantía. Se propone al registrar cada venta)</span>
+            </span>
+            <input
+              inputMode="numeric"
+              value={v.warrantyMonths ?? ""}
+              placeholder="Sin garantía"
+              onChange={(e) => {
+                const d = e.target.value.replace(/\D/g, "").slice(0, 3);
+                set("warrantyMonths", d && Number(d) > 0 ? Math.min(Number(d), 120) : null);
+              }}
+            />
+          </label>
           <label className="check">
             <input type="checkbox" checked={v.featured} onChange={(e) => set("featured", e.target.checked)} />
             <span>

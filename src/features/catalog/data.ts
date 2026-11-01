@@ -33,7 +33,7 @@ export async function getCatalogData(): Promise<CatalogData> {
       supabase
         .from("products")
         .select(
-          "id, catalog, ref, slug, name, summary, description, price_cop, status, specs, featured, published_at, category_id, engine_model_id, model_glb_path, manual_path, manual_public, product_images(path, alt, is_reference, sort)",
+          "id, catalog, ref, slug, name, summary, description, price_cop, status, specs, featured, published_at, category_id, engine_model_id, model_glb_path, manual_path, manual_public, warranty_months, product_images(path, alt, is_reference, sort)",
         )
         .neq("status", "borrador")
         .order("published_at", { ascending: false }),
@@ -62,6 +62,7 @@ export async function getCatalogData(): Promise<CatalogData> {
         engineModelId: p.engine_model_id,
         glbPath: p.model_glb_path,
         hasPublicManual: !!p.manual_path && p.manual_public,
+        warrantyMonths: p.warranty_months,
         images: [...(p.product_images ?? [])]
           .sort((a, b) => a.sort - b.sort)
           .map((i) => ({ path: i.path, alt: i.alt as I18nText, isReference: i.is_reference })),

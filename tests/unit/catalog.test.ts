@@ -38,3 +38,18 @@ describe("catálogo", () => {
     expect(specValue("caudal_lpm", 4000, "en")).toBe("4,000 L/min");
   });
 });
+
+describe("repuestos compatibles con un equipo", () => {
+  const parts = [mk("p1", { catalog: "repuesto" }), mk("p2", { catalog: "repuesto" }), mk("p3", { catalog: "repuesto" })];
+  const compat = [
+    { partId: "p1", engineModelId: "motorA", productId: null },
+    { partId: "p2", engineModelId: null, productId: "11111111-1111-1111-1111-111111111111" },
+    { partId: "p3", engineModelId: "motorB", productId: null },
+  ];
+  it("incluye los del motor del equipo y los del equipo mismo", () => {
+    const q = parseCatalogQuery({ equipo: "11111111-1111-1111-1111-111111111111" });
+    const ids = filterProducts(parts, q, { locale: "es", categories: [], compat, equipmentEngine: "motorA" }).map((p) => p.id);
+    expect(ids.sort()).toEqual(["p1", "p2"]);
+  });
+  it("ignora un id de equipo inválido", () => expect(parseCatalogQuery({ equipo: "x" }).equipment).toBeNull());
+});

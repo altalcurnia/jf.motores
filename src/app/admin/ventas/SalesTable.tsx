@@ -1,8 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { resendPurchaseEmail } from "./actions";
+import { resendPurchaseEmail, setWarranty, voidSale as voidSaleAction } from "./actions";
 
 export type SaleRow = {
   id: string;
@@ -18,6 +17,8 @@ export type SaleRow = {
   customerCountry: string | null;
   seller: string | null;
   notifiedAt: string | null;
+  warrantyStart: string | null;
+  warrantyEnd: string | null;
 };
 
 const channelLabel = { presencial: "En persona", whatsapp: "WhatsApp", web: "Página web", otro: "Otro" } as const;
@@ -30,11 +31,24 @@ const waNumber = (phone: string) => {
   return d.length === 10 && d.startsWith("3") ? `57${d}` : d;
 };
 
+/** Meses de garantía a partir de inicio y fin (el fin es el día anterior al aniversario). */
+const monthsBetween = (start: string, end: string) => {
+  const s = new Date(`${start}T12:00:00`);
+  const e = new Date(`${end}T12:00:00`);
+  e.setDate(e.getDate() + 1);
+  return Math.max(0, (e.getFullYear() - s.getFullYear()) * 12 + e.getMonth() - s.getMonth());
+};
+const warrantyText = (r: SaleRow) => {
+  if (!r.warrantyEnd) return "Sin garantía";
+  const today = new Date().toISOString().slice(0, 10);
+  return `${r.warrantyEnd >= today ? "Vigente" : "Vencida"} hasta ${fmtDate(r.warrantyEnd)}`;
+};
+
 function toCsv(rows: SaleRow[]): string {
-  const head = ["Fecha", "Producto", "Serie", "Cliente", "Correo", "Teléfono", "País", "Canal", "Precio COP", "Registró", "Notas"];
+  const head = ["Fecha", "Producto", "Serie", "Cliente", "Correo", "Teléfono", "País", "Canal", "Precio COP", "Garantía desde", "Garantía hasta", "Registró", "Notas"];
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const lines = rows.map((r) =>
-    [r.date, r.product, r.serial, r.customerName, r.customerEmail, r.customerPhone, r.customerCountry, channelLabel[r.channel], r.price, r.seller, r.notes]
+    [r.date, r.product, r.serial, r.customerName, r.customerEmail, r.customerPhone, r.customerCountry, channelLabel[r.channel], r.price, r.warrantyStart, r.warrantyEnd, r.seller, r.notes]
       .map(esc)
       .join(","),
   );
@@ -81,11 +95,22 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
       );
   }
 
+  async function editWarranty(r: SaleRow) {
+    const current = r.warrantyStart && r.warrantyEnd ? monthsBetween(r.warrantyStart, r.warrantyEnd) : 0;
+    const input = prompt("Meses de garantía desde la fecha de venta (0 = sin garantía)", String(current));
+    if (input === null) return;
+    const months = Math.max(0, Math.min(120, Number(input.replace(/\D/g, "")) || 0));
+    setError(null);
+    const res = await setWarranty(r.id, r.warrantyStart ?? r.date ?? new Date().toISOString().slice(0, 10), months);
+    if (!res.ok) return setError(res.error ?? "Error");
+    router.refresh();
+  }
+
   async function voidSale(r: SaleRow) {
     if (!confirm(`¿Anular la venta de ${r.product}${r.serial ? ` (serie ${r.serial})` : ""} a ${r.customerEmail}? El equipo deja de aparecer en su cuenta. Queda en el historial.`)) return;
     setError(null);
-    const { error: err } = await createSupabaseBrowserClient().rpc("delete_sale", { unit: r.id });
-    if (err) return setError(err.message);
+    const res = await voidSaleAction(r.id);
+    if (!res.ok) return setError(res.error ?? "Error");
     router.refresh();
   }
 
@@ -142,6 +167,9 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
                   <b>{r.product}</b>
                   {r.serial && <span className="muted block small">Serie {r.serial}</span>}
                   {r.notes && <span className="muted block small">{r.notes}</span>}
+                  <span className={`block small ${r.warrantyEnd && r.warrantyEnd >= new Date().toISOString().slice(0, 10) ? "mail-ok" : "muted"}`}>
+                    {warrantyText(r)}
+                  </span>
                 </td>
                 <td>
                   <b>{r.customerName || "—"}</b>
@@ -162,6 +190,9 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
                 <td>{r.price == null ? <span className="muted">—</span> : money.format(r.price)}</td>
                 {canEdit && (
                   <td className="actions">
+                    <button className="link" onClick={() => editWarranty(r)}>
+                      Garantía
+                    </button>
                     <button className="link" disabled={sending === r.id} onClick={() => resend(r)}>
                       {sending === r.id ? "Enviando…" : r.notifiedAt ? "Reenviar correo" : "Enviar correo"}
                     </button>

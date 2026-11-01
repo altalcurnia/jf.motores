@@ -49,6 +49,7 @@ export async function loadProduct(supabase: Awaited<ReturnType<typeof createSupa
     glbPath: p.model_glb_path,
     manualPath: p.manual_path,
     manualPublic: p.manual_public,
+    warrantyMonths: p.warranty_months,
     images: [...(p.product_images ?? [])].sort((a, b) => a.sort - b.sort).map((i) => ({ path: i.path, isReference: i.is_reference })),
     compatModels: (p.part_compatibility ?? []).map((c) => c.engine_model_id).filter((x): x is string => !!x),
     compatProducts: (p.part_compatibility ?? []).map((c) => c.product_id).filter((x): x is string => !!x),

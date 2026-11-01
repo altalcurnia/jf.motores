@@ -9,6 +9,7 @@ type Input = {
   ref: string;
   serial: string | null;
   soldOn: string | null; // AAAA-MM-DD
+  warrantyEnd?: string | null;
   accountUrl: string;
   manualUrl: string | null;
   whatsappUrl: string;
@@ -22,6 +23,7 @@ const T = {
     product: "Producto",
     serial: "Serie",
     date: "Fecha de compra",
+    warranty: "Garantía hasta",
     account: "Ver mis equipos",
     manual: "Descargar la guía de usuario (PDF)",
     manualNote: "Debes iniciar sesión con este correo para descargarla.",
@@ -36,6 +38,7 @@ const T = {
     product: "Product",
     serial: "Serial",
     date: "Purchase date",
+    warranty: "Warranty until",
     account: "See my equipment",
     manual: "Download the user guide (PDF)",
     manualNote: "Sign in with this email to download it.",
@@ -50,6 +53,7 @@ const T = {
     product: "Produto",
     serial: "Série",
     date: "Data da compra",
+    warranty: "Garantia até",
     account: "Ver meus equipamentos",
     manual: "Baixar o guia do usuário (PDF)",
     manualNote: "Entre com este e-mail para baixá-lo.",
@@ -69,6 +73,8 @@ export function purchaseEmail(i: Input) {
   const rows: [string, string][] = [[t.product, `${i.product} (${i.ref})`]];
   if (i.serial) rows.push([t.serial, i.serial]);
   if (date) rows.push([t.date, date]);
+  if (i.warrantyEnd)
+    rows.push([t.warranty, new Intl.DateTimeFormat(localeTags[i.locale], { dateStyle: "long" }).format(new Date(`${i.warrantyEnd}T12:00:00`))]);
 
   const e = escapeHtml;
   const btn = (href: string, label: string, primary: boolean) =>

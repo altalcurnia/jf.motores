@@ -301,7 +301,25 @@
     "googleNoPassword": "Você entra com o Google: sua conta já está pronta e não precisa de senha.",
     "optionalPassword": "Criar uma senha (opcional, para entrar também com seu e-mail)",
     "manual": "Guia do usuário (PDF)",
-    "viewProduct": "Ver produto"
+    "viewProduct": "Ver produto",
+    "warranty": "Garantia",
+    "warrantyFrom": "De",
+    "warrantyUntil": "Até",
+    "warrantyActive": "Vigente",
+    "warrantyExpired": "Vencida",
+    "noWarranty": "Sem garantia",
+    "daysLeft": "Faltam {n} dias",
+    "requestPart": "Solicitar peça",
+    "requestPartWa": "Olá JF Motores, preciso de uma peça para meu {name}, série {serial}.",
+    "appButton": "Gerenciar pelo app",
+    "appSoon": "Em construção",
+    "compatibleParts": "Peças compatíveis com seu equipamento",
+    "noCompatible": "Ainda não há peças publicadas para este equipamento. Peça pelo WhatsApp.",
+    "backToAccount": "Voltar para minha conta",
+    "purchaseDate": "Data da compra",
+    "viewAllParts": "Ver todas as compatíveis",
+    "open": "Abrir",
+    "notFoundUnit": "Não encontramos esse equipamento na sua conta."
   },
   "legal": {
     "privacyTitle": "Política de tratamento de dados pessoais",
@@ -396,7 +414,12 @@
     },
     "featuredKicker": "Destaques",
     "featuredTitle": "Equipamentos prontos para entrega",
-    "manual": "Guia do usuário (PDF)"
+    "manual": "Guia do usuário (PDF)",
+    "owned": "Seu equipamento",
+    "ownedBanner": "Este equipamento é seu.",
+    "ownedLink": "Ver nos meus equipamentos",
+    "compatibleFor": "Compatíveis com seu {name}",
+    "warrantyMonths": "Garantia de {n} meses"
   },
   "notFound": {
     "title": "Não encontramos essa página",
@@ -490,5 +513,75 @@
     ],
     "cta": "Dúvidas? Fale conosco",
     "waGuide": "Olá JF Motores, li o guia e tenho uma pergunta: "
+  },
+  "app": {
+    "kicker": "Em breve",
+    "title": "JF Monitor",
+    "subtitle": "Suas motobombas no bolso, em tempo real.",
+    "badge": "Em construção",
+    "intro": "Estamos desenvolvendo um app para ver pelo celular como seus equipamentos JF estão trabalhando, com a mesma conta que você usa neste site.",
+    "scroll": "Role para ver como vai funcionar",
+    "phases": [
+      {
+        "h": "Tudo em ordem",
+        "p": "Vazão, pressão e temperatura de cada equipamento, da boca da mina ou da cidade."
+      },
+      {
+        "h": "Algo começa a mudar",
+        "p": "O app acompanha as tendências: se a pressão cai ou a temperatura sobe, você vê antes de virar um problema."
+      },
+      {
+        "h": "Alerta na hora",
+        "p": "Uma notificação avisa o equipamento, o valor e o que verificar primeiro."
+      },
+      {
+        "h": "De volta ao normal",
+        "p": "Você ajusta a operação e confirma em segundos que tudo voltou à faixa."
+      }
+    ],
+    "screen": {
+      "flow": "Vazão",
+      "pressure": "Pressão",
+      "temp": "Temperatura",
+      "hours": "Horímetro",
+      "normal": "Normal",
+      "warning": "Verificar",
+      "alert": "Alerta",
+      "recovered": "Normalizado",
+      "notifTitle": "Alerta · Temperatura alta",
+      "notifBody": "104 °C · verifique radiador e nível do líquido",
+      "live": "Ao vivo"
+    },
+    "featuresTitle": "O que estamos construindo",
+    "features": [
+      {
+        "h": "Tempo real",
+        "p": "Leituras de sensores instalados na motobomba, enviadas por rede celular, LoRa ou satélite conforme o local."
+      },
+      {
+        "h": "Alertas",
+        "p": "Avisos no celular quando um valor sai da faixa: temperatura, pressão, vazão ou parada do equipamento."
+      },
+      {
+        "h": "Histórico",
+        "p": "Gráficos por dia e por turno para entender o desempenho e planejar a manutenção."
+      },
+      {
+        "h": "Manutenção por horas",
+        "p": "Lembretes pelo horímetro real: troca de óleo, filtros e revisões."
+      },
+      {
+        "h": "Todos os seus equipamentos",
+        "p": "Várias frentes e motobombas em uma só tela, só para você e a JF Motores."
+      },
+      {
+        "h": "A mesma conta",
+        "p": "Entre com o mesmo e-mail ou Google; os equipamentos comprados aparecem sozinhos."
+      }
+    ],
+    "disclaimer": "O app está em desenvolvimento. Funções e data de lançamento podem mudar; as imagens são uma simulação.",
+    "cta": "Quero saber quando estiver pronto",
+    "wa": "Olá JF Motores, quero saber quando o app de monitoramento JF Monitor estiver pronto.",
+    "back": "Voltar aos meus equipamentos"
   }
 }

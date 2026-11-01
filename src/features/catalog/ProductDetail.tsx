@@ -10,6 +10,7 @@ import { compatibleParts, compatibleWith, getCatalogData } from "./data";
 import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
 import { Viewer3D } from "./Viewer3D";
+import { OwnerBanner, StatusPill } from "./owned";
 import { catalogPaths, fill, formatPrice, productHref, specValue, storageUrl, tr, type CatalogType } from "./shared";
 
 const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -78,13 +79,20 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
           </span>
           <h1>{name}</h1>
           {tr(p.summary, locale) && <p className="pd-summary">{tr(p.summary, locale)}</p>}
-          <span className={`pc-status static ${p.status}`}>{p.status === "vendido" ? t.statusSold : t.statusAvailable}</span>
+          <StatusPill
+            className="static"
+            productId={p.id}
+            status={p.status}
+            labels={{ available: t.statusAvailable, sold: t.statusSold, owned: t.owned }}
+          />
+          <OwnerBanner productId={p.id} locale={locale} text={t.ownedBanner} link={t.ownedLink} />
 
           <div className="pd-price">
             <b>{price ?? t.askPrice}</b>
             {price && <small>{t.priceNote}</small>}
+            {p.warrantyMonths && <small className="pd-warranty">✓ {fill(t.warrantyMonths, { n: p.warrantyMonths })}</small>}
           </div>
-          {p.status === "vendido" && <p className="pd-sold">{t.soldNotice}</p>}
+          {p.status === "vendido" && <p className="pd-sold sold-note">{t.soldNotice}</p>}
 
           <div className="pd-actions">
             <a className="btn y" href={buildWhatsAppUrl(site.whatsappFallback, message)} target="_blank" rel="noopener">
