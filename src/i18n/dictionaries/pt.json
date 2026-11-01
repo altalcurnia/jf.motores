@@ -11,7 +11,19 @@
     "empresa": "Empresa",
     "contacto": "Contato",
     "cta": "Orçamento no WhatsApp",
-    "language": "Idioma"
+    "language": "Idioma",
+    "catalog": "Catálogo",
+    "soporte": "Suporte",
+    "guias": "Guias",
+    "menu": "Menu",
+    "close": "Fechar menu",
+    "viewAll": "Ver tudo",
+    "secCatalog": "Catálogo",
+    "secHelp": "Ajuda",
+    "secAccount": "Sua conta",
+    "findPart": "Buscar peças por motor",
+    "faq": "Perguntas frequentes",
+    "writeUs": "Fale conosco pelo WhatsApp"
   },
   "hero": {
     "kicker": "Medellín · Colômbia — Motobombas para mineração",
@@ -375,11 +387,101 @@
       "dientes": "Dentes",
       "caras": "Faces",
       "voltaje_v": "Tensão"
-    }
+    },
+    "featuredKicker": "Destaques",
+    "featuredTitle": "Equipamentos prontos para entrega"
   },
   "notFound": {
     "title": "Não encontramos essa página",
     "text": "O produto pode não estar mais publicado. Veja o catálogo ou fale conosco pelo WhatsApp.",
     "home": "Ir para o início"
+  },
+  "support": {
+    "title": "Suporte",
+    "intro": "Seu equipamento precisa de ajuda? Um técnico da oficina atende você pelo WhatsApp.",
+    "waTech": "Olá JF Motores, preciso de suporte técnico para meu equipamento. Modelo: ___ Série: ___ Problema: ___",
+    "cards": [
+      {
+        "h": "Suporte técnico",
+        "p": "Informe o modelo, o número de série e o que está acontecendo. Se puder, envie fotos ou um vídeo curto.",
+        "cta": "Falar com o técnico"
+      },
+      {
+        "h": "Pedir uma peça",
+        "p": "Busque pela peça ou pelo motor compatível. Se não encontrar, envie uma foto da placa do motor.",
+        "cta": "Ver peças"
+      },
+      {
+        "h": "Seus equipamentos",
+        "p": "Com sua conta você vê os equipamentos que comprou e seus orçamentos.",
+        "cta": "Ir para minha conta"
+      },
+      {
+        "h": "Guias",
+        "p": "Como escolher uma motobomba, manutenção básica e como pedir a peça certa.",
+        "cta": "Ler os guias"
+      }
+    ],
+    "faqTitle": "Perguntas frequentes",
+    "faq": [
+      {
+        "q": "Os preços incluem o frete?",
+        "a": "Não. O preço corresponde apenas ao item. Frete, impostos e custos de importação ou exportação são orçados à parte conforme o destino."
+      },
+      {
+        "q": "As fotos são do equipamento exato?",
+        "a": "Quando uma foto diz “Imagem de referência”, mostra um equipamento igual ou semelhante. Se precisar de fotos do equipamento exato, peça pelo WhatsApp."
+      },
+      {
+        "q": "Como sei se uma peça serve no meu motor?",
+        "a": "Cada peça indica com quais motores e equipamentos é compatível. Em caso de dúvida, envie o modelo e uma foto da placa do motor e confirmamos."
+      },
+      {
+        "q": "Preciso de uma conta para comprar?",
+        "a": "Para comprar uma motobomba, sim: assim registramos o equipamento em seu nome e você pode acompanhá-lo. Para pedir orçamento não precisa de conta."
+      }
+    ]
+  },
+  "guides": {
+    "title": "Guias",
+    "intro": "Guias práticos para escolher, cuidar e consertar seus equipamentos. São orientações gerais: siga sempre o manual do fabricante do seu equipamento.",
+    "items": [
+      {
+        "id": "elegir-motobomba",
+        "h": "Como escolher uma motobomba",
+        "steps": [
+          "Vazão: quanto de água ou lama você precisa mover, em litros por minuto. Calcule pelo volume a drenar e pelo tempo disponível.",
+          "Altura total: some a altura de sucção (da água até a bomba), a altura de recalque (da bomba até a saída) e as perdas na mangueira, que aumentam com o comprimento e as curvas.",
+          "O que vai bombear: para lama ou água com areia escolha uma bomba para sólidos, com rotor resistente à abrasão.",
+          "Diâmetro de sucção e descarga: deve corresponder às suas mangueiras; uma mangueira mais estreita reduz a vazão.",
+          "Altitude: motores a diesel perdem potência em maior altitude. Para trabalho em alta montanha consulte um motor turboalimentado.",
+          "Com esses dados (vazão, altura e tipo de fluido) fale conosco e recomendamos o equipamento."
+        ]
+      },
+      {
+        "id": "mantenimiento",
+        "h": "Manutenção básica de um motor a diesel",
+        "steps": [
+          "Antes de dar partida: verifique o nível de óleo e de líquido de arrefecimento, e se não há vazamentos.",
+          "Filtro de ar: na mineração há muita poeira; verifique e limpe com frequência. Um filtro entupido reduz a potência e desgasta o motor.",
+          "Combustível limpo: drene a água do filtro separador e guarde o diesel em recipientes limpos e fechados.",
+          "Radiador: mantenha as aletas limpas e verifique as mangueiras e a correia do ventilador.",
+          "Trocas de óleo e filtros: faça conforme as horas do horímetro indicadas no manual, não só pelo calendário.",
+          "Se notar fumaça anormal, perda de força, batidas ou superaquecimento, pare o equipamento e fale conosco."
+        ]
+      },
+      {
+        "id": "pedir-repuesto",
+        "h": "Como pedir a peça certa",
+        "steps": [
+          "Tire uma foto da placa do motor ou do equipamento: nela estão o modelo e o número de série.",
+          "Fotografe a peça danificada de vários ângulos, com uma régua ou trena ao lado para mostrar o tamanho.",
+          "Se puder, anote medidas importantes: diâmetro, número de dentes, tipo de rosca ou comprimento.",
+          "Busque no catálogo de peças filtrando pelo seu motor, ou envie tudo pelo WhatsApp e confirmamos a peça."
+        ]
+      }
+    ],
+    "cta": "Dúvidas? Fale conosco",
+    "waGuide": "Olá JF Motores, li o guia e tenho uma pergunta: "
   }
 }

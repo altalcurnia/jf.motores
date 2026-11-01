@@ -11,7 +11,19 @@
     "empresa": "Company",
     "contacto": "Contact",
     "cta": "Quote on WhatsApp",
-    "language": "Language"
+    "language": "Language",
+    "catalog": "Catalogue",
+    "soporte": "Support",
+    "guias": "Guides",
+    "menu": "Menu",
+    "close": "Close menu",
+    "viewAll": "View all",
+    "secCatalog": "Catalogue",
+    "secHelp": "Help",
+    "secAccount": "Your account",
+    "findPart": "Find parts by engine",
+    "faq": "FAQ",
+    "writeUs": "Message us on WhatsApp"
   },
   "hero": {
     "kicker": "Medellín · Colombia — Mining pump sets",
@@ -375,11 +387,101 @@
       "dientes": "Teeth",
       "caras": "Faces",
       "voltaje_v": "Voltage"
-    }
+    },
+    "featuredKicker": "Featured",
+    "featuredTitle": "Units ready to ship"
   },
   "notFound": {
     "title": "We couldn't find that page",
     "text": "The product may no longer be listed. Browse the catalogue or message us on WhatsApp.",
     "home": "Go to home"
+  },
+  "support": {
+    "title": "Support",
+    "intro": "Does your equipment need help? A workshop technician will assist you on WhatsApp.",
+    "waTech": "Hello JF Motores, I need technical support for my equipment. Model: ___ Serial: ___ Issue: ___",
+    "cards": [
+      {
+        "h": "Technical support",
+        "p": "Tell us the model, the serial number and what is happening. If you can, send photos or a short video.",
+        "cta": "Message a technician"
+      },
+      {
+        "h": "Order a spare part",
+        "p": "Search by part or by compatible engine. If you can't find it, send us a photo of the engine plate.",
+        "cta": "See spare parts"
+      },
+      {
+        "h": "Your equipment",
+        "p": "With your account you can see the units you bought and your quotes.",
+        "cta": "Go to my account"
+      },
+      {
+        "h": "Guides",
+        "p": "How to choose a pump set, basic maintenance and how to order the right part.",
+        "cta": "Read the guides"
+      }
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faq": [
+      {
+        "q": "Do prices include shipping?",
+        "a": "No. The price covers the item only. Shipping, taxes and import/export costs are quoted separately depending on the destination."
+      },
+      {
+        "q": "Are the photos of the exact unit?",
+        "a": "When a photo says “Reference image”, it shows the same or a similar unit. If you need photos of the exact unit, ask us on WhatsApp."
+      },
+      {
+        "q": "How do I know if a part fits my engine?",
+        "a": "Each part lists the engines and units it fits. If in doubt, send us the model and a photo of the engine plate and we will confirm."
+      },
+      {
+        "q": "Do I need an account to buy?",
+        "a": "For a pump set, yes: that way we register the unit in your name and you can track it. You don't need an account to request a quote."
+      }
+    ]
+  },
+  "guides": {
+    "title": "Guides",
+    "intro": "Practical guides to choose, care for and repair your equipment. They are general guidance: always follow your equipment manufacturer's manual.",
+    "items": [
+      {
+        "id": "elegir-motobomba",
+        "h": "How to choose a pump set",
+        "steps": [
+          "Flow: how much water or slurry you need to move, in litres per minute. Work it out from the volume to drain and the time available.",
+          "Total head: add the suction height (from the water to the pump), the discharge height (from the pump to the outlet) and the hose losses, which grow with length and bends.",
+          "What you will pump: for slurry or sandy water choose a solids-handling pump with an abrasion-resistant impeller.",
+          "Suction and discharge diameter: it must match your hoses; a narrower hose reduces flow.",
+          "Altitude: diesel engines lose power at higher altitude. For high-mountain work ask about a turbocharged engine.",
+          "With that data (flow, head and type of fluid) message us and we will recommend the right unit."
+        ]
+      },
+      {
+        "id": "mantenimiento",
+        "h": "Basic diesel engine maintenance",
+        "steps": [
+          "Before starting: check oil and coolant levels and look for leaks.",
+          "Air filter: mining sites are dusty; check and clean it often. A clogged filter cuts power and wears the engine.",
+          "Clean fuel: drain water from the fuel separator filter and store diesel in clean, closed containers.",
+          "Radiator: keep the fins clean and check the hoses and the fan belt.",
+          "Oil and filter changes: follow the hour-meter intervals in the manual, not just the calendar.",
+          "If you notice abnormal smoke, loss of power, knocking or overheating, stop the unit and contact us."
+        ]
+      },
+      {
+        "id": "pedir-repuesto",
+        "h": "How to order the right spare part",
+        "steps": [
+          "Take a photo of the engine or unit plate: it shows the model and serial number.",
+          "Photograph the damaged part from several angles, with a ruler or tape next to it to show the size.",
+          "If you can, note key measurements: diameter, number of teeth, thread type or length.",
+          "Search the spare parts catalogue filtered by your engine, or send everything on WhatsApp and we will confirm the part."
+        ]
+      }
+    ],
+    "cta": "Questions? Message us",
+    "waGuide": "Hello JF Motores, I read the guide and have a question: "
   }
 }

@@ -95,16 +95,37 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
     setBusy(null);
   }
 
-  async function uploadGlb(file: File | undefined) {
+  async function upload3d(file: File | undefined) {
     if (!file) return;
-    if (!file.name.toLowerCase().endsWith(".glb")) return setMsg({ ok: false, text: "El modelo 3D debe ser un archivo .glb" });
-    if (file.size > 15 * 1024 * 1024) return setMsg({ ok: false, text: "El modelo 3D pesa más de 15 MB. Redúcelo antes de subirlo." });
+    const name = file.name.toLowerCase();
+    const isStl = name.endsWith(".stl");
+    if (!isStl && !name.endsWith(".glb")) return setMsg({ ok: false, text: "El modelo 3D debe ser un archivo .glb o .stl" });
+    if (file.size > 80 * 1024 * 1024) return setMsg({ ok: false, text: "El archivo pesa más de 80 MB. Redúcelo antes de subirlo." });
     setBusy("glb");
+    setMsg(null);
+    let body: Blob = file;
+    let note = "";
+    if (isStl) {
+      try {
+        const { stlToGlb } = await import("@/features/catalog/stl-to-glb");
+        const { glb, triangles } = await stlToGlb(await file.arrayBuffer());
+        body = new Blob([glb], { type: "model/gltf-binary" });
+        note = ` Convertido de STL (${triangles.toLocaleString("es-CO")} triángulos, ${(body.size / 1048576).toFixed(1)} MB).`;
+      } catch (err) {
+        setBusy(null);
+        return setMsg({ ok: false, text: `No se pudo leer el STL: ${err instanceof Error ? err.message : "archivo dañado"}` });
+      }
+    }
+    if (body.size > 15 * 1024 * 1024) {
+      setBusy(null);
+      return setMsg({ ok: false, text: "El modelo pesa más de 15 MB. Simplifícalo (menos triángulos) antes de subirlo." });
+    }
     const path = `modelos/${crypto.randomUUID()}.glb`;
-    const { error } = await createSupabaseBrowserClient().storage.from("catalogo").upload(path, file, { contentType: "model/gltf-binary", cacheControl: "31536000" });
+    const { error } = await createSupabaseBrowserClient().storage.from("catalogo").upload(path, body, { contentType: "model/gltf-binary", cacheControl: "31536000" });
     setBusy(null);
     if (error) return setMsg({ ok: false, text: `No se pudo subir el modelo 3D: ${error.message}` });
     set("glbPath", path);
+    setMsg({ ok: true, text: `Modelo 3D listo.${note} Guarda el producto para publicarlo.` });
   }
 
   function moveImage(i: number, dir: -1 | 1) {
@@ -255,22 +276,17 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               </select>
             </label>
           </div>
-          <div className="row2">
-            <label>
-              <span>
-                Fecha de publicación <span className="hint">(ordena “Más recientes”)</span>
-              </span>
-              <input
-                type="datetime-local"
-                value={v.publishedAt ? toLocalInput(v.publishedAt) : ""}
-                onChange={(e) => set("publishedAt", e.target.value ? new Date(e.target.value).toISOString() : null)}
-              />
-            </label>
-            <label className="check">
-              <input type="checkbox" checked={v.featured} onChange={(e) => set("featured", e.target.checked)} />
-              Destacado
-            </label>
-          </div>
+          <label className="check">
+            <input type="checkbox" checked={v.featured} onChange={(e) => set("featured", e.target.checked)} />
+            <span>
+              Destacado en el inicio <span className="hint">(aparece en la sección “Destacados” de la página principal si está disponible)</span>
+            </span>
+          </label>
+          <p className="hint">
+            {v.publishedAt
+              ? `Publicado el ${new Date(v.publishedAt).toLocaleString("es-CO", { dateStyle: "long", timeStyle: "short" })}.`
+              : "La fecha de publicación se pone sola la primera vez que lo marcas como Disponible o Vendido."}
+          </p>
           <p className="hint">Los precios se muestran como “solo el artículo, sin envío ni costos de importación”.</p>
         </section>
 
@@ -395,11 +411,14 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
             </p>
           ) : (
             <label className="img-add wide">
-              <input type="file" accept=".glb,model/gltf-binary" hidden onChange={(e) => (uploadGlb(e.target.files?.[0]), (e.target.value = ""))} />
-              {busy === "glb" ? "Subiendo…" : "+ Subir archivo .glb"}
+              <input type="file" accept=".glb,.stl,model/gltf-binary,model/stl" hidden onChange={(e) => (upload3d(e.target.files?.[0]), (e.target.value = ""))} />
+              {busy === "glb" ? "Procesando…" : "+ Subir modelo 3D (.glb o .stl)"}
             </label>
           )}
-          <p className="hint">Opcional. Archivo .glb de máximo 15 MB. En la ficha aparece el botón “Ver en 3D”.</p>
+          <p className="hint">
+            Opcional. GLB (con colores y texturas) o STL (de CAD o impresión 3D; se convierte solo y se muestra en gris metálico).
+            Máximo 15 MB ya convertido. En la ficha aparece el botón “Ver en 3D”.
+          </p>
         </section>
       </fieldset>
 
@@ -425,8 +444,3 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
   );
 }
 
-function toLocalInput(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}

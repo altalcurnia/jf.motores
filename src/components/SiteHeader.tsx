@@ -6,32 +6,82 @@ import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { site } from "@/lib/site";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AccountNavLink } from "@/features/account/AccountNavLink";
+import { CatalogMenu } from "./CatalogMenu";
+import { MobileMenu } from "./MobileMenu";
 
 export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const t = dict.nav;
+  const l = (path: string) => `/${locale}${path}`;
+  const wa = buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general);
+  const catalogItems = (["motobombas", "motores", "repuestos"] as const).map((k) => ({
+    href: l(`/${k}`),
+    title: dict.catalogs.items[k].title,
+    desc: dict.catalogs.items[k].desc,
+  }));
+
   return (
     <nav id="nav">
-      <Link className="brand" href={`/${locale}`} aria-label={site.name}>
-        <Image src="/logo.png" alt="" width={34} height={34} priority />
-        <b>
-          JF <em>MOTORES</em>
-        </b>
-      </Link>
+      <div className="nav-left">
+        <MobileMenu
+          labels={{ open: t.menu, close: t.close }}
+          sections={[
+            {
+              title: t.secCatalog,
+              links: [
+                { href: l("/motobombas"), label: t.motobombas },
+                { href: l("/motores"), label: t.motores },
+                { href: l("/repuestos"), label: t.repuestos },
+                { href: l("/guias#pedir-repuesto"), label: t.findPart },
+              ],
+            },
+            {
+              title: t.secHelp,
+              links: [
+                { href: l("/soporte"), label: t.soporte },
+                { href: l("/guias"), label: t.guias },
+                { href: l("/soporte#faq"), label: t.faq },
+                { href: l("#contacto"), label: t.contacto },
+              ],
+            },
+            {
+              title: t.secAccount,
+              links: [
+                { href: l("/cuenta"), label: dict.account.myAccount },
+                { href: l("/legal/privacidad"), label: dict.footer.privacy },
+              ],
+            },
+          ]}
+          footer={
+            <>
+              <LanguageSwitcher current={locale} label={t.language} />
+              <a className="btn y drawer-cta" href={wa} target="_blank" rel="noopener">
+                {t.writeUs}
+              </a>
+              <a className="drawer-phone" href={`tel:+${site.whatsappFallback}`}>
+                {site.phoneDisplay}
+              </a>
+            </>
+          }
+        />
+        <Link className="brand" href={`/${locale}`} aria-label={site.name}>
+          <Image src="/logo.png" alt="" width={34} height={34} priority />
+          <b>
+            JF <em>MOTORES</em>
+          </b>
+        </Link>
+      </div>
       <div className="nlinks">
-        <Link href={`/${locale}/motobombas`}>{t.motobombas}</Link>
-        <Link href={`/${locale}/motores`}>{t.motores}</Link>
-        <Link href={`/${locale}/repuestos`}>{t.repuestos}</Link>
-        <Link href={`/${locale}#contacto`}>{t.contacto}</Link>
+        <CatalogMenu label={t.catalog} items={catalogItems} />
+        <Link href={l("/soporte")}>{t.soporte}</Link>
+        <Link href={l("/guias")}>{t.guias}</Link>
+        <Link href={l("#contacto")}>{t.contacto}</Link>
       </div>
       <div className="nav-right">
-        <LanguageSwitcher current={locale} label={t.language} />
+        <span className="nav-lang">
+          <LanguageSwitcher current={locale} label={t.language} />
+        </span>
         <AccountNavLink locale={locale} signIn={dict.account.signIn} myAccount={dict.account.myAccount} />
-        <a
-          className="ncta"
-          href={buildWhatsAppUrl(site.whatsappFallback, dict.whatsapp.general)}
-          target="_blank"
-          rel="noopener"
-        >
+        <a className="ncta" href={wa} target="_blank" rel="noopener">
           {t.cta}
         </a>
       </div>

@@ -6,6 +6,7 @@ import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
+import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 
 // Ilustración de referencia local (public/demo). Se reemplaza por una foto real de la empresa.
 const BENEFITS_IMAGE = "/demo/jf-m25.jpg";
@@ -137,6 +138,8 @@ export default async function HomePage() {
             ))}
           </div>
         </section>
+
+      <FeaturedProducts locale={locale} dict={dict} />
 
       <section className="block" id="catalogos">
         <div className="sk reveal">{dict.catalogs.kicker}</div>

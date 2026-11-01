@@ -1,4 +1,14 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+/** El selector de idioma está en el encabezado (escritorio) o dentro del menú lateral (celular). */
+async function languageSelect(page: Page) {
+  const burger = page.locator(".burger");
+  if (await burger.isVisible()) {
+    await burger.click();
+    return page.locator("#drawer").getByLabel(/Idioma|Language|Idioma/);
+  }
+  return page.locator(".nav-lang").getByLabel(/Idioma|Language/);
+}
 
 test.describe("navegador en portugués", () => {
   test.use({ locale: "pt-BR" });
@@ -24,9 +34,15 @@ for (const [lang, heading] of [
 
 test("el selector de idioma conserva la página", async ({ page }) => {
   await page.goto("/es/motores");
-  await page.getByLabel("Idioma").selectOption("en");
+  await (await languageSelect(page)).selectOption("en");
   await expect(page).toHaveURL(/\/en\/motores$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Engines");
+});
+
+test("el selector de idioma conserva los filtros del catálogo", async ({ page }) => {
+  await page.goto("/es/repuestos?categoria=tableros&estado=disponible");
+  await (await languageSelect(page)).selectOption("pt");
+  await expect(page).toHaveURL(/\/pt\/repuestos\?categoria=tableros&estado=disponible$/);
 });
 
 test("los tres catálogos responden", async ({ page }) => {
@@ -40,7 +56,7 @@ test("cada pieza del motor tiene su página de repuestos", async ({ page }) => {
   const res = await page.goto("/es/repuestos/radiador");
   expect(res?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Repuestos: Radiador");
-  await expect(page.locator("a.btn.y")).toHaveAttribute("href", /text=.*radiador/i);
+  await expect(page.locator(".cat-actions a.btn.y")).toHaveAttribute("href", /text=.*radiador/i);
 });
 
 test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async ({ page }) => {
@@ -126,4 +142,29 @@ test("un producto inexistente muestra la página de no encontrado y no se indexa
   await page.goto("/es/motores/no-existe-este-motor");
   await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
   await expect(page.locator(".pd-info")).toHaveCount(0);
+});
+
+test("menú: Catálogo agrupa las categorías y el menú lateral abre en celular", async ({ page }) => {
+  await page.goto("/es");
+  const burger = page.locator(".burger");
+  if (await burger.isVisible()) {
+    await burger.click();
+    const drawer = page.locator("#drawer");
+    await expect(drawer).toHaveClass(/open/);
+    await drawer.getByRole("link", { name: "Soporte" }).click();
+    await expect(page).toHaveURL(/\/es\/soporte$/);
+    await expect(drawer).not.toHaveClass(/open/);
+  } else {
+    await page.locator(".cat-menu > button").click();
+    await page.locator(".cat-menu-panel").getByRole("menuitem", { name: /Motores/ }).click();
+    await expect(page).toHaveURL(/\/es\/motores$/);
+  }
+});
+
+test("soporte y guías responden en los tres idiomas", async ({ page }) => {
+  for (const path of ["/es/soporte", "/en/guias", "/pt/soporte"]) {
+    const res = await page.goto(path);
+    expect(res?.status()).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  }
 });

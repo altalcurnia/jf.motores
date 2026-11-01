@@ -205,3 +205,26 @@ fieldset:disabled .img-add, fieldset:disabled .chip { cursor: not-allowed; opaci
   .toolbar .select { width: 100%; }
 }
 .seg button { white-space: nowrap; }
+
+/* Confirmación con contraseña y roles */
+.unlock { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); }
+.unlock-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.unlock-row input { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; min-width: 220px; }
+.unlock-row .btn-primary { padding: 10px 16px; }
+.err-text { color: var(--err); font-size: 14px; width: 100%; }
+.matrix th .all { display: flex; gap: 4px; justify-content: center; margin-top: 6px; }
+.matrix th .all button { background: #0d1014; border: 1px solid var(--line); color: var(--mut); border-radius: 6px; font: inherit; font-size: 11px; padding: 3px 7px; cursor: pointer; text-transform: none; letter-spacing: 0; }
+.matrix th .all button:hover:not(:disabled) { color: var(--ink); border-color: var(--yellow); }
+.matrix th .all button:disabled { opacity: 0.4; cursor: not-allowed; }
+.roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.role-card { background: #0d1014; border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 6px; }
+.role-card .row-actions { display: flex; gap: 12px; font-size: 13px; }
+.role-card .row-actions button { background: none; border: 0; color: var(--ink); font: inherit; cursor: pointer; padding: 0; text-decoration: underline; }
+.role-card .row-actions button.link-danger { color: var(--err); }
+.role-card .row-actions button:disabled { opacity: 0.4; cursor: not-allowed; }
+.role-form { display: grid; grid-template-columns: 1fr 1.4fr 1fr auto; gap: 8px; align-items: end; }
+.role-form label { display: grid; gap: 4px; font-size: 12px; color: var(--mut); }
+.role-form input, .role-form select { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: inherit; }
+.role-form .check { display: flex; align-items: center; gap: 6px; grid-column: 1 / -1; color: var(--ink); font-size: 14px; }
+@media (max-width: 760px) { .role-form { grid-template-columns: 1fr; } }

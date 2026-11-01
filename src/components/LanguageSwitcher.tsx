@@ -8,7 +8,8 @@ export function LanguageSwitcher({ current, label }: { current: Locale; label: s
 
   function change(next: Locale) {
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
-    router.push(switchLocalePath(pathname, next));
+    // Conserva los filtros (?categoria=…) y el ancla al cambiar de idioma
+    router.push(switchLocalePath(pathname, next) + window.location.search + window.location.hash);
   }
 
   return (

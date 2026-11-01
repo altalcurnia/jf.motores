@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { AdminTopbar } from "../AdminTopbar";
+import { OwnerUnlock } from "../OwnerUnlock";
 import { UsersTable, type UserRow } from "./UsersTable";
 
 export const metadata = { title: "Usuarios" };
@@ -27,12 +28,13 @@ async function Users() {
     return <div className="notice err">No tienes permiso para ver los usuarios.</div>;
   }
   const supabase = await createSupabaseServerClient();
-  const [{ data: profiles }, { data: roles }] = await Promise.all([
+  const [{ data: profiles }, { data: roles }, unlock] = await Promise.all([
     supabase
       .from("profiles")
       .select("id, email, full_name, is_owner, created_at, privacy_accepted_at, roles ( key )")
       .order("created_at", { ascending: false }),
     supabase.from("roles").select("key, name, is_internal").order("id"),
+    session.isOwner ? supabase.rpc("owner_unlock_status") : Promise.resolve({ data: null }),
   ]);
 
   const users: UserRow[] = (profiles ?? []).map((p) => ({
@@ -47,11 +49,15 @@ async function Users() {
 
   return (
     <>
-      {!session.isOwner && <div className="notice">Puedes ver los usuarios, pero solo el propietario cambia roles.</div>}
+      {session.isOwner ? (
+        <OwnerUnlock expiresAt={unlock.data ?? null} />
+      ) : (
+        <div className="notice">Puedes ver los usuarios, pero solo el propietario cambia roles.</div>
+      )}
       <UsersTable
         users={users}
         roles={(roles ?? []).map((r) => ({ key: r.key, name: r.name, isInternal: r.is_internal }))}
-        canEdit={session.isOwner}
+        canEdit={session.isOwner && !!unlock.data}
         me={session.userId}
       />
     </>

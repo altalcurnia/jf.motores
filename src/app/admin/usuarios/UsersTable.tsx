@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { rpcError } from "../OwnerUnlock";
 
 export type UserRow = {
   id: string;
@@ -43,7 +44,7 @@ export function UsersTable({ users, roles, canEdit, me }: { users: UserRow[]; ro
     setError(null);
     const { error: err } = await createSupabaseBrowserClient().rpc("set_user_role", { target: user.id, role_key: roleKey });
     setBusy(null);
-    if (err) return setError(err.message);
+    if (err) return setError(rpcError(err));
     router.refresh();
   }
 

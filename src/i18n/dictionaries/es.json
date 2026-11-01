@@ -11,7 +11,19 @@
     "empresa": "Empresa",
     "contacto": "Contacto",
     "cta": "Cotizar por WhatsApp",
-    "language": "Idioma"
+    "language": "Idioma",
+    "catalog": "Catálogo",
+    "soporte": "Soporte",
+    "guias": "Guías",
+    "menu": "Menú",
+    "close": "Cerrar menú",
+    "viewAll": "Ver todo",
+    "secCatalog": "Catálogo",
+    "secHelp": "Ayuda",
+    "secAccount": "Tu cuenta",
+    "findPart": "Buscar repuesto por motor",
+    "faq": "Preguntas frecuentes",
+    "writeUs": "Escríbenos por WhatsApp"
   },
   "hero": {
     "kicker": "Medellín · Colombia — Motobombas mineras",
@@ -375,11 +387,101 @@
       "dientes": "Dientes",
       "caras": "Caras",
       "voltaje_v": "Voltaje"
-    }
+    },
+    "featuredKicker": "Destacados",
+    "featuredTitle": "Equipos listos para entregar"
   },
   "notFound": {
     "title": "No encontramos esa página",
     "text": "Puede que el producto ya no esté publicado. Mira el catálogo o escríbenos por WhatsApp.",
     "home": "Ir al inicio"
+  },
+  "support": {
+    "title": "Soporte",
+    "intro": "¿Tu equipo necesita ayuda? Te atendemos por WhatsApp con un técnico del taller.",
+    "waTech": "Hola JF Motores, necesito soporte técnico para mi equipo. Modelo: ___ Serie: ___ Problema: ___",
+    "cards": [
+      {
+        "h": "Soporte técnico",
+        "p": "Cuéntanos el modelo, el número de serie y qué está pasando. Si puedes, envía fotos o un video corto.",
+        "cta": "Escribir al técnico"
+      },
+      {
+        "h": "Pedir un repuesto",
+        "p": "Busca por pieza o por motor compatible. Si no lo encuentras, envíanos una foto de la placa del motor.",
+        "cta": "Ver repuestos"
+      },
+      {
+        "h": "Tus equipos",
+        "p": "Con tu cuenta ves los equipos que compraste y tus cotizaciones.",
+        "cta": "Ir a mi cuenta"
+      },
+      {
+        "h": "Guías",
+        "p": "Cómo elegir una motobomba, mantenimiento básico y cómo pedir el repuesto correcto.",
+        "cta": "Leer guías"
+      }
+    ],
+    "faqTitle": "Preguntas frecuentes",
+    "faq": [
+      {
+        "q": "¿Los precios incluyen el envío?",
+        "a": "No. El precio corresponde solo al artículo. Envío, impuestos y costos de importación o exportación se cotizan aparte según el destino."
+      },
+      {
+        "q": "¿Las fotos son del equipo exacto?",
+        "a": "Cuando una foto dice “Imagen de referencia”, muestra un equipo igual o similar. Si necesitas fotos del equipo exacto, pídelas por WhatsApp."
+      },
+      {
+        "q": "¿Cómo sé si un repuesto le sirve a mi motor?",
+        "a": "Cada repuesto indica con qué motores y equipos es compatible. Si tienes dudas, envíanos el modelo y una foto de la placa del motor y te confirmamos."
+      },
+      {
+        "q": "¿Necesito una cuenta para comprar?",
+        "a": "Para comprar una motobomba sí: así registramos el equipo a tu nombre y puedes hacerle seguimiento. Para cotizar no necesitas cuenta."
+      }
+    ]
+  },
+  "guides": {
+    "title": "Guías",
+    "intro": "Guías prácticas para elegir, cuidar y reparar tus equipos. Son orientación general: sigue siempre el manual del fabricante de tu equipo.",
+    "items": [
+      {
+        "id": "elegir-motobomba",
+        "h": "Cómo elegir una motobomba",
+        "steps": [
+          "Caudal: cuánta agua o lodo necesitas mover, en litros por minuto. Calcúlalo con el volumen a desaguar y el tiempo disponible.",
+          "Altura total: suma la altura de succión (del agua a la bomba), la altura de descarga (de la bomba al punto de salida) y las pérdidas de la manguera, que crecen con el largo y las curvas.",
+          "Qué vas a bombear: para lodo o agua con arena elige una bomba para sólidos, con impulsor resistente a la abrasión.",
+          "Diámetro de succión y descarga: debe coincidir con tus mangueras; una manguera más angosta reduce el caudal.",
+          "Altitud: los motores diésel pierden potencia a mayor altura. Para trabajo en alta montaña consulta un motor turboalimentado.",
+          "Con esos datos (caudal, altura y tipo de fluido) escríbenos y te recomendamos el equipo."
+        ]
+      },
+      {
+        "id": "mantenimiento",
+        "h": "Mantenimiento básico de un motor diésel",
+        "steps": [
+          "Antes de arrancar: revisa el nivel de aceite y de refrigerante, y que no haya fugas.",
+          "Filtro de aire: en minería hay mucho polvo; revísalo y límpialo con frecuencia. Un filtro tapado reduce potencia y desgasta el motor.",
+          "Combustible limpio: drena el agua del filtro separador y guarda el diésel en recipientes limpios y tapados.",
+          "Radiador: mantén limpias las aletas y revisa las mangueras y la correa del ventilador.",
+          "Cambios de aceite y filtros: hazlos según las horas del horómetro que indique el manual, no solo por fechas.",
+          "Si notas humo anormal, pérdida de fuerza, golpeteo o sobrecalentamiento, detén el equipo y consúltanos."
+        ]
+      },
+      {
+        "id": "pedir-repuesto",
+        "h": "Cómo pedir el repuesto correcto",
+        "steps": [
+          "Toma una foto de la placa del motor o del equipo: allí está el modelo y el número de serie.",
+          "Toma fotos de la pieza dañada desde varios ángulos, con una regla o un metro al lado para ver el tamaño.",
+          "Si puedes, anota medidas clave: diámetro, número de dientes, tipo de rosca o largo.",
+          "Busca en el catálogo de repuestos filtrando por tu motor, o envíanos todo por WhatsApp y te confirmamos la pieza."
+        ]
+      }
+    ],
+    "cta": "¿Tienes dudas? Escríbenos",
+    "waGuide": "Hola JF Motores, leí la guía y tengo una pregunta: "
   }
 }

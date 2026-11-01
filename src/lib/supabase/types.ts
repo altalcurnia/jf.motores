@@ -423,6 +423,13 @@ export type Database = {
       accept_privacy: { Args: Record<string, never>; Returns: undefined };
       set_user_role: { Args: { target: string; role_key: string }; Returns: undefined };
       set_role_permission: { Args: { role_key: string; permission_key: string; granted: boolean }; Returns: undefined };
+      set_role_all_permissions: { Args: { role_key: string; granted: boolean }; Returns: undefined };
+      create_role: { Args: { role_name: string; role_description?: string | null; internal?: boolean; copy_from?: string | null }; Returns: string };
+      update_role: { Args: { role_key: string; role_name: string; role_description?: string | null }; Returns: undefined };
+      delete_role: { Args: { role_key: string }; Returns: undefined };
+      owner_unlock: { Args: { password: string }; Returns: Json };
+      owner_lock: { Args: Record<string, never>; Returns: undefined };
+      owner_unlock_status: { Args: Record<string, never>; Returns: string | null };
     };
     Enums: {
       catalog_type: "motobomba" | "motor" | "repuesto";

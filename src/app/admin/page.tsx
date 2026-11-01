@@ -80,8 +80,8 @@ async function Dashboard() {
               <span className="pill ok">Disponible</span>
             </Link>
             <Link href="/admin/permisos" className="card link">
-              <h3>Permisos</h3>
-              <p>Qué puede hacer cada rol (Editor, Asesor). Administrador y Cliente son fijos.</p>
+              <h3>Roles y permisos</h3>
+              <p>Crea roles y marca qué puede hacer cada uno. Los cambios piden tu contraseña.</p>
               <span className="pill ok">Disponible</span>
             </Link>
           </>

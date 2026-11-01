@@ -16,9 +16,17 @@ export function SiteFooter({ dict, locale }: { dict: Dictionary; locale: Locale 
         <br />
         <small className="price-notice">{dict.footer.priceNotice}</small>
         <br />
-        <Link className="footer-link" href={`/${locale}/legal/privacidad`}>
-          {dict.footer.privacy}
-        </Link>
+        <span className="footer-links">
+          <Link className="footer-link" href={`/${locale}/soporte`}>
+            {dict.nav.soporte}
+          </Link>
+          <Link className="footer-link" href={`/${locale}/guias`}>
+            {dict.nav.guias}
+          </Link>
+          <Link className="footer-link" href={`/${locale}/legal/privacidad`}>
+            {dict.footer.privacy}
+          </Link>
+        </span>
       </p>
     </footer>
   );
