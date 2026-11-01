@@ -836,8 +836,11 @@ body.drawer-open { overflow: hidden; }
   .part-row.on { transform: none; }
   .part-row-title { display: none; }
   .part-row a { flex: none; font-size: 10px; padding: 8px 10px; }
-  body.in-journey.parts-open #hud { opacity: 0; }
+  /* El riel tapa etiquetas del despiece en pantallas angostas */
+  body.in-journey.parts-open #rail { opacity: 0; }
 }
+/* En el despiece la fila de piezas ocupa la izquierda: el tacómetro se oculta */
+body.in-journey.parts-open #hud { opacity: 0; }
 /* Con el celular en pantalla, el tacómetro lo muestra el propio teléfono */
 body.in-journey.app-open #hud { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {

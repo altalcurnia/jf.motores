@@ -232,7 +232,8 @@ export function startEngine(opts) {
         mk(new THREE.BoxGeometry(6.2, 0.05, 2.1), MAT.glow, -0.2, 0.035, 0),
       );
       engine.add(luzG);
-      regPart(luzG, 0, -1.15, 0);
+      // La luz ambiental es solo ambientación: no se separa en el despiece ni es una pieza
+      regPart(luzG, 0, 0, 0);
 
       const CYL_X = [-1.275, -0.425, 0.425, 1.275];
       const blockG = new THREE.Group();
@@ -626,6 +627,8 @@ export function startEngine(opts) {
           th: 0.9,
         },
       ];
+      // Etiquetas que no están en la página (p. ej. retiradas) se ignoran
+      for (let i = labelDefs.length - 1; i >= 0; i--) if (!labelDefs[i].el) labelDefs.splice(i, 1);
       labelDefs.forEach((d) => {
         d.anchor = new THREE.Object3D();
         d.anchor.position.copy(d.off);
@@ -635,7 +638,7 @@ export function startEngine(opts) {
       
       /* piezas clicables → categoría de repuestos */
       const PART_GROUPS = {
-        chasis: skid, luz: luzG, bloque: blockG, camisas: linerG, pistones: pistonG,
+        chasis: skid, bloque: blockG, camisas: linerG, pistones: pistonG,
         culata: headG, escape: escG, tanque: tankG, radiador: radG, ventilador: fanG,
         volante: flyG, bomba: pumpG, tablero: tabG,
       };
@@ -925,6 +928,45 @@ export function startEngine(opts) {
           Math.sin(t * 12.9898 + s) * 0.5 + Math.sin(t * 7.233 + s * 2) * 0.5
         );
       }
+      /* Encuadre del despiece: la cámara se aleja o acerca lo justo para que
+         todas las piezas separadas quepan en el área libre de la pantalla. */
+      let explodedBox = null;
+      function getExplodedBox() {
+        if (explodedBox) return explodedBox;
+        for (const p of parts) p.position.copy(p.userData.base).add(p.userData.dir);
+        engine.updateMatrixWorld(true);
+        explodedBox = new THREE.Box3().setFromObject(engine);
+        for (const p of parts) p.position.copy(p.userData.base);
+        engine.updateMatrixWorld(true);
+        return explodedBox;
+      }
+      const fitDir = new THREE.Vector3();
+      const fitU = new THREE.Vector3();
+      const fitV = new THREE.Vector3();
+      const fitP = new THREE.Vector3();
+      const fitT = new THREE.Vector3();
+      const fitC = new THREE.Vector3();
+      const WORLD_UP = new THREE.Vector3(0, 1, 0);
+      let viewOffsetOn = false;
+      // Márgenes (px) que ocupan encabezado, franjas, fila de piezas y riel en el despiece
+      function freeArea(W, H) {
+        const lb = H * 0.07;
+        if (W <= 760) return { l: 10, r: 34, t: Math.max(lb, 70) + 40, b: lb + 64 };
+        return { l: Math.min(300, W * 0.24), r: 80, t: Math.max(lb, 76) + 40, b: lb + 16 };
+      }
+      /** Distancia mínima para que la caja quepa en el área libre, mirando a T desde la dirección dir. */
+      function fitDistance(box, T, dir, tanH, tanV) {
+        fitU.crossVectors(WORLD_UP, dir).normalize();
+        fitV.crossVectors(dir, fitU).normalize();
+        let d = 0;
+        for (let i = 0; i < 8; i++) {
+          fitP.set(i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z).sub(T);
+          const along = fitP.dot(dir);
+          d = Math.max(d, along + Math.abs(fitP.dot(fitU)) / tanH, along + Math.abs(fitP.dot(fitV)) / tanV);
+        }
+        return d;
+      }
+
       function tick() {
         if (rafId === -1) return;
         rafId = requestAnimationFrame(tick);
@@ -944,16 +986,38 @@ export function startEngine(opts) {
           0.5,
           1.5,
         );
-        const rEff = Math.max(S.camR * CAMK, RMIN);
-        camera.position.set(
-          rEff * Math.sin(ph) * Math.sin(th),
-          rEff * Math.cos(ph) + S.camTY,
-          rEff * Math.sin(ph) * Math.cos(th),
-        );
+        const rBase = Math.max(S.camR * CAMK, RMIN);
+        fitDir.set(Math.sin(ph) * Math.sin(th), Math.cos(ph), Math.sin(ph) * Math.cos(th));
+        fitT.set(0, S.camTY, 0);
+        let rEff = rBase;
+        const ef = THREE.MathUtils.smoothstep(S.explode, 0, 1);
+        const W = window.innerWidth,
+          H = window.innerHeight;
+        if (ef > 0.001) {
+          const box = getExplodedBox();
+          box.getCenter(fitC);
+          fitT.lerp(fitC, ef);
+          const m = freeArea(W, H);
+          const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+          const tanH = tanV * (W / H);
+          const freeW = Math.max(W - m.l - m.r, W * 0.4);
+          const freeH = Math.max(H - m.t - m.b, H * 0.4);
+          const dFit = fitDistance(box, fitT, fitDir, tanH * (freeW / W) * 0.94, tanV * (freeH / H) * 0.94);
+          rEff = THREE.MathUtils.lerp(rBase, dFit, ef);
+          // Centrar la imagen en el área libre (corre el centro óptico)
+          const ox = ((m.l - m.r) / 2) * ef;
+          const oy = ((m.t - m.b) / 2) * ef;
+          camera.setViewOffset(W, H, -ox, -oy, W, H);
+          viewOffsetOn = true;
+        } else if (viewOffsetOn) {
+          camera.clearViewOffset();
+          viewOffsetOn = false;
+        }
+        camera.position.copy(fitT).addScaledVector(fitDir, rEff);
         const sh = S.shake * R.rpm;
         camera.position.x += noise(t, 1) * 0.028 * sh;
         camera.position.y += noise(t, 2) * 0.02 * sh;
-        camera.lookAt(0, S.camTY, 0);
+        camera.lookAt(fitT);
 
         engine.position.set(
           noise(t, 3) * 0.018 * sh,
@@ -990,8 +1054,6 @@ export function startEngine(opts) {
 
         applyAtmo(S.atmo);
 
-        const W = window.innerWidth,
-          H = window.innerHeight;
         for (const d of labelDefs) {
           const vis =
             THREE.MathUtils.clamp((e - d.th) * 6, 0, 1) *

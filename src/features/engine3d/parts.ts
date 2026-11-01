@@ -28,5 +28,4 @@ export const engineLabels = [
   { id: "lbl-pistones", part: "pistones" },
   { id: "lbl-tanque", part: "tanque" },
   { id: "lbl-tablero", part: "tablero" },
-  { id: "lbl-luz", part: "luz" },
 ] as const satisfies readonly { id: string; part: PartKey }[];
