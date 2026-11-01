@@ -605,7 +605,7 @@
     "disclaimer": "O app está em desenvolvimento. Funções e data de lançamento podem mudar; as imagens são uma simulação.",
     "cta": "Quero saber quando estiver pronto",
     "wa": "Olá JF Motores, quero saber quando o app de monitoramento JF Monitor estiver pronto.",
-    "back": "Voltar aos meus equipamentos",
+    "back": "Voltar",
     "plansTitle": "Planos previstos",
     "plansIntro": "Três níveis conforme o que você precisa ver. Os preços serão definidos no lançamento: dependem da conexão disponível no seu local (celular ou satélite).",
     "recommended": "Recomendado",
@@ -628,6 +628,7 @@
         "items": [
           "Câmera industrial à prova d'água e de poeira",
           "Vídeo ao vivo a 30 quadros por segundo quando você abre o app",
+          "Controle remoto: ligar, desligar e ajustar a velocidade",
           "Gravação contínua no equipamento para rever depois",
           "Clipe de vídeo anexado a cada alerta",
           "Visão noturna"
@@ -640,8 +641,7 @@
         "items": [
           "Vídeo ao vivo e gravação na nuvem 24 horas",
           "Várias câmeras, incluindo uma térmica para detectar superaquecimento",
-          "Aviso se pessoas ou veículos se aproximam do equipamento à noite",
-          "Controle remoto incluído: ligar, desligar e ajustar a velocidade",
+          "Câmeras com IA que detectam anomalias: fumaça, vazamentos, faíscas ou pessoas perto do equipamento",
           "Assistência de um técnico da JF vendo o mesmo vídeo"
         ],
         "needs": "Requer conexão via satélite ilimitada e energia permanente (solar ou rede)."
@@ -652,12 +652,8 @@
     "extrasIntro": "Vai funcionar como nos equipamentos de bombeamento profissionais: um plano base necessário e extras que você adiciona conforme sua operação.",
     "extras": [
       {
-        "h": "Controle remoto",
-        "p": "Ligar, desligar, acelerar e desacelerar o motor pelo app, com confirmação e registro de cada comando."
-      },
-      {
-        "h": "Alarmes por ligação",
-        "p": "Se ninguém vir a notificação, o sistema liga para o celular dos responsáveis, um após o outro."
+        "h": "Alarmes por WhatsApp",
+        "p": "Se algo sai da faixa, o aviso chega ao WhatsApp de cada responsável com o equipamento, o valor e o que verificar."
       },
       {
         "h": "Conexão via satélite",
@@ -668,7 +664,7 @@
         "p": "Histórico detalhado com mais leituras por minuto e relatórios para baixar por turno ou mês."
       }
     ],
-    "extrasNote": "O plano Essencial é a base: os extras e os planos com câmera são somados a ele."
+    "extrasNote": "O plano Essencial é a base: os extras e os planos com câmera são somados a ele. O controle remoto vem incluído a partir do plano Visão."
   },
   "appForm": {
     "title": "Quero saber",

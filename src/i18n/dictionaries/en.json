@@ -605,7 +605,7 @@
     "disclaimer": "The app is in development. Features and launch date may change; the images are a simulation.",
     "cta": "Let me know when it's ready",
     "wa": "Hello JF Motores, I'd like to know when the JF Monitor app is ready.",
-    "back": "Back to my equipment",
+    "back": "Back",
     "plansTitle": "Planned plans",
     "plansIntro": "Three levels depending on what you need to see. Prices will be set at launch: they depend on the connection available at your site (cellular or satellite).",
     "recommended": "Recommended",
@@ -628,6 +628,7 @@
         "items": [
           "Water- and dust-proof industrial camera",
           "Live video at 30 frames per second when you open the app",
+          "Remote control: start, stop and adjust speed",
           "Continuous on-device recording to review later",
           "Video clip attached to every alert",
           "Night vision"
@@ -640,8 +641,7 @@
         "items": [
           "Live video and cloud recording around the clock",
           "Several cameras, including a thermal one to detect overheating",
-          "Alert if people or vehicles approach the unit at night",
-          "Remote control included: start, stop and adjust speed",
+          "AI cameras that detect anomalies: smoke, leaks, sparks or people near the unit",
           "Assistance from a JF technician watching the same video"
         ],
         "needs": "Requires unlimited satellite connection and permanent power (solar or grid)."
@@ -652,12 +652,8 @@
     "extrasIntro": "It will work like professional pumping equipment: a required base plan plus add-ons you choose for your operation.",
     "extras": [
       {
-        "h": "Remote control",
-        "p": "Start, stop, speed up and slow down the engine from the app, with confirmation and a log of every command."
-      },
-      {
-        "h": "Call alarms",
-        "p": "If nobody sees the notification, the system calls the people in charge, one after another."
+        "h": "WhatsApp alarms",
+        "p": "If something goes out of range, the alert reaches each person in charge on WhatsApp with the unit, the value and what to check."
       },
       {
         "h": "Satellite connection",
@@ -668,7 +664,7 @@
         "p": "Detailed history with more readings per minute and downloadable reports by shift or month."
       }
     ],
-    "extrasNote": "The Essential plan is the base: add-ons and camera plans are added on top of it."
+    "extrasNote": "The Essential plan is the base: add-ons and camera plans are added on top of it. Remote control is included from the Vision plan."
   },
   "appForm": {
     "title": "Let me know",

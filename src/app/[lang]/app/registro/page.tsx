@@ -6,6 +6,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import { getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { WaitlistForm, type WaitlistValue } from "@/features/app-preview/WaitlistForm";
+import { BackButton } from "@/components/BackButton";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
@@ -17,6 +18,7 @@ export default async function WaitlistPage() {
   const t = dict.appForm;
   return (
     <section className="block cat-page wl-page">
+      <BackButton label={dict.app.back} fallback={`/${locale}/app`} />
       <header className="cat-head">
         <span className="app-badge">{dict.app.badge}</span>
         <div className="sk">{dict.app.title}</div>

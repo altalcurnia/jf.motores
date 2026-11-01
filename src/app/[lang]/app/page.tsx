@@ -3,6 +3,7 @@ import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { localizedAlternates } from "@/i18n/metadata";
 import { Arrow } from "@/components/Arrow";
 import { AppStory } from "@/features/app-preview/AppStory";
+import { BackButton } from "@/components/BackButton";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
@@ -20,6 +21,7 @@ export default async function AppPreviewPage() {
   return (
     <div className="app-page">
       <section className="block app-hero">
+        <BackButton label={t.back} fallback={`/${locale}/cuenta`} />
         <span className="app-badge">{t.badge}</span>
         <div className="sk">{t.kicker}</div>
         <h1>{t.title}</h1>
@@ -85,9 +87,7 @@ export default async function AppPreviewPage() {
             {t.cta}
             <Arrow />
           </Link>
-          <Link className="btn g" href={`/${locale}/cuenta`}>
-            {t.back}
-          </Link>
+          <BackButton label={t.back} fallback={`/${locale}/cuenta`} className="as-btn" />
         </div>
       </section>
     </div>
