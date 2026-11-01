@@ -535,8 +535,16 @@
         "p": "Una notificación te avisa con el equipo, el valor y qué revisar primero."
       },
       {
+        "h": "También por WhatsApp",
+        "p": "El aviso llega al WhatsApp de los responsables, aunque no tengan la app abierta."
+      },
+      {
+        "h": "Lo controlas a distancia",
+        "p": "Bajas las revoluciones o detienes la motobomba desde el celular, sin ir hasta el frente."
+      },
+      {
         "h": "De vuelta a la normalidad",
-        "p": "Ajustas la operación y confirmas en segundos que todo volvió a su rango."
+        "p": "Confirmas en segundos que todo volvió a su rango y queda registrado en el historial."
       }
     ],
     "screen": {
@@ -550,7 +558,18 @@
       "recovered": "Normalizado",
       "notifTitle": "Alerta · Temperatura alta",
       "notifBody": "104 °C · revisa radiador y nivel de refrigerante",
-      "live": "En vivo"
+      "live": "En vivo",
+      "waApp": "WhatsApp",
+      "waFrom": "JF Monitor",
+      "waTime": "ahora",
+      "waMsg": "⚠ JF-M40 #0042 · Temperatura 104 °C. Revisa radiador y refrigerante.",
+      "waOpen": "Abrir en la app",
+      "rpm": "Régimen",
+      "control": "Control remoto",
+      "reduce": "Bajar a 1.800 rpm",
+      "stop": "Detener",
+      "sent": "Orden confirmada por el equipo",
+      "adjusting": "Ajustando"
     },
     "featuresTitle": "Lo que estamos construyendo",
     "features": [

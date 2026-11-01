@@ -1,0 +1,100 @@
+<!doctype html><html><body style="margin:0;background:#000">
+<canvas id="c"></canvas>
+<script>
+// Fondo de la página de JF Monitor: túnel minero minimalista con luz cálida, bruma y bokeh.
+// Se renderiza una vez a imagen (render.mjs) para no costar nada en el teléfono.
+function draw(W, H, seed) {
+  const c = document.getElementById("c"); c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  let s = seed; const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  const cx = W / 2, cy = H * 0.44;
+
+  // Base
+  let g = x.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.75);
+  g.addColorStop(0, "#2b2010"); g.addColorStop(0.35, "#120e09"); g.addColorStop(1, "#040506");
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+
+  // Perfil del túnel (paredes rectas + bóveda) repetido hacia el fondo
+  const unit = Math.min(W, H * 1.35);
+  const prof = (k) => { // k: 1 cerca → 0 lejos
+    const w = unit * (0.08 + 1.05 * Math.pow(k, 1.6));
+    const h = w * 0.82;
+    return { w, h, x0: cx - w / 2, y0: cy + h * 0.42 - h };
+  };
+  const N = 26;
+  for (let i = N; i >= 1; i--) {
+    const k = i / N;
+    const p = prof(k);
+    const a = 0.06 + 0.55 * Math.pow(1 - k, 2.2) * (i % 2 ? 1 : 0.55);
+    x.save();
+    x.lineWidth = Math.max(1, 2.6 * k);
+    x.strokeStyle = `rgba(247, 198, 0, ${Math.min(0.5, a * 0.9)})`;
+    x.shadowColor = "rgba(255, 190, 60, 0.6)"; x.shadowBlur = 18 * (1 - k) + 4;
+    x.beginPath();
+    const r = p.w / 2;
+    x.moveTo(p.x0, p.y0 + p.h);
+    x.lineTo(p.x0, p.y0 + r * 0.9);
+    x.ellipse(cx, p.y0 + r * 0.9, r, r * 0.9, 0, Math.PI, 0);
+    x.lineTo(p.x0 + p.w, p.y0 + p.h);
+    x.stroke();
+    x.restore();
+  }
+  // Líneas longitudinales (cables / rieles) hacia el punto de fuga
+  const far = prof(1 / N), near = prof(1.35);
+  const guides = [[0.06, 1], [0.94, 1], [0.4, 1.0], [0.6, 1.0], [0.0, 0.55], [1.0, 0.55]];
+  x.save(); x.lineWidth = 1.2;
+  for (const [fx, fy] of guides) {
+    const ax = far.x0 + far.w * fx, ay = far.y0 + far.h * fy;
+    const bx = near.x0 + near.w * fx, by = near.y0 + near.h * fy;
+    const lg = x.createLinearGradient(ax, ay, bx, by);
+    lg.addColorStop(0, "rgba(247,198,0,0.35)"); lg.addColorStop(1, "rgba(247,198,0,0)");
+    x.strokeStyle = lg; x.beginPath(); x.moveTo(ax, ay); x.lineTo(bx, by); x.stroke();
+  }
+  x.restore();
+
+  // Lámparas en las paredes, alternando lados
+  for (let i = 2; i <= N; i += 2) {
+    const k = i / N; const p = prof(k);
+    const side = (i / 2) % 2 ? 0 : 1;
+    const lx = p.x0 + (side ? p.w - 6 * k : 6 * k), ly = p.y0 + p.h * 0.32, rr = 1.5 + 5 * k;
+    const lg = x.createRadialGradient(lx, ly, 0, lx, ly, rr * 7);
+    lg.addColorStop(0, "rgba(255,232,160,0.95)"); lg.addColorStop(0.12, "rgba(255,200,80,0.45)"); lg.addColorStop(1, "rgba(255,170,40,0)");
+    x.fillStyle = lg; x.beginPath(); x.arc(lx, ly, rr * 7, 0, Math.PI * 2); x.fill();
+  }
+
+  // Haz de luz volumétrico desde el fondo
+  x.save(); x.globalCompositeOperation = "screen"; x.filter = "blur(40px)";
+  const beam = x.createRadialGradient(cx, cy, 0, cx, cy, unit * 0.55);
+  beam.addColorStop(0, "rgba(255,190,70,0.55)"); beam.addColorStop(0.4, "rgba(255,150,40,0.15)"); beam.addColorStop(1, "rgba(0,0,0,0)");
+  x.fillStyle = beam; x.fillRect(0, 0, W, H);
+  x.restore();
+
+  // Bruma
+  x.save(); x.filter = "blur(70px)"; x.globalCompositeOperation = "screen";
+  for (let i = 0; i < 9; i++) {
+    x.fillStyle = `rgba(200,160,110,${0.035 + rnd() * 0.04})`;
+    x.beginPath(); x.ellipse(rnd() * W, H * (0.55 + rnd() * 0.4), W * (0.15 + rnd() * 0.25), H * (0.05 + rnd() * 0.08), 0, 0, Math.PI * 2); x.fill();
+  }
+  x.restore();
+
+  // Bokeh / partículas de polvo
+  for (let i = 0; i < 70; i++) {
+    const r = 1 + rnd() * rnd() * 26, px = rnd() * W, py = rnd() * H;
+    x.save(); x.filter = `blur(${r > 10 ? r * 0.5 : 0.5}px)`; x.globalCompositeOperation = "screen";
+    x.fillStyle = `rgba(255,${180 + rnd() * 50 | 0},${80 + rnd() * 60 | 0},${r > 10 ? 0.08 + rnd() * 0.1 : 0.25 + rnd() * 0.35})`;
+    x.beginPath(); x.arc(px, py, r, 0, Math.PI * 2); x.fill(); x.restore();
+  }
+
+  // Viñeta
+  const v = x.createRadialGradient(cx, cy, Math.min(W, H) * 0.25, cx, cy, Math.max(W, H) * 0.8);
+  v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,0.78)");
+  x.fillStyle = v; x.fillRect(0, 0, W, H);
+
+  // Grano fino
+  const img = x.getImageData(0, 0, W, H), d = img.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (rnd() - 0.5) * 14; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  x.putImageData(img, 0, 0);
+  return c.toDataURL("image/webp", 0.82);
+}
+window.draw = draw;
+</script></body></html>

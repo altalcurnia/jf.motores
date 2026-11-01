@@ -535,8 +535,16 @@
         "p": "A notification tells you the unit, the value and what to check first."
       },
       {
+        "h": "On WhatsApp too",
+        "p": "The alert reaches the WhatsApp of the people in charge, even if the app isn't open."
+      },
+      {
+        "h": "Control it remotely",
+        "p": "Lower the speed or stop the pump set from your phone, without walking to the face."
+      },
+      {
         "h": "Back to normal",
-        "p": "Adjust the operation and confirm in seconds that everything is back in range."
+        "p": "Confirm in seconds that everything is back in range, and it's logged in the history."
       }
     ],
     "screen": {
@@ -550,7 +558,18 @@
       "recovered": "Recovered",
       "notifTitle": "Alert · High temperature",
       "notifBody": "104 °C · check radiator and coolant level",
-      "live": "Live"
+      "live": "Live",
+      "waApp": "WhatsApp",
+      "waFrom": "JF Monitor",
+      "waTime": "now",
+      "waMsg": "⚠ JF-M40 #0042 · Temperature 104 °C. Check radiator and coolant.",
+      "waOpen": "Open in the app",
+      "rpm": "Speed",
+      "control": "Remote control",
+      "reduce": "Lower to 1,800 rpm",
+      "stop": "Stop",
+      "sent": "Command confirmed by the unit",
+      "adjusting": "Adjusting"
     },
     "featuresTitle": "What we are building",
     "features": [
