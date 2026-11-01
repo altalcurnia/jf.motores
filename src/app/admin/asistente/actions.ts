@@ -22,18 +22,11 @@ export async function saveSettings(input: {
   model: string;
   webVerify: boolean;
   domains: string;
-  budgetBase: number;
-  budgetPerMillion: number;
-  budgetMax: number;
 }): Promise<ActionResult> {
   const m = await manager();
   if (!m) return { ok: false, error: "No tienes permiso para configurar el asistente." };
   const model = input.model.trim().toLowerCase();
   if (!/^[a-z0-9][a-z0-9.-]{2,39}$/.test(model)) return { ok: false, error: "Nombre de modelo inválido." };
-  const money = [input.budgetBase, input.budgetPerMillion, input.budgetMax];
-  if (money.some((v) => !Number.isFinite(v) || v < 0) || input.budgetMax > 50 || input.budgetBase > 10 || input.budgetPerMillion > 10) {
-    return { ok: false, error: "Revisa los cupos: valores en dólares entre 0 y 10 (tope máximo 50)." };
-  }
   const { error } = await m.supabase
     .from("ai_settings")
     .update({
@@ -41,9 +34,6 @@ export async function saveSettings(input: {
       model,
       web_verify: input.webVerify,
       official_domains: cleanDomains(input.domains.split(/[\s,;]+/)),
-      budget_base_usd: input.budgetBase,
-      budget_per_million_cop_usd: input.budgetPerMillion,
-      budget_max_usd: input.budgetMax,
       updated_at: new Date().toISOString(),
       updated_by: m.session.userId,
     })
@@ -51,6 +41,37 @@ export async function saveSettings(input: {
   if (error) return { ok: false, error: error.message };
   updateTag("assistant");
   return { ok: true };
+}
+
+const lockedMsg = (e: { message: string; hint?: string | null }) =>
+  e.hint === "unlock_required" ? "Este bloque está bloqueado: confirma tu contraseña en su candado." : e.message;
+
+/** Cupo de clientes. La base de datos exige que el propietario haya abierto el candado “ia_clientes”. */
+export async function saveCustomerBudget(input: { base: number; perMillion: number; max: number }): Promise<ActionResult> {
+  const m = await manager();
+  if (!m || !m.session.isOwner) return { ok: false, error: "Solo el propietario puede cambiar los cupos." };
+  const v = [input.base, input.perMillion, input.max];
+  if (v.some((x) => !Number.isFinite(x) || x < 0) || input.base > 10 || input.perMillion > 10 || input.max > 50) {
+    return { ok: false, error: "Revisa los valores: base y valor por millón entre 0 y 10 dólares; tope entre 0 y 50." };
+  }
+  const { error } = await m.supabase
+    .from("ai_settings")
+    .update({ budget_base_usd: input.base, budget_per_million_cop_usd: input.perMillion, budget_max_usd: input.max })
+    .eq("id", true);
+  if (error) return { ok: false, error: lockedMsg(error) };
+  return { ok: true, message: "Cupos de clientes guardados." };
+}
+
+/** Cupo mensual de cada rol interno. La base de datos exige el candado “ia_personal”. */
+export async function saveStaffBudgets(list: { key: string; usd: number }[]): Promise<ActionResult> {
+  const m = await manager();
+  if (!m || !m.session.isOwner) return { ok: false, error: "Solo el propietario puede cambiar los cupos." };
+  if (list.some((r) => !Number.isFinite(r.usd) || r.usd < 0 || r.usd > 50)) return { ok: false, error: "Cada cupo debe estar entre 0 y 50 dólares." };
+  for (const r of list) {
+    const { error } = await m.supabase.rpc("set_role_ai_budget", { role_key: r.key, usd: r.usd });
+    if (error) return { ok: false, error: lockedMsg(error) };
+  }
+  return { ok: true, message: "Cupos del personal guardados." };
 }
 
 /** Lee el PDF ya subido al bucket privado, extrae su texto y lo guarda como fuente del asistente. */

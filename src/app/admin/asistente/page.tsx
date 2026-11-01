@@ -39,6 +39,11 @@ async function Body() {
   if (error) return <div className="notice err">No se pudieron leer los documentos: {error.message}</div>;
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Bogota" }));
   const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const [{ data: staffRoles }, locks] = await Promise.all([
+    supabase.from("roles").select("key, name, ai_budget_usd").eq("is_internal", true).order("id"),
+    session.isOwner ? supabase.rpc("owner_scope_status") : Promise.resolve({ data: null }),
+  ]);
+  const lockMap = (locks.data ?? {}) as Record<string, string>;
   const { data: usage } = await supabase
     .from("ai_usage")
     .select("cost_usd, requests, profiles ( email )")
@@ -67,6 +72,9 @@ async function Body() {
         perMillion: Number(settings?.budget_per_million_cop_usd ?? 0.08),
         max: Number(settings?.budget_max_usd ?? 2),
       }}
+      isOwner={session.isOwner}
+      locks={{ personal: lockMap.ia_personal ?? null, clientes: lockMap.ia_clientes ?? null }}
+      staff={(staffRoles ?? []).map((r) => ({ key: r.key, name: r.name, usd: r.ai_budget_usd == null ? null : Number(r.ai_budget_usd) }))}
       usage={(usage ?? []).map((u) => ({ email: u.profiles?.email ?? "—", cost: Number(u.cost_usd), requests: u.requests }))}
       telegramConfigured={!!process.env.TELEGRAM_BOT_TOKEN && !!process.env.TELEGRAM_WEBHOOK_SECRET}
     />

@@ -463,9 +463,9 @@ export type Database = {
         ];
       };
       roles: {
-        Row: { description: string | null; id: number; is_internal: boolean; key: string; name: string };
-        Insert: { description?: string | null; id?: never; is_internal?: boolean; key: string; name: string };
-        Update: { description?: string | null; id?: never; is_internal?: boolean; key?: string; name?: string };
+        Row: { ai_budget_usd: number | null; description: string | null; id: number; is_internal: boolean; key: string; name: string };
+        Insert: { ai_budget_usd?: number | null; description?: string | null; id?: never; is_internal?: boolean; key: string; name: string };
+        Update: { ai_budget_usd?: number | null; description?: string | null; id?: never; is_internal?: boolean; key?: string; name?: string };
         Relationships: [];
       };
       routing_rules: {
@@ -561,6 +561,10 @@ export type Database = {
       owner_unlock: { Args: { password: string }; Returns: Json };
       owner_lock: { Args: Record<string, never>; Returns: undefined };
       owner_unlock_status: { Args: Record<string, never>; Returns: string | null };
+      owner_unlock_scope: { Args: { password: string; scope: string }; Returns: Json };
+      owner_lock_scope: { Args: { scope: string }; Returns: undefined };
+      owner_scope_status: { Args: Record<string, never>; Returns: Json };
+      set_role_ai_budget: { Args: { role_key: string; usd: number }; Returns: undefined };
       find_customer: {
         Args: { customer_email: string };
         Returns: { id: string; full_name: string | null; email: string; phone: string | null; country: string | null; purchases: number }[];

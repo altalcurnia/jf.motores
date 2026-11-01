@@ -9,7 +9,16 @@ const time = new Intl.DateTimeFormat("es-CO", { timeStyle: "short" });
  * Confirmación con la contraseña del propietario. La base de datos la verifica y
  * habilita cambios de roles y permisos durante 10 minutos.
  */
-export function OwnerUnlock({ expiresAt }: { expiresAt: string | null }) {
+export function OwnerUnlock({
+  expiresAt,
+  scope,
+  what = "cambiar roles o permisos",
+}: {
+  expiresAt: string | null;
+  /** Candado de una sección concreta (p. ej. "ia_personal"); sin él, es el candado de roles y permisos. */
+  scope?: "ia_personal" | "ia_clientes";
+  what?: string;
+}) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -27,7 +36,10 @@ export function OwnerUnlock({ expiresAt }: { expiresAt: string | null }) {
     e.preventDefault();
     setBusy(true);
     setMsg(null);
-    const { data, error } = await createSupabaseBrowserClient().rpc("owner_unlock", { password });
+    const supabase = createSupabaseBrowserClient();
+    const { data, error } = scope
+      ? await supabase.rpc("owner_unlock_scope", { password, scope })
+      : await supabase.rpc("owner_unlock", { password });
     setBusy(false);
     setPassword("");
     if (error) return setMsg(error.message);
@@ -44,7 +56,8 @@ export function OwnerUnlock({ expiresAt }: { expiresAt: string | null }) {
   }
 
   async function lock() {
-    await createSupabaseBrowserClient().rpc("owner_lock");
+    const supabase = createSupabaseBrowserClient();
+    await (scope ? supabase.rpc("owner_lock_scope", { scope }) : supabase.rpc("owner_lock"));
     router.refresh();
   }
 
@@ -63,7 +76,7 @@ export function OwnerUnlock({ expiresAt }: { expiresAt: string | null }) {
   return (
     <form className="notice unlock" onSubmit={unlock}>
       <span>
-        🔒 Para cambiar roles o permisos, confirma <b>tu contraseña</b>. Queda habilitado 10 minutos.
+        🔒 Para {what}, confirma <b>tu contraseña</b>. Queda habilitado 10 minutos.
       </span>
       <div className="unlock-row">
         <input

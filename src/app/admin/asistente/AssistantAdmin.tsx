@@ -3,7 +3,18 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Linkified } from "@/components/Linkified";
-import { addDocument, connectTelegram, deleteDocument, newDocumentPath, saveSettings, setDocumentActive, testAssistant } from "./actions";
+import { OwnerUnlock } from "../OwnerUnlock";
+import {
+  addDocument,
+  connectTelegram,
+  deleteDocument,
+  newDocumentPath,
+  saveCustomerBudget,
+  saveSettings,
+  saveStaffBudgets,
+  setDocumentActive,
+  testAssistant,
+} from "./actions";
 
 export type DocRow = { id: string; title: string; chars: number; active: boolean; isTest: boolean; createdAt: string };
 type Note = { ok: boolean; text: string } | null;
@@ -24,8 +35,16 @@ export function AssistantAdmin(props: {
   domains: string[];
   budget: { base: number; perMillion: number; max: number };
   usage: { email: string; cost: number; requests: number }[];
+  isOwner: boolean;
+  locks: { personal: string | null; clientes: string | null };
+  staff: { key: string; name: string; usd: number | null }[];
 }) {
   const [budget, setBudget] = useState(props.budget);
+  const [staff, setStaff] = useState(props.staff.map((r) => ({ ...r, usd: r.usd ?? props.budget.max })));
+  const staffOpen = props.isOwner && !!props.locks.personal;
+  const clientsOpen = props.isOwner && !!props.locks.clientes;
+  const limitFor = (cop: number) => Math.min(budget.max, budget.base + (cop / 1_000_000) * budget.perMillion);
+  const capAt = budget.perMillion > 0 ? Math.max(0, ((budget.max - budget.base) / budget.perMillion) * 1_000_000) : null;
   const [webVerify, setWebVerify] = useState(props.webVerify);
   const [domains, setDomains] = useState(props.domains.join("\n"));
   const router = useRouter();
@@ -115,7 +134,7 @@ export function AssistantAdmin(props: {
                 return;
               }
               run(() =>
-                saveSettings({ enabled, model, webVerify, domains, budgetBase: budget.base, budgetPerMillion: budget.perMillion, budgetMax: budget.max }),
+                saveSettings({ enabled, model, webVerify, domains }),
               );
             }}
           >
@@ -124,33 +143,99 @@ export function AssistantAdmin(props: {
         </section>
 
         <section className="panel">
-          <h2>Cupos por cliente (al mes)</h2>
+          <h2>Cupos del personal (al mes)</h2>
           <p className="muted small">
-            Solo clientes con cuenta pueden usar el chat. Cupo = base + (compras en millones de COP × valor por millón), sin pasar del tope.
-            Ej.: con 0,10 + 0,08 por millón, un cliente que compró una motobomba de 25 millones llega al tope. Cada respuesta cuesta
-            alrededor de US$ 0,001 con deepseek-flash; una búsqueda en fuentes oficiales, US$ 0,008.
+            Cuánto puede gastar en el chat cada cuenta del equipo, según su rol. Lo defines tú. Cada respuesta cuesta alrededor de
+            US$ 0,001 con deepseek-flash; una búsqueda en fuentes oficiales, US$ 0,008.
           </p>
+          {props.isOwner ? (
+            <OwnerUnlock scope="ia_personal" what="cambiar los cupos del personal" expiresAt={props.locks.personal} />
+          ) : (
+            <div className="notice">🔒 Bloqueado. Solo el propietario puede cambiar estos cupos.</div>
+          )}
+          <div className="contact-row">
+            {staff.map((r, i) => (
+              <label key={r.key} className="field">
+                <span className="field-label">{r.name} (US$)</span>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="50"
+                  value={r.usd}
+                  disabled={!staffOpen}
+                  onChange={(e) => setStaff(staff.map((x, j) => (j === i ? { ...x, usd: Number(e.target.value) } : x)))}
+                />
+              </label>
+            ))}
+          </div>
+          {staffOpen && (
+            <button className="btn-primary" disabled={pending} onClick={() => run(() => saveStaffBudgets(staff.map((r) => ({ key: r.key, usd: r.usd }))))}>
+              Guardar cupos del personal
+            </button>
+          )}
+        </section>
+
+        <section className="panel">
+          <h2>Cupos de clientes (al mes)</h2>
+          <p className="muted small">
+            Solo clientes con cuenta pueden usar el chat. <b>Cupo = base + (compras en millones de COP × valor por millón)</b>, sin pasar
+            del tope. Se calcula solo con las compras registradas a su nombre (Mi cuenta → Mis equipos).
+          </p>
+          {props.isOwner ? (
+            <OwnerUnlock scope="ia_clientes" what="cambiar la fórmula de cupos de clientes" expiresAt={props.locks.clientes} />
+          ) : (
+            <div className="notice">🔒 Bloqueado. Solo el propietario puede cambiar esta fórmula.</div>
+          )}
           <div className="contact-row">
             <label className="field">
-              <span className="field-label">Base (US$)</span>
-              <input type="number" step="0.01" min="0" value={budget.base} onChange={(e) => setBudget({ ...budget, base: Number(e.target.value) })} />
+              <span className="field-label">Base sin compras (US$)</span>
+              <input type="number" step="0.01" min="0" value={budget.base} disabled={!clientsOpen} onChange={(e) => setBudget({ ...budget, base: Number(e.target.value) })} />
             </label>
             <label className="field">
-              <span className="field-label">Por millón comprado (US$)</span>
-              <input type="number" step="0.01" min="0" value={budget.perMillion} onChange={(e) => setBudget({ ...budget, perMillion: Number(e.target.value) })} />
+              <span className="field-label">Sube por cada millón comprado (US$)</span>
+              <input type="number" step="0.01" min="0" value={budget.perMillion} disabled={!clientsOpen} onChange={(e) => setBudget({ ...budget, perMillion: Number(e.target.value) })} />
             </label>
             <label className="field">
               <span className="field-label">Tope por cliente (US$)</span>
-              <input type="number" step="0.1" min="0" value={budget.max} onChange={(e) => setBudget({ ...budget, max: Number(e.target.value) })} />
+              <input type="number" step="0.1" min="0" value={budget.max} disabled={!clientsOpen} onChange={(e) => setBudget({ ...budget, max: Number(e.target.value) })} />
             </label>
           </div>
-          <p className="muted small">Se guarda con el botón Guardar de “Estado”.</p>
-          <h3>Consumo de este mes</h3>
+          <table className="table budget-table">
+            <thead>
+              <tr>
+                <th>Compras del cliente</th>
+                <th>Cupo al mes</th>
+                <th>Preguntas aprox.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[0, 1_000_000, 5_000_000, 12_000_000, 25_000_000].map((cop) => (
+                <tr key={cop}>
+                  <td>{cop ? `$ ${cop.toLocaleString("es-CO")} COP` : "Sin compras"}</td>
+                  <td>US$ {limitFor(cop).toFixed(2)}</td>
+                  <td>≈ {Math.round(limitFor(cop) / 0.0015).toLocaleString("es-CO")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {capAt !== null && (
+            <p className="muted small">Un cliente llega al tope con unos $ {Math.round(capAt).toLocaleString("es-CO")} COP en compras.</p>
+          )}
+          {clientsOpen && (
+            <button className="btn-primary" disabled={pending} onClick={() => run(() => saveCustomerBudget(budget))}>
+              Guardar cupos de clientes
+            </button>
+          )}
+        </section>
+
+        <section className="panel">
+          <h2>Consumo de este mes</h2>
           {props.usage.length ? (
             <table className="table">
               <thead>
                 <tr>
-                  <th>Cliente</th>
+                  <th>Cuenta</th>
                   <th>Preguntas</th>
                   <th>Costo (US$)</th>
                 </tr>
