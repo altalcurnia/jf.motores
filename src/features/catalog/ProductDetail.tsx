@@ -9,7 +9,6 @@ import { BRAND_PLACEHOLDER } from "@/components/placeholder";
 import { compatibleParts, compatibleWith, getCatalogData } from "./data";
 import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
-import { Viewer3D } from "./Viewer3D";
 import { OwnerBanner, StatusPill } from "./owned";
 import { catalogPaths, fill, formatPrice, productHref, specValue, storageUrl, tr, type CatalogType } from "./shared";
 import { getContact } from "@/lib/supabase/public";
@@ -69,10 +68,11 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
 
       <div className="pd-top">
         <div className="pd-media">
-          <Gallery images={images} referenceLabel={t.reference} />
-          {p.glbPath && (
-            <Viewer3D src={storageUrl(p.glbPath, supabaseUrl())} alt={name} label={t.view3d} closeLabel={t.close} />
-          )}
+          <Gallery
+            images={images}
+            referenceLabel={t.reference}
+            model={p.glbPath ? { src: storageUrl(p.glbPath, supabaseUrl()), alt: name, label3d: t.view3d, labelPhotos: t.photos } : undefined}
+          />
         </div>
 
         <div className="pd-info">

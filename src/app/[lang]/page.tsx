@@ -9,7 +9,7 @@ import { EngineExperience } from "@/features/engine3d/EngineExperience";
 import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 
 // Ilustración de referencia local (public/demo). Se reemplaza por una foto real de la empresa.
-const BENEFITS_IMAGE = "/demo/jf-m25.jpg";
+const BENEFITS_IMAGE = "/demo/motobomba-isometrica.jpg";
 
 const catalogKeys = ["motobombas", "motores", "repuestos"] as const;
 // Miniaturas de referencia por categoría (public/demo); se cambian por fotos reales.
@@ -119,7 +119,7 @@ export default async function HomePage() {
             <div className="b-left">
               <div className="b-visual reveal">
                 <FallbackImage src={BENEFITS_IMAGE} alt={b.imageAlt} />
-                {/* La referencia ya viene en la ilustración; la barra solo lleva el estado de prueba */}
+                {/* Barra inferior con el estado de prueba */}
                 <div className="bv-bar" style={{ justifyContent: "flex-end" }}>
                   <span>{b.bar2}</span>
                 </div>
