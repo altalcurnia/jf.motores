@@ -1043,3 +1043,11 @@ body.in-journey.app-open #hud { opacity: 0; }
 .ai-list > * { min-width: 0; }
 .ai-list { overflow-x: hidden; }
 .ai-msg a.wa-inline { color: #25d366; font-weight: 700; }
+/* Chat compacto: las respuestas usan todo el ancho */
+.ai-list { padding: 12px 10px; gap: 8px; }
+.ai-msg { padding: 9px 11px; font-size: 13.5px; }
+.ai-msg.assistant { max-width: 100%; }
+.ai-msg.user { max-width: 88%; }
+.ai-msg a.ai-wa { color: #fff; text-decoration: none; word-break: normal; }
+.ai-msg a.ai-wa { display: flex; width: fit-content; margin-top: 10px; }
+.ai-msg a.wa-inline { white-space: nowrap; }

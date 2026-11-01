@@ -8,7 +8,12 @@ const LINK =
 function sameSite(url: string): string | null {
   try {
     const u = new URL(url);
-    return typeof window !== "undefined" && u.host === window.location.host ? u.pathname + u.search + u.hash : null;
+    const own = new Set<string>();
+    if (typeof window !== "undefined") own.add(window.location.host);
+    try {
+      if (process.env.NEXT_PUBLIC_SITE_URL) own.add(new URL(process.env.NEXT_PUBLIC_SITE_URL).host);
+    } catch {}
+    return own.has(u.host) ? u.pathname + u.search + u.hash : null;
   } catch {
     return null;
   }
@@ -35,8 +40,9 @@ export function Linkified({ text, waHref }: { text: string; waHref?: string }) {
       continue;
     }
     const url = m[2] ?? m[3];
-    const label = m[1] ?? url.replace(/^https?:\/\/(www\.)?/, "");
     const internal = sameSite(url);
+    // Etiqueta corta: en enlaces del propio sitio solo la ruta (sin el idioma), en otros el dominio y la ruta
+    const label = m[1] ?? (internal ? internal.replace(/^\/(es|en|pt)(\/|$)/, "/") : url.replace(/^https?:\/\/(www\.)?/, ""));
     out.push(
       internal ? (
         <a key={`l${out.length}`} href={internal}>
