@@ -204,7 +204,7 @@ export function EngineExperience({ locale, t }: Props) {
             <p className="rpm-p" style={{ marginTop: 18 }}>{j.b.p}</p>
           </div>
 
-          <div className={"card jcard" + show("c")}>
+          <div className={"card right jcard jcard-parts" + (active && (stage === "c" || stage === "x") ? " on" : "")}>
             <div className="pk">{j.c.pk}</div>
             <h2>{j.c.h2}</h2>
             <p>{j.c.p}</p>
@@ -315,7 +315,7 @@ function MiniRemote({ on, p, s }: { on: boolean; p: number; s: Dictionary["journ
   const state = !pressed ? s.on : k < 1 ? s.stopping : s.off;
   return (
     <div className={`mini-remote${on ? " on" : ""}`} aria-hidden="true">
-      <div className={`hand-phone small${pressed ? " tapping" : ""}`}>
+      <div className={`hand-phone small${pressed && k < 1 ? " press-hold" : ""}`}>
         <Hand part="back" />
         <div className="phone">
           <div className="notch" />

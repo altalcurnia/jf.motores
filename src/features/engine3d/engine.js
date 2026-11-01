@@ -965,8 +965,9 @@ export function startEngine(opts) {
       // Márgenes (px) que ocupan encabezado, franjas, fila de piezas y riel en el despiece
       function freeArea(W, H) {
         const lb = H * 0.07;
-        if (W <= 760) return { l: 10, r: 34, t: Math.max(lb, 70) + 40, b: lb + 64 };
-        return { l: Math.min(300, W * 0.24), r: 80, t: Math.max(lb, 76) + 40, b: lb + 16 };
+        // Celular: la tarjeta "Por dentro" va arriba; PC: va a la derecha
+        if (W <= 760) return { l: 10, r: 34, t: lb + 58 + 150, b: lb + 64 };
+        return { l: Math.min(300, W * 0.24), r: Math.min(430, W * 0.3), t: Math.max(lb, 76) + 40, b: lb + 16 };
       }
       /** Distancia mínima para que la caja quepa en el área libre, mirando a T desde la dirección dir. */
       function fitDistance(box, T, dir, tanH, tanV) {

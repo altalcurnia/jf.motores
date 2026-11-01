@@ -88,7 +88,7 @@
     "a": {
       "pk": "01 · Arranque",
       "h2": "Arranca a la primera.",
-      "p": "Tranquilidad es saber que tu bomba enciende en cada turno.",
+      "p": "Tranquilidad es saber que tu bomba enciende en cada turno. Cada unidad sale probada de nuestro taller.",
       "chips": [
         {
           "label": "Probado en taller",
@@ -109,18 +109,18 @@
       "torque": "Torque",
       "temp": "Temp",
       "flow": "Caudal",
-      "p": "Caudal constante para sacar el agua y seguir produciendo."
+      "p": "Régimen pleno: caudal constante para sacar el agua y seguir produciendo, turno tras turno."
     },
     "c": {
       "pk": "03 · Por dentro",
       "h2": "Confianza que se puede ver.",
-      "p": "Toca una pieza para ver sus repuestos.",
+      "p": "Así es por dentro. Toca una pieza o su botón para ver los repuestos y con qué equipos son compatibles.",
       "hint": "▼ Sigue bajando"
     },
     "d": {
       "pk": "04 · Ensamble",
       "h2": "Cada pieza, en su sitio.",
-      "p": "Repuestos con compatibilidad clara: pides lo correcto a la primera."
+      "p": "Las piezas vuelven a su lugar. Repuestos con compatibilidad clara: pides lo correcto a la primera."
     },
     "e": {
       "pk": "05 · Muy pronto",

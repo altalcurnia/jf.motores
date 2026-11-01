@@ -88,7 +88,7 @@
     "a": {
       "pk": "01 · Partida",
       "h2": "Liga na primeira.",
-      "p": "Tranquilidade é saber que sua bomba liga em todo turno.",
+      "p": "Tranquilidade é saber que sua bomba liga em todo turno. Cada unidade sai testada da nossa oficina.",
       "chips": [
         {
           "label": "Testada na oficina",
@@ -109,18 +109,18 @@
       "torque": "Torque",
       "temp": "Temp",
       "flow": "Vazão",
-      "p": "Vazão constante para tirar a água e continuar produzindo."
+      "p": "Carga plena: vazão constante para tirar a água e continuar produzindo, turno após turno."
     },
     "c": {
       "pk": "03 · Por dentro",
       "h2": "Confiança que se vê.",
-      "p": "Toque numa peça para ver as peças de reposição.",
+      "p": "Assim é por dentro. Toque numa peça ou no botão dela para ver as peças de reposição e com quais equipamentos são compatíveis.",
       "hint": "▼ Continue descendo"
     },
     "d": {
       "pk": "04 · Montagem",
       "h2": "Cada peça no seu lugar.",
-      "p": "Peças com compatibilidade clara: você pede a certa na primeira vez."
+      "p": "As peças voltam ao lugar. Peças com compatibilidade clara: você pede a certa na primeira vez."
     },
     "e": {
       "pk": "05 · Em breve",

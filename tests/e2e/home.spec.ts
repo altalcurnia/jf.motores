@@ -81,9 +81,10 @@ test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el d
   await expect(page.locator(".jcard.on h2")).toContainText("Arranca");
   await at(0.25);
   await expect(page.locator(".jcard.on #bigRpm")).toHaveCount(1);
-  // Despiece: ninguna tarjeta, botones de piezas visibles
+  // Despiece: solo la tarjeta "Por dentro" lo acompaña, con los botones de piezas visibles
   await at(0.5);
-  await expect(page.locator(".jcard.on")).toHaveCount(0);
+  await expect(page.locator(".jcard.on")).toHaveCount(1);
+  await expect(page.locator(".jcard-parts.on")).toHaveCount(1);
   await expect(page.locator(".part-row.on")).toHaveCount(1);
   await page.locator(".part-row a", { hasText: "Pistones" }).hover();
   await expect(page.locator("#lbl-pistones")).toHaveClass(/hl/);

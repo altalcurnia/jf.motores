@@ -88,7 +88,7 @@
     "a": {
       "pk": "01 · Start-up",
       "h2": "Starts first time.",
-      "p": "Peace of mind is knowing your pump starts every shift.",
+      "p": "Peace of mind is knowing your pump starts every shift. Every unit leaves our workshop tested.",
       "chips": [
         {
           "label": "Workshop-tested",
@@ -109,18 +109,18 @@
       "torque": "Torque",
       "temp": "Temp",
       "flow": "Flow",
-      "p": "Steady flow to get the water out and keep producing."
+      "p": "Full load: steady flow to get the water out and keep producing, shift after shift."
     },
     "c": {
       "pk": "03 · Inside",
       "h2": "Trust you can see.",
-      "p": "Tap a part to see its spare parts.",
+      "p": "This is what's inside. Tap a part or its button to see the spare parts and which units they fit.",
       "hint": "▼ Keep scrolling"
     },
     "d": {
       "pk": "04 · Assembly",
       "h2": "Every part in its place.",
-      "p": "Spare parts with clear compatibility: order the right one first time."
+      "p": "The parts go back into place. Spare parts with clear compatibility: order the right one first time."
     },
     "e": {
       "pk": "05 · Coming soon",
