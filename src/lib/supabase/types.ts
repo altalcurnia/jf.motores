@@ -8,6 +8,36 @@ export type Database = {
   __InternalSupabase: { PostgrestVersion: "14.18" };
   public: {
     Tables: {
+      ai_settings: {
+        Row: { enabled: boolean; id: boolean; model: string; updated_at: string; updated_by: string | null };
+        Insert: { enabled?: boolean; id?: boolean; model?: string; updated_at?: string; updated_by?: string | null };
+        Update: Partial<Database["public"]["Tables"]["ai_settings"]["Insert"]>;
+        Relationships: [];
+      };
+      ai_documents: {
+        Row: {
+          active: boolean;
+          content: string;
+          created_at: string;
+          created_by: string | null;
+          file_path: string | null;
+          id: string;
+          is_test: boolean;
+          title: string;
+        };
+        Insert: {
+          active?: boolean;
+          content: string;
+          created_at?: string;
+          created_by?: string | null;
+          file_path?: string | null;
+          id?: string;
+          is_test?: boolean;
+          title: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["ai_documents"]["Insert"]>;
+        Relationships: [];
+      };
       app_waitlist: {
         Row: {
           id: string;
@@ -519,6 +549,7 @@ export type Database = {
         };
         Returns: string;
       };
+      assistant_context: { Args: Record<string, never>; Returns: Json };
       list_customers: {
         Args: Record<string, never>;
         Returns: { id: string; email: string; full_name: string | null; phone: string | null; purchases: number }[];

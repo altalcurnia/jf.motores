@@ -93,6 +93,13 @@ async function Dashboard() {
             <span className="pill ok">Disponible</span>
           </Link>
         )}
+        {can(session, "asistente.gestionar") && (
+          <Link href="/admin/asistente" className="card link">
+            <h3>Asistente de IA</h3>
+            <p>Chat de ventas 24/7 que responde solo con tus PDF. Enciéndelo, carga documentos y pruébalo.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
         {(session.isOwner || can(session, "usuarios.ver")) && (
           <>
             <Link href="/admin/usuarios" className="card link">

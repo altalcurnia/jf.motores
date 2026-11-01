@@ -236,9 +236,13 @@ test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ p
 
 test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de envío en el catálogo", async ({ page }) => {
   await page.goto("/es");
-  const float = page.locator("a.wa-float");
-  await expect(float).toBeVisible();
-  await expect(float).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=.*p%C3%A1gina%20web/);
+  // Botón Soporte: abre WhatsApp (y el chat con IA solo si está encendido en el panel)
+  await page.locator(".support-fab").click();
+  const wa = page.locator(".support-menu a.support-opt.sopt-wa");
+  await expect(wa).toBeVisible();
+  await expect(wa).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=.*p%C3%A1gina%20web/);
+  await expect(page.locator(".support-opt.sopt-ai")).toHaveCount(0);
+  await page.keyboard.press("Escape");
   const meta = page.locator("#contacto .c-meta");
   await expect(meta).toContainText("Sedes");
   await expect(meta.locator('a[href^="mailto:"]')).toHaveCount(1);
@@ -252,4 +256,15 @@ test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de enví
 test("el panel de contacto y sedes exige iniciar sesión", async ({ page }) => {
   await page.goto("/admin/empresa");
   await expect(page).toHaveURL(/\/admin\/login/);
+});
+
+test("el chat con IA responde 'apagado' si no está encendido", async ({ request }) => {
+  const res = await request.post("/api/asistente", { data: { locale: "es", messages: [{ role: "user", content: "hola" }] } });
+  expect(res.status()).toBe(403);
+  expect((await res.json()).code).toBe("disabled");
+});
+
+test("el webhook de Telegram rechaza llamadas sin la firma secreta", async ({ request }) => {
+  const res = await request.post("/api/telegram", { data: { message: { chat: { id: 1 }, text: "hola" } } });
+  expect(res.status()).toBe(403);
 });

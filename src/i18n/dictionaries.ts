@@ -21,3 +21,8 @@ export async function getLocale(): Promise<Locale> {
 export async function getDictionary(): Promise<Dictionary> {
   return dictionaries[await getLocale()]();
 }
+
+/** Diccionario de un idioma concreto (para rutas sin segmento de idioma, p. ej. webhooks). */
+export function dictionaryFor(locale: Locale): Promise<Dictionary> {
+  return dictionaries[locale]();
+}

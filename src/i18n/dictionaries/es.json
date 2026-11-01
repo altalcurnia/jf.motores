@@ -768,5 +768,32 @@
     "phoneError": "Escribe un número de celular válido.",
     "privacy": "Usamos estos datos solo para la app y según nuestra política de datos.",
     "select": "Elige una opción"
+  },
+  "assistant": {
+    "fab": "Soporte",
+    "fabClose": "Cerrar soporte",
+    "whatsapp": "WhatsApp",
+    "whatsappDesc": "Habla con un asesor",
+    "ai": "Chat con IA",
+    "aiDesc": "Respuestas al instante, 24/7",
+    "title": "Asistente JF",
+    "badge": "IA",
+    "notice": "Responde solo con la información oficial de JF Motores y puede equivocarse. Para cotizar o comprar, escríbenos por WhatsApp. No compartas datos personales.",
+    "placeholder": "Escribe tu pregunta…",
+    "send": "Enviar",
+    "thinking": "Buscando en nuestra información…",
+    "close": "Cerrar chat",
+    "welcome": "Hola, soy el asistente de JF Motores. Pregúntame por motobombas, motores, repuestos o cómo elegir tu equipo.",
+    "suggestions": [
+      "¿Qué motobomba necesito para mi mina?",
+      "¿El precio incluye el envío?",
+      "¿Cómo pido un repuesto?"
+    ],
+    "noInfo": "No tengo ese dato en nuestra información oficial. Un asesor te responde por WhatsApp.",
+    "limit": "Enviaste muchas preguntas seguidas. Espera unos minutos o escríbenos por WhatsApp.",
+    "unavailable": "El asistente no está disponible ahora. Escríbenos por WhatsApp.",
+    "disabled": "El chat con IA está apagado. Escríbenos por WhatsApp.",
+    "toWhatsapp": "Seguir por WhatsApp",
+    "waMessage": "Hola JF Motores, vengo del chat de su página web y quiero hablar con un asesor."
   }
 }

@@ -768,5 +768,32 @@
     "phoneError": "Enter a valid mobile number.",
     "privacy": "We use this data only for the app and according to our data policy.",
     "select": "Choose an option"
+  },
+  "assistant": {
+    "fab": "Support",
+    "fabClose": "Close support",
+    "whatsapp": "WhatsApp",
+    "whatsappDesc": "Talk to an advisor",
+    "ai": "AI chat",
+    "aiDesc": "Instant answers, 24/7",
+    "title": "JF Assistant",
+    "badge": "AI",
+    "notice": "Answers only with JF Motores' official information and may make mistakes. To get a quote or buy, message us on WhatsApp. Don't share personal data.",
+    "placeholder": "Type your question…",
+    "send": "Send",
+    "thinking": "Searching our information…",
+    "close": "Close chat",
+    "welcome": "Hi, I'm the JF Motores assistant. Ask me about pump sets, engines, spare parts or how to choose your equipment.",
+    "suggestions": [
+      "Which pump set do I need for my mine?",
+      "Does the price include shipping?",
+      "How do I order a spare part?"
+    ],
+    "noInfo": "I don't have that in our official information. An advisor will answer you on WhatsApp.",
+    "limit": "You sent many questions in a row. Wait a few minutes or message us on WhatsApp.",
+    "unavailable": "The assistant isn't available right now. Message us on WhatsApp.",
+    "disabled": "The AI chat is turned off. Message us on WhatsApp.",
+    "toWhatsapp": "Continue on WhatsApp",
+    "waMessage": "Hi JF Motores, I'm coming from your website chat and would like to talk to an advisor."
   }
 }
