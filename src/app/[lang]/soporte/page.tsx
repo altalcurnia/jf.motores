@@ -5,6 +5,7 @@ import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
+import { TechSupportCard } from "@/features/support/TechSupportCard";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
@@ -36,35 +37,29 @@ export default async function SupportPage() {
 
       <div className="help-grid">
         {t.cards.map((c, i) => {
-          const external = hrefs[i].startsWith("http");
-          const body = (
-            <>
+          if (i === 0) {
+            return (
+              <TechSupportCard
+                key={c.h}
+                h={c.h}
+                p={c.p}
+                cta={c.cta}
+                waHref={hrefs[0]}
+                email={contact.email}
+                labels={t.techOptions}
+              />
+            );
+          }
+          return (
+            <Link key={c.h} className="help-card" href={hrefs[i]}>
               <h2>{c.h}</h2>
               <p>{c.p}</p>
               <span className="catalog-card-cta">
                 {c.cta} <Arrow />
               </span>
-            </>
-          );
-          return external ? (
-            <a key={c.h} className={`help-card ${i === 0 ? "primary" : ""}`} href={hrefs[i]} target="_blank" rel="noopener">
-              {body}
-            </a>
-          ) : (
-            <Link key={c.h} className="help-card" href={hrefs[i]}>
-              {body}
             </Link>
           );
         })}
-        {contact.email && (
-          <a className="help-card" href={`mailto:${contact.email}`}>
-            <h2>{t.emailCard.h}</h2>
-            <p>{t.emailCard.p}</p>
-            <span className="catalog-card-cta">
-              {contact.email} <Arrow />
-            </span>
-          </a>
-        )}
       </div>
 
       <h2 className="info-h2" id="faq">

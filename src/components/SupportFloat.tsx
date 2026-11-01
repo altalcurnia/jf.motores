@@ -5,7 +5,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
 import { SupportFab } from "./SupportFab";
 
-/** Botón flotante de soporte: WhatsApp y, si está encendido en el panel, chat con IA. */
+/** Botón flotante de soporte: WhatsApp, chat con IA (si está encendido) y tickets con el equipo. */
 export async function SupportFloat({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const [contact, ai] = await Promise.all([getContact(), getAssistantContext()]);
   return (
@@ -15,6 +15,7 @@ export async function SupportFloat({ dict, locale }: { dict: Dictionary; locale:
       waNumber={contact.whatsapp}
       aiEnabled={ai.enabled}
       t={dict.assistant}
+      tt={dict.tickets}
     />
   );
 }

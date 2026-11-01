@@ -312,3 +312,31 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .site-image-actions { display: grid; gap: 10px; justify-items: start; }
 .site-image-actions label.btn-primary { cursor: pointer; }
 .site-image-actions label.disabled { opacity: 0.6; pointer-events: none; }
+
+/* Tickets */
+.bell { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+.bell-link { position: relative; display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); color: var(--mut); }
+.bell-link.has { color: var(--yellow); border-color: var(--yellow); animation: bell 1.6s ease-in-out infinite; }
+.bell-link b { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: #ff5a4a; color: #fff; font-size: 11px; display: grid; place-items: center; }
+@keyframes bell { 0%, 100% { transform: rotate(0); } 10% { transform: rotate(12deg); } 20% { transform: rotate(-10deg); } 30% { transform: rotate(6deg); } 40% { transform: rotate(0); } }
+.bell-toggle { background: none; border: 1px solid var(--line); color: var(--mut); border-radius: 999px; padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+.bell-toggle.on { color: var(--ok); border-color: var(--ok); }
+.tk-admin { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 16px; align-items: start; }
+.tk-admin-list { display: grid; gap: 8px; max-height: 75vh; overflow-y: auto; }
+.tk-admin-list .seg { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.tk-admin-list .seg a { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--mut); text-decoration: none; font-size: 12.5px; }
+.tk-admin-list .seg a.on { background: var(--yellow); color: #0b0d10; border-color: var(--yellow); }
+.tk-row-item { display: grid; gap: 3px; padding: 11px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); text-decoration: none; position: relative; }
+.tk-row-item b { font-size: 14px; padding-right: 80px; }
+.tk-row-item small { color: var(--mut); font-size: 12px; }
+.tk-row-item .tk-st { position: absolute; top: 10px; right: 10px; }
+.tk-row-item.on { border-color: var(--yellow); }
+.tk-row-item.unread { box-shadow: inset 3px 0 0 #ff5a4a; }
+.tk-admin-view { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); min-height: 60vh; overflow: hidden; }
+.tk-admin-view > .muted { padding: 18px; }
+.tk-admin-ticket { display: grid; grid-template-rows: auto 1fr; height: 75vh; }
+.tk-admin-ticket header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.tk-admin-subject { margin: 0 0 4px; font-family: var(--body); font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.tk-admin-ticket header a { color: var(--yellow); }
+.tk-admin-thread { min-height: 0; }
+@media (max-width: 860px) { .tk-admin { grid-template-columns: 1fr; } .tk-admin-list { max-height: none; } }

@@ -4,6 +4,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
 import { Linkified } from "./Linkified";
+import { TicketsPanel } from "@/features/tickets/TicketsPanel";
 
 type Msg = { role: "user" | "assistant"; content: string; kind?: "info" | "error" | "handoff"; summary?: string };
 
@@ -23,6 +24,13 @@ const ChatIcon = () => (
     <path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" strokeWidth="2.6" />
   </svg>
 );
+const TicketIcon = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z" />
+    <path d="M9 9h6M9 13h4" />
+  </svg>
+);
+const FAB_KEY = "jf-fab-bottom";
 const HeadsetIcon = () => (
   <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
@@ -38,12 +46,14 @@ export function SupportFab({
   waNumber,
   aiEnabled,
   t,
+  tt,
 }: {
   locale: Locale;
   waHref: string;
   waNumber: string;
   aiEnabled: boolean;
   t: T;
+  tt: Dictionary["tickets"];
 }) {
   const waChatHref = (summary?: string) => buildWhatsAppUrl(waNumber, summary ? `${t.waMessage}\n${t.waSummary}${summary}` : t.waMessage);
   const [menu, setMenu] = useState(false);
@@ -55,6 +65,77 @@ export function SupportFab({
   const [session, setSession] = useState<{ login: boolean; leftPct?: number } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Tickets: panel abierto (o el id del ticket a abrir) y respuestas sin leer
+  const [tickets, setTickets] = useState<false | { id: string | null }>(false);
+  const [unread, setUnread] = useState(0);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ y: number; bottom: number; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
+
+  const refreshUnread = () =>
+    fetch("/api/tickets/unread", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { mine?: number }) => setUnread(d.mine ?? 0))
+      .catch(() => undefined);
+
+  // Avisos de respuestas y enlace directo desde el correo (?ticket=…)
+  useEffect(() => {
+    refreshUnread();
+    const id = new URLSearchParams(window.location.search).get("ticket");
+    if (id && /^[0-9a-f-]{36}$/.test(id)) {
+      const open = () => setTickets({ id });
+      open();
+    }
+  }, []);
+
+  // Posición vertical elegida por el usuario (se arrastra el botón arriba o abajo)
+  const place = (bottom: number) => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const max = window.innerHeight - 76;
+    const b = Math.max(8, Math.min(max, bottom));
+    el.style.bottom = `${b}px`;
+    el.classList.toggle("upper", b > window.innerHeight / 2);
+  };
+  useEffect(() => {
+    let saved = NaN;
+    try {
+      saved = Number(localStorage.getItem(FAB_KEY));
+    } catch {}
+    if (saved > 0) place(saved);
+    const onResize = () => {
+      const b = parseFloat(wrapRef.current?.style.bottom || "");
+      if (b) place(b);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const el = wrapRef.current;
+    if (!el) return;
+    drag.current = { y: e.clientY, bottom: window.innerHeight - el.getBoundingClientRect().bottom, moved: false };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = drag.current;
+    if (!d) return;
+    const dy = e.clientY - d.y;
+    if (!d.moved && Math.abs(dy) < 6) return;
+    d.moved = true;
+    wrapRef.current?.classList.add("dragging");
+    place(d.bottom - dy);
+  };
+  const onPointerUp = () => {
+    const d = drag.current;
+    drag.current = null;
+    wrapRef.current?.classList.remove("dragging");
+    if (!d?.moved) return;
+    suppressClick.current = true;
+    setTimeout(() => (suppressClick.current = false), 0);
+    try {
+      localStorage.setItem(FAB_KEY, String(parseFloat(wrapRef.current?.style.bottom || "0")));
+    } catch {}
+  };
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
@@ -212,7 +293,16 @@ export function SupportFab({
         </section>
       )}
 
-      <div className={`support${menu ? " open" : ""}${chat ? " chatting" : ""}`}>
+      {tickets && (
+        <TicketsPanel
+          t={tt}
+          locale={locale}
+          initialTicket={tickets.id}
+          onClose={() => setTickets(false)}
+          onChanged={refreshUnread}
+        />
+      )}
+      <div ref={wrapRef} className={`support${menu ? " open" : ""}${chat || tickets ? " chatting" : ""}`}>
         {menu && (
           <div className="support-menu" role="menu">
             <a role="menuitem" className="support-opt sopt-wa" href={waHref} target="_blank" rel="noopener" onClick={() => setMenu(false)}>
@@ -245,20 +335,52 @@ export function SupportFab({
                 </span>
               </button>
             )}
+            <button
+              type="button"
+              role="menuitem"
+              className="support-opt sopt-tk"
+              onClick={() => {
+                setMenu(false);
+                setChat(false);
+                setTickets({ id: null });
+              }}
+            >
+              <span className="ico">
+                <TicketIcon />
+              </span>
+              <span>
+                <b>
+                  {tt.option}
+                  {unread > 0 && <em className="tk-badge">{unread}</em>}
+                </b>
+                <small>{tt.optionDesc}</small>
+              </span>
+            </button>
           </div>
         )}
         <button
           type="button"
           className="support-fab"
+          title={tt.dragHint}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
           aria-expanded={menu}
           aria-label={menu ? t.fabClose : t.fab}
           onClick={() => {
+            if (suppressClick.current) return;
             setChat(false);
-            setMenu((v) => !v);
+            setTickets(false);
+            setMenu((v) => {
+              if (!v) refreshUnread();
+              return !v;
+            });
           }}
         >
           {menu ? <span className="x">×</span> : <HeadsetIcon />}
           <span className="lbl-txt">{t.fab}</span>
+          {!menu && unread > 0 && <span className="fab-dot" aria-label={tt.newReply} />}
         </button>
       </div>
     </>

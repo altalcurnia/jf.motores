@@ -470,7 +470,7 @@
       {
         "h": "Soporte técnico",
         "p": "Cuéntanos el modelo, el número de serie y qué está pasando. Si puedes, envía fotos o un video corto.",
-        "cta": "Escribir al técnico"
+        "cta": "Elegir cómo escribir"
       },
       {
         "h": "Pedir un repuesto",
@@ -502,10 +502,11 @@
         "a": "Para comprar una motobomba sí: así registramos el equipo a tu nombre y puedes hacerle seguimiento. Para cotizar no necesitas cuenta."
       }
     ],
-    "emailCard": {
-      "h": "Soporte por correo",
-      "p": "Para casos con fotos, documentos o que necesitan seguimiento por escrito.",
-      "cta": "Escribir correo"
+    "techOptions": {
+      "whatsapp": "Por WhatsApp",
+      "whatsappDesc": "Respuesta rápida con un técnico del taller",
+      "email": "Por correo",
+      "emailDesc": "Escribe a {email}: ideal para fotos, documentos y seguimiento por escrito"
     }
   },
   "guides": {
@@ -925,5 +926,47 @@
     "quota": "Usaste tus consultas de IA de este mes. Un asesor te atiende por WhatsApp; las consultas se renuevan cada mes y aumentan con tus compras.",
     "low": "Te queda el {n} % de tus consultas del mes.",
     "telegramPrivate": "Este bot es privado. Tu ID de chat es {id}: pide que lo autoricen."
+  },
+  "tickets": {
+    "option": "Abrir ticket",
+    "optionDesc": "Escríbenos con fotos y te respondemos aquí",
+    "title": "Tickets de soporte",
+    "subtitle": "Te responde el equipo de JF Motores",
+    "myTickets": "Mis tickets",
+    "newTicket": "Nuevo ticket",
+    "empty": "Aún no tienes tickets. Cuéntanos qué necesitas y adjunta fotos si puedes.",
+    "subject": "Asunto",
+    "subjectPh": "Ej.: la motobomba no ceba",
+    "message": "Mensaje",
+    "messagePh": "Equipo, modelo y qué está pasando. Puedes adjuntar fotos.",
+    "create": "Enviar ticket",
+    "creating": "Enviando…",
+    "back": "← Mis tickets",
+    "close": "Cerrar ticket",
+    "status": {
+      "abierto": "Abierto",
+      "respondido": "Respondido",
+      "cerrado": "Cerrado"
+    },
+    "newReply": "Respuesta nueva",
+    "loginTitle": "Inicia sesión para abrir un ticket",
+    "loginText": "Así guardamos la conversación y te avisamos por correo cuando respondamos.",
+    "login": "Entrar",
+    "signup": "Crear cuenta",
+    "photosHint": "Hasta 4 fotos por mensaje.",
+    "dragHint": "Mantén presionado y arrastra para moverlo",
+    "thread": {
+      "you": "Tú",
+      "team": "JF Motores",
+      "customer": "Cliente",
+      "placeholder": "Escribe tu mensaje…",
+      "send": "Enviar",
+      "attach": "Adjuntar fotos",
+      "sending": "Enviando…",
+      "closed": "Ticket cerrado.",
+      "reopenHint": "Este ticket está cerrado. Si escribes, se vuelve a abrir.",
+      "error": "No se pudo enviar. Intenta de nuevo.",
+      "photo": "Ver foto"
+    }
   }
 }

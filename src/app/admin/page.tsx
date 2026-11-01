@@ -86,6 +86,13 @@ async function Dashboard() {
             <span className="pill ok">Disponible</span>
           </Link>
         )}
+        {can(session, "tickets.responder") && (
+          <Link href="/admin/tickets" className="card link">
+            <h3>Tickets de soporte</h3>
+            <p>Responde a los clientes con fotos, cierra casos y activa avisos cuando llegue uno nuevo.</p>
+            <span className="pill ok">Disponible</span>
+          </Link>
+        )}
         {can(session, "empresa.editar") && (
           <Link href="/admin/empresa" className="card link">
             <h3>Contacto, sedes e imagen del inicio</h3>

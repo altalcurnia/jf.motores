@@ -36,6 +36,41 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["ai_settings"]["Insert"]>;
         Relationships: [];
       };
+      tickets: {
+        Row: {
+          created_at: string;
+          id: string;
+          staff_unread: boolean;
+          status: "abierto" | "respondido" | "cerrado";
+          subject: string;
+          updated_at: string;
+          user_id: string;
+          user_unread: boolean;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          staff_unread?: boolean;
+          status?: "abierto" | "respondido" | "cerrado";
+          subject: string;
+          updated_at?: string;
+          user_id: string;
+          user_unread?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["tickets"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "tickets_user_id_fkey"; columns: ["user_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ];
+      };
+      ticket_messages: {
+        Row: { author_id: string | null; body: string; created_at: string; from_staff: boolean; id: string; images: string[]; ticket_id: string };
+        Insert: { author_id?: string | null; body?: string; created_at?: string; from_staff?: boolean; id?: string; images?: string[]; ticket_id: string };
+        Update: Partial<Database["public"]["Tables"]["ticket_messages"]["Insert"]>;
+        Relationships: [
+          { foreignKeyName: "ticket_messages_ticket_id_fkey"; columns: ["ticket_id"]; isOneToOne: false; referencedRelation: "tickets"; referencedColumns: ["id"] },
+          { foreignKeyName: "ticket_messages_author_id_fkey"; columns: ["author_id"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+        ];
+      };
       ai_usage: {
         Row: { cost_usd: number; month: string; requests: number; tokens_in: number; tokens_out: number; updated_at: string; user_id: string };
         Insert: { cost_usd?: number; month: string; requests?: number; tokens_in?: number; tokens_out?: number; updated_at?: string; user_id: string };
@@ -553,6 +588,10 @@ export type Database = {
     };
     Views: { [_ in never]: never };
     Functions: {
+      ticket_create: { Args: { subject: string; body: string; images?: string[] }; Returns: string };
+      ticket_post: { Args: { ticket: string; body: string; images?: string[] }; Returns: string };
+      ticket_set_status: { Args: { ticket: string; new_status: string }; Returns: undefined };
+      ticket_mark_read: { Args: { ticket: string }; Returns: undefined };
       accept_privacy: { Args: Record<string, never>; Returns: undefined };
       set_user_role: { Args: { target: string; role_key: string }; Returns: undefined };
       set_role_permission: { Args: { role_key: string; permission_key: string; granted: boolean }; Returns: undefined };

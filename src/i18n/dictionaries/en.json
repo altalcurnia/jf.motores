@@ -470,7 +470,7 @@
       {
         "h": "Technical support",
         "p": "Tell us the model, the serial number and what is happening. If you can, send photos or a short video.",
-        "cta": "Message a technician"
+        "cta": "Choose how to reach us"
       },
       {
         "h": "Order a spare part",
@@ -502,10 +502,11 @@
         "a": "For a pump set, yes: that way we register the unit in your name and you can track it. You don't need an account to request a quote."
       }
     ],
-    "emailCard": {
-      "h": "Email support",
-      "p": "For cases with photos, documents or that need written follow-up.",
-      "cta": "Send an email"
+    "techOptions": {
+      "whatsapp": "On WhatsApp",
+      "whatsappDesc": "Quick answer from a workshop technician",
+      "email": "By email",
+      "emailDesc": "Write to {email}: best for photos, documents and written follow-up"
     }
   },
   "guides": {
@@ -925,5 +926,47 @@
     "quota": "You've used this month's AI questions. An advisor will help you on WhatsApp; questions renew every month and grow with your purchases.",
     "low": "You have {n}% of this month's questions left.",
     "telegramPrivate": "This bot is private. Your chat ID is {id}: ask for it to be authorized."
+  },
+  "tickets": {
+    "option": "Open a ticket",
+    "optionDesc": "Write to us with photos and we'll reply here",
+    "title": "Support tickets",
+    "subtitle": "The JF Motores team will answer you",
+    "myTickets": "My tickets",
+    "newTicket": "New ticket",
+    "empty": "You don't have tickets yet. Tell us what you need and attach photos if you can.",
+    "subject": "Subject",
+    "subjectPh": "E.g.: the pump won't prime",
+    "message": "Message",
+    "messagePh": "Equipment, model and what's happening. You can attach photos.",
+    "create": "Send ticket",
+    "creating": "Sending…",
+    "back": "← My tickets",
+    "close": "Close ticket",
+    "status": {
+      "abierto": "Open",
+      "respondido": "Answered",
+      "cerrado": "Closed"
+    },
+    "newReply": "New reply",
+    "loginTitle": "Sign in to open a ticket",
+    "loginText": "That way we keep the conversation and email you when we reply.",
+    "login": "Sign in",
+    "signup": "Create account",
+    "photosHint": "Up to 4 photos per message.",
+    "dragHint": "Press and drag to move it",
+    "thread": {
+      "you": "You",
+      "team": "JF Motores",
+      "customer": "Customer",
+      "placeholder": "Write your message…",
+      "send": "Send",
+      "attach": "Attach photos",
+      "sending": "Sending…",
+      "closed": "Ticket closed.",
+      "reopenHint": "This ticket is closed. If you write, it reopens.",
+      "error": "Couldn't send. Try again.",
+      "photo": "View photo"
+    }
   }
 }

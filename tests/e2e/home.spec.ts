@@ -251,7 +251,10 @@ test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de enví
   await page.goto("/es/motobombas");
   await expect(page.locator(".price-notice")).toContainText("no incluye el envío");
   await page.goto("/es/soporte");
-  await expect(page.locator('.help-card[href^="mailto:"]')).toHaveCount(1);
+  await page.locator(".tech-toggle").click();
+  await expect(page.locator('.tech-opt.tech-mail[href^="mailto:"]')).toHaveCount(1);
+  await expect(page.locator(".tech-opt.tech-wa")).toBeVisible();
+  await expect(page.locator(".tech-opt.tech-wa")).toHaveAttribute("href", /^https:\/\/wa\.me\//);
 });
 
 test("el panel de contacto y sedes exige iniciar sesión", async ({ page }) => {
@@ -318,4 +321,32 @@ test("repuestos: estados En stock / Sin stock en lugar de Disponible / Vendido",
   await expect(page.locator(".pc-status").first()).toHaveText(/En stock|Sin stock/);
   await page.goto("/es/motobombas");
   await expect(page.locator(".cf-seg")).toContainText("Vendidos");
+});
+
+test("soporte: opción de tickets pide iniciar sesión y la API exige sesión", async ({ page, request }) => {
+  await page.goto("/es/soporte");
+  await page.locator(".support-fab").click();
+  await page.locator(".support-opt.sopt-tk").click();
+  await expect(page.locator(".tk-panel")).toBeVisible();
+  await expect(page.locator(".tk-panel .ai-login")).toContainText("Inicia sesión");
+  const unread = await request.get("/api/tickets/unread");
+  expect((await unread.json()).login).toBe(false);
+  const res = await request.post("/api/tickets", { data: { subject: "Prueba", body: "hola" } });
+  expect(res.status()).toBe(401);
+});
+
+test("soporte: el botón flotante se arrastra arriba y abajo y recuerda la posición", async ({ page }) => {
+  await page.goto("/es/soporte");
+  const fab = page.locator(".support-fab");
+  const box = (await fab.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2, box.y - 150, { steps: 8 });
+  await page.mouse.up();
+  const after = (await fab.boundingBox())!;
+  expect(after.y).toBeLessThan(box.y - 100);
+  await expect(page.locator(".support-menu")).toHaveCount(0);
+  await page.reload();
+  const again = (await page.locator(".support-fab").boundingBox())!;
+  expect(Math.abs(again.y - after.y)).toBeLessThan(4);
 });

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { TicketBell } from "./TicketBell";
 
 /** Barra superior del panel con navegación entre secciones. */
 export function AdminTopbar() {
@@ -14,6 +15,7 @@ export function AdminTopbar() {
         <Link href="/admin">Inicio</Link>
         <Link href="/admin/productos">Productos</Link>
         <Link href="/admin/ventas">Ventas</Link>
+        <Link href="/admin/tickets">Tickets</Link>
         <Link href="/admin/interesados">Interesados app</Link>
         <Link href="/admin/empresa">Contacto e imagen</Link>
         <Link href="/admin/asistente">Asistente IA</Link>
@@ -21,6 +23,7 @@ export function AdminTopbar() {
         <Link href="/admin/permisos">Roles y permisos</Link>
         <Link href="/es">Ver sitio</Link>
       </nav>
+      <TicketBell />
       <form action="/auth/signout" method="post">
         <button className="btn-ghost">Cerrar sesión</button>
       </form>
