@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { waLead } from "@/features/whatsapp/lead-link";
-import { formatPhone, getContact, getHomeImages, getTrust } from "@/lib/supabase/public";
+import { formatPhone, getContact, getEngineVariant, getHomeImages, getTrust } from "@/lib/supabase/public";
 import { JsonLd } from "@/components/JsonLd";
 import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
@@ -26,7 +26,7 @@ export default async function HomePage() {
   const dict = await getDictionary();
   const t = dict.hero;
   const b = dict.benefits;
-  const [contact, homeImages, trust] = await Promise.all([getContact(), getHomeImages(), getTrust()]);
+  const [contact, homeImages, trust, engineVariant] = await Promise.all([getContact(), getHomeImages(), getTrust(), getEngineVariant()]);
   // Ficha del negocio para Google (nombre, logo, sedes y teléfonos)
   const orgLd = {
     "@context": "https://schema.org",
@@ -117,6 +117,7 @@ export default async function HomePage() {
 
       <EngineExperience
         locale={locale}
+        variant={engineVariant}
         t={{ journey: dict.journey, hud: dict.hud, rail: dict.rail, parts: dict.parts }}
       />
 

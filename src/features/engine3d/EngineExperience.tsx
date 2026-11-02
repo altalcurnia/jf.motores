@@ -11,6 +11,8 @@ import { engineLabels, isPartKey, type PartKey } from "./parts";
 
 type Props = {
   locale: Locale;
+  /** Versión del modelo 3D elegida en el admin (v1, v2, v3). */
+  variant?: string;
   t: Pick<Dictionary, "journey" | "hud" | "rail" | "parts">;
 };
 
@@ -18,7 +20,7 @@ type Props = {
  * Motor 3D de fondo + recorrido por scroll (encendido, revolución, despiece, apagado).
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
-export function EngineExperience({ locale, t }: Props) {
+export function EngineExperience({ locale, t, variant = "v1" }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const journeyRef = useRef<HTMLElement>(null);
   const engineRef = useRef<{ highlight?: (k: string | null) => void } | null>(null);
@@ -92,8 +94,11 @@ export function EngineExperience({ locale, t }: Props) {
       .then(({ startEngine }) => {
         if (cancelled) return;
         try {
+          // Vista previa desde el admin: ?motor=v2 muestra esa versión sin activarla
+          const preview = new URLSearchParams(window.location.search).get("motor");
           const started = startEngine({
             canvas,
+            variant: preview && /^v[1-9]$/.test(preview) ? preview : variant,
             isMobile: window.matchMedia("(max-width:760px)").matches,
             numberLocale: localeTags[locale],
             hud: hudRef.current,
@@ -133,7 +138,7 @@ export function EngineExperience({ locale, t }: Props) {
       canvas.remove();
       document.body.classList.remove("no-3d");
     };
-  }, [locale]);
+  }, [locale, variant]);
 
   const j = t.journey;
   const stage: StageKey = stageAt(p).key;

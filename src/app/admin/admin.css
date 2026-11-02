@@ -377,3 +377,16 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .trust-item { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
 .trust-item p { margin: 4px 0; font-size: 14px; }
 .ok-text { color: var(--ok); }
+
+/* Motor 3D del inicio: versiones del modelo */
+.ev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0 6px; }
+.ev-card { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.02); display: grid; }
+.ev-card.on { border-color: var(--yellow); box-shadow: 0 0 0 1px var(--yellow) inset; }
+.ev-card img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; background: #0d1014; }
+.ev-body { padding: 12px 14px 14px; display: grid; gap: 6px; }
+.ev-body h3 { margin: 0; font-size: 15px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ev-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.ev-actions .btn-primary, .ev-actions .btn-ghost { padding: 7px 12px; font-size: 13px; }
+.btn-ghost.danger { color: #ff8a80; border-color: rgba(255, 138, 128, 0.4); }
+.ev-removed ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
+.ev-removed li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 8px; }

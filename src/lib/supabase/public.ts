@@ -121,6 +121,20 @@ export async function getHomeImages(): Promise<{ benefits: string }> {
   }
 }
 
+/** Versión del motor 3D del inicio (elegida en /admin/empresa). Cacheada; se refresca al guardar. */
+export async function getEngineVariant(): Promise<string> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("company");
+  try {
+    const supabase = createSupabasePublicClient();
+    const { data } = await supabase.from("company_settings").select("engine_model").maybeSingle();
+    return data?.engine_model && /^v[1-9]$/.test(data.engine_model) ? data.engine_model : "v1";
+  } catch {
+    return "v1";
+  }
+}
+
 /** IDs de medición (GA4 y Píxel de Meta) editables en /admin/empresa. Vacíos = no se carga nada. */
 export async function getAnalyticsIds(): Promise<{ ga4: string | null; pixel: string | null }> {
   "use cache";

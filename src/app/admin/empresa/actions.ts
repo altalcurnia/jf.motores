@@ -1,4 +1,5 @@
 "use server";
+import { isEngineVariant } from "@/features/engine3d/variants";
 import { updateTag } from "next/cache";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -167,6 +168,43 @@ export async function deleteTestimonial(id: string): Promise<SaveResult> {
   if (!supabase) return { ok: false, error: "No tienes permiso." };
   const { error } = await supabase.from("testimonials").delete().eq("id", id);
   if (error) return { ok: false, error: error.message };
+  updateTag("company");
+  return { ok: true };
+}
+
+/**
+ * Motor 3D del inicio: elegir la versión visible, descartar (ocultar) o restaurar versiones.
+ * La versión activa no se puede descartar; siempre queda al menos una disponible.
+ */
+export async function setEngineVariant(
+  action: "use" | "hide" | "restore",
+  key: string,
+): Promise<SaveResult> {
+  const session = await getSession();
+  if (!session || !session.role.isInternal || !can(session, "empresa.editar")) {
+    return { ok: false, error: "No tienes permiso para cambiar el motor 3D." };
+  }
+  if (!isEngineVariant(key)) return { ok: false, error: "Versión desconocida." };
+  const supabase = await createSupabaseServerClient();
+  const { data, error: e1 } = await supabase.from("company_settings").select("engine_model, engine_models_hidden").maybeSingle();
+  if (e1 || !data) return { ok: false, error: `No se pudo leer la configuración: ${e1?.message ?? "sin datos"}` };
+  let active = data.engine_model;
+  let hidden = new Set(data.engine_models_hidden ?? []);
+  if (action === "use") {
+    active = key;
+    hidden.delete(key);
+  } else if (action === "hide") {
+    if (key === active) return { ok: false, error: "Esta versión es la que se ve en el sitio. Elige otra antes de eliminarla." };
+    hidden.add(key);
+  } else {
+    hidden.delete(key);
+  }
+  hidden = new Set([...hidden].filter(isEngineVariant));
+  const { error } = await supabase
+    .from("company_settings")
+    .update({ engine_model: active, engine_models_hidden: [...hidden].sort() })
+    .eq("id", true);
+  if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
   updateTag("company");
   return { ok: true };
 }
