@@ -220,7 +220,7 @@
     "luz": "Ambient light",
     "bloque": "Engine block",
     "camisas": "Cylinder liners",
-    "pistones": "Pistons",
+    "pistones": "Pistons & rods",
     "culata": "Cylinder head",
     "escape": "Exhaust",
     "tanque": "Diesel tank",
@@ -235,7 +235,8 @@
     "arranque": "Starter motor",
     "inyeccion": "Injection & throttle",
     "carter": "Oil pan",
-    "soportes": "Engine mounts"
+    "soportes": "Engine mounts",
+    "ciguenal": "Crankshaft"
   },
   "partPage": {
     "title": "Spare parts: ",

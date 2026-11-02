@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { ladderGuard } from "./guard.js";
+import { buildCrankTrain } from "./crank.js";
 
 /**
  * Modelo detallado de la motobomba, medido sobre los planos (vista lateral, trasera y frontal).
@@ -222,29 +223,22 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
   engine.add(carterG);
   regPart(carterG, 0, -0.1, -2.4);
 
-  /* ---------- CAMISAS y PISTONES ---------- */
-  const PISTON_Y = 2.4;
-  const PISTON_PHASE = [0, Math.PI, Math.PI, 0];
+  /* ---------- CAMISAS ---------- */
   const linerG = new THREE.Group();
-  const pistonG = new THREE.Group();
-  const pistonBodies = [];
   CYL_X.forEach((cx) => {
     linerG.add(mk(new THREE.CylinderGeometry(0.25, 0.25, 0.85, 26, 1, true), MAT.glass, cx, 2.3, 0));
     linerG.add(ring(0.25, 0.026, MAT.steel, cx, 2.73, 0, "y"));
-    const pb = new THREE.Group();
-    pb.position.set(cx, PISTON_Y, 0);
-    pb.add(mk(new THREE.CylinderGeometry(0.22, 0.22, 0.38, 24), MAT.chrome, 0, 0, 0));
-    for (let r = 0; r < 3; r++) pb.add(ring(0.222, 0.013, MAT.dark, 0, 0.11 - r * 0.06, 0, "y"));
-    pb.add(mk(new THREE.CylinderGeometry(0.045, 0.065, 0.62, 10), MAT.steel, 0, -0.47, 0));
-    const pin = cyl(0.05, 0.05, 0.3, MAT.dark, 0, -0.05, 0, "z", 10);
-    pb.add(pin);
-    pistonG.add(pb);
-    pistonBodies.push(pb);
   });
   engine.add(linerG);
   regPart(linerG, 0, 1.7, 2.1);
+
+  /* ---------- CIGÜEÑAL, BIELAS y PISTONES (cinemática real, ver crank.js) ---------- */
+  const crank = buildCrankTrain({ mk, MAT, cylX: CYL_X, y0: AX, r: 0.19, l: 0.64, bore: 0.22, crown: 0.17 });
+  const pistonG = crank.pistonG;
   engine.add(pistonG);
   regPart(pistonG, 0, 2.5, 0);
+  engine.add(crank.crankG);
+  regPart(crank.crankG, 0, 0, 3.5);
 
   /* ---------- CULATA y tapas de balancines ---------- */
   const headG = new THREE.Group();
@@ -498,50 +492,25 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
   engine.add(coupG);
   regPart(coupG, -0.8, 2.0, 0);
 
-  /* ---------- BOMBA centrífuga: voluta en espiral, succión axial, descarga vertical ---------- */
+  /* ---------- BOMBA centrífuga: carcasa redondeada (como la versión 1), succión axial, descarga vertical ---------- */
   const pumpG = new THREE.Group();
   const VX = -2.95,
-    VD = 0.62;
-  // voluta: espiral extruida (el radio crece hasta la descarga, arriba)
-  const vs = new THREE.Shape();
-  const N = 64;
-  for (let i = 0; i <= N; i++) {
-    const t = i / N;
-    const a = Math.PI / 2 + t * Math.PI * 2;
-    const r = 0.74 + 0.24 * t;
-    const px = Math.cos(a) * r,
-      py = Math.sin(a) * r;
-    if (i === 0) vs.moveTo(px, py);
-    else vs.lineTo(px, py);
-  }
-  vs.lineTo(-0.3, 0.98);
-  vs.lineTo(-0.3, 0.74);
-  vs.closePath();
-  const vgeo = new THREE.ExtrudeGeometry(vs, {
-    depth: VD,
-    bevelEnabled: true,
-    bevelThickness: 0.09,
-    bevelSize: 0.08,
-    bevelSegments: real ? 4 : 2,
-    curveSegments: 12,
-  });
-  vgeo.translate(0, 0, -VD / 2);
-  const volute = mk(vgeo, P.blue, VX, AX, 0);
-  volute.rotation.y = Math.PI / 2;
-  pumpG.add(volute);
-  // tapa frontal (lado de succión) con corona de pernos
-  pumpG.add(cyl(0.82, 0.82, 0.12, P.blue, VX - VD / 2 - 0.1, AX, 0, "x", 48));
-  pumpG.add(bolts(12, 0.86, 0.12, P.blue, VX - VD / 2 - 0.12, AX, 0, "x", 0.045));
-  pumpG.add(cyl(0.55, 0.55, 0.1, P.blue, VX - VD / 2 - 0.2, AX, 0, "x", 40));
-  pumpG.add(bolts(8, 0.46, 0.1, MAT.dark, VX - VD / 2 - 0.26, AX, 0, "x", 0.035));
+    VD = 0.58;
+  // carcasa: disco + voluta en anillo (toroide) que la redondea, con pernos pasantes alrededor
+  pumpG.add(cyl(0.85, 0.85, VD, P.blue, VX, AX, 0, "x", 48));
+  const scroll = mk(new THREE.TorusGeometry(0.8, 0.22, 18, 48), P.blue, VX, AX, 0);
+  scroll.rotation.y = Math.PI / 2;
+  pumpG.add(scroll);
+  pumpG.add(bolts(10, 0.93, VD + 0.12, P.blue, VX, AX, 0, "x", 0.048));
+  pumpG.add(cyl(0.6, 0.6, 0.06, P.blue, VX - VD / 2 - 0.03, AX, 0, "x", 40));
   // succión axial con brida y tapa cobriza
-  pumpG.add(cyl(0.34, 0.36, 0.3, P.blue, VX - VD / 2 - 0.38, AX, 0, "x", 32));
-  pumpG.add(cyl(0.48, 0.48, 0.08, P.blue, VX - VD / 2 - 0.55, AX, 0, "x", 40));
-  pumpG.add(cyl(0.34, 0.34, 0.03, P.copper, VX - VD / 2 - 0.6, AX, 0, "x", 32));
-  pumpG.add(bolts(8, 0.41, 0.1, MAT.dark, VX - VD / 2 - 0.56, AX, 0, "x", 0.03));
+  pumpG.add(cyl(0.34, 0.38, 0.4, P.blue, VX - VD / 2 - 0.2, AX, 0, "x", 32));
+  pumpG.add(cyl(0.48, 0.48, 0.08, P.blue, VX - VD / 2 - 0.42, AX, 0, "x", 40));
+  pumpG.add(cyl(0.34, 0.34, 0.03, P.copper, VX - VD / 2 - 0.47, AX, 0, "x", 32));
+  pumpG.add(bolts(8, 0.41, 0.1, MAT.dark, VX - VD / 2 - 0.43, AX, 0, "x", 0.03));
   // descarga vertical tangencial con brida y tapa cobriza
   const DZ = -0.15;
-  pumpG.add(cyl(0.26, 0.32, 0.55, P.blue, VX, AX + 1.15, DZ, null, 28));
+  pumpG.add(cyl(0.26, 0.32, 0.6, P.blue, VX, AX + 1.12, DZ, null, 28));
   pumpG.add(cyl(0.46, 0.46, 0.09, P.blue, VX, AX + 1.45, DZ, null, 40));
   pumpG.add(cyl(0.3, 0.3, 0.03, P.copper, VX, AX + 1.51, DZ, null, 32));
   pumpG.add(bolts(8, 0.39, 0.1, MAT.dark, VX, AX + 1.47, DZ, null, 0.03));
@@ -606,9 +575,9 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
 
   const PART_GROUPS = {
     chasis: [skid, cageG], bloque: [blockG], carter: [carterG], camisas: [linerG], pistones: [pistonG],
-    culata: [headG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
+    culata: [headG], ciguenal: [crank.crankG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
     arranque: [startG], soportes: mountGroups, tanque: [tankG], radiador: [radG], ventilador: [fanG],
     volante: [flyG], acople: [coupG], bomba: [pumpG], tablero: [tabG],
   };
-  return { PART_GROUPS, pistonBodies, PISTON_Y, PISTON_PHASE, flyG, fanG, coupHub, tNeedles, smokeAnchor };
+  return { PART_GROUPS, crank, flyG, fanG, coupHub, tNeedles, smokeAnchor };
 }

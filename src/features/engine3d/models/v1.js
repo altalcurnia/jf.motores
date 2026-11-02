@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { ladderGuard } from "./guard.js";
+import { buildCrankTrain } from "./crank.js";
 
 /**
  * Versión 1 del modelo 3D (la primera aproximación a los planos).
@@ -144,29 +145,13 @@ export function buildV1({ engine, regPart, MAT, mk }) {
   engine.add(linerG);
   regPart(linerG, 0, 1.6, 2.0);
 
-  // --- Pistones ---
-  const PISTON_Y = 1.7;
-  const PISTON_PHASE = [0, Math.PI, Math.PI, 0];
-  const pistonG = new THREE.Group();
-  const pistonBodies = [];
-  CYL_X.forEach((cx) => {
-    const pb = new THREE.Group();
-    pb.position.set(cx, PISTON_Y, 0);
-    pb.add(mk(new THREE.CylinderGeometry(0.22, 0.22, 0.36, 22), MAT.chrome, 0, 0, 0));
-    for (let r = 0; r < 3; r++) {
-      const ring = mk(new THREE.TorusGeometry(0.22, 0.013, 8, 22), MAT.dark, 0, 0.1 - r * 0.06, 0);
-      ring.rotation.x = Math.PI / 2;
-      pb.add(ring);
-    }
-    pb.add(mk(new THREE.CylinderGeometry(0.045, 0.06, 0.6, 10), MAT.steel, 0, -0.45, 0));
-    const pin = mk(new THREE.CylinderGeometry(0.05, 0.05, 0.28, 10), MAT.dark, 0, -0.05, 0);
-    pin.rotation.x = Math.PI / 2;
-    pb.add(pin);
-    pistonG.add(pb);
-    pistonBodies.push(pb);
-  });
+  // --- Cigüeñal, bielas y pistones (cinemática real, ver crank.js) ---
+  const crank = buildCrankTrain({ mk, MAT, cylX: CYL_X, y0: AX, r: 0.14, l: 0.47, bore: 0.22, crown: 0.14 });
+  const pistonG = crank.pistonG;
   engine.add(pistonG);
   regPart(pistonG, 0, 2.5, 0);
+  engine.add(crank.crankG);
+  regPart(crank.crankG, 0, -0.1, 3.6);
 
   // --- Culata y tapas de válvulas ---
   const headG = new THREE.Group();
@@ -417,10 +402,10 @@ export function buildV1({ engine, regPart, MAT, mk }) {
   /* piezas clicables → categoría de repuestos (una pieza puede tener varios grupos) */
   const PART_GROUPS = {
     chasis: [skid, cageG], bloque: [blockG], carter: [carterG], camisas: [linerG], pistones: [pistonG],
-    culata: [headG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
+    culata: [headG], ciguenal: [crank.crankG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
     arranque: [startG], soportes: mountGroups, tanque: [tankG], radiador: [radG], ventilador: [fanG],
     volante: [flyG], acople: [coupG], bomba: [pumpG], tablero: [tabG],
   };
 
-  return { PART_GROUPS, pistonBodies, PISTON_Y, PISTON_PHASE, flyG, fanG, coupHub, tNeedles, smokeAnchor };
+  return { PART_GROUPS, crank, flyG, fanG, coupHub, tNeedles, smokeAnchor };
 }

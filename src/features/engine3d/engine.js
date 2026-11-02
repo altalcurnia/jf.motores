@@ -47,6 +47,8 @@ export function startEngine(opts) {
         glow: 0,
         shake: 0,
         atmo: 0,
+        // 0 → motor sólido; 1 → bloque, culata y cárter transparentes (rayos X)
+        xray: 0,
         // Encendido mientras se recorre la portada (antes del recorrido)
         preRpm: 0,
         preSmoke: 0,
@@ -56,9 +58,7 @@ export function startEngine(opts) {
       };
       // Valores efectivos que usa el render (mezcla de portada y recorrido)
       const R = { rpm: 0, smoke: 0, glow: 0 };
-      let heat = 0,
-        pistonPhase = 0,
-        flyRot = 0;
+      let heat = 0;
       const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
       let inJourney = false;
 
@@ -218,7 +218,7 @@ export function startEngine(opts) {
 
       /* ===== Modelo del equipo: versión elegida en el admin (ver models/) ===== */
       const build = MODELS[opts.variant] || MODELS.v1;
-      const { PART_GROUPS, pistonBodies, PISTON_Y, PISTON_PHASE, flyG, fanG, coupHub, tNeedles, smokeAnchor } = build({
+      const { PART_GROUPS, crank, flyG, fanG, coupHub, tNeedles, smokeAnchor } = build({
         engine,
         regPart,
         MAT,
@@ -231,6 +231,43 @@ export function startEngine(opts) {
       engine.updateMatrixWorld(true);
       smokeAnchor.getWorldPosition(smokeLight.position);
       for (const [k, gs] of Object.entries(PART_GROUPS)) gs.forEach((g) => (g.userData.partKey = k));
+
+      /* Rayos X: en «plena carga» el bloque, la culata y el cárter se vuelven transparentes
+         para ver el cigüeñal, las bielas y los pistones. Cada pieza recibe su propio material. */
+      const XRAY = { bloque: 0.88, culata: 0.86, carter: 0.88, inyeccion: 0.6, arranque: 0.6, admision: 0.45, soportes: 0.4 };
+      const xrayMats = [];
+      for (const [k, f] of Object.entries(XRAY)) {
+        const own = new Map();
+        for (const g of PART_GROUPS[k] || [])
+          g.traverse((o) => {
+            if (!o.isMesh && !o.isLineSegments) return;
+            const base = o.material;
+            let m = own.get(base);
+            if (!m) {
+              m = base.clone();
+              own.set(base, m);
+              xrayMats.push({ m, f: o.isLineSegments ? f * 0.7 : f, base: m.opacity, trans: m.transparent, dw: m.depthWrite });
+            }
+            o.material = m;
+          });
+      }
+      disposers.push(() => xrayMats.forEach((x) => x.m.dispose()));
+      let xrayLast = -1;
+      function applyXray(v) {
+        if (Math.abs(v - xrayLast) < 0.002) return;
+        const on = v > 0.004;
+        const wasOn = xrayLast > 0.004;
+        xrayLast = v;
+        for (const x of xrayMats) {
+          x.m.opacity = x.base * (1 - x.f * v);
+          if (on !== wasOn) {
+            x.m.transparent = on || x.trans;
+            x.m.depthWrite = on ? false : x.dw;
+            x.m.needsUpdate = true;
+          }
+        }
+      }
+      let crankAngle = 0;
       const tmpBox = new THREE.Box3();
       function partBox(key, out) {
         out.makeEmpty();
@@ -471,6 +508,9 @@ export function startEngine(opts) {
         .to(S, { smoke: 1, duration: 10, ease: "power1.inOut" }, 16)
         .to(S, { shake: 1, duration: 10, ease: "power1.inOut" }, 15)
         .to(S, { atmo: 2, duration: 12, ease: "power1.inOut" }, 15)
+        // Rayos X: aparece con la tarjeta «plena carga» mientras suben las rpm y se va antes del despiece
+        .to(S, { xray: 1, duration: 8, ease: "power1.inOut" }, 15.5)
+        .to(S, { xray: 0, duration: 4, ease: "power1.inOut" }, 31.5)
         // Despiece
         .to(S, { camTheta: 6.283, camR: 15.5, camPhi: 1.12, camTY: 1.7, duration: 30, ease: "power1.inOut" }, 33)
         .to(S, { rpm: 0.35, duration: 8, ease: "power2.inOut" }, 33)
@@ -671,14 +711,13 @@ export function startEngine(opts) {
           p.position.copy(p.userData.base).addScaledVector(p.userData.dir, e);
 
         const run = THREE.MathUtils.clamp(R.rpm * 4, 0, 1);
-        pistonPhase += dt * (2 + R.rpm * 26);
-        for (let i = 0; i < 4; i++)
-          pistonBodies[i].position.y =
-            PISTON_Y + Math.sin(pistonPhase + PISTON_PHASE[i]) * 0.13 * run;
-        flyRot += dt * R.rpm * 16;
-        flyG.rotation.x = flyRot;
-        fanG.rotation.x = -flyRot * 1.6;
-        coupHub.rotation.x = flyRot;
+        // Un solo eje: cigüeñal, volante y acople giran juntos; el ventilador va por correa (1,25:1)
+        crankAngle += dt * R.rpm * 30;
+        crank.update(crankAngle);
+        flyG.rotation.x = crankAngle;
+        coupHub.rotation.x = crankAngle;
+        fanG.rotation.x = crankAngle * 1.25;
+        applyXray(S.xray);
         // Relojes del tablero: rpm, temperatura y presión de aceite
         tNeedles[0].rotation.z = 1.2 - run * 2.0 - noise(t, 9) * 0.08 * run;
         tNeedles[1].rotation.z = 1.2 - THREE.MathUtils.clamp(heat, 0, 1) * 1.8;

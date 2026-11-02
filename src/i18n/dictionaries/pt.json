@@ -220,7 +220,7 @@
     "luz": "Luz ambiente",
     "bloque": "Bloco",
     "camisas": "Camisas",
-    "pistones": "Pistões",
+    "pistones": "Pistões e bielas",
     "culata": "Cabeçote",
     "escape": "Escapamento",
     "tanque": "Tanque de diesel",
@@ -235,7 +235,8 @@
     "arranque": "Motor de partida",
     "inyeccion": "Injeção e acelerador",
     "carter": "Cárter",
-    "soportes": "Coxins do motor"
+    "soportes": "Coxins do motor",
+    "ciguenal": "Virabrequim"
   },
   "partPage": {
     "title": "Peças: ",

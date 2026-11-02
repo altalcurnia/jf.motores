@@ -220,7 +220,7 @@
     "luz": "Luz ambiental",
     "bloque": "Bloque",
     "camisas": "Camisas",
-    "pistones": "Pistones",
+    "pistones": "Pistones y bielas",
     "culata": "Culata",
     "escape": "Escape",
     "tanque": "Tanque diésel",
@@ -235,7 +235,8 @@
     "arranque": "Motor de arranque",
     "inyeccion": "Inyección y acelerador",
     "carter": "Cárter",
-    "soportes": "Soportes del motor"
+    "soportes": "Soportes del motor",
+    "ciguenal": "Cigüeñal"
   },
   "partPage": {
     "title": "Repuestos: ",

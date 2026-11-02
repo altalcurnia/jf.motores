@@ -20,6 +20,7 @@ export const partKeys = [
   "inyeccion",
   "carter",
   "soportes",
+  "ciguenal",
 ] as const;
 
 export type PartKey = (typeof partKeys)[number];
@@ -40,6 +41,7 @@ export const engineLabels = [
   { id: "lbl-bloque", part: "bloque", main: false },
   { id: "lbl-camisas", part: "camisas", main: false },
   { id: "lbl-pistones", part: "pistones", main: true },
+  { id: "lbl-ciguenal", part: "ciguenal", main: false },
   { id: "lbl-culata", part: "culata", main: true },
   { id: "lbl-inyeccion", part: "inyeccion", main: false },
   { id: "lbl-admision", part: "admision", main: false },
