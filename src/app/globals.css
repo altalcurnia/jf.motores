@@ -804,6 +804,17 @@ body.drawer-open { overflow: hidden; }
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .part-row.on { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+/* Con muchas piezas, en PC la fila se reparte en dos columnas compactas */
+/* Con muchas piezas, en PC la fila es una columna compacta; en pantallas bajas, dos columnas */
+@media (min-width: 761px) {
+  .part-row { gap: 4px; }
+  .part-row a { padding: 5px 12px 5px 8px; font-size: 10px; letter-spacing: 0.1em; gap: 8px; }
+}
+@media (min-width: 761px) and (max-height: 980px) {
+  .part-row { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); max-width: min(430px, 34vw); }
+  .part-row-title { grid-column: 1 / -1; }
+  .part-row a { padding: 4px 8px; font-size: 9px; }
+}
 .part-row-title {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; color: var(--yellow);
   text-transform: uppercase; margin-bottom: 6px; display: grid; gap: 4px;

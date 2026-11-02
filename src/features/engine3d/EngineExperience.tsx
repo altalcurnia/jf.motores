@@ -243,7 +243,7 @@ export function EngineExperience({ locale, t }: Props) {
         </div>
 
         {/* Fila de piezas del despiece: al pasar el cursor se ilumina la pieza y su etiqueta */}
-        <div className={`part-row${exploded ? " on" : ""}`} aria-hidden={!exploded}>
+        <div className={`part-row${exploded ? " on" : ""}`} aria-hidden={!exploded} data-count={engineLabels.length}>
           <span className="part-row-title">
             {j.partsTitle}
             <small>{j.partsHint}</small>
@@ -286,6 +286,8 @@ export function EngineExperience({ locale, t }: Props) {
             className={`lbl${hover === l.part ? " hl" : ""}`}
             id={l.id}
             key={l.id}
+            data-part={l.part}
+            data-main={l.main ? "" : undefined}
             href={`/${locale}/repuestos/${l.part}`}
             onMouseEnter={() => lightPart(l.part)}
             onMouseLeave={() => lightPart(null)}

@@ -216,7 +216,7 @@
     ]
   },
   "parts": {
-    "chasis": "Chassi",
+    "chasis": "Chassi e estrutura",
     "luz": "Luz ambiente",
     "bloque": "Bloco",
     "camisas": "Camisas",
@@ -227,8 +227,15 @@
     "radiador": "Radiador",
     "ventilador": "Ventilador",
     "volante": "Volante",
-    "bomba": "Bomba",
-    "tablero": "Painel"
+    "bomba": "Bomba centrífuga",
+    "tablero": "Painel",
+    "acople": "Acoplamento e proteção",
+    "admision": "Admissão e filtro de ar",
+    "mangueras": "Mangueiras",
+    "arranque": "Motor de partida",
+    "inyeccion": "Injeção e acelerador",
+    "carter": "Cárter",
+    "soportes": "Coxins do motor"
   },
   "partPage": {
     "title": "Peças: ",

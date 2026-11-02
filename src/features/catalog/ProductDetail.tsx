@@ -12,6 +12,7 @@ import { ProductCard } from "./ProductCard";
 import { OwnerBanner, StatusPill } from "./owned";
 import { catalogPaths, fill, formatPrice, productHref, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
+import { JsonLd } from "@/components/JsonLd";
 
 const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
 
@@ -32,11 +33,16 @@ export async function productMetadata(catalog: CatalogType, slug: string) {
   const [{ product }, locale] = await Promise.all([findProduct(catalog, slug), getLocale()]);
   if (!product) return {};
   const img = product.images[0];
+  const title = `${tr(product.name, locale)} · ${product.ref}`;
+  const description = tr(product.summary, locale) || tr(product.description, locale).slice(0, 160);
+  // Al compartir el enlace (WhatsApp, Facebook) sale la foto del producto
+  const images = img ? [storageUrl(img.path, supabaseUrl())] : ["/og.jpg"];
   return {
-    title: `${tr(product.name, locale)} · ${product.ref}`,
-    description: tr(product.summary, locale) || tr(product.description, locale).slice(0, 160),
+    title,
+    description,
     alternates: localizedAlternates(locale, `/${catalogPaths[catalog]}/${slug}`),
-    openGraph: img ? { images: [storageUrl(img.path, supabaseUrl())] } : undefined,
+    openGraph: { type: "website", siteName: site.name, title, description, images },
+    twitter: { card: "summary_large_image", title, description, images },
   };
 }
 
@@ -58,9 +64,44 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
   const parts = catalog === "repuesto" ? [] : compatibleParts(data, p);
   const fits = catalog === "repuesto" ? compatibleWith(data, p) : null;
   const listHref = `/${locale}/${catalogPaths[catalog]}`;
+  const abs = (u: string) => (u.startsWith("http") ? u : `${site.url}${u}`);
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    sku: p.ref,
+    description: tr(p.summary, locale) || tr(p.description, locale).slice(0, 300) || undefined,
+    image: p.images.length ? images.slice(0, 6).map((i) => abs(i.url)) : undefined,
+    brand: { "@type": "Brand", name: model?.brand ?? site.name },
+    category: category ? tr(category.name, locale) : undefined,
+    url: pageUrl,
+    offers:
+      p.priceCop != null
+        ? {
+            "@type": "Offer",
+            url: pageUrl,
+            priceCurrency: "COP",
+            price: p.priceCop,
+            itemCondition: "https://schema.org/NewCondition",
+            availability: p.status === "disponible" ? "https://schema.org/InStock" : isPart ? "https://schema.org/OutOfStock" : "https://schema.org/SoldOut",
+            seller: { "@type": "Organization", name: site.name },
+          }
+        : undefined,
+  };
+  const crumbsLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: site.name, item: `${site.url}/${locale}` },
+      { "@type": "ListItem", position: 2, name: dict.catalogs.items[catalogPaths[catalog]].title, item: `${site.url}${listHref}` },
+      { "@type": "ListItem", position: 3, name, item: pageUrl },
+    ],
+  };
 
   return (
     <section className="block pd-page">
+      <JsonLd data={productLd} />
+      <JsonLd data={crumbsLd} />
       <div className="pd-crumbs">
         <Link href={listHref}>← {dict.catalogs.items[catalogPaths[catalog]].title}</Link>
         {category && <span> / {tr(category.name, locale)}</span>}

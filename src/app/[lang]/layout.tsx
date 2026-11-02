@@ -36,8 +36,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: dict.meta.title,
       description: dict.meta.description,
       locale: localeTags[locale].replace("-", "_"),
-      images: ["/logo.png"],
+      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: dict.meta.title }],
     },
+    twitter: { card: "summary_large_image", title: dict.meta.title, description: dict.meta.description, images: ["/og.jpg"] },
   };
 }
 

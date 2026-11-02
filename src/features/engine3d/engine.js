@@ -118,7 +118,7 @@ export function startEngine(opts) {
       underGlow.position.set(0, 0.4, 0);
       scene.add(underGlow);
       const smokeLight = new THREE.PointLight(0xffb066, 0, 7, 2);
-      smokeLight.position.set(1.7, 4.4, -0.95);
+      smokeLight.position.set(-0.04, 3.85, 1.0);
       scene.add(smokeLight);
 
       const ground = new THREE.Mesh(
@@ -210,440 +210,454 @@ export function startEngine(opts) {
         parts.push(g);
       }
 
+      /* ===== Motobomba diésel (según los planos de JF Motores) =====
+         Eje X = largo del equipo (bomba en −X, radiador en +X). Eje del cigüeñal a Y = AX. */
+      const AX = 1.25;
+      const M2 = {
+        blue: new THREE.MeshStandardMaterial({ color: 0x1f63c4, metalness: 0.35, roughness: 0.45 }),
+        copper: new THREE.MeshStandardMaterial({ color: 0xc8743a, metalness: 0.8, roughness: 0.32 }),
+        red: new THREE.MeshStandardMaterial({ color: 0xd0231b, metalness: 0.2, roughness: 0.5 }),
+        brass: new THREE.MeshStandardMaterial({ color: 0xc9a24e, metalness: 0.9, roughness: 0.28 }),
+        frame: new THREE.MeshStandardMaterial({ color: 0x202327, metalness: 0.55, roughness: 0.55 }),
+        rubber: new THREE.MeshStandardMaterial({ color: 0x141618, metalness: 0.1, roughness: 0.85 }),
+        yellowDk: new THREE.MeshStandardMaterial({ color: 0xd3a400, metalness: 0.35, roughness: 0.5 }),
+        gray: new THREE.MeshStandardMaterial({ color: 0xb9bec4, metalness: 0.75, roughness: 0.35 }),
+      };
+      function box(w, h, d, mat, x, y, z) {
+        return mk(new THREE.BoxGeometry(w, h, d), mat, x, y, z);
+      }
+      /** Cilindro con su eje a lo largo de X, Y o Z */
+      function cyl(r1, r2, len, mat, x, y, z, axis, seg) {
+        const m = mk(new THREE.CylinderGeometry(r1, r2, len, seg || 24), mat, x, y, z);
+        if (axis === "x") m.rotation.z = Math.PI / 2;
+        else if (axis === "z") m.rotation.x = Math.PI / 2;
+        return m;
+      }
+      /** Tubo por puntos (mangueras, escape, cañerías) */
+      function tube(pts, r, mat, seg) {
+        const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(p[0], p[1], p[2])));
+        return mk(new THREE.TubeGeometry(curve, seg || 40, r, 12, false), mat, 0, 0, 0);
+      }
+      /** Manguera corrugada: tubo + anillos a lo largo */
+      function corrugated(pts, r, mat, rings) {
+        const g = new THREE.Group();
+        const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(p[0], p[1], p[2])));
+        g.add(mk(new THREE.TubeGeometry(curve, 48, r, 12, false), mat, 0, 0, 0));
+        const ringGeo = new THREE.TorusGeometry(r * 1.02, r * 0.16, 6, 16);
+        const up = new THREE.Vector3(0, 0, 1);
+        for (let i = 1; i < rings; i++) {
+          const t = i / rings;
+          const ring = mk(ringGeo, mat, 0, 0, 0);
+          ring.position.copy(curve.getPointAt(t));
+          ring.quaternion.setFromUnitVectors(up, curve.getTangentAt(t));
+          g.add(ring);
+        }
+        return g;
+      }
+      /** Oreja de izaje: placa con agujero */
+      function liftEye(x, y, z, alongX) {
+        const g = new THREE.Group();
+        g.add(box(alongX ? 0.32 : 0.1, 0.3, alongX ? 0.1 : 0.32, M2.frame, 0, 0.12, 0));
+        const ring = mk(new THREE.TorusGeometry(0.12, 0.05, 10, 24), M2.frame, 0, 0.34, 0);
+        if (!alongX) ring.rotation.y = Math.PI / 2;
+        g.add(ring);
+        g.position.set(x, y, z);
+        return g;
+      }
+
+      // --- Base de canal (chasis) ---
       const skid = new THREE.Group();
-      skid.add(
-        mk(new THREE.BoxGeometry(6.8, 0.24, 2.6), MAT.dark, -0.2, 0.14, 0),
-      );
-      skid.add(
-        mk(new THREE.BoxGeometry(6.8, 0.1, 0.14), MAT.yellow, -0.2, 0.06, 1.28),
-      );
-      skid.add(
-        mk(
-          new THREE.BoxGeometry(6.8, 0.1, 0.14),
-          MAT.yellow,
-          -0.2,
-          0.06,
-          -1.28,
-        ),
+      [-1.05, 1.05].forEach((z) => {
+        skid.add(box(6.5, 0.3, 0.16, M2.frame, -0.5, 0.15, z));
+        skid.add(box(6.5, 0.04, 0.3, M2.frame, -0.5, 0.02, z - Math.sign(z) * 0.07));
+        skid.add(box(6.5, 0.04, 0.3, M2.frame, -0.5, 0.28, z - Math.sign(z) * 0.07));
+      });
+      [-3.6, -2.45, -1.25, 0.3, 1.55, 2.6].forEach((x) => skid.add(box(0.16, 0.22, 2.0, M2.frame, x, 0.15, 0)));
+      // Pedestal de la bomba
+      skid.add(box(0.95, 0.12, 1.0, M2.frame, -3.0, 0.36, 0));
+      // Pernos de anclaje
+      [-3.55, -1.3, 0.25, 2.55].forEach((x) =>
+        [-1.05, 1.05].forEach((z) => skid.add(cyl(0.035, 0.035, 0.08, MAT.chrome, x, 0.33, z, null, 8))),
       );
       engine.add(skid);
 
+      // --- Marco de protección con oreja de izaje (parte del chasis) ---
+      const cageG = new THREE.Group();
+      const PX = -0.9;
+      [-1.0, 1.0].forEach((z) => {
+        cageG.add(box(0.24, 2.75, 0.2, M2.frame, PX, 1.68, z));
+        const ch = box(0.24, 0.46, 0.2, M2.frame, PX, 3.2, z - Math.sign(z) * 0.16);
+        ch.rotation.x = -Math.sign(z) * 0.74;
+        cageG.add(ch);
+        // Tirante diagonal hacia el radiador
+        const br = box(0.12, 1.4, 0.12, M2.frame, PX + 0.45, 0.85, z);
+        br.rotation.z = -0.62;
+        cageG.add(br);
+      });
+      cageG.add(box(0.24, 0.2, 1.42, M2.frame, PX, 3.38, 0));
+      cageG.add(liftEye(PX, 3.48, 0, false));
+      engine.add(cageG);
+      regPart(cageG, 0, 0.9, -2.7);
+
       const luzG = new THREE.Group();
-      luzG.add(
-        mk(new THREE.BoxGeometry(6.2, 0.05, 2.1), MAT.glow, -0.2, 0.035, 0),
-      );
+      luzG.add(box(6.0, 0.05, 1.9, MAT.glow, -0.5, 0.035, 0));
       engine.add(luzG);
       // La luz ambiental es solo ambientación: no se separa en el despiece ni es una pieza
       regPart(luzG, 0, 0, 0);
 
-      const CYL_X = [-1.275, -0.425, 0.425, 1.275];
+      // --- Bloque (con carcasa del volante, tapa frontal, filtro de aceite) ---
+      const CYL_X = [-0.93, -0.31, 0.31, 0.93];
       const blockG = new THREE.Group();
-      blockG.add(mk(new THREE.BoxGeometry(3.4, 1.2, 1.2), MAT.iron, 0, 0.9, 0));
-      blockG.add(
-        mk(new THREE.BoxGeometry(3.46, 0.12, 1.26), MAT.steel, 0, 1.52, 0),
-      );
+      blockG.add(box(2.6, 1.25, 1.1, MAT.yellow, 0, 1.375, 0));
+      // Nervaduras y tapones laterales
       CYL_X.forEach((cx) =>
-        blockG.add(
-          mk(new THREE.BoxGeometry(0.09, 1.0, 1.24), MAT.dark, cx, 0.9, 0),
-        ),
+        [-0.56, 0.56].forEach((z) => {
+          blockG.add(box(0.1, 1.0, 0.04, M2.yellowDk, cx + 0.31, 1.4, z));
+          blockG.add(cyl(0.07, 0.07, 0.03, MAT.dark, cx, 1.55, z * 1.02, "z", 12));
+        }),
       );
+      // Carcasa del volante (anillo abierto: deja ver el volante)
+      blockG.add(cyl(0.7, 0.7, 0.3, MAT.yellow, -1.45, AX, 0, "x", 36));
+      blockG.children[blockG.children.length - 1].geometry = new THREE.CylinderGeometry(0.7, 0.7, 0.3, 36, 1, true);
+      blockG.add(cyl(0.72, 0.72, 0.05, M2.yellowDk, -1.32, AX, 0, "x", 36));
+      // Tapa de distribución y bomba de agua
+      blockG.add(box(0.14, 1.0, 0.9, M2.yellowDk, 1.37, 1.45, 0));
+      blockG.add(cyl(0.22, 0.22, 0.12, MAT.dark, 1.5, AX, 0, "x", 24));
+      blockG.add(cyl(0.12, 0.12, 0.25, MAT.yellow, 1.45, 1.9, -0.25, "x", 16));
+      // Filtro de aceite
+      blockG.add(cyl(0.13, 0.13, 0.32, MAT.dark, -0.35, 1.0, 0.7, "z", 18));
       engine.add(blockG);
 
+      // --- Cárter ---
+      const carterG = new THREE.Group();
+      carterG.add(box(2.3, 0.22, 0.9, M2.yellowDk, -0.05, 0.64, 0));
+      carterG.add(box(1.1, 0.2, 0.7, M2.yellowDk, 0.4, 0.45, 0));
+      carterG.add(cyl(0.05, 0.05, 0.06, MAT.chrome, 0.4, 0.33, 0, null, 10));
+      engine.add(carterG);
+      regPart(carterG, 0, -0.15, -2.2);
+
+      // --- Camisas ---
       const linerG = new THREE.Group();
       CYL_X.forEach((cx) => {
-        linerG.add(
-          mk(
-            new THREE.CylinderGeometry(0.3, 0.3, 0.8, 24, 1, true),
-            MAT.glass,
-            cx,
-            1.9,
-            0,
-          ),
-        );
-        const rt = mk(
-          new THREE.TorusGeometry(0.3, 0.025, 10, 24),
-          MAT.steel,
-          cx,
-          2.3,
-          0,
-        );
+        linerG.add(mk(new THREE.CylinderGeometry(0.25, 0.25, 0.75, 24, 1, true), MAT.glass, cx, 1.62, 0));
+        const rt = mk(new THREE.TorusGeometry(0.25, 0.025, 10, 24), MAT.steel, cx, 2.0, 0);
         rt.rotation.x = Math.PI / 2;
         linerG.add(rt);
       });
       engine.add(linerG);
-      regPart(linerG, 0, 1.5, 1.1);
+      regPart(linerG, 0, 1.6, 2.0);
 
+      // --- Pistones ---
+      const PISTON_Y = 1.7;
       const PISTON_PHASE = [0, Math.PI, Math.PI, 0];
       const pistonG = new THREE.Group();
       const pistonBodies = [];
       CYL_X.forEach((cx) => {
         const pb = new THREE.Group();
-        pb.position.set(cx, 1.92, 0);
-        pb.add(
-          mk(
-            new THREE.CylinderGeometry(0.25, 0.25, 0.4, 22),
-            MAT.chrome,
-            0,
-            0,
-            0,
-          ),
-        );
+        pb.position.set(cx, PISTON_Y, 0);
+        pb.add(mk(new THREE.CylinderGeometry(0.22, 0.22, 0.36, 22), MAT.chrome, 0, 0, 0));
         for (let r = 0; r < 3; r++) {
-          const ring = mk(
-            new THREE.TorusGeometry(0.25, 0.014, 8, 22),
-            MAT.dark,
-            0,
-            0.11 - r * 0.07,
-            0,
-          );
+          const ring = mk(new THREE.TorusGeometry(0.22, 0.013, 8, 22), MAT.dark, 0, 0.1 - r * 0.06, 0);
           ring.rotation.x = Math.PI / 2;
           pb.add(ring);
         }
-        pb.add(
-          mk(
-            new THREE.CylinderGeometry(0.05, 0.07, 0.7, 10),
-            MAT.steel,
-            0,
-            -0.5,
-            0,
-          ),
-        );
-        const pin = mk(
-          new THREE.CylinderGeometry(0.06, 0.06, 0.3, 10),
-          MAT.dark,
-          0,
-          -0.05,
-          0,
-        );
+        pb.add(mk(new THREE.CylinderGeometry(0.045, 0.06, 0.6, 10), MAT.steel, 0, -0.45, 0));
+        const pin = mk(new THREE.CylinderGeometry(0.05, 0.05, 0.28, 10), MAT.dark, 0, -0.05, 0);
         pin.rotation.x = Math.PI / 2;
         pb.add(pin);
         pistonG.add(pb);
         pistonBodies.push(pb);
       });
       engine.add(pistonG);
-      regPart(pistonG, 0, 2.9, 0);
+      regPart(pistonG, 0, 2.5, 0);
 
+      // --- Culata y tapas de válvulas ---
       const headG = new THREE.Group();
-      headG.add(
-        mk(new THREE.BoxGeometry(3.4, 0.22, 1.25), MAT.iron, 0, 2.41, 0),
-      );
-      headG.add(
-        mk(new THREE.BoxGeometry(3.3, 0.2, 0.95), MAT.yellow, 0, 2.62, 0),
-      );
-      CYL_X.forEach((cx) =>
-        [-0.22, 0.22].forEach((zo) =>
-          headG.add(
-            mk(
-              new THREE.CylinderGeometry(0.045, 0.045, 0.18, 10),
-              MAT.chrome,
-              cx,
-              2.8,
-              zo,
-            ),
-          ),
-        ),
-      );
-      engine.add(headG);
-      regPart(headG, 0, 4.4, 0);
-
-      const escG = new THREE.Group();
-      CYL_X.forEach((cx) => {
-        const dp = mk(
-          new THREE.CylinderGeometry(0.05, 0.05, 0.4, 10),
-          MAT.steel,
-          cx,
-          2.42,
-          -0.78,
-        );
-        dp.rotation.x = Math.PI / 2;
-        escG.add(dp);
+      headG.add(box(2.55, 0.3, 1.04, MAT.yellow, 0, 2.15, 0));
+      headG.add(box(1.2, 0.24, 0.8, MAT.yellow, -0.62, 2.42, 0));
+      headG.add(box(1.2, 0.24, 0.8, MAT.yellow, 0.62, 2.42, 0));
+      [-0.62, 0.62].forEach((x) => {
+        headG.add(box(1.24, 0.05, 0.84, M2.yellowDk, x, 2.32, 0));
+        [-0.4, 0.4].forEach((dx) => headG.add(cyl(0.035, 0.035, 0.06, MAT.chrome, x + dx, 2.56, 0, null, 8)));
       });
-      const collector = mk(
-        new THREE.CylinderGeometry(0.07, 0.07, 3.0, 14),
-        MAT.steel,
-        0,
-        2.42,
-        -0.98,
-      );
-      collector.rotation.z = Math.PI / 2;
-      escG.add(collector);
+      headG.add(cyl(0.08, 0.08, 0.08, MAT.dark, 0.2, 2.58, 0.18, null, 14));
+      // Caja del termostato (recibe la manguera roja)
+      headG.add(box(0.22, 0.18, 0.26, M2.yellowDk, 1.25, 2.38, -0.2));
+      engine.add(headG);
+      regPart(headG, 0, 2.8, 0);
+
+      // --- Inyección: bomba, 4 tubos a los inyectores y acelerador ---
+      const injG = new THREE.Group();
+      injG.add(box(0.95, 0.38, 0.3, MAT.yellow, 0.05, 1.32, -0.72));
+      injG.add(box(0.95, 0.06, 0.32, M2.yellowDk, 0.05, 1.53, -0.72));
+      CYL_X.forEach((cx, i) => {
+        const sx = -0.3 + i * 0.2;
+        injG.add(cyl(0.035, 0.035, 0.12, MAT.chrome, sx, 1.6, -0.72, null, 8));
+        injG.add(tube([[sx, 1.62, -0.72], [sx + (cx - sx) * 0.4, 1.95, -0.7], [cx, 2.25, -0.56], [cx, 2.42, -0.44]], 0.022, MAT.yellow, 20));
+        injG.add(cyl(0.045, 0.045, 0.14, MAT.chrome, cx, 2.38, -0.44, null, 10));
+      });
+      // Acelerador (palanca con perilla negra)
+      const lever = new THREE.Group();
+      lever.position.set(-0.45, 1.4, -0.88);
+      lever.add(cyl(0.025, 0.025, 0.55, MAT.steel, 0, 0.25, 0, null, 8));
+      lever.add(mk(new THREE.SphereGeometry(0.075, 16, 12), M2.rubber, 0, 0.53, 0));
+      lever.rotation.z = 0.35;
+      injG.add(lever);
+      injG.add(cyl(0.08, 0.08, 0.1, MAT.dark, -0.45, 1.4, -0.85, "z", 14));
+      engine.add(injG);
+      regPart(injG, 0, 1.3, -2.1);
+
+      // --- Escape: múltiple, silenciador y cuello de ganso ---
+      const escG = new THREE.Group();
+      CYL_X.forEach((cx) => escG.add(cyl(0.06, 0.06, 0.2, MAT.dark, cx, 2.12, 0.62, "z", 10)));
+      escG.add(cyl(0.09, 0.09, 2.0, MAT.dark, 0, 2.12, 0.74, "x", 14));
       escG.add(
-        mk(
-          new THREE.CylinderGeometry(0.09, 0.09, 1.3, 14),
-          MAT.steel,
-          1.7,
-          3.1,
-          -0.98,
+        tube(
+          [[-0.15, 2.12, 0.78], [-0.38, 2.4, 0.95], [-0.48, 2.9, 1.0], [-0.48, 3.6, 1.0], [-0.44, 3.95, 1.0], [-0.26, 4.1, 1.0], [-0.08, 3.98, 1.0], [-0.04, 3.7, 1.0], [-0.04, 3.55, 1.0]],
+          0.1,
+          M2.rubber,
+          60,
         ),
       );
-      escG.add(
-        mk(
-          new THREE.CylinderGeometry(0.18, 0.18, 0.7, 18),
-          MAT.chrome,
-          1.7,
-          4.05,
-          -0.98,
-        ),
-      );
-      escG.add(
-        mk(
-          new THREE.CylinderGeometry(0.07, 0.09, 0.3, 12),
-          MAT.dark,
-          1.7,
-          4.55,
-          -0.98,
-        ),
-      );
+      escG.add(cyl(0.18, 0.18, 0.75, M2.frame, -0.48, 3.0, 1.0, null, 20));
+      escG.add(cyl(0.19, 0.19, 0.05, MAT.dark, -0.48, 3.38, 1.0, null, 20));
+      escG.add(cyl(0.19, 0.19, 0.05, MAT.dark, -0.48, 2.62, 1.0, null, 20));
       const smokeAnchor = new THREE.Object3D();
-      smokeAnchor.position.set(1.7, 4.75, -0.98);
+      smokeAnchor.position.set(-0.04, 3.5, 1.0);
       escG.add(smokeAnchor);
       engine.add(escG);
-      regPart(escG, 1.2, 2.6, -1.4);
+      regPart(escG, -0.3, 0.9, 2.6);
 
+      // --- Admisión: filtro de aire y manguera corrugada ---
+      const admG = new THREE.Group();
+      admG.add(box(1.2, 0.12, 0.14, MAT.yellow, 0.0, 2.3, 0.6));
+      admG.add(corrugated([[0.55, 2.32, 0.66], [0.75, 2.75, 0.78], [1.1, 3.0, 0.7], [1.45, 2.95, 0.55], [1.6, 2.85, 0.45]], 0.12, M2.rubber, 16));
+      admG.add(cyl(0.24, 0.24, 0.62, M2.frame, 1.68, 2.85, 0.42, null, 24));
+      admG.add(cyl(0.25, 0.25, 0.06, MAT.dark, 1.68, 3.17, 0.42, null, 24));
+      admG.add(cyl(0.06, 0.06, 0.08, MAT.chrome, 1.68, 3.22, 0.42, null, 10));
+      engine.add(admG);
+      regPart(admG, 1.1, 1.2, 2.4);
+
+      // --- Mangueras de refrigeración ---
+      const hoseG = new THREE.Group();
+      hoseG.add(tube([[2.12, 2.95, -0.35], [1.85, 3.05, -0.32], [1.6, 2.85, -0.25], [1.42, 2.5, -0.2], [1.3, 2.4, -0.2]], 0.1, M2.red, 32));
+      [[2.05, 2.97, -0.34], [1.36, 2.42, -0.2]].forEach((p) => {
+        const c = cyl(0.115, 0.115, 0.06, MAT.chrome, p[0], p[1], p[2], "x", 16);
+        hoseG.add(c);
+      });
+      hoseG.add(tube([[2.12, 0.75, -0.45], [1.85, 0.72, -0.4], [1.6, 0.95, -0.3], [1.45, 1.1, -0.25]], 0.09, M2.rubber, 24));
+      engine.add(hoseG);
+      regPart(hoseG, 1.0, 1.6, -0.9);
+
+      // --- Motor de arranque ---
+      const startG = new THREE.Group();
+      startG.add(cyl(0.17, 0.17, 0.55, M2.gray, 0.55, 0.95, 0.74, "x", 22));
+      startG.add(cyl(0.1, 0.1, 0.36, M2.gray, 0.5, 1.2, 0.74, "x", 16));
+      startG.add(cyl(0.12, 0.12, 0.06, MAT.dark, 0.25, 0.95, 0.74, "x", 16));
+      engine.add(startG);
+      regPart(startG, 0.2, 0.5, 2.3);
+
+      // --- Soportes del motor (dos grupos: lado frontal y lado trasero) ---
+      const mountGroups = [-1, 1].map((side) => {
+        const g = new THREE.Group();
+        [-0.95, 0.95].forEach((x) => {
+          g.add(box(0.3, 0.52, 0.16, M2.frame, x, 0.58, side * 0.66));
+          g.add(box(0.36, 0.06, 0.3, M2.frame, x, 0.33, side * 0.66));
+          g.add(box(0.3, 0.06, 0.24, M2.frame, x, 0.86, side * 0.62));
+          [-0.1, 0.1].forEach((dx) => g.add(cyl(0.03, 0.03, 0.07, MAT.chrome, x + dx, 0.38, side * 0.74, null, 8)));
+        });
+        engine.add(g);
+        regPart(g, 0, 0, side * 1.6);
+        return g;
+      });
+
+      // --- Tanque diésel en la base ---
       const tankG = new THREE.Group();
-      tankG.add(
-        mk(new THREE.BoxGeometry(0.9, 0.55, 1.0), MAT.yellow, -2.45, 1.95, 0),
-      );
-      tankG.add(
-        mk(
-          new THREE.CylinderGeometry(0.11, 0.11, 0.1, 14),
-          MAT.dark,
-          -2.45,
-          2.27,
-          0,
-        ),
-      );
-      tankG.add(
-        mk(new THREE.BoxGeometry(0.08, 0.5, 0.08), MAT.dark, -2.45, 1.45, 0.4),
-      );
-      tankG.add(
-        mk(new THREE.BoxGeometry(0.08, 0.5, 0.08), MAT.dark, -2.45, 1.45, -0.4),
-      );
+      tankG.add(box(2.6, 0.24, 1.5, M2.frame, 0.1, 0.17, 0));
+      tankG.add(box(2.64, 0.03, 1.54, MAT.yellow, 0.1, 0.3, 0));
+      tankG.add(cyl(0.1, 0.1, 0.1, MAT.yellow, 1.1, 0.35, 0.55, null, 16));
+      tankG.add(cyl(0.11, 0.11, 0.03, M2.brass, 1.1, 0.41, 0.55, null, 16));
       engine.add(tankG);
-      regPart(tankG, -2.2, 2.2, 0);
+      regPart(tankG, 0, 0, 2.5);
 
+      // --- Radiador con tanque de expansión, carcasa del ventilador y oreja de izaje ---
       const radG = new THREE.Group();
-      radG.add(
-        mk(new THREE.BoxGeometry(2.2, 1.25, 0.18), MAT.dark, 0, 1.15, 1.05),
-      );
-      for (let i = 0; i < 6; i++)
-        radG.add(
-          mk(
-            new THREE.BoxGeometry(2.1, 0.03, 0.2),
-            MAT.iron,
-            0,
-            0.68 + i * 0.19,
-            1.05,
-          ),
-        );
-      radG.add(
-        mk(new THREE.BoxGeometry(2.3, 0.1, 0.26), MAT.yellow, 0, 1.83, 1.05),
-      );
+      const RX = 2.35;
+      radG.add(box(0.26, 2.2, 1.66, MAT.dark, RX, 1.6, 0));
+      for (let i = 0; i < 16; i++) radG.add(box(0.02, 0.025, 1.6, MAT.iron, RX + 0.14, 0.6 + i * 0.13, 0));
+      [-0.88, 0.88].forEach((z) => radG.add(box(0.34, 2.6, 0.1, M2.frame, RX, 1.45, z)));
+      [-0.95, 0.95].forEach((z) => radG.add(box(0.2, 0.5, 0.2, M2.frame, RX, 0.45, z * 0.95)));
+      // Carcasa del ventilador
+      radG.add(mk(new THREE.CylinderGeometry(0.7, 0.7, 0.3, 36, 1, true), M2.frame, RX - 0.3, AX + 0.3, 0));
+      radG.children[radG.children.length - 1].rotation.z = Math.PI / 2;
+      radG.add(box(0.05, 1.7, 0.1, M2.frame, RX - 0.16, AX + 0.3, 0.8));
+      radG.add(box(0.05, 1.7, 0.1, M2.frame, RX - 0.16, AX + 0.3, -0.8));
+      // Tanque de expansión y tapa de bronce
+      radG.add(box(0.52, 0.48, 1.6, M2.frame, RX - 0.08, 2.95, 0));
+      radG.add(box(0.56, 0.04, 1.64, MAT.dark, RX - 0.08, 2.72, 0));
+      radG.add(cyl(0.09, 0.09, 0.08, M2.brass, RX - 0.08, 3.23, 0.45, null, 18));
+      radG.add(cyl(0.12, 0.12, 0.03, M2.brass, RX - 0.08, 3.28, 0.45, null, 18));
+      radG.add(liftEye(RX - 0.08, 3.19, -0.35, true));
+      // Salidas de agua
+      radG.add(cyl(0.11, 0.11, 0.18, MAT.dark, RX - 0.25, 2.95, -0.35, "x", 14));
+      radG.add(cyl(0.1, 0.1, 0.18, MAT.dark, RX - 0.22, 0.75, -0.45, "x", 14));
       engine.add(radG);
-      regPart(radG, 0, 0.5, 3.0);
+      regPart(radG, 2.2, 0.3, 0);
+
+      // --- Ventilador (gira sobre el eje X) ---
       const fanG = new THREE.Group();
-      fanG.position.set(0, 1.15, 0.82);
-      for (let i = 0; i < 5; i++) {
-        const blade = mk(
-          new THREE.BoxGeometry(0.12, 0.5, 0.02),
-          MAT.steel,
-          0,
-          0.28,
-          0,
-        );
+      fanG.position.set(RX - 0.32, AX + 0.3, 0);
+      fanG.add(cyl(0.12, 0.12, 0.1, MAT.dark, 0, 0, 0, "x", 16));
+      for (let i = 0; i < 6; i++) {
         const pv = new THREE.Group();
-        pv.rotation.z = (i / 5) * Math.PI * 2;
-        blade.rotation.x = 0.5;
+        pv.rotation.x = (i / 6) * Math.PI * 2;
+        const blade = box(0.02, 0.5, 0.17, MAT.steel, 0, 0.36, 0);
+        blade.rotation.y = 0.5;
         pv.add(blade);
         fanG.add(pv);
       }
+      fanG.add(cyl(0.05, 0.05, 0.5, MAT.steel, -0.3, -0.3, 0, "x", 10));
       engine.add(fanG);
+      regPart(fanG, 1.3, 0, 0);
 
+      // --- Volante (dentro de su carcasa) ---
       const flyG = new THREE.Group();
-      flyG.position.set(2.1, 1.05, 0);
-      const flyMesh = mk(
-        new THREE.CylinderGeometry(0.82, 0.82, 0.16, 36),
-        MAT.iron,
-        0,
-        0,
-        0,
-      );
-      flyMesh.rotation.z = Math.PI / 2;
-      flyG.add(flyMesh);
-      const flyHub = mk(
-        new THREE.CylinderGeometry(0.2, 0.2, 0.24, 20),
-        MAT.chrome,
-        0,
-        0,
-        0,
-      );
-      flyHub.rotation.z = Math.PI / 2;
-      flyG.add(flyHub);
+      flyG.position.set(-1.45, AX, 0);
+      flyG.add(cyl(0.62, 0.62, 0.14, MAT.iron, 0, 0, 0, "x", 36));
+      flyG.add(cyl(0.18, 0.18, 0.22, MAT.chrome, 0, 0, 0, "x", 20));
       for (let i = 0; i < 4; i++) {
-        const spoke = mk(
-          new THREE.BoxGeometry(0.18, 0.62, 0.06),
-          MAT.dark,
-          0,
-          0,
-          0,
-        );
         const pv = new THREE.Group();
         pv.rotation.x = (i / 4) * Math.PI * 2 + 0.4;
-        spoke.position.y = 0.4;
-        pv.add(spoke);
+        const hole = box(0.16, 0.14, 0.14, MAT.dark, -0.04, 0.38, 0);
+        pv.add(hole);
         flyG.add(pv);
       }
       engine.add(flyG);
-      regPart(flyG, 3.0, 0.5, 0);
+      regPart(flyG, 0, 1.0, 2.6);
 
+      // --- Acople y guarda tipo escalera ---
+      const coupG = new THREE.Group();
+      const CX0 = -2.22,
+        CX1 = -1.6;
+      const coupHub = new THREE.Group();
+      coupHub.position.set((CX0 + CX1) / 2, AX, 0);
+      coupHub.add(cyl(0.05, 0.05, 0.62, MAT.steel, 0, 0, 0, "x", 12));
+      coupHub.add(cyl(0.24, 0.24, 0.14, M2.blue, -0.1, 0, 0, "x", 22));
+      coupHub.add(cyl(0.24, 0.24, 0.14, M2.blue, 0.1, 0, 0, "x", 22));
+      coupHub.add(cyl(0.2, 0.2, 0.06, M2.rubber, 0, 0, 0, "x", 22));
+      for (let i = 0; i < 6; i++) {
+        const b = cyl(0.025, 0.025, 0.36, MAT.chrome, 0, 0, 0, "x", 6);
+        b.position.set(0, Math.cos((i / 6) * Math.PI * 2) * 0.17, Math.sin((i / 6) * Math.PI * 2) * 0.17);
+        coupHub.add(b);
+      }
+      coupG.add(coupHub);
+      const GW = CX1 - CX0,
+        GM = (CX0 + CX1) / 2;
+      [-0.44, 0.44].forEach((z) => {
+        coupG.add(box(0.06, 1.6, 0.06, M2.frame, CX0, 1.15, z));
+        coupG.add(box(0.06, 1.6, 0.06, M2.frame, CX1, 1.15, z));
+        for (let i = 0; i < 7; i++) coupG.add(box(GW, 0.07, 0.04, M2.frame, GM, 0.45 + i * 0.22, z));
+      });
+      for (let i = 0; i < 4; i++) coupG.add(box(0.06, 0.04, 0.9, M2.frame, CX0 + 0.03 + (i * (GW - 0.06)) / 3, 1.95, 0));
+      coupG.add(box(GW, 0.04, 0.06, M2.frame, GM, 1.95, -0.44));
+      coupG.add(box(GW, 0.04, 0.06, M2.frame, GM, 1.95, 0.44));
+      engine.add(coupG);
+      regPart(coupG, -0.9, 2.0, 0);
+
+      // --- Bomba centrífuga azul (voluta, succión axial, descarga vertical, soporte de rodamientos) ---
       const pumpG = new THREE.Group();
-      const vol = mk(
-        new THREE.CylinderGeometry(0.55, 0.55, 0.34, 28),
-        MAT.yellow,
-        -2.75,
-        0.85,
-        0,
-      );
-      vol.rotation.z = Math.PI / 2;
-      pumpG.add(vol);
-      const suc = mk(
-        new THREE.CylinderGeometry(0.2, 0.2, 0.5, 18),
-        MAT.steel,
-        -3.2,
-        0.85,
-        0,
-      );
-      suc.rotation.z = Math.PI / 2;
-      pumpG.add(suc);
-      pumpG.add(
-        mk(
-          new THREE.CylinderGeometry(0.17, 0.17, 0.6, 18),
-          MAT.steel,
-          -3.0,
-          1.3,
-          0,
-        ),
-      );
+      const VX = -3.05;
+      pumpG.add(cyl(0.62, 0.62, 0.42, M2.blue, VX, AX, 0, "x", 40));
+      const scroll = mk(new THREE.TorusGeometry(0.58, 0.16, 14, 40), M2.blue, VX, AX, 0);
+      scroll.rotation.y = Math.PI / 2;
+      pumpG.add(scroll);
+      for (let i = 0; i < 10; i++) {
+        const a = (i / 10) * Math.PI * 2;
+        pumpG.add(cyl(0.035, 0.035, 0.5, M2.blue, VX, AX + Math.cos(a) * 0.68, Math.sin(a) * 0.68, "x", 8));
+      }
+      // Succión axial con brida y tapa cobriza
+      pumpG.add(cyl(0.3, 0.33, 0.3, M2.blue, VX - 0.35, AX, 0, "x", 28));
+      pumpG.add(cyl(0.44, 0.44, 0.08, M2.blue, VX - 0.52, AX, 0, "x", 32));
+      pumpG.add(cyl(0.31, 0.31, 0.03, M2.copper, VX - 0.57, AX, 0, "x", 28));
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        pumpG.add(cyl(0.03, 0.03, 0.1, MAT.dark, VX - 0.53, AX + Math.cos(a) * 0.37, Math.sin(a) * 0.37, "x", 8));
+      }
+      // Descarga vertical tangencial con brida y tapa cobriza
+      pumpG.add(cyl(0.22, 0.26, 0.62, M2.blue, VX, AX + 0.78, 0.2, null, 24));
+      pumpG.add(cyl(0.38, 0.38, 0.08, M2.blue, VX, AX + 1.11, 0.2, null, 32));
+      pumpG.add(cyl(0.25, 0.25, 0.03, M2.copper, VX, AX + 1.16, 0.2, null, 28));
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        pumpG.add(cyl(0.03, 0.03, 0.1, MAT.dark, VX + Math.cos(a) * 0.31, AX + 1.12, 0.2 + Math.sin(a) * 0.31, null, 8));
+      }
+      // Soporte de rodamientos (cónico) y placa con agujeros
+      pumpG.add(cyl(0.36, 0.22, 0.6, M2.blue, VX + 0.55, AX, 0, "x", 24));
+      pumpG.add(box(0.26, 0.36, 0.03, MAT.steel, VX + 0.55, AX, 0.33));
+      // Patas
+      pumpG.add(box(0.3, 0.55, 0.16, M2.blue, VX, 0.7, 0.32));
+      pumpG.add(box(0.3, 0.55, 0.16, M2.blue, VX, 0.7, -0.32));
+      pumpG.add(box(0.5, 0.06, 0.9, M2.blue, VX, 0.45, 0));
+      pumpG.add(box(0.22, 0.5, 0.5, M2.blue, VX + 0.6, 0.7, 0));
+      [-0.18, 0.18].forEach((dx) => [-0.38, 0.38].forEach((z) => pumpG.add(cyl(0.035, 0.035, 0.08, MAT.chrome, VX + dx, 0.5, z, null, 8))));
       engine.add(pumpG);
-      regPart(pumpG, -3.0, 0.4, 0);
+      regPart(pumpG, -1.9, 0.3, 0);
 
+      // --- Tablero: 3 relojes y llave, montado en el poste del marco ---
       const tabG = new THREE.Group();
-      tabG.position.set(2.5, 1.85, 0.95);
-      tabG.rotation.y = 0.55;
-      tabG.rotation.x = -0.12;
-      tabG.add(mk(new THREE.BoxGeometry(1.15, 0.72, 0.1), MAT.dark, 0, 0, 0));
-      tabG.add(
-        mk(new THREE.BoxGeometry(1.25, 0.08, 0.14), MAT.yellow, 0, 0.4, 0),
-      );
-      const tFace1 = mk(
-        new THREE.CylinderGeometry(0.17, 0.17, 0.03, 24),
-        MAT.white,
-        -0.3,
-        0.1,
-        0.06,
-      );
-      tFace1.rotation.x = Math.PI / 2;
-      tabG.add(tFace1);
-      const tFace2 = mk(
-        new THREE.CylinderGeometry(0.17, 0.17, 0.03, 24),
-        MAT.white,
-        0.3,
-        0.1,
-        0.06,
-      );
-      tFace2.rotation.x = Math.PI / 2;
-      tabG.add(tFace2);
+      tabG.position.set(PX, 2.6, -1.14);
+      tabG.add(box(0.34, 1.25, 0.1, M2.frame, 0, 0, 0));
       const tNeedles = [];
-      [-0.3, 0.3].forEach((nx) => {
+      [0.4, 0.1, -0.2].forEach((gy) => {
+        const face = cyl(0.12, 0.12, 0.03, MAT.white, 0, gy, -0.06, "z", 24);
+        tabG.add(face);
+        const bezel = mk(new THREE.TorusGeometry(0.125, 0.015, 8, 24), MAT.chrome, 0, gy, -0.07);
+        tabG.add(bezel);
         const pv = new THREE.Group();
-        pv.position.set(nx, 0.1, 0.085);
-        pv.add(
-          mk(new THREE.BoxGeometry(0.02, 0.13, 0.012), MAT.dark, 0, 0.045, 0),
-        );
+        pv.position.set(0, gy, -0.08);
+        pv.add(box(0.015, 0.1, 0.01, MAT.dark, 0, 0.035, 0));
         tabG.add(pv);
         tNeedles.push(pv);
       });
-      tabG.add(
-        mk(new THREE.BoxGeometry(0.62, 0.16, 0.02), MAT.screen, 0, -0.2, 0.06),
-      );
-      [-0.42, 0, 0.42].forEach((ix) =>
-        tabG.add(
-          mk(
-            new THREE.CylinderGeometry(0.025, 0.025, 0.03, 10),
-            MAT.yellow,
-            ix,
-            -0.32,
-            0.06,
-          ),
-        ),
-      );
-      tabG.add(
-        mk(
-          new THREE.CylinderGeometry(0.05, 0.06, 1.7, 10),
-          MAT.iron,
-          0,
-          -1.0,
-          -0.1,
-        ),
-      );
+      tabG.add(cyl(0.05, 0.05, 0.04, MAT.chrome, 0, -0.45, -0.06, "z", 14));
+      tabG.add(box(0.012, 0.06, 0.02, MAT.dark, 0, -0.45, -0.09));
+      tabG.add(box(0.1, 0.08, 0.02, MAT.screen, 0, -0.55, -0.06));
       engine.add(tabG);
-      regPart(tabG, 1.6, 1.4, 2.4);
+      regPart(tabG, -0.5, 0.4, -3.5);
 
-      /* labels */
-      const labelDefs = [
-        {
-          el: document.getElementById("lbl-escape"),
-          parent: escG,
-          off: new THREE.Vector3(1.7, 4.05, -0.98),
-          th: 0.5,
-        },
-        {
-          el: document.getElementById("lbl-valvulas"),
-          parent: headG,
-          off: new THREE.Vector3(0, 2.85, 0),
-          th: 0.58,
-        },
-        {
-          el: document.getElementById("lbl-pistones"),
-          parent: pistonG,
-          off: new THREE.Vector3(0.425, 2.25, 0),
-          th: 0.66,
-        },
-        {
-          el: document.getElementById("lbl-tanque"),
-          parent: tankG,
-          off: new THREE.Vector3(-2.45, 2.3, 0),
-          th: 0.74,
-        },
-        {
-          el: document.getElementById("lbl-tablero"),
-          parent: tabG,
-          off: new THREE.Vector3(0, 0.5, 0.1),
-          th: 0.82,
-        },
-        {
-          el: document.getElementById("lbl-luz"),
-          parent: luzG,
-          off: new THREE.Vector3(2.6, 0.05, 0.8),
-          th: 0.9,
-        },
-      ];
-      // Etiquetas que no están en la página (p. ej. retiradas) se ignoran
-      for (let i = labelDefs.length - 1; i >= 0; i--) if (!labelDefs[i].el) labelDefs.splice(i, 1);
-      labelDefs.forEach((d) => {
-        d.anchor = new THREE.Object3D();
-        d.anchor.position.copy(d.off);
-        d.parent.add(d.anchor);
-      });
-
-      
-      /* piezas clicables → categoría de repuestos */
+      /* piezas clicables → categoría de repuestos (una pieza puede tener varios grupos) */
       const PART_GROUPS = {
-        chasis: skid, bloque: blockG, camisas: linerG, pistones: pistonG,
-        culata: headG, escape: escG, tanque: tankG, radiador: radG, ventilador: fanG,
-        volante: flyG, bomba: pumpG, tablero: tabG,
+        chasis: [skid, cageG], bloque: [blockG], carter: [carterG], camisas: [linerG], pistones: [pistonG],
+        culata: [headG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
+        arranque: [startG], soportes: mountGroups, tanque: [tankG], radiador: [radG], ventilador: [fanG],
+        volante: [flyG], acople: [coupG], bomba: [pumpG], tablero: [tabG],
       };
-      for (const [k, g] of Object.entries(PART_GROUPS)) g.userData.partKey = k;
+      for (const [k, gs] of Object.entries(PART_GROUPS)) gs.forEach((g) => (g.userData.partKey = k));
+      const tmpBox = new THREE.Box3();
+      function partBox(key, out) {
+        out.makeEmpty();
+        for (const g of PART_GROUPS[key] || []) out.union(tmpBox.setFromObject(g));
+        return out;
+      }
+
+      /* etiquetas flotantes: una por pieza (en la página: #labels .lbl[data-part]).
+         Las marcadas data-main se ven siempre en el despiece; el resto, al resaltar su pieza. */
+      engine.updateMatrixWorld(true);
+      const labelDefs = [];
+      document.querySelectorAll("#labels .lbl[data-part]").forEach((el, i, all) => {
+        const key = el.getAttribute("data-part");
+        const gs = PART_GROUPS[key];
+        if (!gs) return;
+        const b = partBox(key, new THREE.Box3());
+        const c = b.getCenter(new THREE.Vector3());
+        const anchor = new THREE.Object3D();
+        // Encima de la pieza (en coordenadas de su primer grupo, para que siga al despiece)
+        const p = new THREE.Vector3(c.x, b.max.y + 0.08, c.z);
+        gs[0].worldToLocal(p);
+        anchor.position.copy(p);
+        gs[0].add(anchor);
+        labelDefs.push({ el, key, anchor, main: el.hasAttribute("data-main"), th: 0.45 + (i / Math.max(1, all.length)) * 0.4 });
+      });
       const raycaster = new THREE.Raycaster();
       const ndc = new THREE.Vector2();
       function partAt(clientX, clientY) {
@@ -674,9 +688,9 @@ export function startEngine(opts) {
       const hlMats = new Map();
       let hlKey = null;
       function paint(key, on) {
-        const g = PART_GROUPS[key];
-        if (!g) return;
-        g.traverse((o) => {
+        const gs = PART_GROUPS[key];
+        if (!gs) return;
+        gs.forEach((g) => g.traverse((o) => {
           if (!o.isMesh) return;
           if (on) {
             if (!o.userData.baseMat) o.userData.baseMat = o.material;
@@ -693,7 +707,7 @@ export function startEngine(opts) {
           } else if (o.userData.baseMat) {
             o.material = o.userData.baseMat;
           }
-        });
+        }));
       }
       api.highlight = (key) => {
         if (hlKey === key) return;
@@ -963,11 +977,17 @@ export function startEngine(opts) {
       const focusBox = new THREE.Box3();
       const focusC = new THREE.Vector3();
       // Márgenes (px) que ocupan encabezado, franjas, fila de piezas y riel en el despiece
+      let rowRight = null;
       function freeArea(W, H) {
         const lb = H * 0.07;
         // Celular: la tarjeta "Por dentro" va arriba; PC: va a la derecha
         if (W <= 760) return { l: 10, r: 34, t: lb + 58 + 150, b: lb + 64 };
-        return { l: Math.min(300, W * 0.24), r: Math.min(430, W * 0.3), t: Math.max(lb, 76) + 40, b: lb + 16 };
+        // La fila de piezas ocupa la izquierda: se mide su ancho real (cambia con la pantalla)
+        if (rowRight == null) {
+          const row = document.querySelector(".part-row");
+          rowRight = row ? row.getBoundingClientRect().right - (row.classList.contains("on") ? 0 : 12) : 300;
+        }
+        return { l: Math.min(Math.max(rowRight + 16, 120), W * 0.4), r: Math.min(430, W * 0.3), t: Math.max(lb, 76) + 40, b: lb + 16 };
       }
       /** Distancia mínima para que la caja quepa en el área libre, mirando a T desde la dirección dir. */
       function fitDistance(box, T, dir, tanH, tanV) {
@@ -1032,7 +1052,7 @@ export function startEngine(opts) {
         const focusGoal = hlKey && S.explode > 0.5 ? 1 : 0;
         focusAmt += (focusGoal - focusAmt) * Math.min(1, dt * 0.9);
         if (focusAmt > 0.002 && focusKey && PART_GROUPS[focusKey]) {
-          focusBox.setFromObject(PART_GROUPS[focusKey]).getCenter(focusC);
+          partBox(focusKey, focusBox).getCenter(focusC);
           fitT.lerp(focusC, focusAmt * 0.6);
           rEff *= 1 - 0.38 * focusAmt;
         }
@@ -1056,12 +1076,15 @@ export function startEngine(opts) {
         pistonPhase += dt * (2 + R.rpm * 26);
         for (let i = 0; i < 4; i++)
           pistonBodies[i].position.y =
-            1.92 + Math.sin(pistonPhase + PISTON_PHASE[i]) * 0.14 * run;
+            PISTON_Y + Math.sin(pistonPhase + PISTON_PHASE[i]) * 0.13 * run;
         flyRot += dt * R.rpm * 16;
         flyG.rotation.x = flyRot;
-        fanG.rotation.z = -flyRot * 1.6;
-        tNeedles[0].rotation.z = -0.9 + run * 1.5 + noise(t, 9) * 0.08 * run;
-        tNeedles[1].rotation.z = 0.9 - run * 1.5 - noise(t, 10) * 0.08 * run;
+        fanG.rotation.x = -flyRot * 1.6;
+        coupHub.rotation.x = flyRot;
+        // Relojes del tablero: rpm, temperatura y presión de aceite
+        tNeedles[0].rotation.z = 1.2 - run * 2.0 - noise(t, 9) * 0.08 * run;
+        tNeedles[1].rotation.z = 1.2 - THREE.MathUtils.clamp(heat, 0, 1) * 1.8;
+        tNeedles[2].rotation.z = 1.2 - Math.min(1, run * 1.4) * 1.5 - noise(t, 10) * 0.05 * run;
 
         MAT.glow.emissiveIntensity = R.glow * (1.6 + Math.sin(t * 3) * 0.25);
         MAT.screen.emissiveIntensity = 0.3 + R.glow * 1.4;
@@ -1078,8 +1101,10 @@ export function startEngine(opts) {
         applyAtmo(S.atmo);
 
         for (const d of labelDefs) {
+          const shown = d.main || d.key === hlKey ? 1 : 0;
           const vis =
-            THREE.MathUtils.clamp((e - d.th) * 6, 0, 1) *
+            shown *
+            THREE.MathUtils.clamp((e - (d.main ? d.th : 0.5)) * 6, 0, 1) *
             THREE.MathUtils.clamp((1.02 - e) * 10 + 0.4, 0, 1);
           if (vis <= 0.01) {
             d.el.style.opacity = 0;
@@ -1147,6 +1172,7 @@ export function startEngine(opts) {
       tick();
 
       listen("resize", () => {
+        rowRight = null;
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);

@@ -216,7 +216,7 @@
     ]
   },
   "parts": {
-    "chasis": "Skid frame",
+    "chasis": "Skid & frame",
     "luz": "Ambient light",
     "bloque": "Engine block",
     "camisas": "Cylinder liners",
@@ -227,8 +227,15 @@
     "radiador": "Radiator",
     "ventilador": "Fan",
     "volante": "Flywheel",
-    "bomba": "Pump",
-    "tablero": "Control panel"
+    "bomba": "Centrifugal pump",
+    "tablero": "Control panel",
+    "acople": "Coupling & guard",
+    "admision": "Air intake & filter",
+    "mangueras": "Hoses",
+    "arranque": "Starter motor",
+    "inyeccion": "Injection & throttle",
+    "carter": "Oil pan",
+    "soportes": "Engine mounts"
   },
   "partPage": {
     "title": "Spare parts: ",

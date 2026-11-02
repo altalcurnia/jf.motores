@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { waLead } from "@/features/whatsapp/lead-link";
-import { formatPhone, getContact, getHomeImages } from "@/lib/supabase/public";
+import { formatPhone, getContact, getHomeImages, getTrust } from "@/lib/supabase/public";
+import { JsonLd } from "@/components/JsonLd";
+import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
@@ -24,11 +26,40 @@ export default async function HomePage() {
   const dict = await getDictionary();
   const t = dict.hero;
   const b = dict.benefits;
-  const [contact, homeImages] = await Promise.all([getContact(), getHomeImages()]);
+  const [contact, homeImages, trust] = await Promise.all([getContact(), getHomeImages(), getTrust()]);
+  // Ficha del negocio para Google (nombre, logo, sedes y teléfonos)
+  const orgLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${site.url}/#org`,
+    name: site.name,
+    legalName: trust.legalName ?? undefined,
+    taxID: trust.nit ?? undefined,
+    url: site.url,
+    logo: `${site.url}/logo.png`,
+    email: contact.email ?? undefined,
+    contactPoint: contact.phones.map((ph) => ({
+      "@type": "ContactPoint",
+      telephone: `+${ph.number}`,
+      contactType: "sales",
+      areaServed: "CO",
+      availableLanguage: ["es", "en", "pt"],
+    })),
+    department: contact.branches
+      .filter((br) => br.address)
+      .map((br) => ({
+        "@type": "LocalBusiness",
+        name: `${site.name} ${br.city}`,
+        image: `${site.url}/logo.png`,
+        telephone: br.phone ? `+${br.phone.replace(/\D/g, "")}` : `+${contact.whatsapp}`,
+        address: { "@type": "PostalAddress", streetAddress: br.address, addressLocality: br.city, addressCountry: "CO" },
+      })),
+  };
   const wa = waLead({ message: dict.whatsapp.general, source: "inicio", locale });
 
   return (
     <>
+      <JsonLd data={orgLd} />
       <section id="hero">
         <div className="hero-in">
           <div className="kicker">{t.kicker}</div>
