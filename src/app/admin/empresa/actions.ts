@@ -1,5 +1,6 @@
 "use server";
 import { isEngineVariant } from "@/features/engine3d/variants";
+import { brandVersions, isBrand } from "@/features/brand/brands";
 import { updateTag } from "next/cache";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -203,6 +204,41 @@ export async function setEngineVariant(
   const { error } = await supabase
     .from("company_settings")
     .update({ engine_model: active, engine_models_hidden: [...hidden].sort() })
+    .eq("id", true);
+  if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
+  updateTag("company");
+  return { ok: true };
+}
+
+/**
+ * Versión de marca del sitio (textos y paleta): usar, eliminar (ocultar) o restaurar.
+ * La que está en el sitio no se puede eliminar, así que siempre queda al menos una.
+ */
+export async function setBrandVersion(action: "use" | "hide" | "restore", key: string): Promise<SaveResult> {
+  const session = await getSession();
+  if (!session || !session.role.isInternal || !can(session, "empresa.editar")) {
+    return { ok: false, error: "No tienes permiso para cambiar la marca del sitio." };
+  }
+  if (!isBrand(key)) return { ok: false, error: "Versión desconocida." };
+  const supabase = await createSupabaseServerClient();
+  const { data, error: e1 } = await supabase.from("company_settings").select("brand, brands_hidden").maybeSingle();
+  if (e1 || !data) return { ok: false, error: `No se pudo leer la configuración: ${e1?.message ?? "sin datos"}` };
+  let active = data.brand;
+  const hidden = new Set((data.brands_hidden ?? []).filter(isBrand));
+  if (action === "use") {
+    active = key;
+    hidden.delete(key);
+  } else if (action === "hide") {
+    if (key === active) return { ok: false, error: "Es la versión que se ve en el sitio. Elige otra antes de eliminarla." };
+    const visible = brandVersions.filter((b) => !hidden.has(b.key)).length;
+    if (visible <= 1) return { ok: false, error: "Debe quedar al menos una versión." };
+    hidden.add(key);
+  } else {
+    hidden.delete(key);
+  }
+  const { error } = await supabase
+    .from("company_settings")
+    .update({ brand: active, brands_hidden: [...hidden].sort() })
     .eq("id", true);
   if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
   updateTag("company");

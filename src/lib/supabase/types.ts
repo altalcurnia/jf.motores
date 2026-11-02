@@ -281,6 +281,8 @@ export type Database = {
           home_benefits_image: string | null;
           engine_model: string;
           engine_models_hidden: string[];
+          brand: string;
+          brands_hidden: string[];
           legal_address: string | null;
           prices_include_vat: boolean | null;
           id: boolean;
@@ -300,6 +302,8 @@ export type Database = {
           home_benefits_image?: string | null;
           engine_model?: string;
           engine_models_hidden?: string[];
+          brand?: string;
+          brands_hidden?: string[];
           legal_address?: string | null;
           prices_include_vat?: boolean | null;
           id?: boolean;

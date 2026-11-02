@@ -16,7 +16,7 @@ const MODELS = { v2: buildV2, v3: buildV3 };
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * @param {{ canvas: HTMLCanvasElement, isMobile: boolean, numberLocale: string, variant?: string,
+ * @param {{ canvas: HTMLCanvasElement, isMobile: boolean, numberLocale: string, variant?: string, accent?: number, heroLift?: boolean,
  *   hud: { standby: string, start: string, running: string, full: string },
  *   onPartClick: (partKey: string, touch: boolean) => void, onPartHover?: (partKey: string | null) => void,
  *   onContextLost?: () => void }} opts
@@ -100,6 +100,7 @@ export function startEngine(opts) {
 
       /* zoom-out responsivo */
       const CAMK = isMobile ? 1.6 : 1;
+      // Distancias del despiece y del armado: en PC más cerca (en celular ya quedan bien)
       const RMIN = isMobile ? 14.5 : 0;
       if (isMobile) {
         camera.fov = 55;
@@ -117,13 +118,14 @@ export function startEngine(opts) {
       key.shadow.camera.top = 10;
       key.shadow.camera.bottom = -10;
       scene.add(key);
-      const rim = new THREE.SpotLight(0xf7c600, 1.2, 40, Math.PI / 4, 0.5, 1);
+      const ACC = opts.accent ?? 0xf7c600; // color de acento de la marca
+      const rim = new THREE.SpotLight(ACC, 1.2, 40, Math.PI / 4, 0.5, 1);
       rim.position.set(-7, 6, -6);
       scene.add(rim);
       const fill = new THREE.PointLight(0x3d5a77, 0.5, 30);
       fill.position.set(4, 2, -6);
       scene.add(fill);
-      const underGlow = new THREE.PointLight(0xf7c600, 0, 9, 2);
+      const underGlow = new THREE.PointLight(ACC, 0, 9, 2);
       underGlow.position.set(0, 0.4, 0);
       scene.add(underGlow);
       const smokeLight = new THREE.PointLight(0xffb066, 0, 7, 2);
@@ -144,7 +146,7 @@ export function startEngine(opts) {
       const floorRing = new THREE.Mesh(
         new THREE.RingGeometry(4.6, 4.75, 72),
         new THREE.MeshBasicMaterial({
-          color: 0xf7c600,
+          color: ACC,
           transparent: true,
           opacity: 0.12,
         }),
@@ -188,8 +190,8 @@ export function startEngine(opts) {
           depthWrite: false,
         }),
         glow: new THREE.MeshStandardMaterial({
-          color: 0xf7c600,
-          emissive: 0xf7c600,
+          color: ACC,
+          emissive: ACC,
           emissiveIntensity: 0,
         }),
         screen: new THREE.MeshStandardMaterial({
@@ -529,7 +531,7 @@ export function startEngine(opts) {
         .to(S, { xray: 0, duration: 4, ease: "power1.inOut" }, 31.5)
         // Despiece
         // Despiece: una vuelta completa extra (termina en la misma posición de siempre, 2π después)
-        .to(S, { camTheta: 6.283 + Math.PI * 2, camR: 15.5, camPhi: 1.12, camTY: 1.7, duration: 30, ease: "power1.inOut" }, 33)
+        .to(S, { camTheta: 6.283 + Math.PI * 2, camR: isMobile ? 15.5 : 10.5, camPhi: 1.12, camTY: 1.7, duration: 30, ease: "power1.inOut" }, 33)
         // …y durante la media vuelta central la cámara se acerca y vuelve a alejarse
         .to(S, { dolly: 1, duration: 7, ease: "sine.inOut" }, 42)
         .to(S, { dolly: 0, duration: 7, ease: "sine.inOut" }, 49)
@@ -540,7 +542,7 @@ export function startEngine(opts) {
         .to(S, { atmo: 3, duration: 12, ease: "power1.inOut" }, 33)
         // Las piezas vuelven a su sitio
         .to(S, { explode: 0, duration: 9, ease: "power2.inOut" }, 63)
-        .to(S, { camTheta: 6.7 + Math.PI * 2, camR: 13, camPhi: 1.24, camTY: 1.5, duration: 22, ease: "power1.inOut" }, 62)
+        .to(S, { camTheta: 6.7 + Math.PI * 2, camR: isMobile ? 13 : 9, camPhi: 1.24, camTY: 1.5, duration: 22, ease: "power1.inOut" }, 62)
         .to(S, { atmo: 4, duration: 10, ease: "power1.inOut" }, 72)
         // Apagado desde el celular (tarjeta de la app)
         .to(S, { rpm: 0, duration: 8, ease: "power2.in" }, 80)
@@ -711,6 +713,15 @@ export function startEngine(opts) {
         } else if (S.xray > 0.001 && W > 760) {
           // Rayos X: la tarjeta ocupa la derecha; se corre la imagen para ver el interior completo
           camera.setViewOffset(W, H, Math.min(W * 0.2, 300) * THREE.MathUtils.smoothstep(S.xray, 0, 1), 0, W, H);
+          viewOffsetOn = true;
+        } else if (opts.heroLift && W <= 760 && window.scrollY < H) {
+          // Portada en celular: el texto va abajo, así que el equipo se dibuja más arriba
+          // (además se acerca un 30 %: se dibuja una ventana más chica del cuadro completo)
+          const k = 1 - window.scrollY / H;
+          const z = 1 + 0.3 * k;
+          const vw = W / z,
+            vh = H / z;
+          camera.setViewOffset(W, H, (W - vw) / 2, (H - vh) / 2 + H * 0.13 * k, vw, vh);
           viewOffsetOn = true;
         } else if (viewOffsetOn) {
           camera.clearViewOffset();

@@ -10,6 +10,7 @@ import { SiteImages } from "./SiteImages";
 import { AnalyticsForm } from "./AnalyticsForm";
 import { TrustForm } from "./TrustForm";
 import { EngineVariants } from "./EngineVariants";
+import { BrandVersions } from "./BrandVersions";
 
 export const metadata = { title: "Empresa, contacto e imagen" };
 
@@ -42,7 +43,7 @@ async function Editor() {
     await Promise.all([
       supabase
         .from("company_settings")
-        .select("email, phones, home_benefits_image, analytics, legal_name, nit, legal_address, founded_year, prices_include_vat, stats, engine_model, engine_models_hidden")
+        .select("email, phones, home_benefits_image, analytics, legal_name, nit, legal_address, founded_year, prices_include_vat, stats, engine_model, engine_models_hidden, brand, brands_hidden")
         .maybeSingle(),
       supabase
         .from("branches")
@@ -75,6 +76,7 @@ async function Editor() {
           municipios: stats.municipios ? String(stats.municipios) : "",
         }}
       />
+      <BrandVersions canEdit={canEdit} active={company?.brand ?? "nueva"} hidden={company?.brands_hidden ?? []} />
       <EngineVariants
         canEdit={canEdit}
         active={company?.engine_model ?? "v2"}

@@ -1,0 +1,132 @@
+/*
+ * Versiones de marca (se elige en /admin/empresa; <html data-brand="…">).
+ *  - nueva y roja: portada optimizada (titular corto, en celular el texto va abajo y el equipo 3D
+ *    se ve completo arriba).
+ *  - roja: rojo industrial como acento sobre el amarillo y negro.
+ *  - clasica: sin cambios (no se toca aquí).
+ */
+
+/* ---------- Portada: marcas nuevas ---------- */
+:root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in {
+  max-width: 580px;
+}
+:root:is([data-brand="nueva"], [data-brand="roja"]) .logo-row {
+  gap: 18px;
+  margin-bottom: 4px;
+}
+:root:is([data-brand="nueva"], [data-brand="roja"]) .logo-mark {
+  width: 84px;
+  height: 84px;
+}
+:root:is([data-brand="nueva"], [data-brand="roja"]) .wordmark .wm1 {
+  font-size: clamp(28px, 3.1vw, 48px);
+}
+:root:is([data-brand="nueva"], [data-brand="roja"]) .wordmark .wm2 {
+  font-size: clamp(14px, 1.4vw, 22px);
+}
+:root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in h1 {
+  font-size: clamp(36px, 4.6vw, 68px);
+  line-height: 0.98;
+  margin-bottom: 18px;
+}
+:root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in p.copy {
+  max-width: 44ch;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+@media (max-width: 760px) {
+  /* El texto se agrupa abajo; arriba queda libre para la motobomba (el 3D se dibuja más arriba) */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) #hero {
+    min-height: 100svh;
+    padding: 84px 6vw calc(var(--lbh, 0px) + 28px);
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) #hero::before {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(8, 10, 12, 0.78) 62%,
+      rgba(8, 10, 12, 0.96) 100%
+    );
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in {
+    padding-top: 0;
+    margin-top: auto;
+  }
+  /* El logo ya está en la cabecera: aquí estorba */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .logo-row,
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .slogan,
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .scroll-hint {
+    display: none;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .kicker {
+    font-size: 9.5px;
+    letter-spacing: 0.24em;
+    margin-bottom: 12px;
+    gap: 10px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .kicker::before {
+    width: 22px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in h1 {
+    font-size: clamp(30px, 9.4vw, 40px);
+    margin-bottom: 10px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in p.copy {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .cta-row {
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .cta-row .btn {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 14px 12px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* Alerta (!texto!): en la marca amarilla no se resalta; acento (*texto*) va en amarillo */
+em.alert {
+  font-style: normal;
+  color: inherit;
+}
+em.acc {
+  font-style: normal;
+  color: var(--yellow);
+}
+
+/* ---------- Paleta con rojo ----------
+   El rojo se usa con estrategia: solo para el PROBLEMA que resolvemos (agua, paradas, detener)
+   y para alertas o acciones de parada. Lo positivo (turnos, confianza, tranquilidad) sigue en amarillo. */
+:root[data-brand="roja"] {
+  --red: #e1251b;
+  --red-soft: #ff4a3d;
+}
+/* franja de marca bajo la cabecera */
+:root[data-brand="roja"] #nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--yellow) 0%, var(--yellow) 78%, var(--red) 78%, var(--red) 100%);
+  opacity: 0.9;
+}
+/* el problema, en rojo: «detenga», «paradas», «agua» */
+:root[data-brand="roja"] .hero-in h1 .yl,
+:root[data-brand="roja"] em.alert {
+  color: var(--red-soft);
+}
+/* estados de alerta del catálogo */
+:root[data-brand="roja"] .pc-status.vendido {
+  color: var(--red-soft);
+  border-color: rgba(225, 37, 27, 0.6);
+}

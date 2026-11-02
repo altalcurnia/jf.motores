@@ -390,3 +390,6 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .btn-ghost.danger { color: #ff8a80; border-color: rgba(255, 138, 128, 0.4); }
 .ev-removed ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
 .ev-removed li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 8px; }
+/* Marca del sitio: muestras de color */
+.bv-swatches { display: grid; grid-template-columns: repeat(3, 1fr); height: 64px; }
+.bv-swatches span { display: block; }

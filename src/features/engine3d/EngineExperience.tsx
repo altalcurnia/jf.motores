@@ -17,6 +17,8 @@ type Props = {
   partProducts?: Record<string, PartProduct[]>;
   /** Versión del modelo 3D elegida en el admin (v2, v3). */
   variant?: string;
+  /** Versión de marca: cambia el color de acento del 3D y la portada en celular. */
+  brand?: string;
   t: Pick<Dictionary, "journey" | "hud" | "rail" | "parts" | "partsInfo">;
 };
 
@@ -24,7 +26,7 @@ type Props = {
  * Motor 3D de fondo + recorrido por scroll (encendido, revolución, despiece, apagado).
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
-export function EngineExperience({ locale, t, variant = "v2", partProducts = {} }: Props) {
+export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", partProducts = {} }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const journeyRef = useRef<HTMLElement>(null);
   const engineRef = useRef<{ highlight?: (k: string | null) => void; focus?: (k: string | null) => void } | null>(null);
@@ -100,6 +102,10 @@ export function EngineExperience({ locale, t, variant = "v2", partProducts = {} 
           const started = startEngine({
             canvas,
             variant: preview && /^v[1-9]$/.test(preview) ? preview : variant,
+            // Luces de acento del 3D: amarillo de la marca (el rojo se reserva para alertas).
+            // Marcas nuevas: en celular la portada sube y acerca el 3D
+            accent: 0xf7c600,
+            heroLift: brand !== "clasica",
             isMobile: window.matchMedia("(max-width:760px)").matches,
             numberLocale: localeTags[locale],
             hud: hudRef.current,
@@ -140,7 +146,7 @@ export function EngineExperience({ locale, t, variant = "v2", partProducts = {} 
       canvas.remove();
       document.body.classList.remove("no-3d");
     };
-  }, [locale, variant]);
+  }, [locale, variant, brand]);
 
   const j = t.journey;
   const stage: StageKey = stageAt(p).key;

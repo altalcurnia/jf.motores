@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { waLead } from "@/features/whatsapp/lead-link";
-import { formatPhone, getContact, getEngineVariant, getHomeImages, getTrust } from "@/lib/supabase/public";
+import { formatPhone, getBrand, getContact, getEngineVariant, getHomeImages, getTrust } from "@/lib/supabase/public";
 import { JsonLd } from "@/components/JsonLd";
 import { site } from "@/lib/site";
 import { Arrow } from "@/components/Arrow";
@@ -10,6 +10,7 @@ import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
 import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 import { TrustSection } from "@/components/TrustSection";
+import { Accent } from "@/components/Accent";
 import { getCatalogData } from "@/features/catalog/data";
 import { formatPrice, productHref, storageUrl, tr } from "@/features/catalog/shared";
 import type { PartProduct } from "@/features/engine3d/EngineExperience";
@@ -36,6 +37,7 @@ export default async function HomePage() {
     getEngineVariant(),
     getCatalogData().catch(() => null),
   ]);
+  const brand = await getBrand();
   // Hasta 3 repuestos por pieza del despiece (primero los que están en stock)
   const partProducts: Record<string, PartProduct[]> = {};
   if (catalog) {
@@ -145,6 +147,7 @@ export default async function HomePage() {
       <EngineExperience
         locale={locale}
         variant={engineVariant}
+        brand={brand}
         partProducts={partProducts}
         t={{ journey: dict.journey, hud: dict.hud, rail: dict.rail, parts: dict.parts, partsInfo: dict.partsInfo }}
       />
@@ -168,9 +171,9 @@ export default async function HomePage() {
             <div>
               <div className="sk reveal">{b.kicker}</div>
               <h2 className="reveal">
-                {b.title1}
-                <em>{b.titleEm}</em>
-                {b.title2}
+                <Accent text={b.title1} />
+                {b.titleEm && <em>{b.titleEm}</em>}
+                <Accent text={b.title2} />
               </h2>
             </div>
             <p className="reveal">{b.intro}</p>
@@ -240,7 +243,7 @@ export default async function HomePage() {
       <section className="block" id="contacto">
         <div className="sk reveal">{dict.contact.kicker}</div>
         <div className="big reveal">
-          {dict.contact.title1}
+          <Accent text={dict.contact.title1} />
           <br />
           <em>{dict.contact.title2}</em>
         </div>

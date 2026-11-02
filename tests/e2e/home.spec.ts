@@ -25,9 +25,10 @@ test.describe("navegador en portugués", () => {
 });
 
 for (const [lang, heading] of [
-  ["es", "Motobombas diésel"],
-  ["en", "Diesel pump sets"],
-  ["pt", "Motobombas a diesel"],
+  // Versión de marca «nueva» (la predeterminada)
+  ["es", "Que el agua"],
+  ["en", "Don't let water"],
+  ["pt", "Que a água"],
 ] as const) {
   test(`inicio en ${lang}: título y botón de WhatsApp`, async ({ page }) => {
     await page.goto(`/${lang}`);
@@ -93,7 +94,7 @@ test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el d
   // Desde el primer tramo ya se ve la tarjeta de encendido
   await at(0.05);
   await expect(page.locator(".jcard.on")).toHaveCount(1);
-  await expect(page.locator(".jcard.on h2")).toContainText("Arranca");
+  await expect(page.locator(".jcard.on h2")).toContainText("Prende");
   await at(0.25);
   await expect(page.locator(".jcard.on #bigRpm")).toHaveCount(1, { timeout: 20_000 });
   // Despiece: solo la tarjeta "Por dentro" lo acompaña, con los botones de piezas visibles

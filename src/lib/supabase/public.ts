@@ -5,6 +5,7 @@ import { supabasePublicEnv } from "@/lib/env";
 import type { Database } from "./types";
 import { site } from "@/lib/site";
 import { DEFAULT_ENGINE_VARIANT, isEngineVariant } from "@/features/engine3d/variants";
+import { DEFAULT_BRAND, isBrand, type BrandKey } from "@/features/brand/brands";
 
 /** Cliente sin sesión (solo datos públicos, respeta RLS). Se puede usar dentro de "use cache". */
 export function createSupabasePublicClient() {
@@ -119,6 +120,20 @@ export async function getHomeImages(): Promise<{ benefits: string }> {
     return { benefits: path ? `${base}/storage/v1/object/public/catalogo/${path}` : DEFAULT_BENEFITS_IMAGE };
   } catch {
     return { benefits: DEFAULT_BENEFITS_IMAGE };
+  }
+}
+
+/** Versión de marca del sitio (textos y paleta), elegida en /admin/empresa. Cacheada; se refresca al guardar. */
+export async function getBrand(): Promise<BrandKey> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("company");
+  try {
+    const supabase = createSupabasePublicClient();
+    const { data } = await supabase.from("company_settings").select("brand").maybeSingle();
+    return isBrand(data?.brand) ? data.brand : DEFAULT_BRAND;
+  } catch {
+    return DEFAULT_BRAND;
   }
 }
 

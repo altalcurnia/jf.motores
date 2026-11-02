@@ -7,6 +7,7 @@ import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/700.css";
 import "../legacy.css";
 import "../globals.css";
+import "../brand.css";
 import { locales, localeTags } from "@/i18n/config";
 import { localizedAlternates } from "@/i18n/metadata";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
@@ -15,7 +16,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SupportFloat } from "@/components/SupportFloat";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Consent } from "@/features/analytics/Consent";
-import { getAnalyticsIds } from "@/lib/supabase/public";
+import { getAnalyticsIds, getBrand } from "@/lib/supabase/public";
 import { SiteEffects } from "@/components/SiteEffects";
 
 export function generateStaticParams() {
@@ -47,9 +48,9 @@ export const viewport: Viewport = { themeColor: "#0b0d10" };
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const locale = await getLocale();
   const dict = await getDictionary();
-  const analytics = await getAnalyticsIds();
+  const [analytics, brand] = await Promise.all([getAnalyticsIds(), getBrand()]);
   return (
-    <html lang={localeTags[locale]}>
+    <html lang={localeTags[locale]} data-brand={brand}>
       <body>
         <SiteHeader locale={locale} dict={dict} />
         <main>{children}</main>
