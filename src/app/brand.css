@@ -56,8 +56,32 @@
     padding-top: 0;
     margin-top: auto;
   }
-  /* El logo ya está en la cabecera: aquí estorba */
-  :root:is([data-brand="nueva"], [data-brand="roja"]) .logo-row,
+  /* Logo grande arriba, sobre la animación (el resto del texto va abajo) */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in {
+    position: static;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .logo-row {
+    position: absolute;
+    top: 78px;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    z-index: 1;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .logo-mark {
+    width: 62px;
+    height: 62px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .wordmark .wm1 {
+    font-size: 30px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .wordmark .wm2 {
+    font-size: 13px;
+    letter-spacing: 0.34em;
+  }
   :root:is([data-brand="nueva"], [data-brand="roja"]) .slogan,
   :root:is([data-brand="nueva"], [data-brand="roja"]) .scroll-hint {
     display: none;
@@ -89,6 +113,60 @@
     padding: 14px 12px;
     font-size: 11px;
     letter-spacing: 0.12em;
+  }
+}
+
+/* ---------- Recorrido en celular (marcas nuevas): el equipo arriba, tarjetas abajo ---------- */
+@media (max-width: 760px) {
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard,
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard.right {
+    top: auto;
+    bottom: calc(var(--lbh, 0px) + 12px);
+    left: 4vw;
+    right: 4vw;
+    width: auto;
+    max-height: 46vh;
+    overflow: auto;
+    padding: 18px 18px 16px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard h2 {
+    font-size: 24px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard p {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  /* «Por dentro» va sobre la fila de piezas */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard.jcard-parts {
+    bottom: calc(var(--lbh, 0px) + 60px);
+  }
+  /* La tarjeta del rpm ya muestra los valores: el tacómetro sobra */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) #hud {
+    display: none;
+  }
+  /* App: tarjeta compacta abajo y la mano con el teléfono encima, bajo el equipo */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app p {
+    display: none;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app h2 {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app .app-cta {
+    margin-top: 10px;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app {
+    right: 40vw;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .mini-remote {
+    left: auto;
+    right: 2vw;
+    bottom: calc(var(--lbh, 0px) + 6px);
+    transform-origin: right bottom;
+    transform: scale(0.5) translateY(40px);
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .mini-remote.on {
+    transform: scale(0.5);
   }
 }
 

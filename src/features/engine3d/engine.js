@@ -50,6 +50,8 @@ export function startEngine(opts) {
         xray: 0,
         // 0 → distancia normal; 1 → acercamiento de la media vuelta del despiece
         dolly: 0,
+        // PC: +1 → equipo a la derecha (texto a la izquierda); −1 → a la izquierda (tarjeta a la derecha)
+        shiftX: 1,
         // Encendido mientras se recorre la portada (antes del recorrido)
         preRpm: 0,
         preSmoke: 0,
@@ -526,6 +528,8 @@ export function startEngine(opts) {
         .to(S, { smoke: 1, duration: 10, ease: "power1.inOut" }, 16)
         .to(S, { shake: 1, duration: 10, ease: "power1.inOut" }, 15)
         .to(S, { atmo: 2, duration: 12, ease: "power1.inOut" }, 15)
+        // Desde «plena carga» las tarjetas van a la derecha: el equipo pasa a la izquierda
+        .to(S, { shiftX: -1, duration: 5, ease: "power1.inOut" }, 12.5)
         // Rayos X: aparece con la tarjeta «plena carga» mientras suben las rpm y se va antes del despiece
         .to(S, { xray: 1, duration: 8, ease: "power1.inOut" }, 15.5)
         .to(S, { xray: 0, duration: 4, ease: "power1.inOut" }, 31.5)
@@ -645,7 +649,11 @@ export function startEngine(opts) {
       function freeArea(W, H) {
         const lb = H * 0.07;
         // Celular: la tarjeta "Por dentro" va arriba; PC: va a la derecha
-        if (W <= 760) return { l: 10, r: 34, t: lb + 58 + 150, b: lb + 64 };
+        if (W <= 760)
+          return opts.heroLift
+            ? // Marcas nuevas: tarjeta y fila de piezas van abajo; el equipo ocupa la parte de arriba
+              { l: 8, r: 8, t: 70, b: H * 0.44 }
+            : { l: 10, r: 34, t: lb + 58 + 150, b: lb + 64 };
         // La fila de piezas ocupa la izquierda: se mide su ancho real (cambia con la pantalla)
         if (rowRight == null) {
           const row = document.querySelector(".part-row");
@@ -693,6 +701,8 @@ export function startEngine(opts) {
         const ef = THREE.MathUtils.smoothstep(S.explode, 0, 1);
         const W = window.innerWidth,
           H = window.innerHeight;
+        let exOx = 0,
+          exOy = 0;
         if (ef > 0.001) {
           const box = getExplodedBox();
           box.getCenter(fitC);
@@ -706,22 +716,35 @@ export function startEngine(opts) {
           rEff = THREE.MathUtils.lerp(rBase, dFit, ef);
           rEff *= 1 - 0.42 * S.dolly;
           // Centrar la imagen en el área libre (corre el centro óptico)
-          const ox = ((m.l - m.r) / 2) * ef;
-          const oy = ((m.t - m.b) / 2) * ef;
-          camera.setViewOffset(W, H, -ox, -oy, W, H);
-          viewOffsetOn = true;
-        } else if (S.xray > 0.001 && W > 760) {
-          // Rayos X: la tarjeta ocupa la derecha; se corre la imagen para ver el interior completo
-          camera.setViewOffset(W, H, Math.min(W * 0.2, 300) * THREE.MathUtils.smoothstep(S.xray, 0, 1), 0, W, H);
-          viewOffsetOn = true;
-        } else if (opts.heroLift && W <= 760 && window.scrollY < H) {
-          // Portada en celular: el texto va abajo, así que el equipo se dibuja más arriba
-          // (además se acerca un 30 %: se dibuja una ventana más chica del cuadro completo)
-          const k = 1 - window.scrollY / H;
-          const z = 1 + 0.3 * k;
-          const vw = W / z,
-            vh = H / z;
-          camera.setViewOffset(W, H, (W - vw) / 2, (H - vh) / 2 + H * 0.13 * k, vw, vh);
+          exOx = (m.l - m.r) / 2;
+          exOy = (m.t - m.b) / 2;
+        }
+        /* Encuadre de la pantalla (desplazamiento de la imagen, sin mover la cámara):
+           - PC: el equipo va al lado contrario del texto (derecha en portada y arranque, izquierda después)
+           - celular (marcas nuevas): el equipo se dibuja arriba; texto y tarjetas van abajo
+           - despiece: centrado en el área libre que dejan la fila de piezas y la tarjeta */
+        let vx = 0,
+          vy = 0,
+          vz = 1;
+        if (W > 760) vx = -S.shiftX * Math.min(W * 0.2, 300);
+        else if (opts.heroLift) {
+          const k = THREE.MathUtils.clamp(1 - window.scrollY / H, 0, 1); // 1 en la portada
+          vz = 0.92 + 0.38 * k; // portada: más cerca; recorrido: un poco más lejos para que quepa arriba
+          vy = H * (0.15 - 0.02 * k);
+          // Plena carga: acercamiento mientras suben las revoluciones (en PC lo hace la cámara)
+          const rev = THREE.MathUtils.smoothstep(S.xray, 0, 1);
+          vz *= 1 + 0.28 * rev;
+          vy -= H * 0.06 * rev;
+        }
+        if (ef > 0.001) {
+          vx = THREE.MathUtils.lerp(vx, -exOx, ef);
+          vy = THREE.MathUtils.lerp(vy, -exOy, ef);
+          vz = THREE.MathUtils.lerp(vz, 1, ef);
+        }
+        if (Math.abs(vx) > 0.5 || Math.abs(vy) > 0.5 || vz !== 1) {
+          const vw = W / vz,
+            vh = H / vz;
+          camera.setViewOffset(W, H, (W - vw) / 2 + vx, (H - vh) / 2 + vy, vw, vh);
           viewOffsetOn = true;
         } else if (viewOffsetOn) {
           camera.clearViewOffset();
@@ -877,6 +900,16 @@ export function startEngine(opts) {
 
         // Con la parte opaca del contenido de abajo cubriendo toda la pantalla no se ve el motor:
         // no se dibuja (ahorra batería y procesador en celulares)
+        // Celular (marcas nuevas): al terminar el recorrido el 3D sube con la página y se oculta arriba
+        if (opts.heroLift && W <= 760) {
+          const jb = journeyEl ? journeyEl.getBoundingClientRect().bottom : Infinity;
+          const dy = Math.round(Math.min(0, jb - H));
+          if (dy !== canvasDy) {
+            canvas.style.transform = dy ? `translate3d(0, ${dy}px, 0)` : "";
+            canvasDy = dy;
+          }
+          if (dy <= -H) return;
+        }
         if (post) {
           const pr = post.getBoundingClientRect();
           if (pr.top + pr.height * 0.3 <= 0) return;
@@ -884,6 +917,8 @@ export function startEngine(opts) {
         renderer.render(scene, camera);
       }
       const post = document.querySelector(".post");
+      const journeyEl = document.getElementById("journey");
+      let canvasDy = 0;
       tick();
 
       listen("resize", () => {
