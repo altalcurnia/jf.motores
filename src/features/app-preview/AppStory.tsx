@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useId } from "react";
 
 type Screen = {
   flow: string;
@@ -226,77 +226,141 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
 }
 
 /**
- * Mano con guante de trabajo sosteniendo el teléfono. Dos capas: la palma va detrás del
- * teléfono; los dedos (que abrazan el borde derecho) y el pulgar (borde izquierdo) van delante.
- * Coordenadas en el mismo sistema que la caja del teléfono (300 × 600).
+ * Mano con guante de trabajo sosteniendo el teléfono (estilo realista, con volumen y costuras).
+ * Dos capas en el mismo sistema que la caja del teléfono (300 × 600, el teléfono va de x 20 a 280):
+ *  - detrás: palma, raíz de los dedos y muñeca con el puño reflectivo;
+ *  - delante: base del pulgar (eminencia tenar) que envuelve la esquina inferior izquierda,
+ *    el pulgar unido a ella (gira desde su articulación para tocar la pantalla) y las yemas
+ *    de los cuatro dedos que abrazan el borde derecho.
  */
 export function Hand({ part }: { part: "back" | "front" }) {
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const id = (n: string) => `${n}-${uid}`;
+  const url = (n: string) => `url(#${id(n)})`;
   if (part === "back") {
     return (
       <svg className="hand back" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">
         <defs>
-          <linearGradient id="glove-palm" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#4a515b" />
-            <stop offset="0.55" stopColor="#30353d" />
-            <stop offset="1" stopColor="#1d2026" />
+          <linearGradient id={id("palm")} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#4c535d" />
+            <stop offset="0.5" stopColor="#323840" />
+            <stop offset="1" stopColor="#1b1e23" />
           </linearGradient>
-          <linearGradient id="cuff" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={id("root")} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#262a30" />
+            <stop offset="0.6" stopColor="#3d434c" />
+            <stop offset="1" stopColor="#2a2e34" />
+          </linearGradient>
+          <linearGradient id={id("cuff")} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#f7c600" />
             <stop offset="1" stopColor="#c99a00" />
           </linearGradient>
         </defs>
-        {/* Palma y dorso de la mano, detrás del teléfono */}
-        <path d="M18 400 C 6 470 14 560 52 620 C 80 662 120 690 168 700 L 252 700 C 286 650 300 560 296 470 C 292 420 284 380 276 350 L 30 350 Z" fill="url(#glove-palm)" />
+        {/* Palma detrás del teléfono: asoma por la derecha y por debajo */}
+        <path
+          d="M 30 470 C 26 540 40 610 84 660 C 112 690 150 704 196 706 L 252 702 C 286 660 304 600 306 520 C 307 450 302 380 296 316 L 268 300 C 160 330 80 380 30 470 Z"
+          fill={url("palm")}
+        />
+        {/* Raíz de los dedos (falanges proximales) por fuera del borde derecho */}
+        {[318, 370, 420, 468].map((y, i) => (
+          <path
+            key={y}
+            d={`M 276 ${y} C 290 ${y - 4} 304 ${y + 2} 308 ${y + 20} C 311 ${y + 36} 302 ${y + 50} 286 ${y + 50 - i * 2} L 276 ${y + 48 - i * 2} Z`}
+            fill={url("root")}
+          />
+        ))}
         {/* Muñeca y puño con banda reflectiva */}
-        <path d="M120 690 L 262 690 L 270 760 L 112 760 Z" fill="url(#cuff)" />
-        <rect x="114" y="716" width="154" height="10" fill="#e8edf2" opacity="0.75" />
+        <path d="M 118 690 C 160 700 214 702 262 690 L 272 760 L 108 760 Z" fill={url("cuff")} />
+        <path d="M 112 716 C 160 724 220 724 268 714 L 269 726 C 220 736 160 736 111 728 Z" fill="#e8edf2" opacity="0.8" />
+        <path d="M 116 692 C 160 702 214 704 262 692" stroke="#8a6c00" strokeWidth="2" fill="none" opacity="0.6" />
       </svg>
     );
   }
-  // Dedos: se asoman poco por el borde derecho y se solapan, como al sostener un teléfono
+  // Dedos de la mano izquierda que abrazan el teléfono por detrás: se ven las dos últimas falanges
+  // doblándose sobre el borde derecho, en abanico (índice arriba, meñique abajo y más corto).
   const fingers = [
-    { y: 380, h: 54, x: 268 },
-    { y: 426, h: 56, x: 266 },
-    { y: 474, h: 56, x: 267 },
-    { y: 522, h: 50, x: 270 },
+    { y: 332, w: 21, tip: 250, rot: -9 },
+    { y: 378, w: 22, tip: 245, rot: -3 },
+    { y: 423, w: 21, tip: 249, rot: 3 },
+    { y: 464, w: 17.5, tip: 258, rot: 10 },
   ];
   return (
     <svg className="hand front" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">
       <defs>
-        <linearGradient id="finger" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#626a75" />
-          <stop offset="0.35" stopColor="#434a53" />
-          <stop offset="1" stopColor="#262a30" />
+        <linearGradient id={id("finger")} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#6c7480" />
+          <stop offset="0.28" stopColor="#4c535d" />
+          <stop offset="0.75" stopColor="#2e3238" />
+          <stop offset="1" stopColor="#1d2025" />
         </linearGradient>
-        <linearGradient id="thumb" x1="0" y1="1" x2="0.6" y2="0">
-          <stop offset="0" stopColor="#23272d" />
-          <stop offset="0.55" stopColor="#3f4650" />
-          <stop offset="1" stopColor="#5b636e" />
+        <linearGradient id={id("bend")} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#000" stopOpacity="0" />
+          <stop offset="0.5" stopColor="#000" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#000" stopOpacity="0" />
         </linearGradient>
-        <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-          <feDropShadow dx="-2" dy="3" stdDeviation="3" floodColor="#000" floodOpacity="0.5" />
+        <linearGradient id={id("thumb")} x1="0" y1="0" x2="1" y2="0.35">
+          <stop offset="0" stopColor="#2a2e34" />
+          <stop offset="0.45" stopColor="#4e5560" />
+          <stop offset="0.8" stopColor="#5f6773" />
+          <stop offset="1" stopColor="#3a4048" />
+        </linearGradient>
+        <radialGradient id={id("thenar")} cx="0.35" cy="0.3" r="0.85">
+          <stop offset="0" stopColor="#59616c" />
+          <stop offset="0.55" stopColor="#3a4048" />
+          <stop offset="1" stopColor="#1e2126" />
+        </radialGradient>
+        <filter id={id("soft")} x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="-3" dy="5" stdDeviation="4" floodColor="#000" floodOpacity="0.55" />
         </filter>
       </defs>
-      {/* Dedos que abrazan el borde derecho (de abajo hacia arriba para que se solapen bien) */}
-      <g filter="url(#soft)">
-        {[...fingers].reverse().map((f) => (
-          <g key={f.y} transform={`rotate(-8 ${f.x + 20} ${f.y + f.h / 2})`}>
-            <path
-              d={`M ${f.x} ${f.y + f.h * 0.18} Q ${f.x} ${f.y} ${f.x + 16} ${f.y} L ${f.x + 22} ${f.y} Q ${f.x + 40} ${f.y} ${f.x + 40} ${f.y + f.h / 2} Q ${f.x + 40} ${f.y + f.h} ${f.x + 22} ${f.y + f.h} L ${f.x + 16} ${f.y + f.h} Q ${f.x} ${f.y + f.h} ${f.x} ${f.y + f.h * 0.82} Z`}
-              fill="url(#finger)"
-            />
-            <path d={`M ${f.x + 6} ${f.y + 8} Q ${f.x + 20} ${f.y + 3} ${f.x + 32} ${f.y + 10}`} stroke="#7d8692" strokeWidth="1.5" fill="none" opacity="0.55" />
-          </g>
-        ))}
+
+      {/* Dedos (de abajo hacia arriba para que cada uno pise al siguiente) */}
+      <g filter={url("soft")}>
+        {[...fingers].reverse().map((f) => {
+          const { y, w, tip } = f;
+          const x0 = 312;
+          const knuckle = 283; // donde el dedo se dobla sobre el borde del teléfono
+          return (
+            <g key={y} transform={`rotate(${f.rot} ${x0} ${y})`}>
+              {/* silueta: se angosta hacia la yema y termina redondeada */}
+              <path
+                d={`M ${x0} ${y - w} C ${knuckle} ${y - w - 1} ${tip + w * 1.2} ${y - w * 0.92} ${tip + w * 0.75} ${y - w * 0.88} C ${tip + 4} ${y - w * 0.82} ${tip - 3} ${y - w * 0.35} ${tip - 3} ${y + 1} C ${tip - 3} ${y + w * 0.5} ${tip + 5} ${y + w * 0.92} ${tip + w * 0.8} ${y + w * 0.95} C ${tip + w * 1.3} ${y + w} ${knuckle} ${y + w + 1} ${x0} ${y + w} Z`}
+                fill={url("finger")}
+              />
+              {/* sombra del doblez sobre el borde y pliegue de la última articulación */}
+              <rect x={knuckle - 7} y={y - w} width="14" height={w * 2} fill={url("bend")} />
+              <path d={`M ${tip + (knuckle - tip) * 0.45} ${y - w * 0.82} C ${tip + (knuckle - tip) * 0.4} ${y - w * 0.2} ${tip + (knuckle - tip) * 0.4} ${y + w * 0.3} ${tip + (knuckle - tip) * 0.46} ${y + w * 0.88}`} stroke="#16191d" strokeWidth="1.5" fill="none" opacity="0.7" />
+              {/* brillo del lomo y costura de la punta del guante */}
+              <path d={`M ${tip + 6} ${y - w * 0.68} C ${tip + 16} ${y - w * 0.86} ${knuckle - 14} ${y - w * 0.9} ${x0 - 6} ${y - w * 0.9}`} stroke="#9aa3ae" strokeWidth="1.5" fill="none" opacity="0.5" strokeLinecap="round" />
+              <path d={`M ${tip + w * 0.9} ${y - w * 0.85} C ${tip + w * 0.55} ${y - w * 0.3} ${tip + w * 0.55} ${y + w * 0.3} ${tip + w * 0.9} ${y + w * 0.9}`} stroke="#121417" strokeWidth="1" strokeDasharray="2.5 2.5" fill="none" opacity="0.65" />
+              {/* línea de separación con el dedo de abajo */}
+              <path d={`M ${tip + w * 0.8} ${y + w * 0.95} C ${tip + w * 1.4} ${y + w} ${knuckle} ${y + w + 1} ${x0} ${y + w}`} stroke="#0d0f12" strokeWidth="1.6" fill="none" opacity="0.6" />
+            </g>
+          );
+        })}
       </g>
-      {/* Pulgar apoyado sobre el borde izquierdo (gira desde su base para tocar la pantalla) */}
-      <g filter="url(#soft)" className="thumb">
+
+      {/* Pulgar: unido a la base de la palma; gira desde su articulación (ver .thumb en globals.css) */}
+      <g filter={url("soft")} className="thumb">
         <path
-          d="M 40 676 C 20 630 14 560 28 505 C 38 482 64 476 76 494 C 88 512 82 542 76 574 C 70 610 84 650 124 690 Z"
-          fill="url(#thumb)"
+          d="M 14 584 C 10 544 20 508 36 480 C 46 460 56 442 64 430 C 72 418 90 414 99 427 C 107 440 102 456 93 468 C 84 482 80 500 79 522 C 78 548 76 570 72 594 Z"
+          fill={url("thumb")}
         />
-        <path d="M 34 500 C 46 488 62 486 70 496" stroke="#86909b" strokeWidth="1.6" fill="none" opacity="0.6" />
-        <path d="M 34 626 C 30 590 36 556 50 526" stroke="#15181c" strokeWidth="1.2" strokeDasharray="4 4" fill="none" opacity="0.7" />
+        {/* pliegue de la articulación, brillo y costura */}
+        <path d="M 40 486 C 52 494 70 496 86 490" stroke="#16191d" strokeWidth="1.8" fill="none" opacity="0.75" />
+        <path d="M 46 470 C 54 452 64 436 74 428" stroke="#8d96a1" strokeWidth="1.8" fill="none" opacity="0.6" strokeLinecap="round" />
+        <path d="M 30 560 C 26 530 34 500 46 478" stroke="#14171a" strokeWidth="1.1" strokeDasharray="3 3" fill="none" opacity="0.7" />
+      </g>
+
+      {/* Base del pulgar (eminencia tenar) sobre la esquina del teléfono: tapa la raíz del pulgar */}
+      <g filter={url("soft")}>
+        <path
+          d="M 124 716 C 82 708 34 682 14 640 C 4 616 6 592 20 578 C 34 566 56 566 74 576 C 94 588 116 602 136 618 C 156 636 160 670 152 704 Z"
+          fill={url("thenar")}
+        />
+        <path d="M 24 584 C 36 574 56 574 72 584" stroke="#7c858f" strokeWidth="1.6" fill="none" opacity="0.5" />
+        <path d="M 60 640 C 82 636 110 640 140 660" stroke="#16191d" strokeWidth="1.4" fill="none" opacity="0.55" />
+        <path d="M 20 640 C 40 676 76 698 120 708" stroke="#14171a" strokeWidth="1" strokeDasharray="3 3" fill="none" opacity="0.6" />
       </g>
     </svg>
   );

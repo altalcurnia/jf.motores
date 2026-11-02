@@ -77,7 +77,7 @@ async function Editor() {
       />
       <EngineVariants
         canEdit={canEdit}
-        active={company?.engine_model ?? "v1"}
+        active={company?.engine_model ?? "v2"}
         hidden={company?.engine_models_hidden ?? []}
       />
       <SiteImages

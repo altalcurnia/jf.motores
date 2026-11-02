@@ -832,10 +832,25 @@ body.drawer-open { overflow: hidden; }
   border-color: var(--yellow); background: rgba(247, 198, 0, 0.14); transform: translateX(4px); outline: none;
 }
 /* Etiqueta sobre el modelo que corresponde al botón resaltado */
+/* Marcador redondo con el número; al resaltar se abre con el nombre de la pieza */
+#labels .lbl .tag {
+  height: 30px; min-width: 30px; padding: 0 9px; gap: 0; border-radius: 15px; justify-content: center;
+  font-size: 11px; letter-spacing: 0.04em; transition: padding 0.25s ease, gap 0.25s ease, background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+#labels .lbl .tag::before { display: none; }
+#labels .lbl .tag b { color: var(--yellow); }
+#labels .lbl .tag .nm {
+  max-width: 0; overflow: hidden; opacity: 0; white-space: nowrap; letter-spacing: 0.2em;
+  transition: max-width 0.3s ease, opacity 0.25s ease;
+}
+#labels .lbl .stem { height: 16px; }
 .lbl.hl .tag {
   border-color: var(--yellow); background: rgba(247, 198, 0, 0.22); color: #fff;
   box-shadow: 0 0 24px rgba(247, 198, 0, 0.45);
 }
+#labels .lbl.hl .tag { padding: 0 14px 0 11px; gap: 9px; background: rgba(46, 38, 6, 0.96); }
+#labels .lbl.hl .tag b { color: #fff; }
+#labels .lbl.hl .tag .nm { max-width: 280px; opacity: 1; }
 .lbl.hl { z-index: 2; }
 
 @media (max-width: 760px) {
@@ -994,10 +1009,10 @@ body.in-journey.app-open #hud { opacity: 0; }
 }
 
 /* ---------- Toque en el celular (inicio y página de la app) ---------- */
-.hand.front .thumb { transform-box: view-box; transform-origin: 124px 690px; }
+.hand.front .thumb { transform-box: view-box; transform-origin: 44px 574px; transform: rotate(-18deg); }
 /* Mientras se apaga, el pulgar se queda presionando el botón (sigue el scroll, no un tiempo fijo) */
 .hand.front .thumb { transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.3, 1); }
-.hand-phone.press-hold .hand.front .thumb { transform: translate(6px, -24px) rotate(28deg); }
+.hand-phone.press-hold .hand.front .thumb { transform: rotate(6deg); }
 .mr-btn { position: relative; transition: transform 0.25s ease, background 0.3s, color 0.3s; }
 .hand-phone.press-hold .mr-btn { transform: scale(0.94); background: #b8392d; color: #fff; }
 .tap-ring { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }

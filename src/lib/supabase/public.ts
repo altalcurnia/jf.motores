@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { supabasePublicEnv } from "@/lib/env";
 import type { Database } from "./types";
 import { site } from "@/lib/site";
+import { DEFAULT_ENGINE_VARIANT, isEngineVariant } from "@/features/engine3d/variants";
 
 /** Cliente sin sesión (solo datos públicos, respeta RLS). Se puede usar dentro de "use cache". */
 export function createSupabasePublicClient() {
@@ -129,9 +130,9 @@ export async function getEngineVariant(): Promise<string> {
   try {
     const supabase = createSupabasePublicClient();
     const { data } = await supabase.from("company_settings").select("engine_model").maybeSingle();
-    return data?.engine_model && /^v[1-9]$/.test(data.engine_model) ? data.engine_model : "v1";
+    return isEngineVariant(data?.engine_model) ? data.engine_model : DEFAULT_ENGINE_VARIANT;
   } catch {
-    return "v1";
+    return DEFAULT_ENGINE_VARIANT;
   }
 }
 

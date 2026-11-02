@@ -11,7 +11,7 @@ import { engineLabels, isPartKey, type PartKey } from "./parts";
 
 type Props = {
   locale: Locale;
-  /** Versión del modelo 3D elegida en el admin (v1, v2, v3). */
+  /** Versión del modelo 3D elegida en el admin (v2, v3). */
   variant?: string;
   t: Pick<Dictionary, "journey" | "hud" | "rail" | "parts">;
 };
@@ -20,10 +20,10 @@ type Props = {
  * Motor 3D de fondo + recorrido por scroll (encendido, revolución, despiece, apagado).
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
-export function EngineExperience({ locale, t, variant = "v1" }: Props) {
+export function EngineExperience({ locale, t, variant = "v2" }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const journeyRef = useRef<HTMLElement>(null);
-  const engineRef = useRef<{ highlight?: (k: string | null) => void } | null>(null);
+  const engineRef = useRef<{ highlight?: (k: string | null) => void; focus?: (k: string | null) => void } | null>(null);
   const [p, setP] = useState(0);
   const [active, setActive] = useState(false);
   const [hover, setHover] = useState<string | null>(null);
@@ -145,6 +145,11 @@ export function EngineExperience({ locale, t, variant = "v1" }: Props) {
   const show = (k: StageKey) => (active && stage === k ? " on" : "");
   const exploded = active && stage === "x";
   const appOn = active && stage === "e";
+
+  // La cámara se acerca solo a la pieza elegida con un toque (menú abierto), no al pasar el cursor
+  useEffect(() => {
+    engineRef.current?.focus?.(sheet && exploded ? sheet : null);
+  }, [sheet, exploded]);
 
   useEffect(() => {
     document.body.classList.toggle("parts-open", exploded);
@@ -285,6 +290,8 @@ export function EngineExperience({ locale, t, variant = "v1" }: Props) {
         )}
       </section>
 
+      {/* Marcadores del despiece: solo el número en un botón redondo; al pasar el cursor o tocarlo
+          se ilumina la pieza y el botón se abre con el nombre */}
       <div id="labels">
         {engineLabels.map((l, i) => (
           <a
@@ -292,15 +299,19 @@ export function EngineExperience({ locale, t, variant = "v1" }: Props) {
             id={l.id}
             key={l.id}
             data-part={l.part}
-            data-main={l.main ? "" : undefined}
+            data-main=""
             href={`/${locale}/repuestos/${l.part}`}
+            aria-label={t.parts[l.part]}
             onMouseEnter={() => lightPart(l.part)}
             onMouseLeave={() => lightPart(null)}
+            onFocus={() => lightPart(l.part)}
+            onBlur={() => lightPart(null)}
             onTouchStart={() => lightPart(l.part)}
             onClick={(e) => onPartTap(e, l.part)}
           >
             <div className="tag">
-              <b>{String(i + 1).padStart(2, "0")}</b> {t.parts[l.part]}
+              <b>{String(i + 1).padStart(2, "0")}</b>
+              <span className="nm">{t.parts[l.part]}</span>
             </div>
             <div className="stem" />
           </a>

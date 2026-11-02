@@ -7,12 +7,11 @@
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { buildV1 } from "./models/v1.js";
 import { buildV2 } from "./models/v2.js";
 import { buildV3 } from "./models/v3.js";
 
 /** Versiones del modelo 3D. Comparten piezas, botones y animación; cambia solo la forma. */
-const MODELS = { v1: buildV1, v2: buildV2, v3: buildV3 };
+const MODELS = { v2: buildV2, v3: buildV3 };
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,7 +20,7 @@ gsap.registerPlugin(ScrollTrigger);
  *   hud: { standby: string, start: string, running: string, full: string },
  *   onPartClick: (partKey: string, touch: boolean) => void, onPartHover?: (partKey: string | null) => void,
  *   onContextLost?: () => void }} opts
- * @returns {(() => void) & { highlight: (partKey: string | null) => void }} limpieza + resaltar pieza
+ * @returns {(() => void) & { highlight: (partKey: string | null) => void, focus: (partKey: string | null) => void }} limpieza, resaltar y enfocar pieza
  */
 export function startEngine(opts) {
   const isMobile = opts.isMobile;
@@ -33,7 +32,7 @@ export function startEngine(opts) {
   }
   let renderer;
   /** Funciones que la página puede llamar mientras el motor está activo */
-  const api = { highlight: /** @param {string | null} _k */ () => {} };
+  const api = { highlight: /** @param {string | null} _k */ () => {}, focus: /** @param {string | null} _k */ () => {} };
   const ctx = gsap.context(() => {
 /* ================= STATE ================= */
       const S = {
@@ -58,7 +57,9 @@ export function startEngine(opts) {
       };
       // Valores efectivos que usa el render (mezcla de portada y recorrido)
       const R = { rpm: 0, smoke: 0, glow: 0 };
-      let heat = 0;
+      let heat = 0,
+        oilP = 0,
+        keyA = 0;
       const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
       let inJourney = false;
 
@@ -217,8 +218,8 @@ export function startEngine(opts) {
       }
 
       /* ===== Modelo del equipo: versión elegida en el admin (ver models/) ===== */
-      const build = MODELS[opts.variant] || MODELS.v1;
-      const { PART_GROUPS, crank, vt, flyG, fanG, coupHub, tNeedles, smokeAnchor } = build({
+      const build = MODELS[opts.variant] || MODELS.v2;
+      const { PART_GROUPS, crank, vt, flyG, fanG, coupHub, tNeedles, controls, smokeAnchor } = build({
         engine,
         regPart,
         MAT,
@@ -344,6 +345,12 @@ export function startEngine(opts) {
           }
         }));
       }
+      // Acercamiento de cámara solo a una pieza elegida (toque en celular), nunca al pasar el cursor:
+      // si la cámara se moviera con el cursor, cambiaría la pieza de abajo y daría saltos.
+      let focusSel = null;
+      api.focus = (key) => {
+        focusSel = key && PART_GROUPS[key] ? key : null;
+      };
       api.highlight = (key) => {
         if (hlKey === key) return;
         if (hlKey) paint(hlKey, false);
@@ -690,8 +697,8 @@ export function startEngine(opts) {
           camera.clearViewOffset();
           viewOffsetOn = false;
         }
-        if (hlKey) focusKey = hlKey;
-        const focusGoal = hlKey && S.explode > 0.5 ? 1 : 0;
+        if (focusSel) focusKey = focusSel;
+        const focusGoal = focusSel && S.explode > 0.5 ? 1 : 0;
         focusAmt += (focusGoal - focusAmt) * Math.min(1, dt * 0.9);
         if (focusAmt > 0.002 && focusKey && PART_GROUPS[focusKey]) {
           partBox(focusKey, focusBox).getCenter(focusC);
@@ -725,9 +732,22 @@ export function startEngine(opts) {
         fanG.rotation.x = crankAngle * 1.25;
         applyXray(S.xray);
         // Relojes del tablero: rpm, temperatura y presión de aceite
-        tNeedles[0].rotation.z = 1.2 - run * 2.0 - noise(t, 9) * 0.08 * run;
-        tNeedles[1].rotation.z = 1.2 - THREE.MathUtils.clamp(heat, 0, 1) * 1.8;
-        tNeedles[2].rotation.z = 1.2 - Math.min(1, run * 1.4) * 1.5 - noise(t, 10) * 0.05 * run;
+        // Tablero 3D con los mismos valores del tacómetro de la pantalla.
+        // Escala de cada reloj: −1,2 rad (izquierda, 0) → +1,2 rad (derecha, máximo).
+        const dial = (f) => -1.2 + 2.4 * THREE.MathUtils.clamp(f, 0, 1);
+        tNeedles[0].rotation.z = dial(R.rpm + noise(t, 9) * 0.012 * run); // rpm (0–2400)
+        tNeedles[1].rotation.z = dial(heat); // temperatura (21–95 °C)
+        const oil = R.rpm > 0.01 ? 0.25 + 0.65 * Math.min(1, R.rpm / 0.7) : 0; // presión de aceite
+        oilP += (oil - oilP) * Math.min(1, dt * 3);
+        tNeedles[2].rotation.z = dial(oilP + noise(t, 10) * 0.01 * run);
+        if (controls) {
+          // Llave: apagado (0) → arranque mientras el motor gira despacio → marcha
+          const keyGoal = R.rpm < 0.01 ? 0 : R.rpm < 0.1 ? 1.35 : 0.85;
+          keyA += (keyGoal - keyA) * Math.min(1, dt * 6);
+          controls.key.rotation.z = -keyA;
+          // Acelerador: de ralentí a plena carga según las rpm
+          controls.lever.rotation.z = controls.leverIdle - R.rpm * 0.75;
+        }
 
         MAT.glow.emissiveIntensity = R.glow * (1.6 + Math.sin(t * 3) * 0.25);
         MAT.screen.emissiveIntensity = 0.3 + R.glow * 1.4;
@@ -762,7 +782,8 @@ export function startEngine(opts) {
             continue;
           }
           d.el.style.opacity = vis;
-          d.el.style.pointerEvents = vis > 0.5 ? "auto" : "none";
+          // Las etiquetas que aparecen al resaltar no capturan el cursor (evita que parpadeen)
+          d.el.style.pointerEvents = d.main && vis > 0.5 ? "auto" : "none";
           d.el.style.left = (wv.x * 0.5 + 0.5) * W + "px";
           d.el.style.top = (-wv.y * 0.5 + 0.5) * H + "px";
         }
@@ -842,5 +863,6 @@ export function startEngine(opts) {
     }
   };
   cleanup.highlight = (key) => api.highlight(key);
+  cleanup.focus = (key) => api.focus?.(key);
   return cleanup;
 }

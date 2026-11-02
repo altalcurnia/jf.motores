@@ -567,7 +567,12 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
     tNeedles.push(pv);
   });
   tabG.add(cyl(0.06, 0.06, 0.05, MAT.chrome, 0, -0.5, -0.07, "z", 16));
-  tabG.add(box(0.014, 0.07, 0.02, MAT.dark, 0, -0.5, -0.1, 0));
+  // llave de encendido (gira: apagado → arranque → marcha)
+  const keyPivot = new THREE.Group();
+  keyPivot.position.set(0, -0.5, -0.1);
+  keyPivot.add(box(0.016, 0.075, 0.02, MAT.dark, 0, 0, 0, 0));
+  keyPivot.add(box(0.05, 0.035, 0.012, P.brass, 0, 0.05, -0.012, 0));
+  tabG.add(keyPivot);
   engine.add(tabG);
   regPart(tabG, -0.4, 0.4, -3.4);
 
@@ -595,5 +600,5 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
     arranque: [startG], soportes: mountGroups, tanque: [tankG], radiador: [radG], ventilador: [fanG],
     volante: [flyG], acople: [coupG], bomba: [pumpG], tablero: [tabG],
   };
-  return { PART_GROUPS, crank, vt, flyG, fanG, coupHub, tNeedles, smokeAnchor };
+  return { PART_GROUPS, crank, vt, flyG, fanG, coupHub, tNeedles, controls: { key: keyPivot, lever, leverIdle: 0.25 }, smokeAnchor };
 }
