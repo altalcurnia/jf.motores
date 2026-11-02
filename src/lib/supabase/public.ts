@@ -28,13 +28,13 @@ export async function getCompanyInfo(): Promise<CompanyInfo> {
   try {
     const supabase = createSupabasePublicClient();
     const [{ data: company }, { data: branch }] = await Promise.all([
-      supabase.from("company_settings").select("legal_name, nit").maybeSingle(),
+      supabase.from("company_settings").select("legal_name, nit, legal_address").maybeSingle(),
       supabase.from("branches").select("address, city, phone").eq("active", true).order("sort").limit(1).maybeSingle(),
     ]);
     return {
       legalName: company?.legal_name ?? null,
       nit: company?.nit ?? null,
-      address: branch ? [branch.address, branch.city].filter(Boolean).join(", ") : null,
+      address: company?.legal_address || (branch ? [branch.address, branch.city].filter(Boolean).join(", ") : null),
       phone: branch?.phone ?? null,
     };
   } catch {
@@ -135,5 +135,48 @@ export async function getAnalyticsIds(): Promise<{ ga4: string | null; pixel: st
     };
   } catch {
     return { ga4: null, pixel: null };
+  }
+}
+
+export type Testimonial = { id: string; name: string; place: string | null; product: string | null; quote: string };
+export type TrustInfo = {
+  legalName: string | null;
+  nit: string | null;
+  /** null = sin confirmar */
+  vat: boolean | null;
+  years: number | null;
+  stats: { equipos?: number; clientes?: number; municipios?: number };
+  testimonials: Testimonial[];
+};
+
+/** Datos legales y prueba social (años, cifras, testimonios con permiso). Cacheados; se refrescan al guardar. */
+export async function getTrust(): Promise<TrustInfo> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("company");
+  const empty: TrustInfo = { legalName: null, nit: null, vat: null, years: null, stats: {}, testimonials: [] };
+  try {
+    const supabase = createSupabasePublicClient();
+    const [{ data: c }, { data: t }] = await Promise.all([
+      supabase.from("company_settings").select("legal_name, nit, prices_include_vat, founded_year, stats").maybeSingle(),
+      supabase.from("testimonials").select("id, name, place, product, quote").order("sort").order("created_at").limit(12),
+    ]);
+    const raw = (c?.stats ?? {}) as Record<string, unknown>;
+    const stats: TrustInfo["stats"] = {};
+    for (const k of ["equipos", "clientes", "municipios"] as const) {
+      const n = Number(raw[k]);
+      if (Number.isFinite(n) && n > 0) stats[k] = Math.round(n);
+    }
+    const year = new Date().getFullYear();
+    return {
+      legalName: c?.legal_name ?? null,
+      nit: c?.nit ?? null,
+      vat: c?.prices_include_vat ?? null,
+      years: c?.founded_year && c.founded_year <= year ? year - c.founded_year : null,
+      stats,
+      testimonials: (t ?? []) as Testimonial[],
+    };
+  } catch {
+    return empty;
   }
 }

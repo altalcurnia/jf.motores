@@ -379,6 +379,55 @@
         "h": "7. Cookies e medição",
         "p": "Usamos cookies próprios necessários: sessão, idioma, preferências e um identificador anônimo com o qual registramos seus pedidos de orçamento pelo WhatsApp (produto, país aproximado, dispositivo e a campanha pela qual você chegou). Somente se você aceitar no aviso de cookies usamos o Google Analytics 4 e o Pixel da Meta para medir visitas e o desempenho dos anúncios. Você pode mudar sua escolha quando quiser em “Preferências de cookies”, no rodapé da página."
       }
+    ],
+    "termsTitle": "Termos e condições",
+    "termsUpdated": "Última atualização: 1 de novembro de 2026",
+    "terms": "Termos e condições",
+    "sic": "Superintendência de Indústria e Comércio (SIC)",
+    "vatYes": "Os preços publicados incluem IVA.",
+    "vatNo": "Aos preços publicados soma-se o IVA.",
+    "vatUnknown": "O preço final com impostos é confirmado no orçamento por escrito.",
+    "termsSections": [
+      {
+        "h": "1. Quem vende",
+        "p": "Este site é operado por {legalName} (nome comercial JF Motores), NIT {nit}, com sede em {address}. E-mail: {email}. WhatsApp e linha direta: {phone}."
+      },
+      {
+        "h": "2. Informações dos produtos",
+        "p": "Cada ficha mostra referência, especificações, status (disponível ou vendido; em estoque ou sem estoque) e garantia. As fotos marcadas como «Imagem de referência» são ilustrativas. Antes da compra, um consultor confirma disponibilidade, especificações e compatibilidade para o seu caso."
+      },
+      {
+        "h": "3. Preços",
+        "p": "Os preços estão em pesos colombianos. {vat} O frete não está incluído e é orçado à parte conforme o destino. Os preços publicados podem mudar; o preço do orçamento por escrito é respeitado durante sua validade."
+      },
+      {
+        "h": "4. Como comprar e pagar",
+        "p": "O site não processa pagamentos. A compra é combinada com um consultor pelo WhatsApp ou em nossas sedes: você recebe um orçamento por escrito com produto, preço, impostos, frete, forma de pagamento e prazo de entrega. A compra fica firme quando você aceita o orçamento e o pagamento combinado é registrado. Cada venda fica registrada em seu nome em Minha conta."
+      },
+      {
+        "h": "5. Envio e entrega",
+        "p": "O prazo de entrega e a transportadora são informados no orçamento. Ao receber, confira o equipamento antes de assinar o comprovante; se houver danos de transporte, anote no comprovante e fale conosco imediatamente."
+      },
+      {
+        "h": "6. Direito de arrependimento",
+        "p": "Se você comprar a distância (WhatsApp, telefone ou site, sem ir a uma sede), pode se arrepender em até 5 dias úteis após a entrega, conforme o artigo 47 da Lei colombiana 1480 de 2011. Devolva o produto sem uso e no mesmo estado em que o recebeu; o frete da devolução é por sua conta. Devolvemos o dinheiro, sem descontos, em até 30 dias corridos. Não se aplica a bens fabricados ou ajustados conforme suas especificações (por exemplo, uma motobomba montada para a sua mina) nem a compras presenciais em nossas sedes."
+      },
+      {
+        "h": "7. Garantia legal",
+        "p": "Todo produto novo tem garantia legal de qualidade, adequação e segurança (Lei 1480 de 2011, artigos 7 e 8), mesmo que não seja anunciada. O prazo é o indicado na ficha ou na nota fiscal; se não houver indicação, é de um ano para produtos novos. Produtos usados ou recondicionados são identificados como tais em sua ficha, com a garantia oferecida. A garantia não cobre danos por mau uso, falta da manutenção indicada no manual, combustível contaminado, sobrecarga nem reparos feitos por terceiros."
+      },
+      {
+        "h": "8. Como acionar a garantia",
+        "p": "Escreva para nós com o número de série (em Minha conta → Meus equipamentos) e fotos ou vídeo da falha. Respondemos em no máximo 15 dias úteis. Se procedente, reparamos, trocamos ou devolvemos o dinheiro nos prazos da lei."
+      },
+      {
+        "h": "9. Pedidos, queixas e reclamações",
+        "p": "Você pode apresentá-los pelo WhatsApp {phone}, pelo e-mail {email} ou em nossas sedes. Se não ficar satisfeito com a resposta, pode recorrer à Superintendência de Indústria e Comércio da Colômbia em www.sic.gov.co."
+      },
+      {
+        "h": "10. Dados pessoais e lei aplicável",
+        "p": "O tratamento dos seus dados é regido pela nossa Política de tratamento de dados pessoais. Estes termos são regidos pelas leis da República da Colômbia."
+      }
     ]
   },
   "catalog": {
@@ -459,7 +508,9 @@
     "ownedBanner": "Este equipamento é seu.",
     "ownedLink": "Ver nos meus equipamentos",
     "compatibleFor": "Compatíveis com seu {name}",
-    "warrantyMonths": "Garantia de {n} meses"
+    "warrantyMonths": "Garantia de {n} meses",
+    "vatIncluded": "IVA incluído.",
+    "vatExcluded": "Preço + IVA."
   },
   "notFound": {
     "title": "Não encontramos essa página",
@@ -979,5 +1030,13 @@
     "necessary": "Somente necessários",
     "policy": "Política de dados",
     "settings": "Preferências de cookies"
+  },
+  "trust": {
+    "kicker": "Confiança",
+    "title": "O que dizem quem já trabalha com a JF",
+    "years": "anos no mercado",
+    "equipos": "equipamentos entregues",
+    "clientes": "clientes atendidos",
+    "municipios": "municípios atendidos"
   }
 }

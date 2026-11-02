@@ -66,7 +66,7 @@ export function siteMap(base: string, locale: AssistantLocale): string {
     `- Videos de mantenimiento en español (motor diésel, motobombas, sello mecánico, filtros): ${b}/videos`,
     `- Crear cuenta gratis: ${b}/cuenta/registro · Entrar: ${b}/cuenta/entrar · Mi cuenta: ${b}/cuenta · Mis equipos (compras con serie, garantía y guía PDF; pedir repuestos): ${b}/cuenta/equipos`,
     `- JF Monitor, app de monitoreo remoto (próximamente; anotarse para enterarse): ${b}/app`,
-    `- Contacto: ${b}#contacto · Política de datos: ${b}/legal/privacidad`,
+    `- Contacto: ${b}#contacto · Política de datos: ${b}/legal/privacidad · Términos y condiciones (precios, envío, retracto de 5 días hábiles en compras a distancia, garantía legal, reclamos): ${b}/legal/terminos`,
     "- Cómo se compra: en la ficha del producto, botón «Cotizar por WhatsApp»; un asesor confirma disponibilidad, envío, pago y factura. No hay pagos en línea. El precio publicado no incluye el envío.",
     "- El chat con IA es gratis para cuentas registradas, con un cupo mensual que crece con las compras.",
   ].join("\n");

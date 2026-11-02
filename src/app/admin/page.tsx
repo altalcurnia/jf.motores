@@ -9,7 +9,6 @@ export const metadata = { title: "Inicio" };
 
 const sections = [
   { title: "Categorías", desc: "Categorías de cada catálogo y pieza del motor 3D que abre cada una.", perm: "catalogo.editar", day: 3 },
-  { title: "Empresa y sedes", desc: "Datos de confianza, garantía, cifras y sedes.", perm: "empresa.editar", day: 7 },
 ];
 
 export default function AdminHome() {
@@ -107,8 +106,8 @@ async function Dashboard() {
         )}
         {can(session, "empresa.editar") && (
           <Link href="/admin/empresa" className="card link">
-            <h3>Contacto, sedes e imagen del inicio</h3>
-            <p>Líneas directas y de WhatsApp, correo de soporte, sedes y la imagen grande de la sección de beneficios.</p>
+            <h3>Empresa</h3>
+            <p>Datos legales, IVA, cifras y testimonios; líneas de WhatsApp, correo, sedes, imagen del inicio y medición.</p>
             <span className="pill ok">Disponible</span>
           </Link>
         )}

@@ -9,6 +9,7 @@ import { ProductCard } from "@/features/catalog/ProductCard";
 import { CatalogTabs } from "@/features/catalog/CatalogListing";
 import { ProductDetail, productMetadata, productStaticParams } from "@/features/catalog/ProductDetail";
 import { Arrow } from "@/components/Arrow";
+import { vatPrefix } from "@/features/catalog/PriceNotice";
 
 /**
  * /repuestos/[slug] sirve dos cosas:
@@ -55,7 +56,7 @@ async function PartCategory({ part }: { part: PartKey }) {
           {name}
         </h1>
         <p>{t.partCategoryIntro}</p>
-        <p className="price-notice">{t.shippingNote}</p>
+        <p className="price-notice">{(await vatPrefix(t)) + t.shippingNote}</p>
       </header>
       {products.length ? (
         <div className="pc-grid">

@@ -8,14 +8,15 @@ import { AdminTopbar } from "../AdminTopbar";
 import { ContactForm } from "./ContactForm";
 import { SiteImages } from "./SiteImages";
 import { AnalyticsForm } from "./AnalyticsForm";
+import { TrustForm } from "./TrustForm";
 
-export const metadata = { title: "Contacto, sedes e imagen del inicio" };
+export const metadata = { title: "Empresa, contacto e imagen" };
 
 export default function CompanyAdminPage() {
   return (
     <main className="shell">
       <AdminTopbar />
-      <h1>Contacto, sedes e imagen del inicio</h1>
+      <h1>Empresa, contacto e imagen del inicio</h1>
       <p className="muted lead">
         Lo que se guarda aquí aparece en todo el sitio: el botón flotante y los
         botones de WhatsApp usan la primera línea marcada como WhatsApp; el
@@ -40,7 +41,7 @@ async function Editor() {
     await Promise.all([
       supabase
         .from("company_settings")
-        .select("email, phones, home_benefits_image, analytics")
+        .select("email, phones, home_benefits_image, analytics, legal_name, nit, legal_address, founded_year, prices_include_vat, stats")
         .maybeSingle(),
       supabase
         .from("branches")
@@ -54,9 +55,25 @@ async function Editor() {
       </div>
     );
   const canEdit = can(session, "empresa.editar");
+  const { data: testimonials } = await supabase.from("testimonials").select("id, name, place, product, quote, consent, active").order("sort").order("created_at");
+  const stats = (company?.stats ?? {}) as Record<string, number>;
   const benefitsPath = company?.home_benefits_image ?? null;
   return (
     <>
+      <TrustForm
+        canEdit={canEdit}
+        testimonials={(testimonials ?? []).map((x) => ({ ...x, place: x.place ?? "", product: x.product ?? "" }))}
+        initial={{
+          legalName: company?.legal_name ?? "",
+          nit: company?.nit ?? "",
+          legalAddress: company?.legal_address ?? "",
+          foundedYear: company?.founded_year ? String(company.founded_year) : "",
+          vat: company?.prices_include_vat === true ? "si" : company?.prices_include_vat === false ? "no" : "",
+          equipos: stats.equipos ? String(stats.equipos) : "",
+          clientes: stats.clientes ? String(stats.clientes) : "",
+          municipios: stats.municipios ? String(stats.municipios) : "",
+        }}
+      />
       <SiteImages
         canEdit={canEdit}
         isDefault={!benefitsPath}

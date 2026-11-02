@@ -386,3 +386,32 @@ test("panel: leads y asesores exigen iniciar sesión", async ({ page }) => {
   await page.goto("/admin/asesores");
   await expect(page).toHaveURL(/\/admin\/login/);
 });
+
+test("política de contenido (CSP): las páginas principales no tienen bloqueos", async ({ page }) => {
+  const blocked: string[] = [];
+  page.on("console", (m) => {
+    if (/Content Security Policy|Refused to (load|execute|connect|frame)/i.test(m.text())) blocked.push(m.text());
+  });
+  const res = await page.goto("/es");
+  expect(res?.headers()["content-security-policy"]).toContain("frame-ancestors 'self'");
+  await page.mouse.wheel(0, 1500);
+  await page.waitForTimeout(800);
+  await page.goto("/es/videos");
+  await page.locator("button.video-thumb").first().click();
+  await expect(page.locator(".video-frame iframe")).toHaveCount(1);
+  await page.goto("/es/soporte");
+  await page.locator(".support-fab").click();
+  await page.locator(".support-opt.sopt-tk").click();
+  await expect(page.locator(".tk-panel")).toBeVisible();
+  await page.goto("/es/legal/terminos");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Términos y condiciones");
+  expect(blocked).toEqual([]);
+});
+
+test("términos: secciones de ley, enlace a la SIC y pie con términos", async ({ page }) => {
+  await page.goto("/es/legal/terminos");
+  await expect(page.locator(".legal-section")).toHaveCount(10);
+  await expect(page.locator(".legal-page")).toContainText("5 días hábiles");
+  await expect(page.locator('.legal-links a[href="https://www.sic.gov.co"]')).toHaveCount(1);
+  await expect(page.locator(`footer a[href="/es/legal/terminos"]`)).toHaveCount(1);
+});

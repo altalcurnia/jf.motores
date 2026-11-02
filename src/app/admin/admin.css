@@ -369,3 +369,11 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .edit-box input:not([type="checkbox"]), .edit-box select { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 14px; }
 .edit-box .row-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .sched { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* Datos legales y testimonios */
+.trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+.trust-panel input, .trust-panel select, .trust-panel textarea { background: #0d1014; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 14px; }
+.trust-h3 { margin: 18px 0 0; font-size: 15px; }
+.trust-item { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.trust-item p { margin: 4px 0; font-size: 14px; }
+.ok-text { color: var(--ok); }

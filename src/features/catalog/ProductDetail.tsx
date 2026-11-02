@@ -11,6 +11,7 @@ import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
 import { OwnerBanner, StatusPill } from "./owned";
 import { catalogPaths, fill, formatPrice, productHref, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
+import { vatPrefix } from "@/features/catalog/PriceNotice";
 
 const supabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL;
 
@@ -90,7 +91,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
 
           <div className="pd-price">
             <b>{price ?? t.askPrice}</b>
-            {price && <small>{t.shippingNote}</small>}
+            {price && <small>{(await vatPrefix(t)) + t.shippingNote}</small>}
             {p.warrantyMonths && <small className="pd-warranty">✓ {fill(t.warrantyMonths, { n: p.warrantyMonths })}</small>}
           </div>
           {p.status === "vendido" && <p className="pd-sold sold-note">{isPart ? t.outOfStockNotice : t.soldNotice}</p>}

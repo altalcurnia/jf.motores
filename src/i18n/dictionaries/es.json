@@ -379,6 +379,55 @@
         "h": "7. Cookies y medición",
         "p": "Usamos cookies propias necesarias: sesión, idioma, preferencias y un identificador anónimo con el que registramos tus solicitudes de cotización por WhatsApp (producto, país aproximado, dispositivo y la campaña por la que llegaste). Solo si las aceptas en el aviso de cookies usamos Google Analytics 4 y el Píxel de Meta para medir visitas y el rendimiento de nuestros anuncios. Puedes cambiar tu decisión cuando quieras en «Preferencias de cookies», al pie de la página."
       }
+    ],
+    "termsTitle": "Términos y condiciones",
+    "termsUpdated": "Última actualización: 1 de noviembre de 2026",
+    "terms": "Términos y condiciones",
+    "sic": "Superintendencia de Industria y Comercio",
+    "vatYes": "Los precios publicados incluyen IVA.",
+    "vatNo": "A los precios publicados se les suma el IVA.",
+    "vatUnknown": "El precio final con impuestos se confirma en la cotización escrita.",
+    "termsSections": [
+      {
+        "h": "1. Quién vende",
+        "p": "Este sitio lo opera {legalName} (nombre comercial JF Motores), NIT {nit}, con domicilio en {address}. Correo: {email}. WhatsApp y línea directa: {phone}."
+      },
+      {
+        "h": "2. Información de los productos",
+        "p": "Cada ficha muestra referencia, especificaciones, estado (disponible o vendido; en stock o sin stock) y garantía. Las fotos marcadas como «Imagen de referencia» son ilustrativas. Antes de comprar, un asesor confirma disponibilidad, especificaciones y compatibilidad para tu caso."
+      },
+      {
+        "h": "3. Precios",
+        "p": "Los precios están en pesos colombianos. {vat} El envío no está incluido y se cotiza aparte según el destino. Los precios publicados pueden cambiar; se respeta el precio de la cotización escrita durante su vigencia."
+      },
+      {
+        "h": "4. Cómo comprar y pagar",
+        "p": "La página no procesa pagos. La compra se acuerda con un asesor por WhatsApp o en nuestras sedes: recibes una cotización escrita con producto, precio, impuestos, envío, forma de pago y plazo de entrega. La compra queda en firme cuando aceptas la cotización y se registra el pago acordado. Cada venta queda registrada a tu nombre en Mi cuenta."
+      },
+      {
+        "h": "5. Envío y entrega",
+        "p": "El plazo de entrega y la transportadora se informan en la cotización. Al recibir, revisa el equipo antes de firmar la guía; si hay daños de transporte, déjalo anotado en la guía y escríbenos de inmediato."
+      },
+      {
+        "h": "6. Derecho de retracto",
+        "p": "Si compras a distancia (por WhatsApp, teléfono o la página, sin ir a una sede), puedes retractarte dentro de los 5 días hábiles siguientes a la entrega, según el artículo 47 de la Ley 1480 de 2011. Debes devolver el producto sin uso y en el mismo estado en que lo recibiste; el transporte de la devolución corre por tu cuenta. Te devolvemos el dinero, sin descuentos, en máximo 30 días calendario. No aplica a bienes fabricados o ajustados según tus especificaciones (por ejemplo, una motobomba armada a la medida de tu mina) ni a compras hechas en persona en nuestras sedes."
+      },
+      {
+        "h": "7. Garantía legal",
+        "p": "Todo producto nuevo tiene garantía legal de calidad, idoneidad y seguridad (Ley 1480 de 2011, artículos 7 y 8), aunque no se anuncie. El plazo es el que indica la ficha o la factura; si no se indica, es de un año para productos nuevos. Los productos usados o reconstruidos se identifican así en su ficha, con la garantía que se ofrece. La garantía no cubre daños por mal uso, falta del mantenimiento indicado en el manual, combustible contaminado, sobrecarga ni reparaciones hechas por terceros."
+      },
+      {
+        "h": "8. Cómo hacer efectiva la garantía",
+        "p": "Escríbenos con el número de serie (lo ves en Mi cuenta → Mis equipos) y fotos o video de la falla. Respondemos tu solicitud en máximo 15 días hábiles. Si procede, reparamos el equipo, lo cambiamos o te devolvemos el dinero, en los plazos que fija la ley."
+      },
+      {
+        "h": "9. Peticiones, quejas y reclamos",
+        "p": "Puedes presentarlos por WhatsApp al {phone}, al correo {email} o en nuestras sedes. Si no quedas conforme con la respuesta, puedes acudir a la Superintendencia de Industria y Comercio en www.sic.gov.co."
+      },
+      {
+        "h": "10. Datos personales y ley aplicable",
+        "p": "El tratamiento de tus datos se rige por nuestra Política de tratamiento de datos personales. Estos términos se rigen por las leyes de la República de Colombia."
+      }
     ]
   },
   "catalog": {
@@ -459,7 +508,9 @@
     "ownedBanner": "Este equipo es tuyo.",
     "ownedLink": "Ver en mis equipos",
     "compatibleFor": "Compatibles con tu {name}",
-    "warrantyMonths": "Garantía de {n} meses"
+    "warrantyMonths": "Garantía de {n} meses",
+    "vatIncluded": "IVA incluido.",
+    "vatExcluded": "Precio + IVA."
   },
   "notFound": {
     "title": "No encontramos esa página",
@@ -979,5 +1030,13 @@
     "necessary": "Solo necesarias",
     "policy": "Política de datos",
     "settings": "Preferencias de cookies"
+  },
+  "trust": {
+    "kicker": "Confianza",
+    "title": "Lo que dicen quienes ya trabajan con JF",
+    "years": "años en el mercado",
+    "equipos": "equipos entregados",
+    "clientes": "clientes atendidos",
+    "municipios": "municipios atendidos"
   }
 }

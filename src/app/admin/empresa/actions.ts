@@ -91,3 +91,82 @@ export async function saveAnalytics(input: { ga4: string; pixel: string }): Prom
   updateTag("company");
   return { ok: true };
 }
+
+export type TrustInput = {
+  legalName: string;
+  nit: string;
+  legalAddress: string;
+  foundedYear: string;
+  vat: "si" | "no" | "";
+  equipos: string;
+  clientes: string;
+  municipios: string;
+};
+
+async function editor() {
+  const session = await getSession();
+  if (!session || !session.role.isInternal || !can(session, "empresa.editar")) return null;
+  return await createSupabaseServerClient();
+}
+
+/** Razón social, NIT, dirección legal, año de fundación, IVA y cifras. Vacío = no se muestra. */
+export async function saveTrust(input: TrustInput): Promise<SaveResult> {
+  const supabase = await editor();
+  if (!supabase) return { ok: false, error: "No tienes permiso para editar los datos de la empresa." };
+  const nit = input.nit.replace(/[^\d-]/g, "");
+  if (nit && !/^\d{6,12}(-\d)?$/.test(nit)) return { ok: false, error: "El NIT debe verse como 900123456-7." };
+  const year = input.foundedYear.trim() ? Number(input.foundedYear) : null;
+  if (year !== null && (!Number.isInteger(year) || year < 1950 || year > new Date().getFullYear())) {
+    return { ok: false, error: "Revisa el año de fundación." };
+  }
+  const stats: Record<string, number> = {};
+  for (const k of ["equipos", "clientes", "municipios"] as const) {
+    const v = input[k].replace(/\D/g, "");
+    if (v) stats[k] = Math.min(1_000_000, Number(v));
+  }
+  const { error } = await supabase
+    .from("company_settings")
+    .update({
+      legal_name: input.legalName.trim().slice(0, 120) || null,
+      nit: nit || null,
+      legal_address: input.legalAddress.trim().slice(0, 160) || null,
+      founded_year: year,
+      prices_include_vat: input.vat === "si" ? true : input.vat === "no" ? false : null,
+      stats,
+    })
+    .eq("id", true);
+  if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
+  updateTag("company");
+  return { ok: true };
+}
+
+export type TestimonialInput = { id: string | null; name: string; place: string; product: string; quote: string; consent: boolean; active: boolean };
+
+/** Testimonio real; solo se publica si el cliente dio permiso (consent). */
+export async function saveTestimonial(t: TestimonialInput): Promise<SaveResult> {
+  const supabase = await editor();
+  if (!supabase) return { ok: false, error: "No tienes permiso." };
+  const row = {
+    name: t.name.trim().slice(0, 80),
+    place: t.place.trim().slice(0, 100) || null,
+    product: t.product.trim().slice(0, 80) || null,
+    quote: t.quote.trim().slice(0, 600),
+    consent: t.consent,
+    active: t.active,
+  };
+  if (row.name.length < 2) return { ok: false, error: "Escribe el nombre del cliente." };
+  if (row.quote.length < 10) return { ok: false, error: "El testimonio es muy corto." };
+  const { error } = t.id ? await supabase.from("testimonials").update(row).eq("id", t.id) : await supabase.from("testimonials").insert(row);
+  if (error) return { ok: false, error: error.message };
+  updateTag("company");
+  return { ok: true };
+}
+
+export async function deleteTestimonial(id: string): Promise<SaveResult> {
+  const supabase = await editor();
+  if (!supabase) return { ok: false, error: "No tienes permiso." };
+  const { error } = await supabase.from("testimonials").delete().eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  updateTag("company");
+  return { ok: true };
+}

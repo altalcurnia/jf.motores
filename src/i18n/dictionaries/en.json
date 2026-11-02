@@ -379,6 +379,55 @@
         "h": "7. Cookies and measurement",
         "p": "We use our own necessary cookies: session, language, preferences and an anonymous identifier we use to record your WhatsApp quote requests (product, approximate country, device and the campaign that brought you). Only if you accept them in the cookie notice do we use Google Analytics 4 and the Meta Pixel to measure visits and ad performance. You can change your choice at any time in “Cookie preferences” at the bottom of the page."
       }
+    ],
+    "termsTitle": "Terms and conditions",
+    "termsUpdated": "Last updated: November 1, 2026",
+    "terms": "Terms and conditions",
+    "sic": "Superintendence of Industry and Commerce (SIC)",
+    "vatYes": "Published prices include VAT.",
+    "vatNo": "VAT is added to the published prices.",
+    "vatUnknown": "The final price including taxes is confirmed in the written quote.",
+    "termsSections": [
+      {
+        "h": "1. Who sells",
+        "p": "This site is operated by {legalName} (trade name JF Motores), tax ID (NIT) {nit}, located at {address}. Email: {email}. WhatsApp and direct line: {phone}."
+      },
+      {
+        "h": "2. Product information",
+        "p": "Each product page shows reference, specifications, status (available or sold; in stock or out of stock) and warranty. Photos marked “Reference image” are illustrative. Before you buy, an advisor confirms availability, specifications and compatibility for your case."
+      },
+      {
+        "h": "3. Prices",
+        "p": "Prices are in Colombian pesos. {vat} Shipping is not included and is quoted separately by destination. Published prices may change; the price in your written quote is honored while it is valid."
+      },
+      {
+        "h": "4. How to buy and pay",
+        "p": "The site does not process payments. Purchases are agreed with an advisor on WhatsApp or at our branches: you get a written quote with product, price, taxes, shipping, payment method and delivery time. The purchase is final once you accept the quote and the agreed payment is recorded. Every sale is registered under your name in My account."
+      },
+      {
+        "h": "5. Shipping and delivery",
+        "p": "Delivery time and carrier are stated in the quote. On delivery, check the equipment before signing the waybill; if there is transport damage, note it on the waybill and contact us right away."
+      },
+      {
+        "h": "6. Right of withdrawal",
+        "p": "If you buy remotely (WhatsApp, phone or the site, without visiting a branch), you may withdraw within 5 business days after delivery, under article 47 of Colombian Law 1480 of 2011. Return the product unused and in the condition you received it; return shipping is at your expense. We refund the money, without deductions, within 30 calendar days. It does not apply to goods made or adjusted to your specifications (for example, a pump set built for your mine) or to in-person purchases at our branches."
+      },
+      {
+        "h": "7. Legal warranty",
+        "p": "Every new product has a legal warranty of quality, fitness and safety (Law 1480 of 2011, articles 7 and 8), even if not advertised. The term is the one stated on the product page or invoice; if none is stated, it is one year for new products. Used or rebuilt products are identified as such on their page, with the warranty offered. The warranty does not cover damage from misuse, lack of the maintenance indicated in the manual, contaminated fuel, overload or repairs by third parties."
+      },
+      {
+        "h": "8. How to claim the warranty",
+        "p": "Write to us with the serial number (see My account → My equipment) and photos or video of the fault. We answer within 15 business days at most. If it applies, we repair, replace or refund the product within the legal terms."
+      },
+      {
+        "h": "9. Requests, complaints and claims",
+        "p": "You can file them on WhatsApp at {phone}, by email at {email} or at our branches. If you are not satisfied with the answer, you can contact Colombia's Superintendence of Industry and Commerce at www.sic.gov.co."
+      },
+      {
+        "h": "10. Personal data and governing law",
+        "p": "The processing of your data is governed by our Personal Data Policy. These terms are governed by the laws of the Republic of Colombia."
+      }
     ]
   },
   "catalog": {
@@ -459,7 +508,9 @@
     "ownedBanner": "This unit is yours.",
     "ownedLink": "See it in my equipment",
     "compatibleFor": "Compatible with your {name}",
-    "warrantyMonths": "{n}-month warranty"
+    "warrantyMonths": "{n}-month warranty",
+    "vatIncluded": "VAT included.",
+    "vatExcluded": "Price + VAT."
   },
   "notFound": {
     "title": "We couldn't find that page",
@@ -979,5 +1030,13 @@
     "necessary": "Necessary only",
     "policy": "Privacy policy",
     "settings": "Cookie preferences"
+  },
+  "trust": {
+    "kicker": "Trust",
+    "title": "What people already working with JF say",
+    "years": "years in business",
+    "equipos": "units delivered",
+    "clientes": "customers served",
+    "municipios": "municipalities served"
   }
 }

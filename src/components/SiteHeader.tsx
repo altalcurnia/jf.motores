@@ -55,6 +55,7 @@ export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dicti
               links: [
                 { href: l("/cuenta"), label: dict.account.myAccount },
                 { href: l("/legal/privacidad"), label: dict.footer.privacy },
+                { href: l("/legal/terminos"), label: dict.legal.terms },
               ],
             },
           ]}

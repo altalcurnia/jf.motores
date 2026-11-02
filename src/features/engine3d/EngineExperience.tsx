@@ -77,7 +77,18 @@ export function EngineExperience({ locale, t }: Props) {
     let cleanup: (() => void) | undefined;
     let cancelled = false;
 
-    import("./engine.js")
+    // El 3D se descarga cuando la página ya pintó y el navegador está libre: el texto y los
+    // botones responden de inmediato, también en celulares lentos
+    const whenIdle = () =>
+      new Promise<void>((resolve) => {
+        const go = () =>
+          "requestIdleCallback" in window ? window.requestIdleCallback(() => resolve(), { timeout: 1500 }) : setTimeout(resolve, 200);
+        if (document.readyState === "complete") go();
+        else window.addEventListener("load", go, { once: true });
+      });
+
+    whenIdle()
+      .then(() => (cancelled ? Promise.reject(new Error("cancelled")) : import("./engine.js")))
       .then(({ startEngine }) => {
         if (cancelled) return;
         try {
@@ -111,7 +122,9 @@ export function EngineExperience({ locale, t }: Props) {
           console.warn("Motor 3D no disponible", err);
         }
       })
-      .catch((err) => console.warn("No se pudo cargar el motor 3D", err));
+      .catch((err) => {
+        if (!cancelled) console.warn("No se pudo cargar el motor 3D", err);
+      });
 
     return () => {
       cancelled = true;

@@ -7,6 +7,7 @@ import { Arrow } from "@/components/Arrow";
 import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
 import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
+import { TrustSection } from "@/components/TrustSection";
 
 // Ilustración de referencia local (public/demo). Se reemplaza por una foto real de la empresa.
 
@@ -173,6 +174,8 @@ export default async function HomePage() {
       </section>
 
       <FeaturedProducts locale={locale} dict={dict} />
+
+      <TrustSection locale={locale} dict={dict} />
 
       <section className="block" id="contacto">
         <div className="sk reveal">{dict.contact.kicker}</div>

@@ -8,6 +8,7 @@ import { getCatalog, getCatalogData } from "./data";
 import { CatalogFilters } from "./CatalogFilters";
 import { ProductCard } from "./ProductCard";
 import { catalogPaths, fill, filterProducts, parseCatalogQuery, tr, type CatalogType } from "./shared";
+import { vatPrefix } from "@/features/catalog/PriceNotice";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Tab = CatalogType | "all";
@@ -45,7 +46,7 @@ export async function CatalogListing({ catalog, searchParams }: { catalog: Tab; 
         <div className="sk">{dict.catalogs.kicker}</div>
         <h1>{item.title}</h1>
         <p>{item.desc}</p>
-        <p className="price-notice">{dict.catalog.shippingNote}</p>
+        <p className="price-notice">{(await vatPrefix(dict.catalog)) + dict.catalog.shippingNote}</p>
       </header>
       <Suspense fallback={<GridSkeleton />}>
         <Results catalog={catalog} searchParams={searchParams} />

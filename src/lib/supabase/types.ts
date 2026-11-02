@@ -36,6 +36,12 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["ai_settings"]["Insert"]>;
         Relationships: [];
       };
+      testimonials: {
+        Row: { active: boolean; consent: boolean; created_at: string; id: string; name: string; place: string | null; product: string | null; quote: string; sort: number };
+        Insert: { active?: boolean; consent?: boolean; created_at?: string; id?: string; name: string; place?: string | null; product?: string | null; quote: string; sort?: number };
+        Update: Partial<Database["public"]["Tables"]["testimonials"]["Insert"]>;
+        Relationships: [];
+      };
       tickets: {
         Row: {
           created_at: string;
@@ -271,7 +277,10 @@ export type Database = {
         Row: {
           analytics: Json;
           email: string | null;
+          founded_year: number | null;
           home_benefits_image: string | null;
+          legal_address: string | null;
+          prices_include_vat: boolean | null;
           id: boolean;
           legal_name: string | null;
           nit: string | null;
@@ -285,7 +294,10 @@ export type Database = {
         Insert: {
           analytics?: Json;
           email?: string | null;
+          founded_year?: number | null;
           home_benefits_image?: string | null;
+          legal_address?: string | null;
+          prices_include_vat?: boolean | null;
           id?: boolean;
           legal_name?: string | null;
           nit?: string | null;

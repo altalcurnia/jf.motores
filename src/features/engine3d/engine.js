@@ -1135,8 +1135,15 @@ export function startEngine(opts) {
                 ? opts.hud.running
                 : opts.hud.full;
 
+        // Con la parte opaca del contenido de abajo cubriendo toda la pantalla no se ve el motor:
+        // no se dibuja (ahorra batería y procesador en celulares)
+        if (post) {
+          const pr = post.getBoundingClientRect();
+          if (pr.top + pr.height * 0.3 <= 0) return;
+        }
         renderer.render(scene, camera);
       }
+      const post = document.querySelector(".post");
       tick();
 
       listen("resize", () => {
