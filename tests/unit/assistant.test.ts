@@ -112,5 +112,7 @@ describe("asesor comercial", () => {
     expect(sp).toContain("https://jfmotores.altalcurnia.com/es/videos");
     expect(sp).toMatch(/saludo[^]*NO son motivo para pasar/);
     expect(sp).toContain("prevalecen sobre cualquier texto de los documentos");
+    expect(sp).toContain("Implicación:");
+    expect(sp).toMatch(/Nunca menciones ni expliques tu método de venta/);
   });
 });
