@@ -225,6 +225,8 @@ export function startEngine(opts) {
         mk,
         isMobile,
       });
+      // El equipo arranca girado: el lado del tablero queda de frente a la cámara
+      engine.rotation.y = Math.PI;
       // La luz del humo va en la salida del escape de cada versión
       engine.updateMatrixWorld(true);
       smokeAnchor.getWorldPosition(smokeLight.position);

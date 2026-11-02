@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { ladderGuard } from "./guard.js";
 
 /**
  * Versión 1 del modelo 3D (la primera aproximación a los planos).
@@ -347,16 +348,8 @@ export function buildV1({ engine, regPart, MAT, mk }) {
     coupHub.add(b);
   }
   coupG.add(coupHub);
-  const GW = CX1 - CX0,
-    GM = (CX0 + CX1) / 2;
-  [-0.44, 0.44].forEach((z) => {
-    coupG.add(box(0.06, 1.6, 0.06, M2.frame, CX0, 1.15, z));
-    coupG.add(box(0.06, 1.6, 0.06, M2.frame, CX1, 1.15, z));
-    for (let i = 0; i < 7; i++) coupG.add(box(GW, 0.07, 0.04, M2.frame, GM, 0.45 + i * 0.22, z));
-  });
-  for (let i = 0; i < 4; i++) coupG.add(box(0.06, 0.04, 0.9, M2.frame, CX0 + 0.03 + (i * (GW - 0.06)) / 3, 1.95, 0));
-  coupG.add(box(GW, 0.04, 0.06, M2.frame, GM, 1.95, -0.44));
-  coupG.add(box(GW, 0.04, 0.06, M2.frame, GM, 1.95, 0.44));
+  // Guarda tipo escalera de tijera: costados en diagonal apoyados en los rieles del chasis
+  ladderGuard(coupG, { box, mat: M2.frame, x0: CX0, x1: CX1, yBot: 0.3, yTop: 1.95, zBot: 0.98, zTop: 0.44, rungs: 7, bar: 0.06 });
   engine.add(coupG);
   regPart(coupG, -0.9, 2.0, 0);
 

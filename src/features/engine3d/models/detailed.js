@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { ladderGuard } from "./guard.js";
 
 /**
  * Modelo detallado de la motobomba, medido sobre los planos (vista lateral, trasera y frontal).
@@ -492,27 +493,8 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
     coupHub.add(b);
   }
   coupG.add(coupHub);
-  const GY0 = 0.52,
-    GY1 = 2.55,
-    GZB = 0.78,
-    GZT = 0.5;
-  [-1, 1].forEach((s) => {
-    // largueros inclinados (más anchos abajo)
-    [GX0 + 0.04, GX1 - 0.04].forEach((x) => {
-      const post = box(0.08, GY1 - GY0 + 0.05, 0.08, P.frame, x, (GY0 + GY1) / 2, s * ((GZB + GZT) / 2), 0.01);
-      post.rotation.x = s * Math.atan2(GZB - GZT, GY1 - GY0);
-      coupG.add(post);
-    });
-    // peldaños
-    for (let i = 0; i < 8; i++) {
-      const y = GY0 + 0.12 + (i * (GY1 - GY0 - 0.2)) / 7;
-      const zz = GZB - ((y - GY0) / (GY1 - GY0)) * (GZB - GZT);
-      coupG.add(box(GL, 0.1, 0.05, P.frame, GXM, y, s * zz, 0.01));
-    }
-    coupG.add(box(GL + 0.04, 0.05, 0.08, P.frame, GXM, GY1, s * GZT, 0.01));
-    coupG.add(box(GL + 0.04, 0.06, 0.12, P.frame, GXM, GY0, s * GZB, 0.01));
-  });
-  for (let i = 0; i < 5; i++) coupG.add(box(0.07, 0.05, GZT * 2, P.frame, GX0 + 0.04 + (i * (GL - 0.08)) / 4, GY1, 0, 0.01));
+  // Guarda tipo escalera de tijera: costados en diagonal apoyados en los rieles del chasis
+  ladderGuard(coupG, { box, mat: P.frame, x0: GX0, x1: GX1, yBot: 0.4, yTop: 2.55, zBot: 1.3, zTop: 0.5, rungs: 8, bar: 0.08 });
   engine.add(coupG);
   regPart(coupG, -0.8, 2.0, 0);
 
