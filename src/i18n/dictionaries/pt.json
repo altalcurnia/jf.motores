@@ -158,7 +158,8 @@
     "running": "REGIME",
     "full": "CARGA TOTAL",
     "rpm": "RPM",
-    "temp": "Temp"
+    "temp": "Temp",
+    "oil": "Óleo"
   },
   "rail": {
     "a": "Partida",

@@ -600,6 +600,10 @@ export function startEngine(opts) {
       const tmpArc = document.getElementById("tmpArc");
       const txtRpm = document.getElementById("txtRpm");
       const txtTemp = document.getElementById("txtTemp");
+      const needleOil = document.getElementById("needleOil");
+      const oilArc = document.getElementById("oilArc");
+      const txtOil = document.getElementById("txtOil");
+      const hudKey = document.getElementById("hudKey");
       const bigRpm = document.getElementById("bigRpm");
       const stTorque = document.getElementById("stTorque");
       const stTemp = document.getElementById("stTemp");
@@ -812,10 +816,11 @@ export function startEngine(opts) {
         const oil = R.rpm > 0.01 ? 0.25 + 0.65 * Math.min(1, R.rpm / 0.7) : 0; // presión de aceite
         oilP += (oil - oilP) * Math.min(1, dt * 3);
         tNeedles[2].rotation.z = dial(oilP + noise(t, 10) * 0.01 * run);
+        // Llave: apagado (0) → arranque mientras el motor gira despacio → marcha
+        const keyGoal = R.rpm < 0.01 ? 0 : R.rpm < 0.1 ? 1.35 : 0.85;
+        keyA += (keyGoal - keyA) * Math.min(1, dt * 6);
+        if (hudKey) hudKey.setAttribute("transform", "rotate(" + (keyA * 57.3).toFixed(1) + " 30 30)");
         if (controls) {
-          // Llave: apagado (0) → arranque mientras el motor gira despacio → marcha
-          const keyGoal = R.rpm < 0.01 ? 0 : R.rpm < 0.1 ? 1.35 : 0.85;
-          keyA += (keyGoal - keyA) * Math.min(1, dt * 6);
           controls.key.rotation.z = -keyA;
           // Acelerador: de ralentí a plena carga según las rpm
           controls.lever.rotation.z = controls.leverIdle - R.rpm * 0.75;
@@ -865,23 +870,20 @@ export function startEngine(opts) {
         heat += (R.rpm - heat) * dt * 0.25;
         const rpmVal = Math.round(R.rpm * 2400 + noise(t, 11) * 30 * run);
         const tempVal = Math.round(21 + heat * 74);
-        const ang =
-          -80 +
-          THREE.MathUtils.clamp(R.rpm, 0, 1) * 160 +
-          noise(t, 12) * 3 * run;
-        needleRpm.setAttribute("transform", "rotate(" + ang + " 60 66)");
-        rpmArc.style.strokeDashoffset =
-          151 - THREE.MathUtils.clamp(R.rpm, 0, 1) * 151;
-        needleTemp.setAttribute(
-          "transform",
-          "rotate(" +
-            (-80 + THREE.MathUtils.clamp(heat, 0, 1) * 160) +
-            " 60 66)",
-        );
-        tmpArc.style.strokeDashoffset =
-          151 - THREE.MathUtils.clamp(heat, 0, 1) * 151;
+        // Tablero de la pantalla (3 relojes redondos, escala de 240°): rpm, temperatura y aceite
+        const hudDial = (needle, arc, f, jitter) => {
+          const v = THREE.MathUtils.clamp(f, 0, 1);
+          needle.setAttribute("transform", "rotate(" + (-120 + v * 240 + jitter).toFixed(2) + " 50 50)");
+          arc.style.strokeDashoffset = String(151 - v * 151);
+        };
+        hudDial(needleRpm, rpmArc, R.rpm, noise(t, 12) * 3 * run);
+        hudDial(needleTemp, tmpArc, heat, 0);
         txtRpm.textContent = rpmVal;
         txtTemp.textContent = tempVal + "°";
+        if (needleOil) {
+          hudDial(needleOil, oilArc, oilP, noise(t, 13) * 1.5 * run);
+          txtOil.textContent = (oilP * 5).toFixed(1);
+        }
         bigRpm.textContent = String(Math.max(0, rpmVal)).padStart(4, "0");
         // El celular de la tarjeta "app" muestra las mismas rpm que el motor
         if (phoneRpm) phoneRpm.textContent = String(Math.max(0, rpmVal));

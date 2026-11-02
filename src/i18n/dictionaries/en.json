@@ -158,7 +158,8 @@
     "running": "RUNNING",
     "full": "FULL LOAD",
     "rpm": "RPM",
-    "temp": "Temp"
+    "temp": "Temp",
+    "oil": "Oil"
   },
   "rail": {
     "a": "Start-up",

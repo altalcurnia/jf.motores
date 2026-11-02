@@ -140,9 +140,10 @@
   :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard.jcard-parts {
     bottom: calc(var(--lbh, 0px) + 60px);
   }
-  /* La tarjeta del rpm ya muestra los valores: el tacómetro sobra */
+  /* Tablero de relojes: encima de la tarjeta «plena carga», a la izquierda */
   :root:is([data-brand="nueva"], [data-brand="roja"]) #hud {
-    display: none;
+    left: 4vw;
+    bottom: calc(var(--lbh, 0px) + 250px);
   }
   /* App: tarjeta compacta abajo y la mano con el teléfono encima, bajo el equipo */
   :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app p {

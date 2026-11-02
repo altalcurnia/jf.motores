@@ -175,9 +175,11 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
   useEffect(() => {
     document.body.classList.toggle("parts-open", exploded);
     document.body.classList.toggle("app-open", appOn);
+    // El tablero de relojes acompaña a la tarjeta «plena carga»
+    document.body.classList.toggle("stage-b", active && stage === "b");
     if (!exploded) engineRef.current?.highlight?.(null);
-    return () => document.body.classList.remove("parts-open", "app-open");
-  }, [exploded, appOn]);
+    return () => document.body.classList.remove("parts-open", "app-open", "stage-b");
+  }, [exploded, appOn, active, stage]);
 
   function lightPart(part: string | null) {
     if (sheet) return; // con una pieza elegida, la resaltada es esa
@@ -361,13 +363,32 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
         ))}
       </div>
 
+      {/* Tablero como el de la motobomba real: 3 relojes en columna (rpm, temperatura del agua,
+          presión de aceite) y la llave de encendido abajo */}
       <div id="hud" aria-hidden="true">
         <div className="hud-state">
           {t.hud.state}
           <b id="hudState">{t.hud.standby}</b>
         </div>
-        <Gauge arcId="rpmArc" needleId="needleRpm" textId="txtRpm" color="#F7C600" text="0" label={t.hud.rpm} ticks />
-        <Gauge arcId="tmpArc" needleId="needleTemp" textId="txtTemp" color="#ff7a45" text="21°" label={t.hud.temp} />
+        <div className="hud-panel">
+          <Dial arcId="rpmArc" needleId="needleRpm" textId="txtRpm" color="#F7C600" text="0" unit="×1" label={t.hud.rpm} max="2400" />
+          <Dial arcId="tmpArc" needleId="needleTemp" textId="txtTemp" color="#ff7a45" text="21°" unit="°C" label={t.hud.temp} max="95" />
+          <Dial arcId="oilArc" needleId="needleOil" textId="txtOil" color="#4fb3ff" text="0.0" unit="bar" label={t.hud.oil} max="5" />
+          <div className="hud-key">
+            <svg viewBox="0 0 60 60">
+              <circle cx="30" cy="30" r="22" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.28)" strokeWidth="1.5" />
+              <circle cx="30" cy="30" r="15" fill="none" stroke="#c9a24e" strokeWidth="1.5" opacity="0.8" />
+              {/* posiciones: apagado, marcha, arranque */}
+              <text x="30" y="7" textAnchor="middle" className="hk-t">OFF</text>
+              <text x="54" y="20" textAnchor="middle" className="hk-t">ON</text>
+              <text x="54" y="46" textAnchor="middle" className="hk-t">ST</text>
+              <g id="hudKey">
+                <rect x="27" y="12" width="6" height="36" rx="2.5" fill="#c9a24e" />
+                <circle cx="30" cy="30" r="4" fill="#0b0d10" />
+              </g>
+            </svg>
+          </div>
+        </div>
       </div>
 
       <div id="rail" aria-hidden="true">
@@ -419,56 +440,43 @@ function MiniRemote({ on, p, s }: { on: boolean; p: number; s: Dictionary["journ
   );
 }
 
-function Gauge(props: {
-  arcId: string;
-  needleId: string;
-  textId: string;
-  color: string;
-  text: string;
-  label: string;
-  ticks?: boolean;
-}) {
-  const arc = "M12 66 A50 50 0 0 1 108 66";
+/** Reloj redondo de tablero (escala de 240°, en vector y transparente). El motor 3D mueve la aguja y el arco. */
+function Dial(props: { arcId: string; needleId: string; textId: string; color: string; text: string; unit: string; label: string; max: string }) {
+  // Arco de 240° (de −120° a +120°), radio 36 → largo ≈ 151 (lo usa el motor para el relleno)
+  const arc = "M 18.82 68 A 36 36 0 1 1 81.18 68";
+  const ticks = Array.from({ length: 9 }, (_, i) => -120 + i * 30);
   return (
-    <div className="gauge">
-      <svg viewBox="0 0 120 74">
-        <path d={arc} fill="none" stroke="#23282e" strokeWidth="6" strokeLinecap="round" />
-        <path
-          id={props.arcId}
-          d={arc}
-          fill="none"
-          stroke={props.color}
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeDasharray="151"
-          strokeDashoffset="151"
-        />
-        {props.ticks && (
-          <g stroke="#5a636d" strokeWidth="2">
-            <line x1="14" y1="62" x2="20" y2="59" />
-            <line x1="24" y1="38" x2="29" y2="41" />
-            <line x1="45" y1="22" x2="47" y2="27" />
-            <line x1="73" y1="22" x2="71" y2="27" />
-            <line x1="96" y1="38" x2="91" y2="41" />
-            <line x1="106" y1="62" x2="100" y2="59" />
-          </g>
-        )}
-        <line
-          id={props.needleId}
-          x1="60"
-          y1="66"
-          x2="60"
-          y2="24"
-          stroke={props.color}
-          strokeWidth="3"
-          strokeLinecap="round"
-          transform="rotate(-80 60 66)"
-        />
-        <circle cx="60" cy="66" r="5" fill={props.color} />
+    <div className="gauge dial">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="47" fill="rgba(10,12,15,0.35)" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" />
+        <circle cx="50" cy="50" r="43" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+        <path d={arc} fill="none" stroke="#23282e" strokeWidth="5" strokeLinecap="round" />
+        <path id={props.arcId} d={arc} fill="none" stroke={props.color} strokeWidth="5" strokeLinecap="round" strokeDasharray="151" strokeDashoffset="151" />
+        {ticks.map((a, i) => {
+          const r = (a * Math.PI) / 180;
+          const r1 = i % 2 === 0 ? 39 : 40.5;
+          return (
+            <line
+              key={a}
+              x1={50 + Math.sin(r) * r1}
+              y1={50 - Math.cos(r) * r1}
+              x2={50 + Math.sin(r) * 43}
+              y2={50 - Math.cos(r) * 43}
+              stroke={i === 8 ? props.color : "#5a636d"}
+              strokeWidth={i % 2 === 0 ? 1.8 : 1}
+            />
+          );
+        })}
+        <text x="18" y="84" className="d-min">0</text>
+        <text x="82" y="84" textAnchor="end" className="d-min">{props.max}</text>
+        <line id={props.needleId} x1="50" y1="56" x2="50" y2="20" stroke={props.color} strokeWidth="2.4" strokeLinecap="round" transform="rotate(-120 50 50)" />
+        <circle cx="50" cy="50" r="5" fill={props.color} />
+        <circle cx="50" cy="50" r="2" fill="#0b0d10" />
+        <text x="50" y="74" textAnchor="middle" className="d-val" id={props.textId} style={{ fill: props.color }}>
+          {props.text}
+        </text>
+        <text x="50" y="86" textAnchor="middle" className="d-unit">{props.unit}</text>
       </svg>
-      <div className="gv" id={props.textId} style={props.color !== "#F7C600" ? { color: props.color } : undefined}>
-        {props.text}
-      </div>
       <div className="gt">{props.label}</div>
     </div>
   );

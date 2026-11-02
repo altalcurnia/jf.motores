@@ -158,7 +158,8 @@
     "running": "RÉGIMEN",
     "full": "PLENA CARGA",
     "rpm": "RPM",
-    "temp": "Temp"
+    "temp": "Temp",
+    "oil": "Aceite"
   },
   "rail": {
     "a": "Encendido",

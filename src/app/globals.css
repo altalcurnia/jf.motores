@@ -1238,3 +1238,30 @@ body.in-journey.app-open #hud { opacity: 0; }
   body.part-focus-open .support { display: none; }
   .part-focus p { font-size: 13px; }
 }
+
+/* Tablero de la pantalla: 3 relojes redondos en columna + llave (como el tablero real) */
+#hud .hud-panel {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 8px 8px;
+  border-radius: 12px; background: rgba(10, 12, 15, 0.38); border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+}
+#hud .gauge.dial { background: none; border: 0; padding: 0; backdrop-filter: none; }
+#hud .gauge.dial svg { width: 80px; height: 80px; }
+/* En su esquina (abajo a la izquierda), solo durante «plena carga» */
+body.in-journey:not(.stage-b) #hud { opacity: 0; transform: translateY(20px); }
+#hud .gauge.dial .gt { font-size: 8px; letter-spacing: 0.22em; margin-top: -2px; }
+.dial .d-val { font-family: var(--mono); font-weight: 700; font-size: 11px; }
+.dial .d-unit { font-family: var(--mono); font-size: 6.5px; fill: var(--mut); letter-spacing: 0.1em; }
+.dial .d-min { font-family: var(--mono); font-size: 6px; fill: #5a636d; }
+.hud-key svg { width: 44px; height: 44px; display: block; }
+.hud-key .hk-t { font-family: var(--mono); font-size: 6px; fill: var(--mut); }
+/* Celular: vertical como el tablero real, solo más chico */
+@media (max-width: 760px) {
+  #hud .hud-panel { padding: 5px 5px 4px; gap: 2px; border-radius: 9px; }
+  #hud .gauge.dial svg { width: 44px; height: 44px; }
+  #hud .gauge.dial .gt { font-size: 6px; letter-spacing: 0.12em; margin-top: -1px; }
+  .hud-key svg { width: 26px; height: 26px; }
+}
+@media (min-width: 761px) and (max-height: 760px) {
+  #hud .gauge.dial svg { width: 58px; height: 58px; }
+}
