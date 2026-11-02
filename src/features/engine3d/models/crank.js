@@ -73,7 +73,6 @@ export function buildCrankTrain(o) {
   jx.forEach((x) => crankRot.add(cyl(journalR, pitch - pinLen - webT * 2 + 0.02, polished, x, 0, 0)));
   // punta delantera con engranaje/polea y brida trasera para el volante
   crankRot.add(cyl(journalR * 0.8, pitch * 0.6, polished, jx[jx.length - 1] + pitch * 0.4, 0, 0));
-  crankRot.add(cyl(journalR * 1.9, pitch * 0.08, forged, jx[jx.length - 1] + pitch * 0.62, 0, 0));
   crankRot.add(cyl(journalR * 2.2, pitch * 0.12, forged, jx[0] - pitch * 0.26, 0, 0));
   // cojinetes de bancada (fijos, semitransparentes al ver por dentro)
   jx.forEach((x) => {
@@ -149,5 +148,8 @@ export function buildCrankTrain(o) {
   }
   update(0);
 
-  return { crankG, pistonG, update, tdcCrown: y0 + r + l + crown };
+  /** Altura de la cabeza del pistón i (en coordenadas del motor, sin despiece). */
+  const crownY = (i) => pistons[i].position.y + crown;
+
+  return { crankG, pistonG, update, crownY, tdcCrown: y0 + r + l + crown };
 }

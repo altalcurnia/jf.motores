@@ -236,7 +236,10 @@
     "inyeccion": "Injection & throttle",
     "carter": "Oil pan",
     "soportes": "Engine mounts",
-    "ciguenal": "Crankshaft"
+    "ciguenal": "Crankshaft",
+    "distribucion": "Timing gears & camshaft",
+    "valvulas": "Valves & rocker arms",
+    "alternador": "Alternator & belt"
   },
   "partPage": {
     "title": "Spare parts: ",

@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { ladderGuard } from "./guard.js";
 import { buildCrankTrain } from "./crank.js";
+import { buildValvetrain } from "./valvetrain.js";
 
 /**
  * Modelo detallado de la motobomba, medido sobre los planos (vista lateral, trasera y frontal).
@@ -167,7 +168,7 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
     cageG.add(ch);
     // Tirante diagonal hacia el radiador y pie de apoyo
     const br = box(0.16, 1.7, 0.16, P.frame, PX + 0.62, 1.1, s * PZ, 0.02);
-    br.rotation.z = -0.72;
+    br.rotation.z = 0.72; // refuerzo: del poste (arriba) al chasis (abajo)
     cageG.add(br);
     cageG.add(box(0.5, 0.06, 0.5, P.frame, PX, 0.43, s * PZ, 0.01));
   });
@@ -207,9 +208,7 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
   blockG.add(bolts(12, 0.88, 0.08, MAT.dark, EX0 - 0.44, AX, 0, "x", 0.03));
   // tapa de distribución, bomba de agua y polea
   blockG.add(box(0.16, 1.25, EW * 2 - 0.1, P.yellowDk, EX1 + 0.08, 2.25, 0, 0.04));
-  blockG.add(cyl(0.26, 0.26, 0.1, MAT.dark, EX1 + 0.22, AX, 0, "x", 30));
   blockG.add(cyl(0.18, 0.2, 0.3, P.yellow, EX1 + 0.18, 2.55, 0.25, "x", 22));
-  blockG.add(cyl(0.16, 0.16, 0.1, MAT.dark, EX1 + 0.3, 2.55, 0.25, "x", 22));
   // filtro de aceite y varilla
   blockG.add(cyl(0.15, 0.15, 0.36, MAT.dark, 0.7, 1.95, EW + 0.18, "z", 22));
   blockG.add(cyl(0.02, 0.02, 0.6, P.yellowDk, 1.4, 2.4, EW + 0.05, null, 8));
@@ -236,7 +235,7 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
   const crank = buildCrankTrain({ mk, MAT, cylX: CYL_X, y0: AX, r: 0.19, l: 0.64, bore: 0.22, crown: 0.17 });
   const pistonG = crank.pistonG;
   engine.add(pistonG);
-  regPart(pistonG, 0, 2.5, 0);
+  regPart(pistonG, 0, 1.6, 0);
   engine.add(crank.crankG);
   regPart(crank.crankG, 0, 0, 3.5);
 
@@ -257,7 +256,24 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
   // caja del termostato (recibe la manguera roja)
   headG.add(box(0.26, 0.22, 0.3, P.yellowDk, EX1 - 0.12, 3.25, -0.25, 0.04));
   engine.add(headG);
-  regPart(headG, 0, 2.6, 0);
+  regPart(headG, 0, 3.4, 0);
+
+  /* ---------- DISTRIBUCIÓN, VÁLVULAS Y BALANCINES, CORREA Y ALTERNADOR (ver valvetrain.js) ---------- */
+  const vt = buildValvetrain({
+    mk, MAT, cylX: CYL_X, ax: AX, crank, bore: 0.22, scale: 1,
+    camY: AX + 0.25, camZ: -0.42, pushZ: -0.42, deckY: 2.77, rockerY: 3.32, valveZ: 0.1, valveDx: 0.12,
+    gearX: EX1 + 0.08, beltX: EX1 + 0.3,
+    injGear: { y: AX + 0.667, z: -0.92, x0: 1.45 },
+    belt: { rCrank: 0.2, fanY: 2.55, fanZ: 0, rFan: 0.16, altY: 2.35, altZ: 0.62, rAlt: 0.1 },
+    altMat: P.gray,
+    beltMat: P.rubber,
+  });
+  engine.add(vt.distG);
+  regPart(vt.distG, 1.4, -0.2, -2.0);
+  engine.add(vt.valvG);
+  regPart(vt.valvG, 0, 2.0, 0);
+  engine.add(vt.altG);
+  regPart(vt.altG, 1.2, 0.8, 2.0);
 
   /* ---------- INYECCIÓN: bomba, 4 cañerías, inyectores y acelerador (lado del tablero, −Z) ---------- */
   const injG = new THREE.Group();
@@ -559,7 +575,7 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
   if (cad) {
     const cache = new Map();
     engine.traverse((o) => {
-      if (!o.isMesh || o.material === MAT.glow || o.material === MAT.glass) return;
+      if (!o.isMesh || o.userData.noEdges || o.material === MAT.glow || o.material === MAT.glass || o.material.blending === THREE.AdditiveBlending) return;
       let eg = cache.get(o.geometry);
       if (!eg) {
         eg = new THREE.EdgesGeometry(o.geometry, 28);
@@ -575,9 +591,9 @@ export function buildDetailed({ engine, regPart, MAT, mk, isMobile }, style) {
 
   const PART_GROUPS = {
     chasis: [skid, cageG], bloque: [blockG], carter: [carterG], camisas: [linerG], pistones: [pistonG],
-    culata: [headG], ciguenal: [crank.crankG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
+    culata: [headG], ciguenal: [crank.crankG], distribucion: [vt.distG], valvulas: [vt.valvG], alternador: [vt.altG], inyeccion: [injG], escape: [escG], admision: [admG], mangueras: [hoseG],
     arranque: [startG], soportes: mountGroups, tanque: [tankG], radiador: [radG], ventilador: [fanG],
     volante: [flyG], acople: [coupG], bomba: [pumpG], tablero: [tabG],
   };
-  return { PART_GROUPS, crank, flyG, fanG, coupHub, tNeedles, smokeAnchor };
+  return { PART_GROUPS, crank, vt, flyG, fanG, coupHub, tNeedles, smokeAnchor };
 }

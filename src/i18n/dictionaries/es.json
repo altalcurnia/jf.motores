@@ -236,7 +236,10 @@
     "inyeccion": "Inyección y acelerador",
     "carter": "Cárter",
     "soportes": "Soportes del motor",
-    "ciguenal": "Cigüeñal"
+    "ciguenal": "Cigüeñal",
+    "distribucion": "Distribución y árbol de levas",
+    "valvulas": "Válvulas y balancines",
+    "alternador": "Alternador y correa"
   },
   "partPage": {
     "title": "Repuestos: ",

@@ -236,7 +236,10 @@
     "inyeccion": "Injeção e acelerador",
     "carter": "Cárter",
     "soportes": "Coxins do motor",
-    "ciguenal": "Virabrequim"
+    "ciguenal": "Virabrequim",
+    "distribucion": "Distribuição e comando de válvulas",
+    "valvulas": "Válvulas e balancins",
+    "alternador": "Alternador e correia"
   },
   "partPage": {
     "title": "Peças: ",

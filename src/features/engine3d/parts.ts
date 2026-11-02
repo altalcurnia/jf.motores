@@ -21,6 +21,9 @@ export const partKeys = [
   "carter",
   "soportes",
   "ciguenal",
+  "distribucion",
+  "valvulas",
+  "alternador",
 ] as const;
 
 export type PartKey = (typeof partKeys)[number];
@@ -42,6 +45,8 @@ export const engineLabels = [
   { id: "lbl-camisas", part: "camisas", main: false },
   { id: "lbl-pistones", part: "pistones", main: true },
   { id: "lbl-ciguenal", part: "ciguenal", main: false },
+  { id: "lbl-distribucion", part: "distribucion", main: false },
+  { id: "lbl-valvulas", part: "valvulas", main: false },
   { id: "lbl-culata", part: "culata", main: true },
   { id: "lbl-inyeccion", part: "inyeccion", main: false },
   { id: "lbl-admision", part: "admision", main: false },
@@ -51,6 +56,7 @@ export const engineLabels = [
   { id: "lbl-soportes", part: "soportes", main: false },
   { id: "lbl-tanque", part: "tanque", main: false },
   { id: "lbl-mangueras", part: "mangueras", main: false },
+  { id: "lbl-alternador", part: "alternador", main: false },
   { id: "lbl-ventilador", part: "ventilador", main: false },
   { id: "lbl-radiador", part: "radiador", main: true },
   { id: "lbl-tablero", part: "tablero", main: false },

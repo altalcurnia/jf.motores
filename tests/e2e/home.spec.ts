@@ -68,7 +68,7 @@ test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async
   await page.goto("/en");
   await expect(page.locator("#journey .jcard")).toHaveCount(5);
   await expect(page.locator("#lbl-pistones")).toHaveAttribute("href", "/en/repuestos/pistones");
-  await expect(page.locator(".part-row a")).toHaveCount(20);
+  await expect(page.locator(".part-row a")).toHaveCount(23);
 });
 
 test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el despiece", async ({ page }) => {

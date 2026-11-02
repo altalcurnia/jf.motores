@@ -218,7 +218,7 @@ export function startEngine(opts) {
 
       /* ===== Modelo del equipo: versión elegida en el admin (ver models/) ===== */
       const build = MODELS[opts.variant] || MODELS.v1;
-      const { PART_GROUPS, crank, flyG, fanG, coupHub, tNeedles, smokeAnchor } = build({
+      const { PART_GROUPS, crank, vt, flyG, fanG, coupHub, tNeedles, smokeAnchor } = build({
         engine,
         regPart,
         MAT,
@@ -682,6 +682,10 @@ export function startEngine(opts) {
           const oy = ((m.t - m.b) / 2) * ef;
           camera.setViewOffset(W, H, -ox, -oy, W, H);
           viewOffsetOn = true;
+        } else if (S.xray > 0.001 && W > 760) {
+          // Rayos X: la tarjeta ocupa la derecha; se corre la imagen para ver el interior completo
+          camera.setViewOffset(W, H, Math.min(W * 0.2, 300) * THREE.MathUtils.smoothstep(S.xray, 0, 1), 0, W, H);
+          viewOffsetOn = true;
         } else if (viewOffsetOn) {
           camera.clearViewOffset();
           viewOffsetOn = false;
@@ -714,6 +718,8 @@ export function startEngine(opts) {
         // Un solo eje: cigüeñal, volante y acople giran juntos; el ventilador va por correa (1,25:1)
         crankAngle += dt * R.rpm * 30;
         crank.update(crankAngle);
+        // Distribución, válvulas, combustión y correa siguen al mismo cigüeñal
+        vt.update(crankAngle, R.rpm, 1 - THREE.MathUtils.clamp(S.explode * 4, 0, 1));
         flyG.rotation.x = crankAngle;
         coupHub.rotation.x = crankAngle;
         fanG.rotation.x = crankAngle * 1.25;
