@@ -1206,3 +1206,35 @@ body.in-journey.app-open #hud { opacity: 0; }
 .trust-quote blockquote { margin: 0; font-size: 16px; line-height: 1.55; }
 .trust-quote figcaption { display: grid; gap: 2px; }
 .trust-quote figcaption span { color: var(--mut); font-size: 13px; }
+
+/* Despiece: panel de la pieza elegida (acercamiento + info + repuestos) */
+.part-focus {
+  position: fixed; right: 4vw; top: 50%; transform: translateY(-50%); z-index: 8;
+  width: min(400px, 32vw); max-height: 80vh; overflow: auto; padding: 22px 22px 18px; border-radius: 16px;
+  background: rgba(10, 12, 15, 0.94); border: 1px solid rgba(247, 198, 0, 0.45); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px); display: grid; gap: 12px; animation: pf-in 0.35s ease-out;
+}
+@keyframes pf-in { from { opacity: 0; transform: translate(16px, -50%); } }
+.part-focus .pk { font-family: var(--mono); font-size: 11px; letter-spacing: 0.3em; color: var(--yellow); text-transform: uppercase; }
+.part-focus h3 { margin: 0; font-family: var(--disp); font-weight: 900; font-size: 24px; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.05; padding-right: 30px; }
+.part-focus p { margin: 0; color: var(--mut); font-size: 14px; line-height: 1.55; }
+.pf-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+.pf-close:hover { border-color: var(--yellow); color: var(--yellow); }
+.pf-items { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.pf-item { display: grid; gap: 5px; text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 6px; background: rgba(255, 255, 255, 0.03); transition: border-color 0.2s, transform 0.2s; }
+.pf-item:hover { border-color: var(--yellow); transform: translateY(-2px); }
+.pf-item img, .pf-noimg { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 7px; background: #15191e; display: block; }
+.pf-name { font-size: 11.5px; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pf-item small { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.04em; color: var(--mut); }
+.pf-item small.ok { color: #3ecf8e; }
+.pf-empty { font-size: 13px !important; border: 1px dashed var(--line); border-radius: 10px; padding: 10px 12px; }
+@media (max-width: 760px) {
+  .part-focus {
+    left: 4vw; right: 4vw; top: auto; bottom: calc(var(--lbh, 0px) + 64px); transform: none; width: auto; max-height: 58vh;
+    padding: 16px; animation: pf-up 0.3s ease-out;
+  }
+  @keyframes pf-up { from { opacity: 0; transform: translateY(16px); } }
+  .part-focus h3 { font-size: 20px; }
+  body.part-focus-open .support { display: none; }
+  .part-focus p { font-size: 13px; }
+}

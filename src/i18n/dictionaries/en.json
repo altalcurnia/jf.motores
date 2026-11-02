@@ -142,7 +142,14 @@
     "partsTitle": "Parts",
     "partsHint": "Hover or tap a part",
     "sheetOpen": "Open catalog",
-    "sheetContinue": "Keep exploring"
+    "sheetContinue": "Keep exploring",
+    "focusKicker": "Part",
+    "focusCatalog": "See this category in the catalog",
+    "focusEmpty": "No parts published in this category yet. Message us and we will quote the one you need.",
+    "focusAsk": "Price on request",
+    "focusInStock": "In stock",
+    "focusOutStock": "Out of stock",
+    "focusClose": "Close"
   },
   "hud": {
     "state": "Status",
@@ -1049,5 +1056,31 @@
     "equipos": "units delivered",
     "clientes": "customers served",
     "municipios": "municipalities served"
+  },
+  "partsInfo": {
+    "chasis": "Channel skid and protective frame with lifting lugs: support the unit and let you move it by crane.",
+    "luz": "Electrical and lighting system.",
+    "bloque": "Engine block: houses the cylinders, crankshaft and camshaft, with water and oil passages.",
+    "camisas": "Cylinder liners: the piston moves inside them. Replace them when worn or oval and the engine loses compression.",
+    "pistones": "Pistons with rings and connecting rods: they take the combustion force and turn it into crankshaft motion.",
+    "culata": "Cylinder head and rocker covers: close the cylinders and hold valves and injectors. The head gasket seals combustion.",
+    "escape": "Manifold, muffler and gooseneck: take exhaust gases out and keep rain from entering the outlet.",
+    "tanque": "Diesel tank in the skid base, with its cap. Keeping it clean prevents injection problems.",
+    "radiador": "Radiator with expansion tank and pressure cap: cools the engine water. A clogged core overheats the unit.",
+    "ventilador": "Fan: pulls air through the radiator to cool the engine, on the water pump shaft.",
+    "volante": "Crankshaft flywheel: stores inertia so the engine runs smoothly and drives the pump coupling.",
+    "bomba": "End-suction centrifugal pump: the impeller turns with the engine and pushes water out of the vertical discharge. Volute, seals and bearings set flow and head.",
+    "tablero": "Panel with rpm, temperature and oil pressure gauges and key switch: shows engine health during the shift.",
+    "acople": "Flexible coupling between the engine flywheel and the pump shaft, with its safety guard. It absorbs vibration and small misalignments.",
+    "admision": "Air filter, hose and intake manifold: deliver clean air. A dirty filter raises fuel use and smoke.",
+    "mangueras": "Cooling hoses and clamps: carry water between the engine and the radiator.",
+    "arranque": "Starter motor: cranks the engine to start it. Check battery, solenoid and pinion if it starts hard.",
+    "inyeccion": "Injection pump, lines, injectors and throttle: meter diesel at high pressure into each cylinder.",
+    "carter": "Oil pan: holds the engine oil, with its drain plug and gasket.",
+    "soportes": "Engine mounts: fix the engine to the skid and absorb vibration to protect coupling and pump.",
+    "ciguenal": "Counterweighted crankshaft: turns the up-and-down piston motion into rotation, running on main bearings.",
+    "distribucion": "Gear-driven timing: the crankshaft drives the camshaft and injection pump at half speed, always in sync.",
+    "valvulas": "Intake and exhaust valves with springs, pushrods and rocker arms: they let air in and gases out at the right moment.",
+    "alternador": "Alternator and belt: charge the battery and power the panel while the engine runs."
   }
 }

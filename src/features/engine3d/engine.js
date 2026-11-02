@@ -236,10 +236,13 @@ export function startEngine(opts) {
       /* Rayos X: en «plena carga» el bloque, la culata y el cárter se vuelven transparentes
          para ver el cigüeñal, las bielas y los pistones. Cada pieza recibe su propio material. */
       const XRAY = { bloque: 0.88, culata: 0.86, carter: 0.88, inyeccion: 0.6, arranque: 0.6, admision: 0.45, soportes: 0.4 };
-      const xrayMats = [];
-      for (const [k, f] of Object.entries(XRAY)) {
+      /* Cada pieza recibe materiales propios para poder volverla transparente sola:
+         rayos X (plena carga) y desvanecer el resto cuando se elige una pieza en el despiece. */
+      const partMats = [];
+      for (const [k, gs] of Object.entries(PART_GROUPS)) {
+        const f = XRAY[k] || 0;
         const own = new Map();
-        for (const g of PART_GROUPS[k] || [])
+        for (const g of gs)
           g.traverse((o) => {
             if (!o.isMesh && !o.isLineSegments) return;
             const base = o.material;
@@ -247,27 +250,33 @@ export function startEngine(opts) {
             if (!m) {
               m = base.clone();
               own.set(base, m);
-              xrayMats.push({ m, f: o.isLineSegments ? f * 0.7 : f, base: m.opacity, trans: m.transparent, dw: m.depthWrite });
+              partMats.push({ key: k, m, xf: o.isLineSegments ? f * 0.7 : f, base: m.opacity, trans: m.transparent, dw: m.depthWrite });
             }
             o.material = m;
           });
       }
-      disposers.push(() => xrayMats.forEach((x) => x.m.dispose()));
-      let xrayLast = -1;
-      function applyXray(v) {
-        if (Math.abs(v - xrayLast) < 0.002) return;
-        const on = v > 0.004;
-        const wasOn = xrayLast > 0.004;
-        xrayLast = v;
-        for (const x of xrayMats) {
-          x.m.opacity = x.base * (1 - x.f * v);
-          if (on !== wasOn) {
-            x.m.transparent = on || x.trans;
-            x.m.depthWrite = on ? false : x.dw;
+      disposers.push(() => partMats.forEach((x) => x.m.dispose()));
+      let matSig = "";
+      function applyMats(xr, fade, key) {
+        const sig = xr.toFixed(3) + "|" + fade.toFixed(3) + "|" + key;
+        if (sig === matSig) return;
+        matSig = sig;
+        for (const x of partMats) {
+          const fo = key && x.key !== key ? fade : 0;
+          const op = x.base * (1 - x.xf * xr) * (1 - fo);
+          const tr = x.trans || op < x.base - 0.002;
+          x.m.opacity = op;
+          // Totalmente desvanecida: no se dibuja (más liviano, sobre todo en celulares)
+          x.m.visible = op > 0.01;
+          if (x.m.transparent !== tr) {
+            x.m.transparent = tr;
+            x.m.depthWrite = tr && !x.trans ? false : x.dw;
             x.m.needsUpdate = true;
           }
         }
       }
+      let fadeAmt = 0,
+        fadeKey = null;
       let crankAngle = 0;
       const tmpBox = new THREE.Box3();
       function partBox(key, out) {
@@ -286,13 +295,11 @@ export function startEngine(opts) {
         if (!gs) return;
         const b = partBox(key, new THREE.Box3());
         const c = b.getCenter(new THREE.Vector3());
-        const anchor = new THREE.Object3D();
-        // Encima de la pieza (en coordenadas de su primer grupo, para que siga al despiece)
-        const p = new THREE.Vector3(c.x, b.max.y + 0.08, c.z);
-        gs[0].worldToLocal(p);
-        anchor.position.copy(p);
-        gs[0].add(anchor);
-        labelDefs.push({ el, key, anchor, main: el.hasAttribute("data-main"), th: 0.45 + (i / Math.max(1, all.length)) * 0.4 });
+        // Encima de la pieza. Se guarda como desplazamiento respecto de la posición del grupo
+        // (sin su giro): así sigue al despiece pero no da vueltas con el volante o el ventilador.
+        const p = engine.worldToLocal(new THREE.Vector3(c.x, b.max.y + 0.08, c.z));
+        const off = p.sub(gs[0].position);
+        labelDefs.push({ el, key, g: gs[0], off, main: el.hasAttribute("data-main"), th: 0.45 + (i / Math.max(1, all.length)) * 0.4 });
       });
       const raycaster = new THREE.Raycaster();
       const ndc = new THREE.Vector2();
@@ -621,6 +628,7 @@ export function startEngine(opts) {
       let focusKey = null;
       const focusBox = new THREE.Box3();
       const focusC = new THREE.Vector3();
+      const focusSz = new THREE.Vector3();
       // Márgenes (px) que ocupan encabezado, franjas, fila de piezas y riel en el despiece
       let rowRight = null;
       function freeArea(W, H) {
@@ -699,11 +707,15 @@ export function startEngine(opts) {
         }
         if (focusSel) focusKey = focusSel;
         const focusGoal = focusSel && S.explode > 0.5 ? 1 : 0;
-        focusAmt += (focusGoal - focusAmt) * Math.min(1, dt * 0.9);
+        focusAmt += (focusGoal - focusAmt) * Math.min(1, dt * 2.2);
         if (focusAmt > 0.002 && focusKey && PART_GROUPS[focusKey]) {
+          // Acercamiento: la pieza elegida queda centrada y llena buena parte del área libre
           partBox(focusKey, focusBox).getCenter(focusC);
-          fitT.lerp(focusC, focusAmt * 0.6);
-          rEff *= 1 - 0.38 * focusAmt;
+          const rad = Math.max(0.35, focusBox.getSize(focusSz).length() / 2);
+          const rFit = Math.max(2.4, (rad / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.5);
+          const k = THREE.MathUtils.smoothstep(focusAmt, 0, 1);
+          fitT.lerp(focusC, k);
+          rEff = THREE.MathUtils.lerp(rEff, Math.min(rEff, rFit), k);
         }
         camera.position.copy(fitT).addScaledVector(fitDir, rEff);
         const sh = S.shake * R.rpm;
@@ -730,7 +742,15 @@ export function startEngine(opts) {
         flyG.rotation.x = crankAngle;
         coupHub.rotation.x = crankAngle;
         fanG.rotation.x = crankAngle * 1.25;
-        applyXray(S.xray);
+        // Pieza elegida: el resto se desvanece (y vuelve al cerrar)
+        const fadeGoal = focusSel && S.explode > 0.5 ? 1 : 0;
+        if (focusSel) fadeKey = focusSel;
+        fadeAmt += (fadeGoal - fadeAmt) * Math.min(1, dt * 3);
+        if (!focusSel && fadeAmt < 0.003) {
+          fadeAmt = 0;
+          fadeKey = null;
+        }
+        applyMats(S.xray, fadeAmt, fadeKey);
         // Relojes del tablero: rpm, temperatura y presión de aceite
         // Tablero 3D con los mismos valores del tacómetro de la pantalla.
         // Escala de cada reloj: −1,2 rad (izquierda, 0) → +1,2 rad (derecha, máximo).
@@ -764,7 +784,8 @@ export function startEngine(opts) {
         applyAtmo(S.atmo);
 
         for (const d of labelDefs) {
-          const shown = d.main || d.key === hlKey ? 1 : 0;
+          // Con una pieza elegida, los demás marcadores se desvanecen con su pieza
+          const shown = (d.main || d.key === hlKey ? 1 : 0) * (fadeKey && d.key !== fadeKey ? 1 - fadeAmt : 1);
           const vis =
             shown *
             THREE.MathUtils.clamp((e - (d.main ? d.th : 0.5)) * 6, 0, 1) *
@@ -774,7 +795,8 @@ export function startEngine(opts) {
             d.el.style.pointerEvents = "none";
             continue;
           }
-          d.anchor.getWorldPosition(wv);
+          wv.copy(d.off).add(d.g.position);
+          engine.localToWorld(wv);
           wv.project(camera);
           if (wv.z > 1) {
             d.el.style.opacity = 0;

@@ -142,7 +142,14 @@
     "partsTitle": "Peças",
     "partsHint": "Passe o cursor ou toque numa peça",
     "sheetOpen": "Abrir catálogo",
-    "sheetContinue": "Continuar explorando"
+    "sheetContinue": "Continuar explorando",
+    "focusKicker": "Peça",
+    "focusCatalog": "Ver a categoria no catálogo",
+    "focusEmpty": "Ainda não há peças publicadas nesta categoria. Fale conosco e cotamos a que você precisa.",
+    "focusAsk": "Preço sob consulta",
+    "focusInStock": "Em estoque",
+    "focusOutStock": "Sem estoque",
+    "focusClose": "Fechar"
   },
   "hud": {
     "state": "Estado",
@@ -1049,5 +1056,31 @@
     "equipos": "equipamentos entregues",
     "clientes": "clientes atendidos",
     "municipios": "municípios atendidos"
+  },
+  "partsInfo": {
+    "chasis": "Chassi de perfil U e estrutura de proteção com olhais de içamento: sustentam o equipamento e permitem movê-lo com guindaste.",
+    "luz": "Sistema elétrico e iluminação.",
+    "bloque": "Bloco do motor: abriga cilindros, virabrequim e comando de válvulas, com galerias de água e óleo.",
+    "camisas": "Camisas de cilindro: o pistão sobe e desce dentro delas. Troque-as com desgaste ou ovalização e perda de compressão.",
+    "pistones": "Pistões com anéis e bielas: recebem a combustão e a transformam em movimento do virabrequim.",
+    "culata": "Cabeçote e tampas de balancins: fecham os cilindros e alojam válvulas e injetores. A junta do cabeçote veda a combustão.",
+    "escape": "Coletor, silenciador e pescoço de ganso: tiram os gases do motor e evitam a entrada de água pela saída.",
+    "tanque": "Tanque de diesel na base do chassi, com tampa. Mantê-lo limpo evita falhas na injeção.",
+    "radiador": "Radiador com tanque de expansão e tampa de pressão: resfria a água do motor. Colmeia entupida superaquece o equipamento.",
+    "ventilador": "Ventilador: move ar pelo radiador para resfriar o motor, no eixo da bomba d’água.",
+    "volante": "Volante do virabrequim: guarda inércia para o motor girar uniforme e transmite a força ao acoplamento.",
+    "bomba": "Bomba centrífuga de sucção axial: o rotor gira com o motor e empurra a água pela descarga vertical. Voluta, selos e rolamentos definem vazão e altura.",
+    "tablero": "Painel com relógios de rpm, temperatura e pressão de óleo e chave de partida: mostra a saúde do motor no turno.",
+    "acople": "Acoplamento flexível entre o volante do motor e o eixo da bomba, com sua proteção. Absorve vibrações e pequenos desalinhamentos.",
+    "admision": "Filtro de ar, mangueira e coletor de admissão: levam ar limpo ao motor. Filtro sujo aumenta consumo e fumaça.",
+    "mangueras": "Mangueiras de arrefecimento com abraçadeiras: levam a água entre o motor e o radiador.",
+    "arranque": "Motor de partida: gira o motor para ligá-lo. Verifique bateria, solenoide e pinhão se a partida for difícil.",
+    "inyeccion": "Bomba injetora, tubulações, injetores e acelerador: dosam o diesel em alta pressão em cada cilindro.",
+    "carter": "Cárter: guarda o óleo do motor, com bujão de drenagem e junta.",
+    "soportes": "Coxins do motor: fixam o motor ao chassi e absorvem a vibração para proteger acoplamento e bomba.",
+    "ciguenal": "Virabrequim com contrapesos: transforma o sobe e desce dos pistões em giro, apoiado em bronzinas de mancal.",
+    "distribucion": "Distribuição por engrenagens: o virabrequim move o comando de válvulas e a bomba injetora na metade da rotação, sempre sincronizados.",
+    "valvulas": "Válvulas de admissão e escape com molas, varetas e balancins: deixam entrar ar e sair gases no momento certo.",
+    "alternador": "Alternador e correia: carregam a bateria e alimentam o painel com o motor funcionando."
   }
 }

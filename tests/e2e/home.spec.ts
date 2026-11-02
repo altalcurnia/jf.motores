@@ -72,6 +72,7 @@ test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async
 });
 
 test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el despiece", async ({ page }) => {
+  test.setTimeout(90_000); // el 3D se dibuja sin tarjeta gráfica en las pruebas
   await page.goto("/es");
   const journey = page.locator("#journey");
   const at = async (p: number) => {
@@ -93,6 +94,12 @@ test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el d
   await expect(page.locator(".part-row.on")).toHaveCount(1);
   await page.locator(".part-row a", { hasText: "Pistones" }).hover();
   await expect(page.locator("#lbl-pistones")).toHaveClass(/hl/);
+  // Clic en una pieza: panel con la información, enlace a su categoría y cierre
+  await page.locator(".part-row a", { hasText: "Culata" }).click();
+  await expect(page.locator(".part-focus h3")).toContainText("Culata");
+  await expect(page.locator(".part-focus a.btn.y")).toHaveAttribute("href", "/es/repuestos/culata");
+  await page.locator(".part-focus .pf-close").click();
+  await expect(page.locator(".part-focus")).toHaveCount(0);
   // Final: aviso de la app, aún no disponible, con enlace a /app
   await at(0.9);
   await expect(page.locator(".part-row.on")).toHaveCount(0);

@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { useRouter } from "next/navigation";
 import { Hand } from "@/features/app-preview/AppStory";
 import { STOP_AT, STOP_END, stageAt, type StageKey } from "./stages.js";
 import type { Locale } from "@/i18n/config";
@@ -9,18 +8,23 @@ import { localeTags } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { engineLabels, isPartKey, type PartKey } from "./parts";
 
+/** Repuesto de una pieza del despiece (miniatura en el panel de la pieza elegida). */
+export type PartProduct = { name: string; href: string; img: string | null; price: string | null; inStock: boolean };
+
 type Props = {
   locale: Locale;
+  /** Hasta 3 repuestos por pieza (clave = pieza del despiece). */
+  partProducts?: Record<string, PartProduct[]>;
   /** Versión del modelo 3D elegida en el admin (v2, v3). */
   variant?: string;
-  t: Pick<Dictionary, "journey" | "hud" | "rail" | "parts">;
+  t: Pick<Dictionary, "journey" | "hud" | "rail" | "parts" | "partsInfo">;
 };
 
 /**
  * Motor 3D de fondo + recorrido por scroll (encendido, revolución, despiece, apagado).
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
-export function EngineExperience({ locale, t, variant = "v2" }: Props) {
+export function EngineExperience({ locale, t, variant = "v2", partProducts = {} }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const journeyRef = useRef<HTMLElement>(null);
   const engineRef = useRef<{ highlight?: (k: string | null) => void; focus?: (k: string | null) => void } | null>(null);
@@ -58,12 +62,9 @@ export function EngineExperience({ locale, t, variant = "v2" }: Props) {
       cancelAnimationFrame(raf);
     };
   }, []);
-  const router = useRouter();
   // Referencias estables: el motor se crea una sola vez por idioma.
-  const routerRef = useRef(router);
   const hudRef = useRef(t.hud);
   useEffect(() => {
-    routerRef.current = router;
     hudRef.current = t.hud;
   });
 
@@ -102,14 +103,15 @@ export function EngineExperience({ locale, t, variant = "v2" }: Props) {
             isMobile: window.matchMedia("(max-width:760px)").matches,
             numberLocale: localeTags[locale],
             hud: hudRef.current,
-            onPartClick: (part: string, touch: boolean) => {
-              if (!touch) return routerRef.current.push(`/${locale}/repuestos/${part}`);
+            // Clic o toque en una pieza del modelo: acercamiento + panel con información y repuestos
+            onPartClick: (part: string) => {
               if (!isPartKey(part)) return;
               setHover(part);
               started.highlight(part);
               setSheet(part);
             },
             onPartHover: (part: string | null) => {
+              if (sheetRef.current) return; // con una pieza elegida no se resalta otra al pasar
               setHover(part);
               started.highlight(part);
             },
@@ -146,10 +148,23 @@ export function EngineExperience({ locale, t, variant = "v2" }: Props) {
   const exploded = active && stage === "x";
   const appOn = active && stage === "e";
 
-  // La cámara se acerca solo a la pieza elegida con un toque (menú abierto), no al pasar el cursor
+  // La cámara se acerca solo a la pieza elegida (clic o toque), nunca al pasar el cursor
+  const sheetRef = useRef<PartKey | null>(null);
   useEffect(() => {
+    sheetRef.current = sheet;
     engineRef.current?.focus?.(sheet && exploded ? sheet : null);
+    // La pieza elegida se ve con sus colores reales (sin el brillo de resaltado)
+    if (sheet && exploded) engineRef.current?.highlight?.(null);
+    document.body.classList.toggle("part-focus-open", !!(sheet && exploded));
+    return () => document.body.classList.remove("part-focus-open");
   }, [sheet, exploded]);
+  // Escape cierra el panel de la pieza
+  useEffect(() => {
+    if (!sheet) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeSheet();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
 
   useEffect(() => {
     document.body.classList.toggle("parts-open", exploded);
@@ -159,14 +174,13 @@ export function EngineExperience({ locale, t, variant = "v2" }: Props) {
   }, [exploded, appOn]);
 
   function lightPart(part: string | null) {
-    if (sheet && part === null) return; // con el menú abierto la pieza sigue resaltada
+    if (sheet) return; // con una pieza elegida, la resaltada es esa
     setHover(part);
     engineRef.current?.highlight?.(part);
   }
 
-  /** En pantallas táctiles el toque no navega: resalta, acerca y ofrece el menú. */
+  /** Clic o toque en un marcador o botón: acerca la cámara, desvanece el resto y abre el panel. */
   function onPartTap(e: MouseEvent, part: PartKey) {
-    if (!window.matchMedia("(hover: none)").matches) return;
     e.preventDefault();
     setHover(part);
     engineRef.current?.highlight?.(part);
@@ -227,7 +241,7 @@ export function EngineExperience({ locale, t, variant = "v2" }: Props) {
             <p className="rpm-p" style={{ marginTop: 18 }}>{j.b.p}</p>
           </div>
 
-          <div className={"card right jcard jcard-parts" + (active && (stage === "c" || stage === "x") ? " on" : "")}>
+          <div className={"card right jcard jcard-parts" + (active && (stage === "c" || stage === "x") && !(sheet && exploded) ? " on" : "")}>
             <div className="pk">{j.c.pk}</div>
             <h2>{j.c.h2}</h2>
             <p>{j.c.p}</p>
@@ -276,17 +290,40 @@ export function EngineExperience({ locale, t, variant = "v2" }: Props) {
           ))}
         </div>
         {sheet && exploded && (
-          <div className="part-sheet" role="dialog" aria-label={t.parts[sheet]}>
-            <b>{t.parts[sheet]}</b>
+          <aside className="part-focus" role="dialog" aria-label={t.parts[sheet]}>
+            <button type="button" className="pf-close" onClick={closeSheet} aria-label={j.focusClose}>
+              ×
+            </button>
+            <div className="pk">
+              {j.focusKicker} {String(engineLabels.findIndex((l) => l.part === sheet) + 1).padStart(2, "0")}
+            </div>
+            <h3>{t.parts[sheet]}</h3>
+            <p>{t.partsInfo[sheet]}</p>
+            {(partProducts[sheet] ?? []).length > 0 ? (
+              <div className="pf-items">
+                {(partProducts[sheet] ?? []).map((it) => (
+                  <Link key={it.href} href={it.href} className="pf-item">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- miniatura del catálogo */}
+                    {it.img ? <img src={it.img} alt="" loading="lazy" /> : <span className="pf-noimg" />}
+                    <span className="pf-name">{it.name}</span>
+                    <small className={it.inStock ? "ok" : "off"}>
+                      {it.price ?? j.focusAsk} · {it.inStock ? j.focusInStock : j.focusOutStock}
+                    </small>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="pf-empty">{j.focusEmpty}</p>
+            )}
             <div className="part-sheet-actions">
               <Link className="btn y" href={`/${locale}/repuestos/${sheet}`}>
-                {j.sheetOpen}
+                {j.focusCatalog}
               </Link>
               <button type="button" className="btn g" onClick={closeSheet}>
                 {j.sheetContinue}
               </button>
             </div>
-          </div>
+          </aside>
         )}
       </section>
 

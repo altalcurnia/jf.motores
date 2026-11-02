@@ -10,6 +10,9 @@ import { FallbackImage } from "@/components/FallbackImage";
 import { EngineExperience } from "@/features/engine3d/EngineExperience";
 import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 import { TrustSection } from "@/components/TrustSection";
+import { getCatalogData } from "@/features/catalog/data";
+import { formatPrice, productHref, storageUrl, tr } from "@/features/catalog/shared";
+import type { PartProduct } from "@/features/engine3d/EngineExperience";
 
 // Ilustración de referencia local (public/demo). Se reemplaza por una foto real de la empresa.
 
@@ -26,7 +29,31 @@ export default async function HomePage() {
   const dict = await getDictionary();
   const t = dict.hero;
   const b = dict.benefits;
-  const [contact, homeImages, trust, engineVariant] = await Promise.all([getContact(), getHomeImages(), getTrust(), getEngineVariant()]);
+  const [contact, homeImages, trust, engineVariant, catalog] = await Promise.all([
+    getContact(),
+    getHomeImages(),
+    getTrust(),
+    getEngineVariant(),
+    getCatalogData().catch(() => null),
+  ]);
+  // Hasta 3 repuestos por pieza del despiece (primero los que están en stock)
+  const partProducts: Record<string, PartProduct[]> = {};
+  if (catalog) {
+    for (const c of catalog.categories) {
+      if (c.catalog !== "repuesto" || !c.partKey) continue;
+      partProducts[c.partKey] = catalog.products
+        .filter((x) => x.catalog === "repuesto" && x.categoryId === c.id)
+        .sort((a, b) => (a.status === b.status ? 0 : a.status === "disponible" ? -1 : 1))
+        .slice(0, 3)
+        .map((x) => ({
+          name: tr(x.name, locale),
+          href: productHref(locale, x),
+          img: x.images[0] ? storageUrl(x.images[0].path, process.env.NEXT_PUBLIC_SUPABASE_URL) : null,
+          price: formatPrice(x.priceCop, locale),
+          inStock: x.status === "disponible",
+        }));
+    }
+  }
   // Ficha del negocio para Google (nombre, logo, sedes y teléfonos)
   const orgLd = {
     "@context": "https://schema.org",
@@ -118,7 +145,8 @@ export default async function HomePage() {
       <EngineExperience
         locale={locale}
         variant={engineVariant}
-        t={{ journey: dict.journey, hud: dict.hud, rail: dict.rail, parts: dict.parts }}
+        partProducts={partProducts}
+        t={{ journey: dict.journey, hud: dict.hud, rail: dict.rail, parts: dict.parts, partsInfo: dict.partsInfo }}
       />
 
       <div className="post">

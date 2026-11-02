@@ -142,7 +142,14 @@
     "partsTitle": "Piezas",
     "partsHint": "Pasa el cursor o toca una pieza",
     "sheetOpen": "Abrir catálogo",
-    "sheetContinue": "Continuar explorando"
+    "sheetContinue": "Continuar explorando",
+    "focusKicker": "Pieza",
+    "focusCatalog": "Ver la categoría en el catálogo",
+    "focusEmpty": "Aún no hay repuestos publicados en esta categoría. Escríbenos y te cotizamos el que necesitas.",
+    "focusAsk": "Precio a consultar",
+    "focusInStock": "En stock",
+    "focusOutStock": "Sin stock",
+    "focusClose": "Cerrar"
   },
   "hud": {
     "state": "Estado",
@@ -1049,5 +1056,31 @@
     "equipos": "equipos entregados",
     "clientes": "clientes atendidos",
     "municipios": "municipios atendidos"
+  },
+  "partsInfo": {
+    "chasis": "Chasis de canal y marco de protección con orejas de izaje: sostienen el equipo y permiten moverlo con grúa.",
+    "luz": "Sistema eléctrico e iluminación del equipo.",
+    "bloque": "Bloque del motor: aloja los cilindros, el cigüeñal y el árbol de levas, y tiene los conductos de agua y aceite.",
+    "camisas": "Camisas de cilindro: el pistón sube y baja dentro de ellas. Se cambian cuando hay desgaste u ovalamiento y el motor pierde compresión.",
+    "pistones": "Pistones con sus anillos y bielas: reciben la combustión y la convierten en movimiento del cigüeñal.",
+    "culata": "Culata y tapas de balancines: cierran los cilindros por arriba y alojan válvulas e inyectores. El empaque de culata sella la combustión.",
+    "escape": "Múltiple, silenciador y cuello de ganso: sacan los gases del motor y evitan que entre agua por la salida.",
+    "tanque": "Tanque diésel en la base del chasis, con su tapa. Mantenerlo limpio evita fallas en la inyección.",
+    "radiador": "Radiador con tanque de expansión y tapa de presión: enfría el agua del motor. Un panal tapado recalienta el equipo.",
+    "ventilador": "Ventilador: mueve aire por el radiador para enfriar el motor. Va en el eje de la bomba de agua.",
+    "volante": "Volante del cigüeñal: guarda inercia para que el motor gire parejo y transmite la fuerza al acople de la bomba.",
+    "bomba": "Bomba centrífuga de succión axial: el impulsor gira con el motor y empuja el agua por la descarga vertical. Su voluta, sellos y rodamientos definen el caudal y la altura.",
+    "tablero": "Tablero con relojes de rpm, temperatura y presión de aceite y llave de encendido: muestra la salud del motor en el turno.",
+    "acople": "Acople flexible entre el volante del motor y el eje de la bomba, con su guarda de protección. Absorbe vibraciones y pequeñas desalineaciones.",
+    "admision": "Filtro de aire, manguera y múltiple de admisión: llevan aire limpio al motor. Un filtro sucio sube el consumo y el humo.",
+    "mangueras": "Mangueras de refrigeración con sus abrazaderas: llevan el agua entre el motor y el radiador.",
+    "arranque": "Motor de arranque: hace girar el motor al encenderlo. Revisa batería, solenoide y piñón si arranca con dificultad.",
+    "inyeccion": "Bomba de inyección, cañerías, inyectores y acelerador: dosifican el diésel a alta presión en cada cilindro.",
+    "carter": "Cárter: guarda el aceite del motor. Incluye el tapón de drenaje y su empaque.",
+    "soportes": "Soportes del motor: lo fijan al chasis y absorben la vibración para cuidar el acople y la bomba.",
+    "ciguenal": "Cigüeñal con contrapesos: convierte el sube y baja de los pistones en giro. Va apoyado en cojinetes de bancada.",
+    "distribucion": "Distribución por engranajes: el cigüeñal mueve el árbol de levas y la bomba de inyección a media velocidad, siempre sincronizados.",
+    "valvulas": "Válvulas de admisión y escape con resortes, varillas y balancines: dejan entrar aire y salir gases en el momento justo.",
+    "alternador": "Alternador y correa: cargan la batería y alimentan el tablero mientras el motor trabaja."
   }
 }
