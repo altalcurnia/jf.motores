@@ -517,19 +517,20 @@ export function startEngine(opts) {
       // Escala de tiempo 0–100 = progreso del scroll del recorrido (ver stages.js).
       // El arranque ya ocurrió en la portada; aquí sube de ralentí a media carga.
       tl.to(S, { handoff: 1, duration: 2, ease: "none" }, 0)
-        .to(S, { camTheta: 1.9, camR: 10.5, camPhi: 1.32, duration: 15, ease: "none" }, 0)
+        // Encendido → revolución: un solo giro continuo de cámara (gira, se acerca y sube sin cambios
+        // bruscos de velocidad); el equipo cambia de lado aprovechando ese giro
+        .to(S, { camTheta: 3.7, camR: 7.6, camPhi: 1.42, camTY: 1.7, duration: 33, ease: "sine.inOut" }, 0)
         .fromTo(S, { rpm: 0.12 }, { rpm: 0.55, duration: 11.5, ease: "power1.inOut", immediateRender: false }, 0)
         .fromTo(S, { smoke: 0.4 }, { smoke: 0.7, duration: 7, ease: "power1.inOut", immediateRender: false }, 0)
         .fromTo(S, { glow: 0.3 }, { glow: 0.7, duration: 9, ease: "power1.inOut", immediateRender: false }, 0)
         .to(S, { atmo: 1, duration: 10, ease: "power1.inOut" }, 2)
         // Revolución: llega a 2400 rpm justo antes de pasar a la siguiente tarjeta
-        .to(S, { camTheta: 3.7, camR: 7.6, camPhi: 1.42, camTY: 1.7, duration: 18, ease: "none" }, 15)
         .to(S, { rpm: 1, duration: 16, ease: "power2.inOut" }, 15)
         .to(S, { smoke: 1, duration: 10, ease: "power1.inOut" }, 16)
         .to(S, { shake: 1, duration: 10, ease: "power1.inOut" }, 15)
         .to(S, { atmo: 2, duration: 12, ease: "power1.inOut" }, 15)
         // Desde «plena carga» las tarjetas van a la derecha: el equipo pasa a la izquierda
-        .to(S, { shiftX: -1, duration: 5, ease: "power1.inOut" }, 12.5)
+        .to(S, { shiftX: -1, duration: 16, ease: "sine.inOut" }, 6)
         // Rayos X: aparece con la tarjeta «plena carga» mientras suben las rpm y se va antes del despiece
         .to(S, { xray: 1, duration: 8, ease: "power1.inOut" }, 15.5)
         .to(S, { xray: 0, duration: 4, ease: "power1.inOut" }, 31.5)
@@ -733,8 +734,9 @@ export function startEngine(opts) {
         if (W > 760) vx = -S.shiftX * Math.min(W * 0.2, 300);
         else if (opts.heroLift) {
           const k = THREE.MathUtils.clamp(1 - window.scrollY / H, 0, 1); // 1 en la portada
-          vz = 0.92 + 0.38 * k; // portada: más cerca; recorrido: un poco más lejos para que quepa arriba
-          vy = H * (0.15 - 0.02 * k);
+          // Tamaño normal (sin ampliar); solo se dibuja más arriba para dejar abajo el texto y las tarjetas
+          vz = 1;
+          vy = H * (0.14 - 0.01 * k);
           // Plena carga: acercamiento mientras suben las revoluciones (en PC lo hace la cámara)
           const rev = THREE.MathUtils.smoothstep(S.xray, 0, 1);
           vz *= 1 + 0.28 * rev;
@@ -891,7 +893,7 @@ export function startEngine(opts) {
         stTemp.textContent = tempVal + " °C";
         stFlow.textContent =
           Math.round(R.rpm * 3000).toLocaleString(opts.numberLocale) + " L/min";
-        hudState.textContent =
+        if (hudState) hudState.textContent =
           R.rpm < 0.03
             ? opts.hud.standby
             : R.rpm < 0.3

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { Hand } from "@/features/app-preview/AppStory";
 import { STOP_AT, STOP_END, stageAt, type StageKey } from "./stages.js";
 import type { Locale } from "@/i18n/config";
@@ -35,6 +35,16 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
   const [hover, setHover] = useState<string | null>(null);
   // En celular, tocar una pieza abre este menú (abrir catálogo o seguir explorando)
   const [sheet, setSheet] = useState<PartKey | null>(null);
+  // Celular o PC: el 3D usa cámara y encuadre distintos; si cambia (girar o achicar la ventana) se reinicia
+  const mobile = useSyncExternalStore(
+    (cb) => {
+      const mq = window.matchMedia("(max-width:760px)");
+      mq.addEventListener("change", cb);
+      return () => mq.removeEventListener("change", cb);
+    },
+    () => window.matchMedia("(max-width:760px)").matches,
+    () => false,
+  );
 
   // Progreso del recorrido: decide qué tarjeta se ve (independiente del 3D)
   useEffect(() => {
@@ -106,7 +116,7 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
             // Marcas nuevas: en celular la portada sube y acerca el 3D
             accent: 0xf7c600,
             heroLift: brand !== "clasica",
-            isMobile: window.matchMedia("(max-width:760px)").matches,
+            isMobile: mobile,
             numberLocale: localeTags[locale],
             hud: hudRef.current,
             // Clic o toque en una pieza del modelo: acercamiento + panel con información y repuestos
@@ -146,7 +156,7 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
       canvas.remove();
       document.body.classList.remove("no-3d");
     };
-  }, [locale, variant, brand]);
+  }, [locale, variant, brand, mobile]);
 
   const j = t.journey;
   const stage: StageKey = stageAt(p).key;
@@ -366,10 +376,6 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
       {/* Tablero como el de la motobomba real: 3 relojes en columna (rpm, temperatura del agua,
           presión de aceite) y la llave de encendido abajo */}
       <div id="hud" aria-hidden="true">
-        <div className="hud-state">
-          {t.hud.state}
-          <b id="hudState">{t.hud.standby}</b>
-        </div>
         <div className="hud-panel">
           <Dial arcId="rpmArc" needleId="needleRpm" textId="txtRpm" color="#F7C600" text="0" unit="×1" label={t.hud.rpm} max="2400" />
           <Dial arcId="tmpArc" needleId="needleTemp" textId="txtTemp" color="#ff7a45" text="21°" unit="°C" label={t.hud.temp} max="95" />

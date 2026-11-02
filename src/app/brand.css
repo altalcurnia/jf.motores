@@ -57,8 +57,13 @@
     margin-top: auto;
   }
   /* Logo grande arriba, sobre la animación (el resto del texto va abajo) */
+  /* El logo se ubica respecto de la portada; el resto del texto queda sobre el degradado */
   :root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in {
     position: static;
+  }
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .hero-in > :not(.logo-row) {
+    position: relative;
+    z-index: 1;
   }
   :root:is([data-brand="nueva"], [data-brand="roja"]) .logo-row {
     position: absolute;
