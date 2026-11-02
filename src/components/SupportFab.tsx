@@ -70,6 +70,8 @@ export function SupportFab({
   const [unread, setUnread] = useState(0);
   const wrapRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ y: number; bottom: number; moved: boolean } | null>(null);
+  // Arriba: el menú se abre hacia abajo
+  const [upper, setUpper] = useState(true);
   const suppressClick = useRef(false);
 
   const refreshUnread = () =>
@@ -95,14 +97,16 @@ export function SupportFab({
     const max = window.innerHeight - 76;
     const b = Math.max(8, Math.min(max, bottom));
     el.style.bottom = `${b}px`;
-    el.classList.toggle("upper", b > window.innerHeight / 2);
+    setUpper(b > window.innerHeight / 2);
   };
+  /** Posición por defecto: arriba (bajo la cabecera; en celular, bajo el logo grande de la portada). */
+  const defaultBottom = () => window.innerHeight - (window.innerWidth <= 760 ? 214 : 150);
   useEffect(() => {
     let saved = NaN;
     try {
       saved = Number(localStorage.getItem(FAB_KEY));
     } catch {}
-    if (saved > 0) place(saved);
+    place(saved > 0 ? saved : defaultBottom());
     const onResize = () => {
       const b = parseFloat(wrapRef.current?.style.bottom || "");
       if (b) place(b);
@@ -302,7 +306,7 @@ export function SupportFab({
           onChanged={refreshUnread}
         />
       )}
-      <div ref={wrapRef} className={`support${menu ? " open" : ""}${chat || tickets ? " chatting" : ""}`}>
+      <div ref={wrapRef} className={`support${upper ? " upper" : ""}${menu ? " open" : ""}${chat || tickets ? " chatting" : ""}`}>
         {menu && (
           <div className="support-menu" role="menu">
             <a role="menuitem" className="support-opt sopt-wa" href={waHref} target="_blank" rel="noopener" onClick={() => setMenu(false)}>

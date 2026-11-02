@@ -161,8 +161,9 @@
   :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app .app-cta {
     margin-top: 10px;
   }
-  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard-app {
-    right: 40vw;
+  /* la tarjeta deja libre la derecha para la mano con el teléfono */
+  :root:is([data-brand="nueva"], [data-brand="roja"]) .jcard.right.jcard-app {
+    right: calc(2vw + 158px);
   }
   :root:is([data-brand="nueva"], [data-brand="roja"]) .mini-remote {
     left: auto;

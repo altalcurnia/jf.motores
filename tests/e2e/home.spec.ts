@@ -363,10 +363,11 @@ test("soporte: el botón flotante se arrastra arriba y abajo y recuerda la posic
   const box = (await fab.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();
-  await page.mouse.move(box.x + box.width / 2, box.y - 150, { steps: 8 });
+  // Por defecto está arriba: se arrastra hacia abajo
+  await page.mouse.move(box.x + box.width / 2, box.y + 250, { steps: 8 });
   await page.mouse.up();
   const after = (await fab.boundingBox())!;
-  expect(after.y).toBeLessThan(box.y - 100);
+  expect(after.y).toBeGreaterThan(box.y + 200);
   await expect(page.locator(".support-menu")).toHaveCount(0);
   await page.reload();
   const again = (await page.locator(".support-fab").boundingBox())!;

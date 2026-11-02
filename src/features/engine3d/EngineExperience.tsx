@@ -28,6 +28,8 @@ type Props = {
  */
 export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", partProducts = {} }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const liftRef = useRef(false);
   const journeyRef = useRef<HTMLElement>(null);
   const engineRef = useRef<{ highlight?: (k: string | null) => void; focus?: (k: string | null) => void } | null>(null);
   const [p, setP] = useState(0);
@@ -59,8 +61,15 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
       setP(prog);
       // Al salir del despiece se cierra el menú de pieza
       if (stageAt(prog).key !== "x") setSheet(null);
-      // Las tarjetas se van justo antes de que entre la cinta amarilla de la siguiente sección
-      setActive(r.top < window.innerHeight * 0.35 && prog < 0.985);
+      // PC: las tarjetas se van justo antes de que entre la cinta amarilla de la siguiente sección.
+      // Celular (marcas nuevas): la última tarjeta y la mano suben con la página, como el 3D.
+      const lift = liftRef.current;
+      setActive(r.top < window.innerHeight * 0.35 && (lift || prog < 0.985));
+      const cards = cardsRef.current;
+      if (cards) {
+        const dy = lift ? Math.min(0, Math.round(r.bottom - window.innerHeight)) : 0;
+        cards.style.transform = dy ? `translate3d(0, ${dy}px, 0)` : "";
+      }
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -74,6 +83,9 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
       cancelAnimationFrame(raf);
     };
   }, []);
+  useEffect(() => {
+    liftRef.current = mobile && brand !== "clasica";
+  }, [mobile, brand]);
   // Referencias estables: el motor se crea una sola vez por idioma.
   const hudRef = useRef(t.hud);
   useEffect(() => {
@@ -221,7 +233,7 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
 
       <section id="journey" ref={journeyRef} aria-label={t.rail.a}>
         {/* Las tarjetas se muestran una tras otra según el scroll; el despiece queda libre */}
-        <div className={`jcards${active ? " active" : ""}`}>
+        <div ref={cardsRef} className={`jcards${active ? " active" : ""}`}>
           <div className={"card jcard" + show("a")}>
             <div className="pk">{j.a.pk}</div>
             <h2>{j.a.h2}</h2>
