@@ -985,8 +985,12 @@ body.in-journey.app-open #hud { opacity: 0; }
 
 @media (max-width: 760px) {
   .support { right: 14px; bottom: 14px; }
-  .support-fab { height: 52px; padding: 0 16px 0 13px; font-size: 11px; }
-  .part-row { padding-right: 140px; }
+  /* En celular solo el ícono, redondo y más pequeño (el nombre queda en aria-label) */
+  .support-fab { width: 46px; height: 46px; padding: 0; justify-content: center; gap: 0; }
+  .support-fab .lbl-txt { display: none; }
+  .support-fab svg { width: 22px; height: 22px; }
+  .support-fab .x { font-size: 24px; width: auto; }
+  .part-row { padding-right: 64px; }
   .ai-chat { inset: 0; width: auto; height: auto; border-radius: 0; border: 0; }
   body.chat-open .support { display: none; }
 }

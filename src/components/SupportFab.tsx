@@ -73,6 +73,7 @@ export function SupportFab({
   // Arriba: el menú se abre hacia abajo
   const [upper, setUpper] = useState(true);
   const suppressClick = useRef(false);
+  const posRef = useRef(0);
 
   const refreshUnread = () =>
     fetch("/api/tickets/unread", { cache: "no-store" })
@@ -96,8 +97,13 @@ export function SupportFab({
     if (!el) return;
     const max = window.innerHeight - 76;
     const b = Math.max(8, Math.min(max, bottom));
-    el.style.bottom = `${b}px`;
-    setUpper(b > window.innerHeight / 2);
+    posRef.current = b;
+    const up = b > window.innerHeight / 2;
+    // Arriba se ancla por el borde superior: el menú crece hacia abajo sin empujar el botón
+    const h = el.querySelector<HTMLElement>(".support-fab")?.offsetHeight ?? 52;
+    el.style.top = up ? `${window.innerHeight - b - h}px` : "auto";
+    el.style.bottom = up ? "auto" : `${b}px`;
+    setUpper(up);
   };
   /** Posición por defecto: arriba (bajo la cabecera; en celular, bajo el logo grande de la portada). */
   const defaultBottom = () => window.innerHeight - (window.innerWidth <= 760 ? 214 : 150);
@@ -108,8 +114,7 @@ export function SupportFab({
     } catch {}
     place(saved > 0 ? saved : defaultBottom());
     const onResize = () => {
-      const b = parseFloat(wrapRef.current?.style.bottom || "");
-      if (b) place(b);
+      if (posRef.current) place(posRef.current);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -117,7 +122,7 @@ export function SupportFab({
   const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     const el = wrapRef.current;
     if (!el) return;
-    drag.current = { y: e.clientY, bottom: window.innerHeight - el.getBoundingClientRect().bottom, moved: false };
+    drag.current = { y: e.clientY, bottom: window.innerHeight - e.currentTarget.getBoundingClientRect().bottom, moved: false };
     e.currentTarget.setPointerCapture(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -137,7 +142,7 @@ export function SupportFab({
     suppressClick.current = true;
     setTimeout(() => (suppressClick.current = false), 0);
     try {
-      localStorage.setItem(FAB_KEY, String(parseFloat(wrapRef.current?.style.bottom || "0")));
+      localStorage.setItem(FAB_KEY, String(posRef.current));
     } catch {}
   };
 
