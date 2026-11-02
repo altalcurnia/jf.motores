@@ -788,10 +788,16 @@
       "waOpen": "Abrir no app",
       "rpm": "Rotação",
       "control": "Controle remoto",
-      "reduce": "Reduzir para 1.800 rpm",
-      "stop": "Parar",
       "sent": "Comando confirmado pelo equipamento",
-      "adjusting": "Ajustando"
+      "adjusting": "Ajustando",
+      "oil": "Óleo",
+      "discharge": "Recalque",
+      "turnOn": "Ligar",
+      "turnOff": "Desligar",
+      "off": "Desligada",
+      "starting": "Partindo",
+      "tryHint": "Experimente: ligue, desligue ou mude a rotação",
+      "manual": "Modo teste: continue rolando para voltar à simulação"
     },
     "featuresTitle": "O que estamos construindo",
     "features": [

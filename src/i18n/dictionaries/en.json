@@ -788,10 +788,16 @@
       "waOpen": "Open in the app",
       "rpm": "Speed",
       "control": "Remote control",
-      "reduce": "Lower to 1,800 rpm",
-      "stop": "Stop",
       "sent": "Command confirmed by the unit",
-      "adjusting": "Adjusting"
+      "adjusting": "Adjusting",
+      "oil": "Oil",
+      "discharge": "Discharge",
+      "turnOn": "Start",
+      "turnOff": "Stop",
+      "off": "Off",
+      "starting": "Starting",
+      "tryHint": "Try it: start, stop or change the rpm",
+      "manual": "Test mode: keep scrolling to return to the simulation"
     },
     "featuresTitle": "What we are building",
     "features": [

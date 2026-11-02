@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useRef, useState, useId } from "react";
+import { memo, useEffect, useId, useRef, useState } from "react";
+import { MonitorScreen, physics, scrState, useMonitorSim, useThumbPress, type ScrState, type Vals } from "./Monitor";
 
 type Screen = {
   flow: string;
@@ -20,20 +21,36 @@ type Screen = {
   waOpen: string;
   rpm: string;
   control: string;
-  reduce: string;
-  stop: string;
   sent: string;
   adjusting: string;
+  oil: string;
+  discharge: string;
+  turnOn: string;
+  turnOff: string;
+  off: string;
+  starting: string;
+  tryHint: string;
+  manual: string;
 };
 type Phase = { h: string; p: string };
+/** Prueba del visitante: solo vale en la fase en que la hizo (al seguir bajando vuelve la simulación). */
+type Manual = { phase: number; on: boolean; rpm: number };
 
-// Recorrido simulado: normal → cambia → alerta → WhatsApp → control remoto → normal
-const KEYS = [0, 0.14, 0.3, 0.36, 0.64, 0.8, 0.9, 1];
-const FLOW = [4000, 3950, 3300, 2200, 2150, 2700, 3850, 3980];
-const PRESSURE = [6.2, 6.1, 5.0, 3.4, 3.3, 4.6, 5.9, 6.1];
-const TEMP = [82, 83, 93, 104, 104, 96, 86, 83];
-const RPM = [2400, 2400, 2400, 2400, 2400, 1800, 2250, 2400];
+// Recorrido simulado: normal → cambia → sobrecalentamiento → WhatsApp → el pulgar toca «Apagar»
+// y el motor se detiene → se vuelve a encender y todo se normaliza
+const KEYS = [0, 0.14, 0.3, 0.36, 0.67, 0.71, 0.845, 0.88, 0.95, 1];
+const FLOW = [4000, 3950, 3300, 2200, 2150, 0, 0, 3900, 3980, 3980];
+const PRESSURE = [6.2, 6.1, 5.0, 3.4, 3.3, 0, 0, 6.0, 6.1, 6.1];
+const TEMP = [82, 83, 93, 104, 104, 97, 88, 84, 83, 83];
+// Con el motor recalentado el aceite se adelgaza y su presión baja
+const OIL = [4.5, 4.4, 3.7, 2.7, 2.6, 0, 0, 4.3, 4.4, 4.4];
+const RPM = [2400, 2400, 2400, 2400, 2400, 0, 0, 2400, 2400, 2400];
 const BOUNDS = [0.16, 0.33, 0.5, 0.66, 0.83];
+// El pulgar toca el botón: «Apagar» al empezar el control a distancia y «Encender» al volver a la normalidad
+const OFF_AT = 0.67;
+const ON_AT = 0.845;
+const pressingAt = (p: number) => (p >= OFF_AT - 0.018 && p < OFF_AT + 0.025) || (p >= ON_AT - 0.012 && p < ON_AT + 0.022);
+const SETPOINT = 2400;
 
 function at(series: number[], p: number) {
   for (let i = 1; i < KEYS.length; i++) {
@@ -44,20 +61,28 @@ function at(series: number[], p: number) {
   }
   return series[series.length - 1];
 }
-const phaseOf = (p: number) => BOUNDS.findIndex((b) => p < b) === -1 ? 5 : BOUNDS.findIndex((b) => p < b);
+const story = (p: number): Vals => ({ rpm: at(RPM, p), temp: at(TEMP, p), oil: at(OIL, p), flow: at(FLOW, p), press: at(PRESSURE, p) });
+// Inercias (s): en la simulación siguen el scroll; con el mando, el motor acelera y se enfría como uno real
+const TAU_STORY: Vals = { rpm: 0.2, temp: 0.2, oil: 0.2, flow: 0.25, press: 0.25 };
+const TAU_MANUAL: Vals = { rpm: 0.8, temp: 5, oil: 0.5, flow: 1.2, press: 1.2 };
+
+const phaseOf = (p: number) => (BOUNDS.findIndex((b) => p < b) === -1 ? 5 : BOUNDS.findIndex((b) => p < b));
 // Estilo de color de cada fase
 const TONE = ["normal", "warning", "alert", "alert", "control", "recovered"] as const;
 
 /**
- * Historia con scroll: un teléfono en la mano, en la mina, mostrando una motobomba
- * que pasa de normal a alerta, avisa por WhatsApp, se controla a distancia y se normaliza.
- * Es una simulación.
+ * Historia con scroll: un teléfono en la mano, en la mina, con JF Monitor en la pantalla (el tablero
+ * de 3 relojes, el acelerador y el botón de encendido). Pasa de normal a sobrecalentamiento, avisa por
+ * WhatsApp, el pulgar apaga la motobomba a distancia y luego la vuelve a encender. El botón y el
+ * acelerador son reales: el visitante los puede probar. Es una simulación.
  */
 export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Screen; unit: string }) {
   const root = useRef<HTMLElement>(null);
+  const handRef = useRef<HTMLDivElement>(null);
   const [p, setP] = useState(0);
   // Se fija con JS (no con position: sticky) porque el sitio usa overflow-x en <body>
   const [pin, setPin] = useState<"before" | "pinned" | "after">("before");
+  const [manualRaw, setManual] = useState<Manual | null>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -85,23 +110,34 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
 
   const phase = phaseOf(p);
   const tone = TONE[phase];
-  const flow = at(FLOW, p);
-  const pressure = at(PRESSURE, p);
-  const temp = at(TEMP, p);
-  const rpm = at(RPM, p);
-  const flowPct = Math.min(100, (flow / 5000) * 100);
+  const manual = manualRaw && manualRaw.phase === phase ? manualRaw : null;
+  const storyOn = !(p >= OFF_AT && p < ON_AT);
+  const on = manual ? manual.on : storyOn;
+  const setpoint = manual ? manual.rpm : SETPOINT;
+  const target = manual ? physics(manual.on, manual.rpm) : story(p);
+  const tau = manual ? TAU_MANUAL : TAU_STORY;
+  const disp = useMonitorSim(() => ({ target, tau, on }), pin === "pinned", story(0));
+  const v = pin === "pinned" ? disp.v : target;
+  const pressing = !manual && pressingAt(p);
+  useThumbPress(handRef, on);
+
   const enter = Math.min(1, p / 0.07);
   // Durante el control remoto el teléfono se acerca un poco
   const lift = phase === 4 ? 1 : 0;
-  const spark = Array.from({ length: 28 }, (_, i) => {
-    const q = Math.max(0, p - (27 - i) * 0.012);
-    return `${(i / 27) * 100},${40 - ((at(TEMP, q) - 75) / 35) * 36}`;
-  }).join(" ");
-  const chip = { normal: screen.normal, warning: screen.warning, alert: screen.alert, control: screen.adjusting, recovered: screen.recovered }[tone];
-  const sent = phase === 4 && p > 0.72;
+  const scr: ScrState = scrState(v, on, setpoint, manual ? undefined : tone);
+  const chip = {
+    normal: screen.normal,
+    warning: screen.warning,
+    alert: screen.alert,
+    control: screen.adjusting,
+    recovered: screen.recovered,
+    off: screen.off,
+    starting: screen.starting,
+  }[scr];
+  const toast = !manual && phase === 4 && p > 0.72 ? screen.sent : null;
 
   return (
-    <section ref={root} className={`app-story s-${tone} ph-${phase}`} aria-label={phases.map((x) => x.h).join(" · ")}>
+    <section ref={root} className={`app-story s-${tone} ph-${phase}${manual ? " manual" : ""}`} aria-label={phases.map((x) => x.h).join(" · ")}>
       <div className={`app-sticky ${pin}`}>
         <div className="mine" aria-hidden="true" style={{ transform: `scale(${1.04 + p * 0.12})` }}>
           {Array.from({ length: 14 }, (_, i) => (
@@ -112,30 +148,34 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
 
         <div className="app-stage">
           <div
-            className="hand-phone"
+            ref={handRef}
+            className={`hand-phone scr-${scr}${on ? "" : " is-off"}${pressing ? " press-hold" : ""}`}
             style={{ transform: `translateY(${(1 - enter) * 45 - lift * 3}vh) rotate(${-7 + enter * 4 + lift * 2}deg)` }}
-            aria-hidden="true"
           >
             <Hand part="back" />
             <div className="phone">
-              <div className="notch" />
-              <div className="screen">
-                <div className="scr-top">
-                  <span>
-                    <b>{unit}</b>
-                    <small>
-                      <i className="live-dot" /> {screen.live}
-                    </small>
-                  </span>
-                  <span className={`scr-chip ${tone}`}>{chip}</span>
-                </div>
-
-                <div className={`notif ${phase === 2 ? "show" : ""}`}>
+              <div className="notch" aria-hidden="true" />
+              <MonitorScreen
+                unit={unit}
+                labels={screen}
+                v={v}
+                h={disp.h}
+                on={on}
+                setpoint={setpoint}
+                scr={scr}
+                chip={chip}
+                hours={1284.5 + p * 0.6}
+                pressing={pressing}
+                toast={toast}
+                onPower={() => setManual({ phase, on: !on, rpm: setpoint })}
+                onRpm={(rpm) => setManual({ phase, on: manual ? manual.on : on, rpm })}
+              >
+                <div className={`notif ${phase === 2 && !manual ? "show" : ""}`} aria-hidden="true">
                   <b>⚠ {screen.notifTitle}</b>
                   <span>{screen.notifBody}</span>
                 </div>
 
-                <div className={`wa ${phase === 3 ? "show" : ""}`}>
+                <div className={`wa ${phase === 3 && !manual ? "show" : ""}`} aria-hidden="true">
                   <div className="wa-head">
                     <i className="wa-logo">
                       <svg viewBox="0 0 24 24">
@@ -151,55 +191,7 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
                     <em>{screen.waOpen} →</em>
                   </div>
                 </div>
-
-                <div className={`remote ${phase === 4 ? "show" : ""}`}>
-                  <span className="remote-title">{screen.control}</span>
-                  <div className="remote-rpm">
-                    <small>{screen.rpm}</small>
-                    <b>{Math.round(rpm).toLocaleString("es-CO")} rpm</b>
-                    <i>
-                      <em style={{ width: `${(rpm / 3000) * 100}%` }} />
-                    </i>
-                  </div>
-                  <div className="remote-btns">
-                    <span className={`rb primary ${phase === 4 ? "pressed" : ""}`}>
-                      {screen.reduce}
-                      <i className="tap" />
-                    </span>
-                    <span className="rb">{screen.stop}</span>
-                  </div>
-                  <span className={`remote-ok ${sent ? "show" : ""}`}>✓ {screen.sent}</span>
-                </div>
-
-                <div className="gauge-ring">
-                  <svg viewBox="0 0 120 120">
-                    <path d="M 22 92 A 48 48 0 1 1 98 92" pathLength={100} className="track" />
-                    <path d="M 22 92 A 48 48 0 1 1 98 92" pathLength={100} className="value" style={{ strokeDasharray: `${flowPct} 100` }} />
-                  </svg>
-                  <div>
-                    <b>{Math.round(flow).toLocaleString("es-CO")}</b>
-                    <small>L/min · {screen.flow}</small>
-                  </div>
-                </div>
-                <div className="metric">
-                  <span>{screen.pressure}</span>
-                  <b>{pressure.toFixed(1)} bar</b>
-                  <i>
-                    <em style={{ width: `${(pressure / 8) * 100}%` }} />
-                  </i>
-                </div>
-                <div className="metric">
-                  <span>{screen.temp}</span>
-                  <b>{Math.round(temp)} °C</b>
-                  <svg className="spark" viewBox="0 0 100 40" preserveAspectRatio="none">
-                    <polyline points={spark} />
-                  </svg>
-                </div>
-                <div className="metric small">
-                  <span>{screen.hours}</span>
-                  <b>{(1284.5 + p * 0.6).toFixed(1)} h</b>
-                </div>
-              </div>
+              </MonitorScreen>
               <div className="glass" />
             </div>
             <Hand part="front" />
@@ -218,6 +210,9 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
                 <i key={x.h} className={i <= phase ? "on" : ""} />
               ))}
             </div>
+            <p className={`app-try${manual ? " active" : ""}`}>
+              <span aria-hidden="true">☝</span> {manual ? screen.manual : screen.tryHint}
+            </p>
           </div>
         </div>
       </div>
@@ -233,13 +228,13 @@ export function AppStory({ phases, screen, unit }: { phases: Phase[]; screen: Sc
  *    el pulgar unido a ella (gira desde su articulación para tocar la pantalla) y las yemas
  *    de los cuatro dedos que abrazan el borde derecho.
  */
-export function Hand({ part }: { part: "back" | "front" }) {
+export const Hand = memo(function Hand({ part }: { part: "back" | "front" }) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const id = (n: string) => `${n}-${uid}`;
   const url = (n: string) => `url(#${id(n)})`;
   if (part === "back") {
     return (
-      <svg className="hand back" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">
+      <svg className="hand back" aria-hidden="true" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">
         <defs>
           <linearGradient id={id("palm")} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="#4c535d" />
@@ -285,7 +280,7 @@ export function Hand({ part }: { part: "back" | "front" }) {
     { y: 464, w: 17.5, tip: 258, rot: 10 },
   ];
   return (
-    <svg className="hand front" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">
+    <svg className="hand front" aria-hidden="true" viewBox="0 0 300 760" preserveAspectRatio="xMidYMin meet">
       <defs>
         <linearGradient id={id("finger")} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#6c7480" />
@@ -364,4 +359,4 @@ export function Hand({ part }: { part: "back" | "front" }) {
       </g>
     </svg>
   );
-}
+});

@@ -788,10 +788,16 @@
       "waOpen": "Abrir en la app",
       "rpm": "Régimen",
       "control": "Control remoto",
-      "reduce": "Bajar a 1.800 rpm",
-      "stop": "Detener",
       "sent": "Orden confirmada por el equipo",
-      "adjusting": "Ajustando"
+      "adjusting": "Ajustando",
+      "oil": "Aceite",
+      "discharge": "Descarga",
+      "turnOn": "Encender",
+      "turnOff": "Apagar",
+      "off": "Apagada",
+      "starting": "Arrancando",
+      "tryHint": "Pruébalo: enciende, apaga o mueve las rpm",
+      "manual": "Modo prueba: sigue bajando para volver a la simulación"
     },
     "featuresTitle": "Lo que estamos construyendo",
     "features": [

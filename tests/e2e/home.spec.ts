@@ -115,7 +115,9 @@ test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el d
   await expect(page.locator(".part-row.on")).toHaveCount(0);
   await expect(page.locator(".jcard-app.on .soon-badge")).toBeVisible();
   await expect(page.locator(".jcard-app.on a.app-cta")).toHaveAttribute("href", "/es/app");
-  await expect(page.locator(".mini-remote .mr-btn.pressed")).toHaveCount(1);
+  // El teléfono muestra JF Monitor (3 relojes y mando) y el pulgar ya apagó la motobomba
+  await expect(page.locator(".mini-remote .mon-row")).toHaveCount(3);
+  await expect(page.locator(".mini-remote .mon-power")).toHaveText("Encender");
 });
 
 test("el panel exige iniciar sesión", async ({ page }) => {
@@ -248,6 +250,20 @@ test("la página de la app (en construcción) responde y anima con el scroll", a
     window.scrollTo(0, el.offsetTop + (el.offsetHeight - innerHeight) * 0.6);
   });
   await expect(story).toHaveClass(/s-alert/);
+  // Sobrecalentamiento → el pulgar toca «Apagar» y la motobomba queda apagada
+  await page.evaluate(() => {
+    const el = document.querySelector<HTMLElement>(".app-story")!;
+    window.scrollTo(0, el.offsetTop + (el.offsetHeight - innerHeight) * 0.76);
+  });
+  const power = page.locator(".app-story .mon-power");
+  await expect(power).toHaveText("Encender");
+  await expect(page.locator(".app-story .scr-chip")).toHaveText("Apagada", { timeout: 8000 });
+  // El visitante puede probar el mando: encender y mover el acelerador
+  await power.click();
+  await expect(power).toHaveText("Apagar");
+  await page.locator(".app-story .mon-slider").fill("1500");
+  await expect(page.locator(".mon-ctrl-top b")).toHaveText("1.500 rpm");
+  await expect(page.locator(".app-try")).toHaveClass(/active/);
 });
 
 test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ page }) => {

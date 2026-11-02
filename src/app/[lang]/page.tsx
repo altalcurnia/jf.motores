@@ -150,6 +150,7 @@ export default async function HomePage() {
         brand={brand}
         partProducts={partProducts}
         t={{ journey: dict.journey, hud: dict.hud, rail: dict.rail, parts: dict.parts, partsInfo: dict.partsInfo }}
+        monitor={dict.app.screen}
       />
 
       <div className="post">

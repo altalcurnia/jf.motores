@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { Hand } from "@/features/app-preview/AppStory";
+import { MonitorScreen, physics, useMonitorSim, useThumbPress, type MonitorLabels, type Vals } from "@/features/app-preview/Monitor";
 import { STOP_AT, STOP_END, stageAt, type StageKey } from "./stages.js";
 import type { Locale } from "@/i18n/config";
 import { localeTags } from "@/i18n/config";
@@ -20,19 +21,23 @@ type Props = {
   /** Versión de marca: cambia el color de acento del 3D y la portada en celular. */
   brand?: string;
   t: Pick<Dictionary, "journey" | "hud" | "rail" | "parts" | "partsInfo">;
+  /** Textos de la pantalla de JF Monitor (el teléfono del final del recorrido). */
+  monitor: MonitorLabels;
 };
 
 /**
  * Motor 3D de fondo + recorrido por scroll (encendido, revolución, despiece, apagado).
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
-export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", partProducts = {} }: Props) {
+export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "nueva", partProducts = {} }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const liftRef = useRef(false);
   const journeyRef = useRef<HTMLElement>(null);
   const engineRef = useRef<{ highlight?: (k: string | null) => void; focus?: (k: string | null) => void } | null>(null);
   const [p, setP] = useState(0);
+  // Lo que mide el motor 3D en cada cuadro (rpm, temperatura y aceite) para el teléfono de JF Monitor
+  const liveRef = useRef<{ t: number; v: Vals } | null>(null);
   const [active, setActive] = useState(false);
   const [hover, setHover] = useState<string | null>(null);
   // En celular, tocar una pieza abre este menú (abrir catálogo o seguir explorando)
@@ -137,6 +142,10 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
               setHover(part);
               started.highlight(part);
               setSheet(part);
+            },
+            onLive: (rpm: number, temp: number, oil: number) => {
+              const k = rpm / 2400;
+              liveRef.current = { t: performance.now(), v: { rpm, temp, oil, flow: 4000 * k, press: 6.2 * k * k } };
             },
             onPartHover: (part: string | null) => {
               if (sheetRef.current) return; // con una pieza elegida no se resalta otra al pasar
@@ -293,7 +302,7 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
               {j.e.cta} →
             </Link>
           </div>
-          <MiniRemote on={appOn} p={p} s={j.e.screen} />
+          <MiniRemote on={appOn} p={p} s={j.e.screen} labels={monitor} liveRef={liveRef} />
         </div>
 
         {/* Fila de piezas del despiece: al pasar el cursor se ilumina la pieza y su etiqueta */}
@@ -421,35 +430,62 @@ export function EngineExperience({ locale, t, variant = "v2", brand = "nueva", p
   );
 }
 
-/** Teléfono en la mano que apaga la motobomba (simulación de la futura app). */
-function MiniRemote({ on, p, s }: { on: boolean; p: number; s: Dictionary["journey"]["e"]["screen"] }) {
+/** Inercia de las agujas del teléfono: siguen al motor 3D casi sin retraso. */
+const TAU_LIVE: Vals = { rpm: 0.12, temp: 0.3, oil: 0.15, flow: 0.3, press: 0.3 };
+
+/**
+ * Teléfono en la mano con JF Monitor (la misma pantalla de la página de la app): muestra lo que mide el
+ * motor 3D y el pulgar toca «Apagar» para detenerlo (simulación de la futura app).
+ */
+function MiniRemote({
+  on,
+  p,
+  s,
+  labels,
+  liveRef,
+}: {
+  on: boolean;
+  p: number;
+  s: Dictionary["journey"]["e"]["screen"];
+  labels: MonitorLabels;
+  liveRef: { current: { t: number; v: Vals } | null };
+}) {
+  const handRef = useRef<HTMLDivElement>(null);
   const pressed = p >= STOP_AT;
   const k = Math.min(1, Math.max(0, (p - STOP_AT) / (STOP_END - STOP_AT)));
+  const running = !pressed || k < 1;
+  // Sin 3D (equipos sin WebGL) los valores siguen el recorrido
+  const fallback = pressed ? (k < 1 ? physics(true, 2400 * (1 - k)) : physics(false, 0)) : physics(true, 2400);
+  const disp = useMonitorSim(
+    () => {
+      const live = liveRef.current;
+      const fresh = live && performance.now() - live.t < 500;
+      return { target: fresh ? live.v : fallback, tau: TAU_LIVE, on: false };
+    },
+    on,
+    physics(true, 2400),
+  );
+  useThumbPress(handRef, on);
   const state = !pressed ? s.on : k < 1 ? s.stopping : s.off;
   return (
-    <div className={`mini-remote${on ? " on" : ""}`} aria-hidden="true">
-      <div className={`hand-phone small${pressed && k < 1 ? " press-hold" : ""}`}>
+    <div className={`mini-remote${on ? " on" : ""}`} aria-hidden="true" inert>
+      <div ref={handRef} className={`hand-phone small${pressed && k < 1 ? " press-hold" : ""}${running ? "" : " is-off"}`}>
         <Hand part="back" />
         <div className="phone">
           <div className="notch" />
-          <div className="screen">
-            <div className="scr-top">
-              <span>
-                <b>{s.unit}</b>
-              </span>
-              <span className={`scr-chip ${k >= 1 ? "recovered" : pressed ? "control" : "normal"}`}>{state}</span>
-            </div>
-            <div className="mr-rpm">
-              {/* El motor 3D actualiza este número en vivo (mismas rpm del tacómetro) */}
-              <b id="phoneRpm">840</b>
-              <small>RPM</small>
-            </div>
-            <span className={`mr-btn${pressed ? " pressed" : ""}`}>
-              ⏻ {s.button}
-              <i className="tap-ring" />
-            </span>
-            <span className={`mr-ok${pressed ? " show" : ""}`}>{k >= 1 ? s.stopped : s.sent}</span>
-          </div>
+          <MonitorScreen
+            unit={s.unit}
+            labels={labels}
+            v={disp.v}
+            h={disp.h}
+            on={!pressed}
+            setpoint={2400}
+            scr={!pressed ? "normal" : k < 1 ? "control" : "off"}
+            chip={state}
+            hours={1284.5}
+            pressing={pressed && k < 1}
+            toast={pressed ? (k >= 1 ? s.stopped : s.sent) : null}
+          />
           <div className="glass" />
         </div>
         <Hand part="front" />

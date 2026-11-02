@@ -625,48 +625,69 @@ body.drawer-open { overflow: hidden; }
 .wa-bubble { display: grid; gap: 4px; background: #1f6f4a; border-radius: 12px 12px 12px 4px; padding: 9px 10px; font-size: 11.5px; line-height: 1.35; }
 .wa-bubble b { color: #9ff0c2; font-size: 11px; }
 .wa-bubble em { font-style: normal; color: #d8ffe9; font-size: 10.5px; opacity: 0.8; }
-/* Control remoto */
-.remote { position: absolute; left: 8px; right: 8px; top: 80px; z-index: 5; display: grid; gap: 9px; padding: 14px 12px 12px; border-radius: 22px; background: rgba(20, 22, 26, 0.97); border: 1px solid rgba(247, 198, 0, 0.45); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); transform: translateY(-30%) scale(0.96); opacity: 0; transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.2, 1.05), opacity 0.3s; }
-.remote.show { transform: none; opacity: 1; }
-.remote-title { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
-.remote-rpm { display: grid; grid-template-columns: 1fr auto; gap: 4px; align-items: center; }
-.remote-rpm small { color: #98a2ad; font-size: 11px; }
-.remote-rpm b { font-size: 15px; }
-.remote-rpm i { grid-column: 1 / -1; height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
-.remote-rpm em { display: block; height: 100%; background: var(--yellow); transition: width 0.2s; }
-.remote-btns { display: grid; grid-template-columns: 1.4fr 1fr; gap: 6px; }
-.rb { text-align: center; font-size: 11px; font-weight: 700; padding: 9px 6px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.14); color: #eef1f4; }
-.rb.primary { background: var(--yellow); color: #0b0d10; border-color: var(--yellow); }
-.rb.pressed { animation: press 1.6s ease-in-out 1; }
-@keyframes press { 0%, 26%, 100% { transform: none; } 32% { transform: scale(0.92); box-shadow: 0 0 0 6px rgba(247, 198, 0, 0.3); } 50% { transform: none; } }
-.remote-ok { font-size: 10.5px; color: #3ecf8e; opacity: 0; transition: opacity 0.4s; }
-.remote-ok.show { opacity: 1; }
-.s-control .gauge-ring .value, .s-control .metric em { stroke: var(--yellow); background: var(--yellow); }
-.s-control .metric .spark polyline { stroke: var(--yellow); }
-.notif { display: grid; gap: 2px; padding: 0 12px; max-height: 0; opacity: 0; border-radius: 14px; background: rgba(255, 90, 74, 0.16); border: 1px solid rgba(255, 90, 74, 0.6); font-size: 11px; transition: max-height 0.35s, opacity 0.35s, padding 0.35s; overflow: hidden; }
-.notif.show { max-height: 80px; opacity: 1; padding: 10px 12px; }
+/* Aviso de alerta: entra desde arriba sobre el tablero */
+.notif { position: absolute; left: 10px; right: 10px; top: 40px; z-index: 5; display: grid; gap: 2px; padding: 10px 12px; border-radius: 14px; background: rgba(48, 16, 14, 0.96); border: 1px solid rgba(255, 90, 74, 0.7); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); font-size: 11px; transform: translateY(-140%); opacity: 0; transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.2, 1.15), opacity 0.3s; }
+.notif.show { transform: none; opacity: 1; }
 .notif b { color: #ff8a7a; font-size: 12px; }
-.gauge-ring { position: relative; display: grid; place-items: center; }
-.gauge-ring svg { width: 180px; height: 180px; }
-.gauge-ring .track { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 10; stroke-linecap: round; }
-.gauge-ring .value { fill: none; stroke: #3ecf8e; stroke-width: 10; stroke-linecap: round; transition: stroke 0.3s; }
-.s-warning .gauge-ring .value { stroke: var(--yellow); }
-.s-alert .gauge-ring .value { stroke: #ff5a4a; }
-.gauge-ring div { position: absolute; text-align: center; display: grid; }
-.gauge-ring b { font-family: var(--disp); font-weight: 900; font-size: 30px; }
-.gauge-ring small { font-size: 10px; color: #98a2ad; }
-.metric { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 8px; padding: 10px 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
-.metric span { font-size: 11px; color: #98a2ad; }
-.metric b { font-size: 15px; }
-.metric i { grid-column: 1 / -1; height: 5px; border-radius: 5px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
-.metric em { display: block; height: 100%; background: #3ecf8e; transition: background 0.3s; }
-.s-warning .metric em { background: var(--yellow); }
-.s-alert .metric em { background: #ff5a4a; }
-.metric .spark { grid-column: 1 / -1; width: 100%; height: 34px; }
-.metric .spark polyline { fill: none; stroke: #3ecf8e; stroke-width: 2; vector-effect: non-scaling-stroke; }
-.s-warning .metric .spark polyline { stroke: var(--yellow); }
-.s-alert .metric .spark polyline { stroke: #ff5a4a; }
-.metric.small b { font-size: 13px; font-family: var(--mono); }
+
+/* Pantalla de JF Monitor: indicadores, tablero de 3 relojes y mando a distancia */
+.mon-screen { gap: 8px; padding: 40px 12px 14px; }
+.mon-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mon-kpis span { display: grid; gap: 1px; padding: 6px 9px; border-radius: 10px; background: rgba(255, 255, 255, 0.045); }
+.mon-kpis small { font-size: 9px; color: #98a2ad; letter-spacing: 0.04em; }
+.mon-kpis b { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.mon-kpis i { font-style: normal; font-size: 9px; color: #98a2ad; font-weight: 400; }
+.mon-panel { display: grid; gap: 2px; padding: 6px 8px; border-radius: 16px; background: linear-gradient(180deg, rgba(42, 46, 40, 0.55), rgba(18, 20, 22, 0.75)); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05); transition: filter 0.6s; }
+.mon-row { display: grid; grid-template-columns: 78px 1fr; align-items: center; gap: 8px; }
+.mon-row + .mon-row { border-top: 1px dashed rgba(255, 255, 255, 0.07); padding-top: 2px; }
+.mon-dial { width: 78px; height: 78px; display: block; }
+.mon-dial line, .mon-dial path { transition: stroke 0.4s; }
+.mon-dial .d-val { font-family: var(--mono); font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
+.mon-dial .d-unit { font-family: var(--mono); font-size: 7.5px; fill: #8a949e; letter-spacing: 0.08em; }
+.mon-dial .d-min { font-family: var(--mono); font-size: 6.5px; fill: #5a636d; }
+.mon-side { display: grid; gap: 3px; min-width: 0; }
+.mon-lbl { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: #c9d0d7; }
+.mon-row.alert .mon-lbl { color: #ff8a7a; }
+.mon-spark { width: 100%; height: 28px; display: block; }
+.mon-spark polyline { fill: none; stroke: var(--c); stroke-width: 1.8; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: 0.9; }
+.mon-side small { font-size: 8.5px; color: #6f7a85; white-space: nowrap; }
+.mon-row.alert .mon-dial { animation: dial-alarm 1s ease-in-out infinite; }
+@keyframes dial-alarm { 50% { filter: drop-shadow(0 0 8px rgba(255, 90, 74, 0.8)); } }
+.mon-ctrl { position: relative; display: grid; gap: 6px; padding: 9px 10px 8px; border-radius: 14px; background: rgba(255, 255, 255, 0.045); border: 1px solid transparent; transition: border-color 0.3s, background 0.3s; }
+.mon-ctrl-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 10px; color: #98a2ad; }
+.mon-ctrl-top b { font-family: var(--mono); font-size: 12px; color: var(--yellow); font-variant-numeric: tabular-nums; }
+.mon-slider-wrap { position: relative; height: 22px; }
+.mon-slider { -webkit-appearance: none; appearance: none; position: absolute; inset: 0; width: 100%; height: 22px; margin: 0; background: transparent; cursor: pointer; touch-action: pan-y; }
+.mon-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--yellow) var(--f), rgba(255, 255, 255, 0.12) var(--f)); }
+.mon-slider::-moz-range-track { height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--yellow) var(--f), rgba(255, 255, 255, 0.12) var(--f)); }
+.mon-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: #fff; border: 3px solid var(--yellow); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+.mon-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid var(--yellow); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+.mon-slider:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; border-radius: 8px; }
+.mon-ctrl-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.mon-hours { display: grid; font-size: 9px; color: #6f7a85; }
+.mon-hours b { font-family: var(--mono); font-size: 11px; color: #c9d0d7; font-weight: 600; }
+.mon-power { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px 0 10px; border-radius: 999px; border: 1px solid; font: 700 11px/1 var(--body); letter-spacing: 0.04em; cursor: pointer; transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.12s; }
+.mon-power svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+.mon-power.on { background: rgba(255, 90, 74, 0.14); border-color: rgba(255, 90, 74, 0.7); color: #ff8a7a; }
+.mon-power.off { background: #3ecf8e; border-color: #3ecf8e; color: #06140d; box-shadow: 0 0 18px rgba(62, 207, 142, 0.45); }
+.mon-power:active { transform: scale(0.94); }
+.mon-power:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.mon-ok { position: absolute; left: 10px; right: 10px; top: -20px; font-size: 10.5px; color: #3ecf8e; text-align: center; opacity: 0; transform: translateY(4px); transition: opacity 0.4s, transform 0.4s; }
+.mon-ok.show { opacity: 1; transform: none; }
+.scr-chip.off { background: rgba(255, 255, 255, 0.1); color: #98a2ad; }
+.scr-chip.starting { background: rgba(79, 179, 255, 0.18); color: #4fb3ff; }
+/* Motor apagado: tablero apagado y el punto «en vivo» en gris */
+.hand-phone.is-off .live-dot { background: #5a636d; animation: none; }
+.hand-phone.is-off .mon-panel { filter: saturate(0.45) brightness(0.75); }
+.app-story .hand-phone .phone { transition: box-shadow 0.5s; }
+.hand-phone.scr-alert .phone { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 70px rgba(255, 90, 74, 0.35); }
+.hand-phone.scr-control .phone { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(247, 198, 0, 0.28); }
+.hand-phone.scr-normal .phone, .hand-phone.scr-recovered .phone { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 50px rgba(62, 207, 142, 0.16); }
+/* Invitación a probar el mando */
+.app-try { position: absolute; left: 0; bottom: -84px; margin: 0; white-space: nowrap; font-size: 13px; color: #c9d0d7; display: flex; align-items: center; gap: 8px; }
+.app-try span { color: var(--yellow); font-size: 16px; animation: app-bob 1.6s ease-in-out infinite; }
+.app-try.active { color: var(--yellow); }
+
 
 .app-copy { position: relative; min-height: 260px; }
 .app-copy article { position: absolute; inset: 0; opacity: 0; transform: translateY(24px); transition: opacity 0.45s, transform 0.45s; display: grid; gap: 12px; align-content: center; }
@@ -685,17 +706,20 @@ body.drawer-open { overflow: hidden; }
 @media (max-width: 900px) {
   .app-stage { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; padding: 66px 16px 18px; gap: 8px; align-items: center; }
   .hand-phone { scale: 0.56; margin: -132px auto -132px; }
+  .app-story .hand-phone { scale: 0.7; margin: -90px auto -90px; }
   .app-copy { min-height: 205px; background: rgba(7, 8, 10, 0.88); border: 1px solid var(--line); border-radius: 16px; z-index: 4; }
   .app-copy article { padding: 14px 16px 36px; align-content: start; }
   .app-copy h2 { font-size: 26px; }
   .app-copy p { font-size: 14.5px; }
   .app-dots { left: 16px; bottom: 14px; }
+  .app-try { bottom: auto; top: -34px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; padding: 5px 12px; border-radius: 999px; background: rgba(7, 8, 10, 0.82); border: 1px solid var(--line); }
 }
 @media (max-width: 900px) and (max-height: 720px) {
   .hand-phone { scale: 0.5; margin: -150px auto -150px; }
+  .app-story .hand-phone { scale: 0.56; margin: -132px auto -132px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .app-story .hand-phone .phone, .mine .dust, .app-scroll, .app-story .alarm-glow, .rb.pressed { animation: none !important; }
+  .app-story .hand-phone .phone, .mine .dust, .app-scroll, .app-story .alarm-glow, .mon-row .mon-dial, .app-try span { animation: none !important; }
 }
 .app-plans { padding-top: 40px !important; }
 .plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 24px; align-items: stretch; }
@@ -781,21 +805,6 @@ body.drawer-open { overflow: hidden; }
 }
 .mini-remote.on { opacity: 1; transform: translateY(-50%) scale(0.8); }
 .mini-remote .hand-phone { width: 300px; height: 600px; }
-.mini-remote .screen { display: flex; flex-direction: column; gap: 14px; }
-.mr-rpm { margin-top: 26px; text-align: center; font-family: var(--mono); }
-.mr-rpm b { display: block; font-size: 54px; line-height: 1; color: var(--yellow); }
-.mr-rpm small { font-size: 11px; letter-spacing: 0.3em; color: #98a2ad; }
-.mr-btn {
-  margin: auto 8px 0; text-align: center; padding: 16px; border-radius: 16px;
-  background: #ff5a4a; color: #0b0d10; font-weight: 800; font-size: 15px; letter-spacing: 0.04em;
-  transition: transform 0.2s, background 0.3s, box-shadow 0.3s; box-shadow: 0 0 0 0 rgba(255, 90, 74, 0.5);
-}
-.mr-btn.pressed { transform: scale(0.94); background: #7a2e27; color: #f3d3cf; box-shadow: 0 0 0 10px rgba(255, 90, 74, 0.18); }
-.mr-ok {
-  text-align: center; font-size: 12px; color: #3ecf8e; min-height: 18px; margin-bottom: 70px;
-  opacity: 0; transition: opacity 0.3s;
-}
-.mr-ok.show { opacity: 1; }
 
 /* Fila de piezas del despiece (botones laterales sutiles) */
 .part-row {
@@ -1013,40 +1022,23 @@ body.in-journey.app-open #hud { opacity: 0; }
 }
 
 /* ---------- Toque en el celular (inicio y página de la app) ---------- */
-.hand.front .thumb { transform-box: view-box; transform-origin: 44px 574px; transform: rotate(-18deg); }
+/* El pulgar sujeta el borde del teléfono y deja libre el mando */
+.hand.front .thumb { transform-box: view-box; transform-origin: 44px 574px; transform: rotate(-30deg); }
 /* Mientras se apaga, el pulgar se queda presionando el botón (sigue el scroll, no un tiempo fijo) */
 .hand.front .thumb { transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.3, 1); }
-.hand-phone.press-hold .hand.front .thumb { transform: rotate(6deg); }
-.mr-btn { position: relative; transition: transform 0.25s ease, background 0.3s, color 0.3s; }
-.hand-phone.press-hold .mr-btn { transform: scale(0.94); background: #b8392d; color: #fff; }
+/* --thumb-press lo calcula el script para que la yema caiga sobre el botón de encendido */
+.hand-phone.press-hold .hand.front .thumb { transform: var(--thumb-press, rotate(6deg)); }
+.mon-power { position: relative; }
+.mon-power.pressed { transform: scale(0.92); }
+.mon-power .tap-ring { border-radius: inherit; }
 .tap-ring { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
 .hand-phone.press-hold .tap-ring { animation: tap-ring 1.1s 0.35s ease-out infinite; }
 @keyframes tap-ring {
   0% { box-shadow: 0 0 0 0 rgba(255, 90, 74, 0.75); }
   100% { box-shadow: 0 0 0 22px rgba(255, 90, 74, 0); }
 }
-/* Yema del dedo que toca el botón en la página de la app */
-.rb { position: relative; }
-.rb .tap { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; pointer-events: none; opacity: 0;
-  background: radial-gradient(circle at 38% 32%, #6b737e, #3a4048 55%, #22262c); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.55); }
-.rb .tap::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--yellow); opacity: 0; }
-.rb.pressed .tap { animation: fingertip 2.4s 0.35s ease-in-out infinite both; }
-.rb.pressed .tap::after { animation: fingertip-ring 2.4s 0.35s ease-out infinite both; }
-.rb.pressed { animation: press 2.4s 0.35s ease-in-out infinite both; }
-@keyframes fingertip {
-  0% { opacity: 0; transform: translate(36px, 70px) scale(1.25); }
-  22% { opacity: 0.95; transform: translate(0, 0) scale(1.1); }
-  32% { opacity: 0.95; transform: scale(0.86); }
-  50% { opacity: 0.95; transform: scale(1); }
-  68%, 100% { opacity: 0; transform: translate(30px, 60px) scale(1.2); }
-}
-@keyframes fingertip-ring {
-  0%, 28% { opacity: 0; transform: scale(0.6); }
-  32% { opacity: 0.9; transform: scale(0.6); }
-  60%, 100% { opacity: 0; transform: scale(2.2); }
-}
 @media (prefers-reduced-motion: reduce) {
-  .hand-phone.press-hold .tap-ring, .rb.pressed .tap, .rb.pressed .tap::after { animation: none !important; }
+  .hand-phone.press-hold .tap-ring { animation: none !important; }
 }
 
 /* ---------- Celular: tarjetas del recorrido compactas (no tapan el motor) ---------- */

@@ -19,7 +19,8 @@ gsap.registerPlugin(ScrollTrigger);
  * @param {{ canvas: HTMLCanvasElement, isMobile: boolean, numberLocale: string, variant?: string, accent?: number, heroLift?: boolean,
  *   hud: { standby: string, start: string, running: string, full: string },
  *   onPartClick: (partKey: string, touch: boolean) => void, onPartHover?: (partKey: string | null) => void,
- *   onContextLost?: () => void }} opts
+ *   onContextLost?: () => void,
+ *   onLive?: (rpm: number, temp: number, oil: number) => void }} opts
  * @returns {(() => void) & { highlight: (partKey: string | null) => void, focus: (partKey: string | null) => void }} limpieza, resaltar y enfocar pieza
  */
 export function startEngine(opts) {
@@ -610,7 +611,6 @@ export function startEngine(opts) {
       const stTemp = document.getElementById("stTemp");
       const stFlow = document.getElementById("stFlow");
       const hudState = document.getElementById("hudState");
-      const phoneRpm = document.getElementById("phoneRpm");
 
       /* loop */
       const clock = new THREE.Clock();
@@ -887,8 +887,8 @@ export function startEngine(opts) {
           txtOil.textContent = (oilP * 5).toFixed(1);
         }
         bigRpm.textContent = String(Math.max(0, rpmVal)).padStart(4, "0");
-        // El celular de la tarjeta "app" muestra las mismas rpm que el motor
-        if (phoneRpm) phoneRpm.textContent = String(Math.max(0, rpmVal));
+        // El celular de la tarjeta "app" (JF Monitor) muestra lo mismo que el tablero del motor
+        if (opts.onLive) opts.onLive(Math.max(0, rpmVal), 21 + heat * 74, oilP * 5);
         stTorque.textContent = Math.round(R.rpm * 68) + " N·m";
         stTemp.textContent = tempVal + " °C";
         stFlow.textContent =
