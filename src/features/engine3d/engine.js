@@ -48,6 +48,8 @@ export function startEngine(opts) {
         atmo: 0,
         // 0 → motor sólido; 1 → bloque, culata y cárter transparentes (rayos X)
         xray: 0,
+        // 0 → distancia normal; 1 → acercamiento de la media vuelta del despiece
+        dolly: 0,
         // Encendido mientras se recorre la portada (antes del recorrido)
         preRpm: 0,
         preSmoke: 0,
@@ -526,7 +528,11 @@ export function startEngine(opts) {
         .to(S, { xray: 1, duration: 8, ease: "power1.inOut" }, 15.5)
         .to(S, { xray: 0, duration: 4, ease: "power1.inOut" }, 31.5)
         // Despiece
-        .to(S, { camTheta: 6.283, camR: 15.5, camPhi: 1.12, camTY: 1.7, duration: 30, ease: "power1.inOut" }, 33)
+        // Despiece: una vuelta completa extra (termina en la misma posición de siempre, 2π después)
+        .to(S, { camTheta: 6.283 + Math.PI * 2, camR: 15.5, camPhi: 1.12, camTY: 1.7, duration: 30, ease: "power1.inOut" }, 33)
+        // …y durante la media vuelta central la cámara se acerca y vuelve a alejarse
+        .to(S, { dolly: 1, duration: 7, ease: "sine.inOut" }, 42)
+        .to(S, { dolly: 0, duration: 7, ease: "sine.inOut" }, 49)
         .to(S, { rpm: 0.35, duration: 8, ease: "power2.inOut" }, 33)
         .to(S, { smoke: 0.5, duration: 8, ease: "power1.inOut" }, 33)
         .to(S, { shake: 0.12, duration: 8, ease: "power2.out" }, 33)
@@ -534,7 +540,7 @@ export function startEngine(opts) {
         .to(S, { atmo: 3, duration: 12, ease: "power1.inOut" }, 33)
         // Las piezas vuelven a su sitio
         .to(S, { explode: 0, duration: 9, ease: "power2.inOut" }, 63)
-        .to(S, { camTheta: 6.7, camR: 13, camPhi: 1.24, camTY: 1.5, duration: 22, ease: "power1.inOut" }, 62)
+        .to(S, { camTheta: 6.7 + Math.PI * 2, camR: 13, camPhi: 1.24, camTY: 1.5, duration: 22, ease: "power1.inOut" }, 62)
         .to(S, { atmo: 4, duration: 10, ease: "power1.inOut" }, 72)
         // Apagado desde el celular (tarjeta de la app)
         .to(S, { rpm: 0, duration: 8, ease: "power2.in" }, 80)
@@ -629,6 +635,9 @@ export function startEngine(opts) {
       const focusBox = new THREE.Box3();
       const focusC = new THREE.Vector3();
       const focusSz = new THREE.Vector3();
+      let focusSnapKey = null,
+        focusSnapExplode = -1,
+        focusRad = 1;
       // Márgenes (px) que ocupan encabezado, franjas, fila de piezas y riel en el despiece
       let rowRight = null;
       function freeArea(W, H) {
@@ -667,7 +676,8 @@ export function startEngine(opts) {
         mouse.x += (mouse.tx - mouse.x) * 0.05;
         mouse.y += (mouse.ty - mouse.y) * 0.05;
 
-        const par = inJourney ? 0.3 : 1;
+        // Paralaje del cursor: nulo con una pieza elegida (el cursor va al panel y no debe mover el fondo)
+        const par = (inJourney ? 0.3 : 1) * (1 - focusAmt);
         const th = S.camTheta + mouse.x * 0.07 * par;
         const ph = THREE.MathUtils.clamp(
           S.camPhi + mouse.y * 0.05 * par,
@@ -692,6 +702,7 @@ export function startEngine(opts) {
           const freeH = Math.max(H - m.t - m.b, H * 0.4);
           const dFit = fitDistance(box, fitT, fitDir, tanH * (freeW / W) * 0.94, tanV * (freeH / H) * 0.94);
           rEff = THREE.MathUtils.lerp(rBase, dFit, ef);
+          rEff *= 1 - 0.42 * S.dolly;
           // Centrar la imagen en el área libre (corre el centro óptico)
           const ox = ((m.l - m.r) / 2) * ef;
           const oy = ((m.t - m.b) / 2) * ef;
@@ -709,16 +720,23 @@ export function startEngine(opts) {
         const focusGoal = focusSel && S.explode > 0.5 ? 1 : 0;
         focusAmt += (focusGoal - focusAmt) * Math.min(1, dt * 2.2);
         if (focusAmt > 0.002 && focusKey && PART_GROUPS[focusKey]) {
-          // Acercamiento: la pieza elegida queda centrada y llena buena parte del área libre
-          partBox(focusKey, focusBox).getCenter(focusC);
-          const rad = Math.max(0.35, focusBox.getSize(focusSz).length() / 2);
-          const rFit = Math.max(2.4, (rad / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.5);
+          // Acercamiento: la pieza elegida queda centrada y llena buena parte del área libre.
+          // El encuadre se toma una vez (y al cambiar el despiece): si siguiera a la pieza, las que
+          // se mueven (pistones, válvulas, volante…) arrastrarían todo el fondo con ellas.
+          if (focusSnapKey !== focusKey || Math.abs(S.explode - focusSnapExplode) > 0.01) {
+            partBox(focusKey, focusBox).getCenter(focusC);
+            focusRad = Math.max(0.35, focusBox.getSize(focusSz).length() / 2);
+            focusSnapKey = focusKey;
+            focusSnapExplode = S.explode;
+          }
+          const rFit = Math.max(2.4, (focusRad / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.5);
           const k = THREE.MathUtils.smoothstep(focusAmt, 0, 1);
           fitT.lerp(focusC, k);
           rEff = THREE.MathUtils.lerp(rEff, Math.min(rEff, rFit), k);
         }
         camera.position.copy(fitT).addScaledVector(fitDir, rEff);
-        const sh = S.shake * R.rpm;
+        // Sin vibración de cámara ni del equipo mientras se mira una pieza elegida
+        const sh = S.shake * R.rpm * (1 - focusAmt);
         camera.position.x += noise(t, 1) * 0.028 * sh;
         camera.position.y += noise(t, 2) * 0.02 * sh;
         camera.lookAt(fitT);

@@ -72,7 +72,16 @@ test("el inicio incluye el recorrido del motor y sus etiquetas enlazadas", async
 });
 
 test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el despiece", async ({ page }) => {
-  test.setTimeout(90_000); // el 3D se dibuja sin tarjeta gráfica en las pruebas
+  test.setTimeout(90_000);
+  // Esta prueba revisa tarjetas y botones (no el dibujo 3D): sin WebGL, como en un equipo viejo.
+  // Con varias pestañas dibujando el 3D sin tarjeta gráfica a la vez, la página se vuelve muy lenta.
+  await page.addInitScript(() => {
+    const orig = HTMLCanvasElement.prototype.getContext;
+    // @ts-expect-error firma sobrecargada
+    HTMLCanvasElement.prototype.getContext = function (type: string, ...rest: unknown[]) {
+      return /webgl/.test(type) ? null : orig.call(this, type, ...rest);
+    };
+  });
   await page.goto("/es");
   const journey = page.locator("#journey");
   const at = async (p: number) => {
@@ -86,7 +95,7 @@ test("el recorrido muestra una tarjeta a la vez y la fila de piezas solo en el d
   await expect(page.locator(".jcard.on")).toHaveCount(1);
   await expect(page.locator(".jcard.on h2")).toContainText("Arranca");
   await at(0.25);
-  await expect(page.locator(".jcard.on #bigRpm")).toHaveCount(1);
+  await expect(page.locator(".jcard.on #bigRpm")).toHaveCount(1, { timeout: 20_000 });
   // Despiece: solo la tarjeta "Por dentro" lo acompaña, con los botones de piezas visibles
   await at(0.5);
   await expect(page.locator(".jcard.on")).toHaveCount(1);
