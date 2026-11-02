@@ -266,6 +266,16 @@ test("la página de la app (en construcción) responde y anima con el scroll", a
   await expect(page.locator(".app-try")).toHaveClass(/active/);
 });
 
+test("al volver al inicio desde otra página, las secciones aparecen (no quedan ocultas)", async ({ page }) => {
+  await page.goto("/es/soporte");
+  await page.locator("#nav a[href='/es']").first().click();
+  await expect(page).toHaveURL(/\/es$/);
+  for (const id of ["catalogos", "contacto"]) {
+    await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+    await expect(page.locator(`#${id} h2, #${id} .big`).first()).toHaveClass(/is-in/);
+  }
+});
+
 test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ page }) => {
   await page.goto("/es/app");
   await page.locator(".app-hero-cta a").click();
