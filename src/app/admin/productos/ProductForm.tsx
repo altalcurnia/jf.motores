@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { storageUrl, type CatalogType, type ProductStatus } from "@/features/catalog/shared";
-import { generateDescriptionWithAi, translateFieldsWithAi } from "../ai-copy";
+import { generateDescriptionWithAi, lookupEngineSpecsWithAi, translateFieldsWithAi } from "../ai-copy";
 import { createEngineModel, deleteProduct, saveProduct, type ProductInput } from "./actions";
 import { SPEC_KEYS, slugify, type FormOptions, type Lang, type ProductFormValue } from "./form-model";
 
@@ -194,6 +194,98 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
     setMsg({
       ok: true,
       text: "Descripción y resumen generados en español, inglés y portugués usando solo datos reales verificados.",
+    });
+  }
+
+  async function handleLookupEngineSpecs(target?: { brand?: string; model?: string; query?: string }) {
+    const brand = target?.brand ?? newModel.brand;
+    const model = target?.model ?? newModel.model;
+    const selectedEng = models.find((m) => m.id === v.engineModelId);
+    const query =
+      target?.query ??
+      (!brand?.trim() && !model?.trim() ? (selectedEng?.label ?? (v.name.es || v.ref)) : undefined);
+
+    if (!brand?.trim() && !model?.trim() && !query?.trim()) {
+      setMsg({
+        ok: false,
+        text: "Escribe la marca y modelo del motor (o selecciona uno) para buscar su ficha técnica oficial de fabricante.",
+      });
+      return;
+    }
+
+    setBusy("ai-specs");
+    setMsg(null);
+    const res = await lookupEngineSpecsWithAi({
+      brand: brand?.trim() || undefined,
+      model: model?.trim() || undefined,
+      query: query?.trim() || undefined,
+      catalog: v.catalog,
+    });
+    setBusy(null);
+
+    if (!res.ok) {
+      setMsg({ ok: false, text: res.error });
+      return;
+    }
+
+    if (!res.found) {
+      setMsg({
+        ok: false,
+        text: `⚠️ ${res.message || "No se encontraron especificaciones oficiales de fabricante para ese modelo."}`,
+      });
+      return;
+    }
+
+    setV((p) => {
+      const currentSpecs = [...p.specs];
+      const updatedKeys = new Set<string>();
+
+      const nextSpecs = currentSpecs.map((s) => {
+        const match = res.specs.find((sp) => sp.key === s.key);
+        if (match) {
+          updatedKeys.add(match.key);
+          return { ...s, value: match.value };
+        }
+        return s;
+      });
+
+      for (const sp of res.specs) {
+        if (!updatedKeys.has(sp.key)) {
+          nextSpecs.push({ key: sp.key, value: sp.value });
+        }
+      }
+
+      const filteredSpecs = nextSpecs.filter((s, idx) => s.key.trim() || s.value.trim() || idx === 0);
+
+      const next = {
+        ...p,
+        specs: filteredSpecs,
+      };
+
+      if (!next.name.es.trim() && res.suggestedNameEs) {
+        next.name = { ...next.name, es: res.suggestedNameEs };
+        if (!slugTouched) {
+          next.slug = slugify(res.suggestedNameEs);
+        }
+      }
+
+      if (!next.summary.es.trim() && res.summaryEs) {
+        next.summary = { ...next.summary, es: res.summaryEs };
+      }
+
+      return next;
+    });
+
+    if (res.brand && res.model) {
+      setNewModel((prev) => ({
+        brand: prev.brand.trim() ? prev.brand : res.brand,
+        model: prev.model.trim() ? prev.model : res.model,
+      }));
+    }
+
+    setMsg({
+      ok: true,
+      text: `✨ Ficha técnica oficial cargada (${res.sourceHint}): ${res.specs.length} especificaciones de fabricante aplicadas.`,
     });
   }
 
@@ -599,7 +691,18 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
         </section>
 
         <section className="panel">
-          <h2>Especificaciones</h2>
+          <div className="panel-head">
+            <h2>Especificaciones</h2>
+            <button
+              type="button"
+              className="btn-secondary ai-btn"
+              disabled={!!busy}
+              onClick={() => handleLookupEngineSpecs()}
+              title="Busca y carga las especificaciones técnicas oficiales de fabricante con IA"
+            >
+              {busy === "ai-specs" ? "Buscando en fabricante…" : "✨ Llenar datos de fabricante con IA"}
+            </button>
+          </div>
           <div className="chips">
             {SPEC_KEYS[v.catalog].map(([k, label]) => {
               const already = v.specs.some((s) => s.key === k);
@@ -695,26 +798,70 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               </div>
             </>
           ) : (
-            <label>
-              <span>
-                Modelo de motor <span className="hint">(conecta con sus repuestos compatibles)</span>
-              </span>
-              <select value={v.engineModelId ?? ""} onChange={(e) => set("engineModelId", e.target.value || null)}>
-                <option value="">Sin especificar</option>
-                {models.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <>
+              <label>
+                <span>
+                  Modelo de motor <span className="hint">(conecta con sus repuestos compatibles)</span>
+                </span>
+                <select value={v.engineModelId ?? ""} onChange={(e) => set("engineModelId", e.target.value || null)}>
+                  <option value="">Sin especificar</option>
+                  {models.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {v.engineModelId && (
+                <div className="engine-quick-lookup">
+                  <button
+                    type="button"
+                    className="chip-btn"
+                    disabled={!!busy}
+                    onClick={() => {
+                      const eng = models.find((m) => m.id === v.engineModelId);
+                      if (eng) handleLookupEngineSpecs({ query: eng.label });
+                    }}
+                  >
+                    {busy === "ai-specs"
+                      ? "Consultando fabricante…"
+                      : `🔍 Rellenar especificaciones de fabricante de ${models.find((m) => m.id === v.engineModelId)?.label ?? "motor"}`}
+                  </button>
+                </div>
+              )}
+            </>
           )}
-          <div className="new-model">
-            <input placeholder="Marca" value={newModel.brand} onChange={(e) => setNewModel({ ...newModel, brand: e.target.value })} />
-            <input placeholder="Modelo nuevo" value={newModel.model} onChange={(e) => setNewModel({ ...newModel, model: e.target.value })} />
-            <button type="button" className="btn-ghost" disabled={busy === "model" || !newModel.brand || !newModel.model} onClick={addModel}>
-              + Crear motor
-            </button>
+          <div className="new-model-box">
+            <span className="field-label">O ingresa la marca y modelo del motor:</span>
+            <div className="new-model">
+              <input
+                placeholder="Marca (ej. Cummins, Yanmar)"
+                value={newModel.brand}
+                onChange={(e) => setNewModel({ ...newModel, brand: e.target.value })}
+              />
+              <input
+                placeholder="Modelo nuevo (ej. 4BT 3.9, 3TNV88)"
+                value={newModel.model}
+                onChange={(e) => setNewModel({ ...newModel, model: e.target.value })}
+              />
+              <button
+                type="button"
+                className="btn-secondary ai-btn"
+                disabled={!!busy || (!newModel.brand.trim() && !newModel.model.trim())}
+                onClick={() => handleLookupEngineSpecs({ brand: newModel.brand, model: newModel.model })}
+                title="Buscar especificaciones técnicas de fabricante con IA"
+              >
+                {busy === "ai-specs" ? "Buscando ficha…" : "✨ Buscar ficha con IA"}
+              </button>
+              <button
+                type="button"
+                className="btn-ghost"
+                disabled={busy === "model" || !newModel.brand.trim() || !newModel.model.trim()}
+                onClick={addModel}
+              >
+                + Crear motor
+              </button>
+            </div>
           </div>
         </section>
 

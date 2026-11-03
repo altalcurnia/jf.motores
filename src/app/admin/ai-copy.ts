@@ -2,7 +2,7 @@
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { DEEPSEEK_URL, DEFAULT_MODEL, usageCost } from "@/features/assistant/deepseek";
-import { cleanBranchCopy } from "@/features/branches/clean-copy";
+import { cleanBranchCopy, cleanProductCopy } from "@/features/branches/clean-copy";
 
 export type TranslateResult =
   | { ok: true; en: Record<string, string>; pt: Record<string, string> }
@@ -287,12 +287,24 @@ export async function generateDescriptionWithAi(
     "     * Disponibilidad real de equipos y repuestos en ese punto.",
     "     * Zonas o sectores productivos atendidos (ej. minería del Bajo Cauca, proyectos agrícolas, Antioquia y despacho nacional).",
     "   - Extensión para sedes: 1 o máximo 2 frases directas, técnicas y concisas (máximo 200 caracteres en total).",
-    "4. Si los datos entregados todavía son ambiguos o insuficientes para redactar un texto veraz, devuelve:",
+    "4. REGLA ESTRICTA DE CERO REDUNDANCIA PARA PRODUCTOS:",
+    "   - En la página de producto, el PRECIO, la GARANTÍA (meses) y la TABLA DE ESPECIFICACIONES TÉCNICAS ya se muestran en sus propios bloques dedicados al lado.",
+    "   - Por lo tanto, ESTÁ TOTALMENTE PROHIBIDO incluir o repetir en la descripción:",
+    "     * Precios, valores en COP o formas de pago.",
+    "     * Frases de garantía (ej. 'garantía de 12 meses', 'garantía de un año', etc.; ya tiene su badge propio).",
+    "     * Listar mecánicamente las especificaciones en viñetas o listas que ya están en la tabla (ej. no repetir 'Potencia: 25 HP, RPM: 1800, Cilindros: 4').",
+    "   - La descripción de producto debe enfocarse en:",
+    "     * Aplicación y trabajo real: para qué labores mineras, agrícolas o industriales específicas está diseñado o recomendado.",
+    "     * Desempeño y confiabilidad en jornadas continuas y condiciones severas de trabajo (calor, lodo, agua turbia, operación 24/7).",
+    "     * Facilidad de mantenimiento, robustez estructural, compatibilidad de repuestos o acople.",
+    "   - Extensión para productos:",
+    "     * `description` (es/en/pt): 2 a 3 oraciones claras, fluidas y técnicas (máximo 300 caracteres).",
+    "     * `summary` (es/en/pt): 1 oración concisa para la tarjeta de catálogo (máximo 110 caracteres).",
+    "5. Si los datos entregados todavía son ambiguos o insuficientes para redactar un texto veraz, devuelve:",
     '   {"needsInfo": true, "missingHint": "Explicación breve en español de qué dato falta", "questions": ["Pregunta 1", "Pregunta 2"]}',
-    "5. Si los datos son suficientes y verificables, redacta un copy claro, directo, profesional y persuasivo basado 100% en esos hechos reales, y tradúcelo también a inglés (`en`) y portugués (`pt`). Devuelve:",
+    "6. Si los datos son suficientes y verificables, redacta un copy claro, directo, profesional y persuasivo basado 100% en esos hechos reales, y tradúcelo también a inglés (`en`) y portugués (`pt`). Devuelve:",
     '   {"needsInfo": false, "es": "...", "en": "...", "pt": "...", "summaryEs": "...", "summaryEn": "...", "summaryPt": "..."}',
-    "   - Para un producto: `es`, `en`, `pt` deben ser una descripción comercial y técnica clara (2 a 4 frases, sin inventar nada) y `summaryEs`, `summaryEn`, `summaryPt` un resumen corto para la tarjeta (máximo 110 caracteres).",
-    "6. Responde ÚNICAMENTE con un objeto JSON válido.",
+    "7. Responde ÚNICAMENTE con un objeto JSON válido.",
   ].join("\n");
 
   const user = JSON.stringify({
@@ -307,7 +319,18 @@ export async function generateDescriptionWithAi(
             instruccion_antirredundancia:
               "PROHIBIDO escribir la dirección, teléfono u horarios; esos datos ya están en los bloques vecinos. Enfócate solo en la función operativa, equipos disponibles y zonas atendidas.",
           }
-        : input,
+        : {
+            producto: input.nameEs || input.ref,
+            catalogo: input.catalog,
+            referencia: input.ref,
+            categoria: input.categoryLabel,
+            motor_instalado: input.engineModelLabel,
+            compatibilidades: input.compatLabels,
+            especificaciones_clave: input.specs?.map((s) => `${s.label || s.key}: ${s.value}`).join(", "),
+            usos_reales_confirmados: input.extraFacts,
+            instruccion_antirredundancia:
+              "PROHIBIDO escribir precios, mencionar garantía o re-listar en viñetas las especificaciones técnicas; esos datos ya están en la tabla y badges vecinos. Describe la aplicación de trabajo y confiabilidad en campo.",
+          },
     documentos_internos_verificados: docSnippets || "Sin documentos adicionales",
   });
 
@@ -336,6 +359,10 @@ export async function generateDescriptionWithAi(
     es = cleanBranchCopy(es);
     en = cleanBranchCopy(en);
     pt = cleanBranchCopy(pt);
+  } else if (input.kind === "producto") {
+    es = cleanProductCopy(es);
+    en = cleanProductCopy(en);
+    pt = cleanProductCopy(pt);
   }
 
   return {
@@ -347,6 +374,127 @@ export async function generateDescriptionWithAi(
     summaryEs: typeof res.data.summaryEs === "string" ? res.data.summaryEs.trim() : undefined,
     summaryEn: typeof res.data.summaryEn === "string" ? res.data.summaryEn.trim() : undefined,
     summaryPt: typeof res.data.summaryPt === "string" ? res.data.summaryPt.trim() : undefined,
+  };
+}
+
+export type LookupEngineInput = {
+  brand?: string;
+  model?: string;
+  query?: string;
+  catalog?: "motobomba" | "motor" | "repuesto";
+};
+
+export type LookupEngineResult =
+  | {
+      ok: true;
+      found: true;
+      brand: string;
+      model: string;
+      suggestedNameEs: string;
+      specs: { key: string; label: string; value: string }[];
+      summaryEs: string;
+      sourceHint: string;
+    }
+  | {
+      ok: true;
+      found: false;
+      message: string;
+    }
+  | { ok: false; error: string };
+
+/**
+ * Consulta las especificaciones técnicas oficiales de fabricante para una marca y modelo de motor.
+ * Rellena automáticamente los campos de la ficha técnica con datos verificados.
+ */
+export async function lookupEngineSpecsWithAi(input: LookupEngineInput): Promise<LookupEngineResult> {
+  const staff = await requireStaff();
+  if (!staff) return { ok: false, error: "No tienes permiso para usar el asistente de IA." };
+
+  const rawQuery = (input.query ?? "").trim();
+  const brand = (input.brand ?? "").trim();
+  const model = (input.model ?? "").trim();
+
+  if (!rawQuery && !brand && !model) {
+    return { ok: false, error: "Ingresa al menos la marca o el modelo del motor para buscar su ficha técnica." };
+  }
+
+  const system = [
+    "Eres el especialista en ingeniería mecánica y fichas técnicas oficiales de fabricantes de motores diésel y equipos de bombeo industrial de JF Motores (Colombia).",
+    "Tu tarea es buscar y extraer las especificaciones técnicas OFICIALES DE FABRICANTE (OEM) para la marca y modelo solicitados (ej.: Cummins, Yanmar, Changchai, Lister Petter, Deutz, Perkins, Kubota, Yangdong, Weichai, Quanchai, etc.).",
+    "REGLAS ESTRICTAS:",
+    "1. SOLO usa datos verificables de la ficha técnica oficial del fabricante para ese modelo exacto o su variante estándar más común.",
+    "2. Si la marca o modelo NO corresponden a un motor o equipo real verificable en catálogos de fabricantes, responde:",
+    '   {"found": false, "message": "No se encontraron especificaciones oficiales de fabricante para esa marca y modelo."}',
+    "3. Si es reconocido y verificado, responde:",
+    '   {"found": true, "brand": "Marca", "model": "Modelo", "suggestedNameEs": "...", "summaryEs": "...", "sourceHint": "...", "specs": [{"key": "hp", "label": "Potencia (HP)", "value": "..."}, ...]}',
+    "4. Claves normalizadas que debes incluir en `specs` si están disponibles en la ficha técnica:",
+    "   - `hp`: Potencia nominal o rango (ej. '25 HP', '85 HP @ 2500 RPM', '38 HP')",
+    "   - `cilindros`: Número de cilindros (ej. '1', '2', '3', '4', '6')",
+    "   - `cilindrada_l`: Cilindrada en litros (ej. '1.19 L', '3.9 L', '5.9 L')",
+    "   - `rpm`: Régimen nominal de trabajo (ej. '1800', '2200', '2500')",
+    "   - `aspiracion`: 'Natural', 'Turboalimentado' o 'Turbo Aftercooler'",
+    "   - `refrigeracion`: 'Agua (radiador)' o 'Aire'",
+    "   - `arranque`: 'Eléctrico 12V', 'Eléctrico 24V', 'Eléctrico y manual' o 'Manual'",
+    "   - `consumo_lh`: Consumo estimado a régimen de trabajo (ej. '4.2 L/h', '7.5 L/h')",
+    "   - `peso_kg`: Peso seco aproximado en kg (ej. '190', '350')",
+    "   - Si el equipo es una motobomba acoplada:",
+    "     * `succion_in`: Diámetro de succión en pulgadas (ej. '3', '4', '6')",
+    "     * `descarga_in`: Diámetro de descarga en pulgadas (ej. '3', '4')",
+    "     * `caudal_lpm`: Caudal máximo estimado en L/min",
+    "     * `cabeza_m`: Cabeza máxima estimada en m",
+    "5. `suggestedNameEs`: Nombre técnico comercial completo y ordenado (ej. 'Motor Diésel Cummins 4BT 3.9L 85 HP' o 'Motobomba Diésel Changchai 25 HP 4x4').",
+    "6. `summaryEs`: Resumen de 1 sola frase destacando su arquitectura y aplicación ideal de trabajo (máximo 110 caracteres).",
+    "7. `sourceHint`: Menciona el fabricante u origen técnico oficial (ej. 'Ficha técnica oficial Cummins serie 4BT3.9-G').",
+    "8. NO inventes cifras. Si una especificación no está en la ficha oficial, simplemente omítela de `specs`.",
+    "9. Responde ÚNICAMENTE con un objeto JSON válido.",
+  ].join("\n");
+
+  const user = JSON.stringify({
+    marca_solicitada: brand || undefined,
+    modelo_solicitado: model || undefined,
+    busqueda_o_nombre: rawQuery || `${brand} ${model}`.trim(),
+    catalogo: input.catalog || "motor",
+  });
+
+  const res = await callDeepSeekJson(system, user, 800);
+  if (!res.ok) return res;
+
+  if (res.data.found === false) {
+    const message =
+      typeof res.data.message === "string" && res.data.message.trim()
+        ? res.data.message.trim()
+        : "No se encontraron especificaciones oficiales de fabricante para ese modelo.";
+    return { ok: true, found: false, message };
+  }
+
+  const resBrand = typeof res.data.brand === "string" ? res.data.brand.trim() : brand || "Fabricante";
+  const resModel = typeof res.data.model === "string" ? res.data.model.trim() : model || rawQuery;
+  const suggestedNameEs = typeof res.data.suggestedNameEs === "string" ? res.data.suggestedNameEs.trim() : `${resBrand} ${resModel}`;
+  const summaryEs = typeof res.data.summaryEs === "string" ? res.data.summaryEs.trim() : "";
+  const sourceHint = typeof res.data.sourceHint === "string" ? res.data.sourceHint.trim() : `Ficha técnica oficial ${resBrand}`;
+
+  const rawSpecs = Array.isArray(res.data.specs) ? res.data.specs : [];
+  const specs: { key: string; label: string; value: string }[] = [];
+  for (const item of rawSpecs) {
+    if (typeof item === "object" && item !== null) {
+      const k = String((item as Record<string, unknown>).key ?? "").trim();
+      const v = String((item as Record<string, unknown>).value ?? "").trim();
+      const lbl = String((item as Record<string, unknown>).label ?? "").trim() || k;
+      if (k && v) {
+        specs.push({ key: k, label: lbl, value: v });
+      }
+    }
+  }
+
+  return {
+    ok: true,
+    found: true,
+    brand: resBrand,
+    model: resModel,
+    suggestedNameEs,
+    specs,
+    summaryEs,
+    sourceHint,
   };
 }
 

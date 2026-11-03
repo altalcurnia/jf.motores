@@ -181,7 +181,13 @@ button:disabled { opacity: 0.6; cursor: wait; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .pform .chip { display: inline-block; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; color: var(--ink); font-size: 14px; }
 .pform .chip.on { background: var(--yellow); color: #0b0d10; border-color: var(--yellow); font-weight: 600; }
-.new-model { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.new-model-box { display: grid; gap: 8px; padding-top: 10px; border-top: 1px solid var(--line); }
+.new-model { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.new-model input { flex: 1 1 140px; min-width: 120px; }
+.new-model button { flex: 0 0 auto; }
+.engine-quick-lookup { margin-top: 6px; }
+.engine-quick-lookup .chip-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(247, 198, 0, 0.4); background: rgba(247, 198, 0, 0.1); color: var(--yellow); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.engine-quick-lookup .chip-btn:hover:not(:disabled) { background: var(--yellow); color: #0b0d10; border-color: var(--yellow); }
 .savebar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(11, 13, 16, 0.96); border-top: 1px solid var(--line); padding: 12px 16px; z-index: 10; }
 .savebar .notice { max-width: 1088px; margin: 0 auto 10px; }
 .savebar-actions { max-width: 1088px; margin: 0 auto; display: flex; justify-content: flex-end; gap: 10px; }
@@ -189,8 +195,8 @@ fieldset:disabled .img-add, fieldset:disabled .chip { cursor: not-allowed; opaci
 @media (max-width: 860px) {
   .pform-grid { grid-template-columns: 1fr; }
   .row2 { grid-template-columns: 1fr; }
-  .new-model { grid-template-columns: 1fr 1fr; }
-  .new-model button { grid-column: span 2; }
+  .new-model input { flex: 1 1 100%; }
+  .new-model button { flex: 1 1 100%; }
   .table.products th:nth-child(3), .table.products td:nth-child(3) { display: none; }
 }
 @media (max-width: 760px) {
