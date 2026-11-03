@@ -47,6 +47,7 @@ export default async function SupportPage() {
                 waHref={hrefs[0]}
                 email={contact.email}
                 labels={t.techOptions}
+                mail={dict.mail}
               />
             );
           }

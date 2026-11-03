@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { EmailChooser, type MailLabels } from "@/components/EmailChooser";
 
 /** Tarjeta «Soporte técnico»: al tocarla despliega dos caminos, WhatsApp o correo. */
 export function TechSupportCard(props: {
@@ -9,6 +10,7 @@ export function TechSupportCard(props: {
   waHref: string;
   email: string | null;
   labels: { whatsapp: string; whatsappDesc: string; email: string; emailDesc: string };
+  mail: MailLabels;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -22,10 +24,11 @@ export function TechSupportCard(props: {
             <small>{props.labels.whatsappDesc}</small>
           </a>
           {props.email && (
-            <a className="tech-opt tech-mail" href={`mailto:${props.email}`}>
+            // Sin depender del programa de correo del equipo: Gmail, Outlook, app o copiar
+            <EmailChooser email={props.email} labels={props.mail} className="tech-opt tech-mail" inline>
               <b>{props.labels.email}</b>
               <small>{props.labels.emailDesc.replace("{email}", props.email)}</small>
-            </a>
+            </EmailChooser>
           )}
         </div>
       ) : (

@@ -11,6 +11,7 @@ import { EngineExperience } from "@/features/engine3d/EngineExperience";
 import { FeaturedProducts } from "@/features/catalog/FeaturedProducts";
 import { TrustSection } from "@/components/TrustSection";
 import { Accent } from "@/components/Accent";
+import { EmailChooser } from "@/components/EmailChooser";
 import { getCatalogData } from "@/features/catalog/data";
 import { formatPrice, productHref, storageUrl, tr } from "@/features/catalog/shared";
 import type { PartProduct } from "@/features/engine3d/EngineExperience";
@@ -275,9 +276,7 @@ export default async function HomePage() {
           {contact.email && (
             <div>
               <b>{dict.contact.email}</b>
-              <a className="c-line" href={`mailto:${contact.email}`} title={dict.contact.emailHint}>
-                {contact.email}
-              </a>
+              <EmailChooser email={contact.email} labels={dict.mail} className="c-line" />
             </div>
           )}
         </div>

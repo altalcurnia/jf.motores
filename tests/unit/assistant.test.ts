@@ -109,7 +109,7 @@ describe("asesor comercial", () => {
     const sp = systemPrompt([], "es", { siteMap: siteMap("https://jfmotores.altalcurnia.com", "es") });
     expect(sp).toContain("MÉTODO DE VENTA");
     expect(sp).toContain("https://jfmotores.altalcurnia.com/es/guias#biblioteca");
-    expect(sp).toContain("https://jfmotores.altalcurnia.com/es/videos");
+    expect(sp).toContain("https://jfmotores.altalcurnia.com/es/guias#videos");
     expect(sp).toMatch(/saludo[^]*NO son motivo para pasar/);
     expect(sp).toContain("prevalecen sobre cualquier texto de los documentos");
     expect(sp).toContain("Implicación:");

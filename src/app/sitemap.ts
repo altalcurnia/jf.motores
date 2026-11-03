@@ -30,7 +30,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entry("/motores", { priority: 0.9, changeFrequency: "daily" }),
     ...entry("/repuestos", { priority: 0.9, changeFrequency: "daily" }),
     ...entry("/guias", { priority: 0.6, changeFrequency: "monthly" }),
-    ...entry("/videos", { priority: 0.5, changeFrequency: "monthly" }),
     ...entry("/soporte", { priority: 0.5, changeFrequency: "monthly" }),
     ...entry("/app", { priority: 0.4, changeFrequency: "monthly" }),
     ...entry("/legal/terminos", { priority: 0.2, changeFrequency: "yearly" }),

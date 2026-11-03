@@ -26,7 +26,9 @@
     "writeUs": "Fale conosco pelo WhatsApp",
     "techSupport": "Suporte técnico",
     "faqShort": "Perguntas",
-    "videos": "Vídeos"
+    "videos": "Vídeos",
+    "techSupportDesc": "WhatsApp ou e-mail com um técnico da oficina",
+    "guiasDesc": "Manuais oficiais, nossos guias e vídeos"
   },
   "hero": {
     "kicker": "Motobombas a diesel para mineração · Medellín, Colômbia",
@@ -588,7 +590,8 @@
     "intro": "Guias práticos para escolher, cuidar e consertar seus equipamentos. São orientações gerais: siga sempre o manual do fabricante do seu equipamento.",
     "tabs": {
       "official": "Guias oficiais",
-      "ours": "Nossos guias"
+      "ours": "Nossos guias",
+      "videos": "Vídeos"
     },
     "items": [
       {
@@ -1089,5 +1092,14 @@
     "distribucion": "Distribuição por engrenagens: o virabrequim move o comando de válvulas e a bomba injetora na metade da rotação, sempre sincronizados.",
     "valvulas": "Válvulas de admissão e escape com molas, varetas e balancins: deixam entrar ar e sair gases no momento certo.",
     "alternador": "Alternador e correia: carregam a bateria e alimentam o painel com o motor funcionando."
+  },
+  "mail": {
+    "gmail": "Abrir no Gmail",
+    "outlook": "Abrir no Outlook",
+    "app": "Meu app de e-mail",
+    "copy": "Copiar e-mail",
+    "copied": "E-mail copiado ✓",
+    "subject": "Consulta à JF Motores",
+    "choose": "Escolha como escrever"
   }
 }

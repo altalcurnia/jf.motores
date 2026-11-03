@@ -26,7 +26,9 @@
     "writeUs": "Message us on WhatsApp",
     "techSupport": "Technical support",
     "faqShort": "FAQ",
-    "videos": "Videos"
+    "videos": "Videos",
+    "techSupportDesc": "WhatsApp or email with a workshop technician",
+    "guiasDesc": "Official manuals, our guides and videos"
   },
   "hero": {
     "kicker": "Diesel pump sets for mining · Medellín, Colombia",
@@ -588,7 +590,8 @@
     "intro": "Practical guides to choose, care for and repair your equipment. They are general guidance: always follow your equipment manufacturer's manual.",
     "tabs": {
       "official": "Official guides",
-      "ours": "Our guides"
+      "ours": "Our guides",
+      "videos": "Videos"
     },
     "items": [
       {
@@ -1089,5 +1092,14 @@
     "distribucion": "Gear-driven timing: the crankshaft drives the camshaft and injection pump at half speed, always in sync.",
     "valvulas": "Intake and exhaust valves with springs, pushrods and rocker arms: they let air in and gases out at the right moment.",
     "alternador": "Alternator and belt: charge the battery and power the panel while the engine runs."
+  },
+  "mail": {
+    "gmail": "Open in Gmail",
+    "outlook": "Open in Outlook",
+    "app": "My email app",
+    "copy": "Copy email",
+    "copied": "Email copied ✓",
+    "subject": "Inquiry to JF Motores",
+    "choose": "Choose how to write"
   }
 }

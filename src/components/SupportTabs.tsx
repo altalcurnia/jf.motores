@@ -2,12 +2,11 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 
-/** Pestañas de Soporte: Soporte técnico · Guías · Videos, con el título «Soporte» arriba. */
-export function SupportTabs({ current, locale, dict }: { current: "soporte" | "guias" | "videos"; locale: Locale; dict: Dictionary }) {
+/** Pestañas de Soporte: Soporte técnico · Guías (los videos son una subpestaña de Guías), con el título «Soporte» arriba. */
+export function SupportTabs({ current, locale, dict }: { current: "soporte" | "guias"; locale: Locale; dict: Dictionary }) {
   const tabs = [
     { key: "soporte", href: `/${locale}/soporte`, label: dict.nav.techSupport },
     { key: "guias", href: `/${locale}/guias`, label: dict.nav.guias },
-    { key: "videos", href: `/${locale}/videos`, label: dict.nav.videos },
   ];
   return (
     <div className="support-top">

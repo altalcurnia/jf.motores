@@ -26,7 +26,9 @@
     "writeUs": "Escríbenos por WhatsApp",
     "techSupport": "Soporte técnico",
     "faqShort": "Preguntas",
-    "videos": "Videos"
+    "videos": "Videos",
+    "techSupportDesc": "WhatsApp o correo con un técnico del taller",
+    "guiasDesc": "Manuales oficiales, nuestras guías y videos"
   },
   "hero": {
     "kicker": "Motobombas diésel para minería · Medellín, Colombia",
@@ -588,7 +590,8 @@
     "intro": "Guías prácticas para elegir, cuidar y reparar tus equipos. Son orientación general: sigue siempre el manual del fabricante de tu equipo.",
     "tabs": {
       "official": "Guías oficiales",
-      "ours": "Nuestras guías"
+      "ours": "Nuestras guías",
+      "videos": "Videos"
     },
     "items": [
       {
@@ -1089,5 +1092,14 @@
     "distribucion": "Distribución por engranajes: el cigüeñal mueve el árbol de levas y la bomba de inyección a media velocidad, siempre sincronizados.",
     "valvulas": "Válvulas de admisión y escape con resortes, varillas y balancines: dejan entrar aire y salir gases en el momento justo.",
     "alternador": "Alternador y correa: cargan la batería y alimentan el tablero mientras el motor trabaja."
+  },
+  "mail": {
+    "gmail": "Abrir en Gmail",
+    "outlook": "Abrir en Outlook",
+    "app": "Mi app de correo",
+    "copy": "Copiar correo",
+    "copied": "Correo copiado ✓",
+    "subject": "Consulta a JF Motores",
+    "choose": "Elige cómo escribir"
   }
 }

@@ -276,6 +276,28 @@ test("al volver al inicio desde otra página, las secciones aparecen (no quedan 
   }
 });
 
+test("correo de soporte: no depende del programa de correo (Gmail, Outlook, app o copiar)", async ({ page }) => {
+  await page.goto("/es/soporte");
+  await page.locator(".tech-toggle").click();
+  await page.locator(".tech-mail").click();
+  const menu = page.locator(".tech-card .mail-menu");
+  await expect(menu.locator("a", { hasText: "Gmail" })).toHaveAttribute("href", /mail\.google\.com\/mail\/\?view=cm&fs=1&to=soporte%40ejemplo\.com/);
+  await expect(menu.locator("a", { hasText: "Outlook" })).toHaveAttribute("href", /outlook\.live\.com/);
+  await expect(menu.locator("a", { hasText: "app de correo" })).toHaveAttribute("href", /^mailto:soporte@ejemplo\.com/);
+  await expect(menu.locator("button", { hasText: "Copiar" })).toBeVisible();
+});
+
+test("menú Soporte del encabezado: Soporte técnico y Guías", async ({ page, isMobile }) => {
+  test.skip(isMobile, "en celular el menú está en el cajón lateral");
+  await page.goto("/es");
+  const menu = page.locator(".nlinks .cat-menu", { hasText: "Soporte" });
+  await menu.locator("button").click();
+  await expect(menu.locator(".cat-menu-panel a")).toHaveCount(2);
+  await menu.locator(".cat-menu-panel a", { hasText: "Guías" }).click();
+  await expect(page).toHaveURL(/\/es\/guias$/);
+  await expect(page.locator(".guide-subtabs button")).toHaveText(["Guías oficiales", "Nuestras guías", "Videos"]);
+});
+
 test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ page }) => {
   await page.goto("/es/app");
   await page.locator(".app-hero-cta a").click();
@@ -294,13 +316,13 @@ test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de enví
   await page.keyboard.press("Escape");
   const meta = page.locator("#contacto .c-meta");
   await expect(meta).toContainText("Sedes");
-  await expect(meta.locator('a[href^="mailto:"]')).toHaveCount(1);
+  await expect(meta.locator(".mail-pick > button")).toHaveText("soporte@ejemplo.com");
   await expect(page.locator("footer")).not.toContainText("No incluyen envío");
   await page.goto("/es/motobombas");
   await expect(page.locator(".price-notice")).toContainText("no incluye el envío");
   await page.goto("/es/soporte");
   await page.locator(".tech-toggle").click();
-  await expect(page.locator('.tech-opt.tech-mail[href^="mailto:"]')).toHaveCount(1);
+  await expect(page.locator(".tech-opt.tech-mail")).toContainText("soporte@ejemplo.com");
   await expect(page.locator(".tech-opt.tech-wa")).toBeVisible();
   await expect(page.locator(".tech-opt.tech-wa")).toHaveAttribute("href", /^\/api\/wa\?.*s=soporte/);
 });
@@ -332,9 +354,11 @@ test("guías: biblioteca técnica con documentos que piden iniciar sesión", asy
   expect(missing.status()).toBe(404);
 });
 
-test("videos: página con reproductores que cargan al tocar", async ({ page }) => {
+test("videos: subpestaña de Guías con reproductores que cargan al tocar (y /videos redirige)", async ({ page }) => {
   await page.goto("/es/videos");
-  await expect(page.locator(".cat-tabs a[aria-current='page']")).toContainText("Videos");
+  await expect(page).toHaveURL(/\/es\/guias#videos$/);
+  await expect(page.locator(".cat-tabs a[aria-current='page']")).toHaveText("Guías");
+  await expect(page.locator(".guide-subtabs button.on")).toHaveText("Videos");
   expect(await page.locator(".video-card").count()).toBe(8);
   await expect(page.locator(".video-frame iframe")).toHaveCount(0);
   await page.locator("button.video-thumb").first().click();
@@ -440,7 +464,7 @@ test("política de contenido (CSP): las páginas principales no tienen bloqueos"
   expect(res?.headers()["content-security-policy"]).toContain("frame-ancestors 'self'");
   await page.mouse.wheel(0, 1500);
   await page.waitForTimeout(800);
-  await page.goto("/es/videos");
+  await page.goto("/es/guias#videos");
   await page.locator("button.video-thumb").first().click();
   await expect(page.locator(".video-frame iframe")).toHaveCount(1);
   await page.goto("/es/soporte");

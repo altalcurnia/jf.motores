@@ -5,14 +5,27 @@ import { useEffect, useRef, useState } from "react";
 
 type Item = { href: string; title: string; desc: string };
 
-/** "Catálogo" en el encabezado de escritorio: abre las tres categorías (al pasar el mouse o al tocar). */
-export function CatalogMenu({ label, items }: { label: string; items: Item[] }) {
+/**
+ * Menú desplegable del encabezado de escritorio (Catálogo, Soporte): se abre al pasar el mouse o al tocar.
+ * `lastIsAll` resalta el último enlace como «ver todo».
+ */
+export function CatalogMenu({
+  label,
+  items,
+  lastIsAll = true,
+  activePaths,
+}: {
+  label: string;
+  items: Item[];
+  lastIsAll?: boolean;
+  activePaths?: string[];
+}) {
   const [open, setOpen] = useState(false);
   const pointer = useRef<string>("");
   const ref = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const active = items.some((i) => pathname.startsWith(i.href));
-  const last = items.length - 1;
+  const active = (activePaths ?? items.map((i) => i.href)).some((h) => pathname.startsWith(h));
+  const last = lastIsAll ? items.length - 1 : -1;
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- cerrar al cambiar de página
   useEffect(() => setOpen(false), [pathname]);

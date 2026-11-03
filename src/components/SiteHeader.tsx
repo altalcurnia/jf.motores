@@ -7,6 +7,7 @@ import { site } from "@/lib/site";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AccountNavLink } from "@/features/account/AccountNavLink";
 import { CatalogMenu } from "./CatalogMenu";
+import { EmailChooser } from "./EmailChooser";
 import { MobileMenu } from "./MobileMenu";
 import { formatPhone, getContact } from "@/lib/supabase/public";
 
@@ -69,9 +70,7 @@ export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dicti
                 {formatPhone(contact.phones[0].number)}
               </a>
               {contact.email && (
-                <a className="drawer-phone" href={`mailto:${contact.email}`}>
-                  {contact.email}
-                </a>
+                <EmailChooser email={contact.email} labels={dict.mail} className="drawer-phone" inline />
               )}
             </>
           }
@@ -86,7 +85,15 @@ export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dicti
       <div className="nlinks">
         <Link href={l("")}>{t.home}</Link>
         <CatalogMenu label={t.catalog} items={catalogItems} />
-        <Link href={l("/soporte")}>{t.soporte}</Link>
+        <CatalogMenu
+          label={t.soporte}
+          lastIsAll={false}
+          items={[
+            { href: l("/soporte"), title: t.techSupport, desc: t.techSupportDesc },
+            { href: l("/guias"), title: t.guias, desc: t.guiasDesc },
+          ]}
+          activePaths={[l("/soporte"), l("/guias"), l("/videos")]}
+        />
         <Link href={l("#contacto")}>{t.contacto}</Link>
       </div>
       <div className="nav-right">

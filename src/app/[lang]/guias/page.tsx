@@ -3,7 +3,8 @@ import { localizedAlternates } from "@/i18n/metadata";
 import { waLead } from "@/features/whatsapp/lead-link";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
-import { libraryItems, libraryLangs } from "@/features/library/items";
+import { libraryItems, libraryLangs, videoItems } from "@/features/library/items";
+import { VideoGallery } from "@/features/library/VideoGallery";
 import { GuideTabs } from "@/features/library/GuideTabs";
 
 export async function generateMetadata() {
@@ -18,6 +19,7 @@ export async function generateMetadata() {
 export default async function GuidesPage() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
   const t = dict.guides;
+  const tv = t.videos;
   return (
     <section className="block cat-page info-page">
       <SupportTabs current="guias" locale={locale} dict={dict} />
@@ -76,6 +78,32 @@ export default async function GuidesPage() {
               <b>{t.library.criteriaTitle}</b>
               <p>{t.library.criteria}</p>
             </aside>
+          </section>
+        }
+        videos={
+          <section id="videos-lista" className="guide-videos">
+            <p className="library-intro">{tv.intro}</p>
+            {libraryLangs(locale)
+              .filter((lang) => videoItems.some((v) => v.lang === lang))
+              .map((lang) => (
+                <div key={lang} className="video-lang">
+                  <h2>{t.library.langTitle[lang]}</h2>
+                  <VideoGallery
+                    videos={videoItems
+                      .filter((v) => v.lang === lang)
+                      .map((v) => ({
+                        id: v.id,
+                        title: tv.items[v.id as keyof typeof tv.items].h,
+                        source: v.source,
+                        lang: v.lang === "es" ? t.library.langEs : t.library.langEn,
+                        youtube: v.youtube,
+                        url: v.url,
+                      }))}
+                    labels={{ play: tv.play, openSite: tv.openSite, modes: tv.modes }}
+                  />
+                </div>
+              ))}
+            <p className="video-note">{tv.note}</p>
           </section>
         }
         ours={

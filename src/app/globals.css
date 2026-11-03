@@ -1265,3 +1265,35 @@ body.in-journey:not(.stage-b) #hud { opacity: 0; transform: translateY(20px); }
 /* Botón Soporte: arriba por defecto (antes de que el script lo ubique, sin saltos) */
 .support:not([style]) { bottom: calc(100vh - 150px); }
 @media (max-width: 760px) { .support:not([style]) { bottom: calc(100vh - 214px); } }
+
+/* Elegir cómo escribir al correo (Gmail, Outlook, app del equipo o copiar): un «mailto:» en un PC sin
+   programa de correo abre el navegador y no hace nada */
+.mail-pick { position: relative; display: inline-block; }
+.mail-pick > button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+.c-meta .mail-pick > button.c-line { color: var(--mut); text-transform: none; letter-spacing: 0.06em; }
+.c-meta .mail-pick > button.c-line:hover, .mail-pick.open > button.c-line { color: var(--yellow); }
+.mail-pick.inline { display: grid; }
+.mail-pick > button.tech-opt { width: 100%; padding: 12px 14px; border: 1px solid var(--line); background: rgba(10, 12, 15, 0.8); }
+.mail-pick.open > button.tech-opt { border-color: var(--yellow); }
+.mail-menu {
+  position: absolute; z-index: 20; left: 0; top: calc(100% + 6px); min-width: 230px; display: grid; gap: 2px; padding: 6px;
+  border-radius: 12px; background: #11151a; border: 1px solid rgba(247, 198, 0, 0.45); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  animation: sheet-up 0.18s ease-out; text-transform: none; letter-spacing: 0;
+}
+.mail-pick.inline .mail-menu { position: static; margin-top: 6px; min-width: 0; }
+.mail-addr { font-family: var(--mono); font-size: 11.5px; color: var(--mut); padding: 6px 10px 8px; border-bottom: 1px solid var(--line); margin-bottom: 4px; word-break: break-all; user-select: all; }
+.mail-menu a, .mail-menu button {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; border: 0; background: none;
+  color: var(--ink); font: 600 13.5px/1.2 var(--body); text-decoration: none; text-align: left; cursor: pointer; letter-spacing: 0;
+}
+.mail-menu a:hover, .mail-menu button:hover, .mail-menu a:focus-visible, .mail-menu button:focus-visible { background: rgba(247, 198, 0, 0.1); color: var(--yellow); outline: none; }
+.mail-menu .mi { width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 12px; flex: none; }
+.mail-menu .mi.gm { background: #fff; color: #ea4335; }
+.mail-menu .mi.ol { background: #0f6cbd; color: #fff; }
+.mail-menu .mi.ap { background: rgba(247, 198, 0, 0.16); color: var(--yellow); }
+.mail-menu .mi.cp { background: rgba(255, 255, 255, 0.08); color: var(--ink); }
+.mail-pick > button.drawer-phone { text-transform: none; text-align: center; width: 100%; }
+
+/* Videos dentro de Guías */
+.guide-videos { margin-top: 18px; }
+.guide-videos .library-intro { color: var(--mut); max-width: 70ch; margin-bottom: 8px; }

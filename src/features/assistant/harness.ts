@@ -63,7 +63,7 @@ export function siteMap(base: string, locale: AssistantLocale): string {
     `- Repuestos por pieza: ${b}/repuestos/<pieza> (radiador, culata, pistones, camisas, bloque, escape, tanque, ventilador, volante, bomba, tablero, chasis). En el inicio, el recorrido 3D del motor también lleva a cada pieza.`,
     `- Soporte técnico (WhatsApp, línea directa, correo, sedes): ${b}/soporte · Preguntas frecuentes: ${b}/soporte#faq`,
     `- Guías de uso y mantenimiento: ${b}/guias · Biblioteca técnica gratuita en español e inglés (cursos del SENA sobre motor diésel, bombas y mantenimiento, y guías públicas de seguridad minera; se abre con cuenta): ${b}/guias#biblioteca`,
-    `- Videos de mantenimiento en español (motor diésel, motobombas, sello mecánico, filtros): ${b}/videos`,
+    `- Videos de mantenimiento en español (motor diésel, motobombas, sello mecánico, filtros), en la pestaña Videos de Guías: ${b}/guias#videos`,
     `- Crear cuenta gratis: ${b}/cuenta/registro · Entrar: ${b}/cuenta/entrar · Mi cuenta: ${b}/cuenta · Mis equipos (compras con serie, garantía y guía PDF; pedir repuestos): ${b}/cuenta/equipos`,
     `- JF Monitor, app de monitoreo remoto (próximamente; anotarse para enterarse): ${b}/app`,
     `- Contacto: ${b}#contacto · Política de datos: ${b}/legal/privacidad · Términos y condiciones (precios, envío, retracto de 5 días hábiles en compras a distancia, garantía legal, reclamos): ${b}/legal/terminos`,
