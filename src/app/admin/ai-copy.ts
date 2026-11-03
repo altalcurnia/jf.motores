@@ -2,6 +2,7 @@
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { DEEPSEEK_URL, DEFAULT_MODEL, usageCost } from "@/features/assistant/deepseek";
+import { cleanBranchCopy } from "@/features/branches/clean-copy";
 
 export type TranslateResult =
   | { ok: true; en: Record<string, string>; pt: Record<string, string> }
@@ -163,9 +164,9 @@ export type BranchCopyContext = {
   kind: "sede";
   city: string;
   name: string;
-  address: string;
-  phone: string;
-  hoursEs: string;
+  address?: string;
+  phone?: string;
+  hoursEs?: string;
   currentDescEs?: string;
   extraFacts?: string;
 };
@@ -203,11 +204,11 @@ export async function generateDescriptionWithAi(
       return {
         ok: true,
         needsInfo: true,
-        missingHint: "Para redactar la descripción con datos reales necesito saber al menos en qué ciudad está la sede y qué servicios ofrece.",
+        missingHint: "Para redactar la descripción con datos reales necesito saber al menos en qué ciudad está la sede y qué servicios u operaciones realiza.",
         questions: [
           "¿En qué ciudad o municipio está ubicada esta sede?",
-          "¿Qué servicios reales presta esta sede? (ej.: venta de motobombas, motores, repuestos, taller de ensamble, despacho)",
-          "¿Hay algún punto de referencia real o indicación útil para los clientes que visitan la sede?",
+          "¿Qué servicios u operaciones reales realiza? (ej.: ensamble y pruebas, venta directa, entrega inmediata de repuestos, despacho a minas)",
+          "¿Tiene stock permanente para entrega inmediata o es punto de despacho regional?",
         ],
       };
     }
@@ -215,11 +216,11 @@ export async function generateDescriptionWithAi(
       return {
         ok: true,
         needsInfo: true,
-        missingHint: `Tengo la ciudad (${city})${input.address ? ` y la dirección (${input.address})` : ""}, pero para no inventar servicios necesito que confirmes qué hace realmente esta sede.`,
+        missingHint: `Para la sede de ${city}, confirma su especialidad o servicios reales (la dirección, teléfono y horario NO van aquí porque ya aparecen en campos dedicados al lado).`,
         questions: [
-          `¿Qué actividades o servicios reales se realizan en la sede de ${city}? (ej.: atención comercial, entrega de repuestos, taller de servicio, despacho a mina)`,
-          "¿Qué tipo de equipos o repuestos tienen disponibilidad inmediata en este punto?",
-          "¿Quieres mencionar algún detalle real adicional (parqueadero, despacho nacional, punto de referencia)?",
+          `¿Qué actividades reales se realizan en la sede de ${city}? (ej.: ensamble de motobombas, banco de pruebas hidráulicas, bodega de repuestos de alta rotación, despacho directo)`,
+          "¿Qué líneas o repuestos tienen disponibilidad permanente en este punto?",
+          "¿Qué zonas o sectores productivos atiende prioritariamente (ej. minería del Bajo Cauca, proyectos agrícolas, etc.)?",
         ],
       };
     }
@@ -272,19 +273,41 @@ export async function generateDescriptionWithAi(
   const system = [
     "Eres el redactor técnico verificador de JF Motores (Colombia).",
     "REGLA DE ORO INQUEBRANTABLE (Ley 1480 de Colombia — Estatuto del Consumidor):",
-    "1. SOLO puedes usar hechos, cifras, especificaciones, direcciones, horarios y servicios que aparezcan explícitamente en los DATOS VERIFICADOS entregados por el usuario o en los documentos internos adjuntos.",
-    "2. PROHIBIDO inventar potencias, caudales, alturas, materiales, años de experiencia, certificaciones, tiempos de envío o servicios que no estén en los datos.",
-    "3. Si los datos entregados todavía son ambiguos o insuficientes para redactar un texto veraz, devuelve:",
+    "1. SOLO puedes usar hechos, cifras, especificaciones y servicios que aparezcan explícitamente en los DATOS VERIFICADOS entregados por el usuario o en los documentos internos adjuntos.",
+    "2. PROHIBIDO inventar potencias, caudales, alturas, materiales, años de experiencia, certificaciones o servicios que no estén en los datos.",
+    "3. REGLA ESTRICTA DE CERO REDUNDANCIA PARA SEDES:",
+    "   - En la página pública de la sede, la DIRECCIÓN FÍSICA, el NÚMERO DE TELÉFONO y el HORARIO DE ATENCIÓN ya se muestran en campos dedicados destacados justo al lado de la descripción.",
+    "   - Por lo tanto, ESTÁ TOTALMENTE PROHIBIDO incluir o repetir en la descripción:",
+    "     * La dirección física, calles, carreras, números o puntos de referencia de llegada.",
+    "     * El número de teléfono, celular o WhatsApp.",
+    "     * Los horarios, días de atención o frases como 'Atendemos de lunes a...', 'Abierto de...'.",
+    "     * Clichés como 'Visítanos en...', 'Comunícate al...', 'Te esperamos en...'.",
+    "   - La descripción de una sede debe centrarse EXCLUSIVAMENTE en:",
+    "     * El rol operativo de la sede (ej. centro de ensamble, banco de pruebas hidráulicas, bodega de repuestos de alta rotación, despacho directo a mina).",
+    "     * Disponibilidad real de equipos y repuestos en ese punto.",
+    "     * Zonas o sectores productivos atendidos (ej. minería del Bajo Cauca, proyectos agrícolas, Antioquia y despacho nacional).",
+    "   - Extensión para sedes: 1 o máximo 2 frases directas, técnicas y concisas (máximo 200 caracteres en total).",
+    "4. Si los datos entregados todavía son ambiguos o insuficientes para redactar un texto veraz, devuelve:",
     '   {"needsInfo": true, "missingHint": "Explicación breve en español de qué dato falta", "questions": ["Pregunta 1", "Pregunta 2"]}',
-    "4. Si los datos son suficientes y verificables, redacta un copy claro, directo, profesional y persuasivo basado 100% en esos hechos reales, y tradúcelo también a inglés (`en`) y portugués (`pt`). Devuelve:",
+    "5. Si los datos son suficientes y verificables, redacta un copy claro, directo, profesional y persuasivo basado 100% en esos hechos reales, y tradúcelo también a inglés (`en`) y portugués (`pt`). Devuelve:",
     '   {"needsInfo": false, "es": "...", "en": "...", "pt": "...", "summaryEs": "...", "summaryEn": "...", "summaryPt": "..."}',
-    "   - Para una sede: `es`, `en`, `pt` deben tener entre 1 y 2 frases concisas (máximo 260 caracteres).",
     "   - Para un producto: `es`, `en`, `pt` deben ser una descripción comercial y técnica clara (2 a 4 frases, sin inventar nada) y `summaryEs`, `summaryEn`, `summaryPt` un resumen corto para la tarjeta (máximo 110 caracteres).",
-    "5. Responde ÚNICAMENTE con un objeto JSON válido.",
+    "6. Responde ÚNICAMENTE con un objeto JSON válido.",
   ].join("\n");
 
   const user = JSON.stringify({
-    datos_verificados_formulario: input,
+    tipo_de_contenido: input.kind,
+    datos_verificados:
+      input.kind === "sede"
+        ? {
+            sede: input.name || `Sede ${input.city}`,
+            ciudad: input.city,
+            servicios_y_operaciones_reales: input.extraFacts || "Venta de motobombas, motores diésel y repuestos",
+            descripcion_anterior_a_mejorar: input.currentDescEs || undefined,
+            instruccion_antirredundancia:
+              "PROHIBIDO escribir la dirección, teléfono u horarios; esos datos ya están en los bloques vecinos. Enfócate solo en la función operativa, equipos disponibles y zonas atendidas.",
+          }
+        : input,
     documentos_internos_verificados: docSnippets || "Sin documentos adicionales",
   });
 
@@ -302,11 +325,17 @@ export async function generateDescriptionWithAi(
     return { ok: true, needsInfo: true, questions, missingHint };
   }
 
-  const es = typeof res.data.es === "string" ? res.data.es.trim() : "";
-  const en = typeof res.data.en === "string" ? res.data.en.trim() : "";
-  const pt = typeof res.data.pt === "string" ? res.data.pt.trim() : "";
+  let es = typeof res.data.es === "string" ? res.data.es.trim() : "";
+  let en = typeof res.data.en === "string" ? res.data.en.trim() : "";
+  let pt = typeof res.data.pt === "string" ? res.data.pt.trim() : "";
   if (!es) {
     return { ok: false, error: "La IA no devolvió un texto válido. Intenta de nuevo." };
+  }
+
+  if (input.kind === "sede") {
+    es = cleanBranchCopy(es);
+    en = cleanBranchCopy(en);
+    pt = cleanBranchCopy(pt);
   }
 
   return {

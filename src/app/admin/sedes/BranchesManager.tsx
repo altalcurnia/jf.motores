@@ -24,13 +24,13 @@ const COMMON_CITIES = [
 ] as const;
 
 const REAL_BRANCH_SERVICES = [
-  "Venta de motobombas",
-  "Venta de motores diésel",
-  "Venta de repuestos",
-  "Taller de ensamble y pruebas",
-  "Despacho a mina y todo el país",
-  "Asesoría técnica presencial",
-  "Entrega en mostrador",
+  "Ensamble y banco de pruebas",
+  "Venta de motobombas diésel",
+  "Motores para trabajo pesado",
+  "Stock permanente de repuestos",
+  "Despacho inmediato a mina y región",
+  "Asesoría técnica especializada",
+  "Entrega inmediata en mostrador",
 ] as const;
 
 const emptyBranch = (sort: number): BranchAdminInput => {
@@ -545,10 +545,10 @@ export function BranchesManager({
                   </div>
                 </div>
                 <label className="field">
-                  <span className="field-label">Otros datos reales verificables (opcional: punto de referencia, cobertura, etc.)</span>
+                  <span className="field-label">Otros datos reales (opcional: cobertura regional, aplicaciones principales, etc.)</span>
                   <input
                     value={extraFacts}
-                    placeholder="Ej.: A dos cuadras de la estación, atención a minería y agro del Bajo Cauca"
+                    placeholder="Ej.: Especialidad en motobombas para minería, despacho directo al Bajo Cauca"
                     onChange={(e) => setExtraFacts(e.target.value)}
                   />
                 </label>
