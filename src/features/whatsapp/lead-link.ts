@@ -14,7 +14,8 @@ export type LeadSource =
   | "guia"
   | "repuestos"
   | "mis-equipos"
-  | "contacto";
+  | "contacto"
+  | "sedes";
 
 export function waLead(opts: {
   message: string;
@@ -23,8 +24,10 @@ export function waLead(opts: {
   productId?: string;
   catalog?: string;
   partKey?: string;
+  advisorId?: string;
 }): string {
   const q = new URLSearchParams();
+  if (opts.advisorId) q.set("a", opts.advisorId);
   q.set("m", opts.message.slice(0, 700));
   q.set("s", opts.source);
   if (opts.locale) q.set("l", opts.locale);

@@ -9,6 +9,7 @@
     "motores": "Motores",
     "repuestos": "Peças",
     "empresa": "Empresa",
+    "sedes": "Sedes",
     "contacto": "Contato",
     "cta": "Orçamento no WhatsApp",
     "language": "Idioma",
@@ -1101,5 +1102,23 @@
     "copied": "E-mail copiado ✓",
     "subject": "Consulta à JF Motores",
     "choose": "Escolha como escrever"
+  },
+  "branches": {
+    "title": "Nossas sedes",
+    "intro": "Visite nossas oficinas e pontos de atendimento. Escolha uma sede para ver a localização no Google Maps, horários, fotos e falar diretamente com seus consultores.",
+    "address": "Endereço",
+    "phone": "Telefone",
+    "hours": "Horário",
+    "directions": "Como chegar",
+    "openMaps": "Abrir no Google Maps",
+    "photos": "Fotos da sede",
+    "noPhotos": "Em breve publicaremos fotos desta sede.",
+    "advisors": "Consultores em {city}",
+    "noAdvisors": "Fale conosco pelo WhatsApp e colocamos você em contato com a equipe desta sede.",
+    "whatsapp": "WhatsApp",
+    "call": "Ligar",
+    "email": "E-mail",
+    "waMessage": "Olá {name}, escrevo pelo site da JF Motores (sede {city}).",
+    "mapTitle": "Mapa de {name}"
   }
 }

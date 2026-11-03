@@ -48,11 +48,38 @@ export function tr(text: I18nText | null | undefined, locale: Locale): string {
   return text[locale] || text.es || Object.values(text).find(Boolean) || "";
 }
 
-/** Ruta en Storage, ruta local (/demo/...) o URL absoluta → URL servible. */
-export function storageUrl(path: string, supabaseUrl: string | undefined): string {
+/** Ruta en un bucket público de Storage, ruta local (/demo/...) o URL absoluta → URL servible. */
+export function bucketUrl(bucket: string, path: string, supabaseUrl: string | undefined): string {
   if (path.startsWith("/") || /^https?:\/\//.test(path)) return path;
   const base = (supabaseUrl ?? "").replace(/\/$/, "");
-  return `${base}/storage/v1/object/public/catalogo/${path.replace(/^\//, "")}`;
+  return `${base}/storage/v1/object/public/${bucket}/${path.replace(/^\//, "")}`;
+}
+
+/** Ruta en Storage (bucket catalogo), ruta local (/demo/...) o URL absoluta → URL servible. */
+export function storageUrl(path: string, supabaseUrl: string | undefined): string {
+  return bucketUrl("catalogo", path, supabaseUrl);
+}
+
+/** Ruta en el bucket público «sedes» (fotos de sedes y asesores) → URL servible. */
+export function sedesUrl(path: string, supabaseUrl: string | undefined): string {
+  return bucketUrl("sedes", path, supabaseUrl);
+}
+
+/** Slug de una sede a partir de la ciudad (sin tildes, minúsculas, guiones; único en la lista). */
+export function branchSlug(city: string, used?: Set<string>): string {
+  const base =
+    city
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "sede";
+  if (!used) return base;
+  let slug = base;
+  let n = 2;
+  while (used.has(slug)) slug = `${base}-${n++}`;
+  used.add(slug);
+  return slug;
 }
 
 export function productHref(locale: Locale, p: Pick<CatalogProduct, "catalog" | "slug">): string {

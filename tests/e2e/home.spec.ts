@@ -483,3 +483,31 @@ test("términos: secciones de ley, enlace a la SIC y pie con términos", async (
   await expect(page.locator('.legal-links a[href="https://www.sic.gov.co"]')).toHaveCount(1);
   await expect(page.locator(`footer a[href="/es/legal/terminos"]`)).toHaveCount(1);
 });
+
+test("sedes: pestañas por sede, mapa con dirección, ancla por ciudad, WhatsApp de asesor y protección del panel", async ({ page }) => {
+  const res = await page.goto("/es/sedes");
+  expect(res?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nuestras sedes");
+  const tabs = page.locator(".branch-tabs [role='tab']");
+  expect(await tabs.count()).toBeGreaterThanOrEqual(1);
+  await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
+  const activePanel = page.locator(".branch-panel:visible");
+  await expect(activePanel.locator(".branch-map iframe")).toHaveAttribute("src", /google\.com\/maps\?q=.*output=embed/);
+
+  if ((await tabs.count()) > 1) {
+    await page.goto("/es/sedes#caucasia");
+    await expect(page.locator("#caucasia")).toBeVisible();
+    await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+    await page.goto("/es/sedes#medellin");
+  }
+
+  const advisorWa = page.locator(".branch-panel:visible .advisor-card a.advisor-wa");
+  if ((await advisorWa.count()) > 0) {
+    await expect(advisorWa.first()).toHaveAttribute("href", /^\/api\/wa\?a=[0-9a-f-]{36}&.*s=sedes/);
+  } else {
+    await expect(page.locator(".branch-panel:visible .branch-no-advisors a.btn.y")).toHaveAttribute("href", /^\/api\/wa\?.*s=sedes/);
+  }
+
+  await page.goto("/admin/sedes");
+  await expect(page).toHaveURL(/\/admin\/login/);
+});

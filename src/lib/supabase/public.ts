@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { supabasePublicEnv } from "@/lib/env";
 import type { Database } from "./types";
 import { site } from "@/lib/site";
+import { branchSlug, sedesUrl, type I18nText } from "@/features/catalog/shared";
 import { DEFAULT_ENGINE_VARIANT, isEngineVariant } from "@/features/engine3d/variants";
 import { DEFAULT_BRAND, isBrand, type BrandKey } from "@/features/brand/brands";
 
@@ -45,7 +46,7 @@ export async function getCompanyInfo(): Promise<CompanyInfo> {
 }
 
 export type ContactPhone = { label: string; number: string; whatsapp: boolean };
-export type ContactBranch = { id: string; name: string; city: string; address: string | null; phone: string | null };
+export type ContactBranch = { id: string; slug: string; name: string; city: string; address: string | null; phone: string | null };
 export type ContactInfo = {
   email: string | null;
   phones: ContactPhone[];
@@ -75,7 +76,7 @@ export async function getContact(): Promise<ContactInfo> {
     email: null,
     phones: [{ label: "", number: site.whatsappFallback, whatsapp: true }],
     whatsapp: site.whatsappFallback,
-    branches: [{ id: "medellin", name: "Medellín", city: "Medellín", address: site.workshopAddress, phone: null }],
+    branches: [{ id: "medellin", slug: "medellin", name: "Medellín", city: "Medellín", address: site.workshopAddress, phone: null }],
   };
   try {
     const supabase = createSupabasePublicClient();
@@ -86,11 +87,14 @@ export async function getContact(): Promise<ContactInfo> {
     if (e1 || e2) return fallback;
     const phones = parsePhones(company?.phones);
     const wa = phones.find((p) => p.whatsapp) ?? phones[0];
+    const used = new Set<string>();
     return {
       email: company?.email?.trim() || null,
       phones: phones.length ? phones : fallback.phones,
       whatsapp: wa?.number ?? fallback.whatsapp,
-      branches: branches?.length ? branches : fallback.branches,
+      branches: branches?.length
+        ? branches.map((b) => ({ ...b, slug: branchSlug(b.city, used) }))
+        : fallback.branches,
     };
   } catch {
     return fallback;
@@ -208,5 +212,133 @@ export async function getTrust(): Promise<TrustInfo> {
     };
   } catch {
     return empty;
+  }
+}
+
+export type BranchAdvisor = {
+  id: string;
+  name: string;
+  title: I18nText;
+  photoUrl: string | null;
+  phone: string;
+  email: string | null;
+  active: boolean;
+};
+
+export type PublicBranch = {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  address: string | null;
+  phone: string | null;
+  hours: I18nText;
+  description: I18nText;
+  mapQuery: string;
+  photos: string[];
+  lat: number | null;
+  lng: number | null;
+  advisors: BranchAdvisor[];
+};
+
+export type BranchesPageData = {
+  branches: PublicBranch[];
+  whatsapp: string;
+  email: string | null;
+};
+
+function cleanI18n(raw: unknown): I18nText {
+  if (!raw || typeof raw !== "object") return {};
+  const r = raw as Record<string, unknown>;
+  const out: I18nText = {};
+  for (const k of ["es", "en", "pt"] as const) {
+    if (typeof r[k] === "string" && r[k].trim()) out[k] = r[k].trim();
+  }
+  return out;
+}
+
+/** Sedes activas con mapa, fotos, horario, descripción y asesores visibles. Si la migración aún no está aplicada, vuelve a getContact(). */
+export async function getBranchesPage(): Promise<BranchesPageData> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("company");
+  const contact = await getContact();
+  const fallback = (): BranchesPageData => {
+    const used = new Set<string>();
+    return {
+      whatsapp: contact.whatsapp,
+      email: contact.email,
+      branches: contact.branches.map((b) => ({
+        id: b.id,
+        slug: branchSlug(b.city, used),
+        name: b.name || `Sede ${b.city}`,
+        city: b.city,
+        address: b.address,
+        phone: b.phone,
+        hours: {},
+        description: {},
+        mapQuery: [b.address, b.city, "Colombia"].filter(Boolean).join(", "),
+        photos: [],
+        lat: null,
+        lng: null,
+        advisors: [],
+      })),
+    };
+  };
+  try {
+    const supabase = createSupabasePublicClient();
+    const base = supabasePublicEnv().NEXT_PUBLIC_SUPABASE_URL;
+    const [{ data: branches, error: e1 }, { data: advisors, error: e2 }] = await Promise.all([
+      supabase
+        .from("branches")
+        .select("id, name, city, address, phone, hours, description, map_query, photos, lat, lng")
+        .eq("active", true)
+        .order("sort"),
+      supabase
+        .from("advisors")
+        .select("id, name, title, photo_path, phone_e164, public_email, active, branch_id, sort")
+        .eq("show_on_site", true)
+        .not("branch_id", "is", null)
+        .order("sort")
+        .order("name"),
+    ]);
+    if (e1 || e2 || !branches?.length) return fallback();
+    const used = new Set<string>();
+    const advByBranch = new Map<string, BranchAdvisor[]>();
+    for (const a of advisors ?? []) {
+      if (!a.branch_id) continue;
+      const list = advByBranch.get(a.branch_id) ?? [];
+      list.push({
+        id: a.id,
+        name: a.name,
+        title: cleanI18n(a.title),
+        photoUrl: a.photo_path ? sedesUrl(a.photo_path, base) : null,
+        phone: a.phone_e164,
+        email: a.public_email?.trim() || null,
+        active: a.active,
+      });
+      advByBranch.set(a.branch_id, list);
+    }
+    return {
+      whatsapp: contact.whatsapp,
+      email: contact.email,
+      branches: branches.map((b) => ({
+        id: b.id,
+        slug: branchSlug(b.city, used),
+        name: b.name || `Sede ${b.city}`,
+        city: b.city,
+        address: b.address,
+        phone: b.phone,
+        hours: cleanI18n(b.hours),
+        description: cleanI18n(b.description),
+        mapQuery: b.map_query?.trim() || [b.address, b.city, "Colombia"].filter(Boolean).join(", "),
+        photos: (b.photos ?? []).filter(Boolean).map((p) => sedesUrl(p, base)),
+        lat: b.lat ?? null,
+        lng: b.lng ?? null,
+        advisors: advByBranch.get(b.id) ?? [],
+      })),
+    };
+  } catch {
+    return fallback();
   }
 }

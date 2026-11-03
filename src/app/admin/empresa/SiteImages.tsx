@@ -2,38 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { prepareImage } from "@/lib/image-prepare";
 import { saveBenefitsImage } from "./actions";
-
-const MAX_SIDE = 1600;
-
-/** Reduce la foto en el navegador (lado mayor 1600 px) para que el inicio cargue rápido. */
-async function prepare(
-  file: File,
-): Promise<{ blob: Blob; ext: "jpg" | "png" | "webp" }> {
-  const keep = {
-    blob: file as Blob,
-    ext: (file.type === "image/png"
-      ? "png"
-      : file.type === "image/webp"
-        ? "webp"
-        : "jpg") as "jpg" | "png" | "webp",
-  };
-  try {
-    const bmp = await createImageBitmap(file);
-    const scale = Math.min(1, MAX_SIDE / Math.max(bmp.width, bmp.height));
-    if (scale === 1 && file.size < 700_000) return keep;
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(bmp.width * scale);
-    canvas.height = Math.round(bmp.height * scale);
-    canvas.getContext("2d")!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
-    const blob = await new Promise<Blob | null>((r) =>
-      canvas.toBlob(r, "image/jpeg", 0.86),
-    );
-    return blob && blob.size < file.size ? { blob, ext: "jpg" } : keep;
-  } catch {
-    return keep;
-  }
-}
 
 /** Imagen de la sección Beneficios del inicio: vista previa, cambiar y volver a la predeterminada. */
 export function SiteImages({
@@ -58,7 +28,7 @@ export function SiteImages({
       return setMsg({ ok: false, text: "La imagen pesa más de 25 MB." });
     setBusy(true);
     setMsg(null);
-    const { blob, ext } = await prepare(file);
+    const { blob, ext } = await prepareImage(file);
     const path = `sitio/beneficios-${crypto.randomUUID()}.${ext}`;
     const { error } = await createSupabaseBrowserClient()
       .storage.from("catalogo")

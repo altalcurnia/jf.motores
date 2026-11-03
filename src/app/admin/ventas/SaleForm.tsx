@@ -1,18 +1,48 @@
 "use client";
 import { useRouter } from "next/navigation";
 import QRCode from "qrcode";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CatalogType } from "@/features/catalog/shared";
 import { registerSale } from "./actions";
 import { CustomerPicker, type Customer } from "./CustomerPicker";
 
 type ProductOption = { id: string; label: string; catalog: CatalogType; price: number | null; warranty: number | null };
 
-const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota" }).format(new Date());
+const dateAtOffset = (daysOffset = 0) => {
+  const d = new Date();
+  d.setDate(d.getDate() + daysOffset);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota" }).format(d);
+};
+
+const today = () => dateAtOffset(0);
+
+const CHANNEL_OPTIONS = [
+  { key: "presencial", label: "En persona" },
+  { key: "whatsapp", label: "WhatsApp" },
+  { key: "web", label: "Página web" },
+  { key: "otro", label: "Otro" },
+] as const;
+
+const WARRANTY_PRESETS: Array<{ label: string; value: number | null }> = [
+  { label: "Sin garantía", value: null },
+  { label: "3m", value: 3 },
+  { label: "6m", value: 6 },
+  { label: "12m", value: 12 },
+  { label: "18m", value: 18 },
+  { label: "24m", value: 24 },
+];
+
+const NOTE_PRESETS = [
+  "Entrega en sede",
+  "Envío nacional",
+  "Pago de contado",
+  "Incluye puesta en marcha",
+];
 
 /** Registrar una venta: producto, serie y la cuenta del cliente (obligatoria). */
 export function SaleForm({ products, initialProductId, registerUrl }: { products: ProductOption[]; initialProductId: string | null; registerUrl: string }) {
   const router = useRouter();
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const initial = products.find((p) => p.id === initialProductId) ?? null;
   const [productId, setProductId] = useState(initial?.id ?? "");
   const [serial, setSerial] = useState("");
@@ -45,6 +75,18 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
     setPrice(p?.price ?? null);
     setWarranty(p?.warranty ?? null);
     setMarkSold(p ? p.catalog !== "repuesto" : true);
+  }
+
+  function toggleNotePreset(preset: string) {
+    const parts = notes
+      .split(" · ")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (parts.includes(preset)) {
+      setNotes(parts.filter((x) => x !== preset).join(" · "));
+    } else {
+      setNotes([...parts, preset].join(" · "));
+    }
   }
 
   async function submit(e: React.FormEvent) {
@@ -81,6 +123,10 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
     setPickerKey((k) => k + 1);
     router.refresh();
   }
+
+  const todayStr = today();
+  const yesterdayStr = dateAtOffset(-1);
+  const twoDaysAgoStr = dateAtOffset(-2);
 
   return (
     <form className="panel sale-form" onSubmit={submit}>
@@ -169,23 +215,80 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
             placeholder="Opcional"
           />
         </label>
-        <label>
-          Canal
-          <select value={channel} onChange={(e) => setChannel(e.target.value)}>
-            <option value="presencial">En persona</option>
-            <option value="whatsapp">WhatsApp</option>
-            <option value="web">Página web</option>
-            <option value="otro">Otro</option>
-          </select>
-        </label>
-        <label>
-          Fecha
-          <input type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} />
-        </label>
-        <label>
-          <span>
-            Garantía <span className="hint">(meses; vacío = sin garantía)</span>
+        <div className="field">
+          <span className="field-label">Canal (clic para elegir)</span>
+          <div className="sched-presets">
+            {CHANNEL_OPTIONS.map((opt) => (
+              <button
+                key={opt.key}
+                type="button"
+                className={`chip-btn ${channel === opt.key ? "on" : ""}`}
+                onClick={() => setChannel(opt.key)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="field">
+          <span className="field-label">Fecha de venta</span>
+          <div className="sched-presets">
+            <button type="button" className={`chip-btn ${date === todayStr ? "on" : ""}`} onClick={() => setDate(todayStr)}>
+              Hoy
+            </button>
+            <button type="button" className={`chip-btn ${date === yesterdayStr ? "on" : ""}`} onClick={() => setDate(yesterdayStr)}>
+              Ayer
+            </button>
+            <button type="button" className={`chip-btn ${date === twoDaysAgoStr ? "on" : ""}`} onClick={() => setDate(twoDaysAgoStr)}>
+              Hace 2 días
+            </button>
+            <button
+              type="button"
+              className="chip-btn"
+              onClick={() => {
+                const el = dateInputRef.current;
+                if (!el) return;
+                if (typeof el.showPicker === "function") el.showPicker();
+                else el.focus();
+              }}
+            >
+              📅 Calendario
+            </button>
+          </div>
+          <input
+            ref={dateInputRef}
+            type="date"
+            value={date}
+            max={todayStr}
+            onChange={(e) => setDate(e.target.value)}
+            onClick={(e) => {
+              const el = e.currentTarget;
+              if (typeof el.showPicker === "function") {
+                try {
+                  el.showPicker();
+                } catch {
+                  // Ignorar si ya está abierto
+                }
+              }
+            }}
+          />
+        </div>
+        <div className="field">
+          <span className="field-label">
+            Garantía <span className="hint">(clic para elegir meses)</span>
           </span>
+          <div className="sched-presets">
+            {WARRANTY_PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                className={`chip-btn ${warranty === preset.value ? "on" : ""}`}
+                onClick={() => setWarranty(preset.value)}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
           <input
             inputMode="numeric"
             value={warranty ?? ""}
@@ -195,13 +298,31 @@ export function SaleForm({ products, initialProductId, registerUrl }: { products
               setWarranty(d ? Math.min(Number(d), 120) : null);
             }}
           />
-        </label>
-        <label className="span2">
-          <span>
-            Notas <span className="hint">(opcional: garantía, forma de pago, entrega…)</span>
+        </div>
+        <div className="field span2">
+          <span className="field-label">
+            Notas <span className="hint">(clic en opciones rápidas o escribe)</span>
           </span>
-          <input value={notes} maxLength={500} onChange={(e) => setNotes(e.target.value)} />
-        </label>
+          <div className="sched-presets">
+            {NOTE_PRESETS.map((preset) => {
+              const active = notes
+                .split(" · ")
+                .map((s) => s.trim())
+                .includes(preset);
+              return (
+                <button
+                  key={preset}
+                  type="button"
+                  className={`chip-btn ${active ? "on" : ""}`}
+                  onClick={() => toggleNotePreset(preset)}
+                >
+                  {active ? `✓ ${preset}` : `+ ${preset}`}
+                </button>
+              );
+            })}
+          </div>
+          <input value={notes} maxLength={500} onChange={(e) => setNotes(e.target.value)} placeholder="Opcional: entrega, forma de pago…" />
+        </div>
         <label className="check span3">
           <input type="checkbox" checked={markSold} onChange={(e) => setMarkSold(e.target.checked)} />
           <span>

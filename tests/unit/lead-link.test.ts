@@ -18,5 +18,19 @@ describe("enlace de WhatsApp con registro del lead", () => {
     expect(q.get("m")!.length).toBe(700);
     expect(q.has("p")).toBe(false);
     expect(q.has("l")).toBe(false);
+    expect(q.has("a")).toBe(false);
+  });
+
+  it("incluye el asesor cuando el clic viene de una tarjeta de la página de Sedes", () => {
+    const href = waLead({
+      advisorId: "11111111-2222-3333-4444-555555555555",
+      source: "sedes",
+      locale: "es",
+      message: "Hola Ana, te escribo desde la página de JF Motores (sede Medellín).",
+    });
+    expect(href).toMatch(/^\/api\/wa\?a=11111111-2222-3333-4444-555555555555&/);
+    const q = new URLSearchParams(href.split("?")[1]);
+    expect(q.get("a")).toBe("11111111-2222-3333-4444-555555555555");
+    expect(q.get("s")).toBe("sedes");
   });
 });

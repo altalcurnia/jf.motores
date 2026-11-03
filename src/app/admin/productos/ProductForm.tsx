@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { storageUrl, type CatalogType, type ProductStatus } from "@/features/catalog/shared";
+import { generateDescriptionWithAi, translateFieldsWithAi } from "../ai-copy";
 import { createEngineModel, deleteProduct, saveProduct, type ProductInput } from "./actions";
 import { SPEC_KEYS, slugify, type FormOptions, type Lang, type ProductFormValue } from "./form-model";
 
@@ -19,6 +20,35 @@ const CATALOGS: { key: CatalogType; label: string }[] = [
   { key: "motor", label: "Motor" },
   { key: "repuesto", label: "Repuesto" },
 ];
+const WARRANTY_PRESETS: { value: number | null; label: string }[] = [
+  { value: null, label: "Sin garantía" },
+  { value: 3, label: "3 meses" },
+  { value: 6, label: "6 meses" },
+  { value: 12, label: "12 meses (1 año)" },
+  { value: 18, label: "18 meses" },
+  { value: 24, label: "24 meses (2 años)" },
+];
+const SPEC_VALUE_PRESETS: Record<string, string[]> = {
+  arranque: ["Eléctrico 12V", "Eléctrico 24V", "Eléctrico y manual", "Manual"],
+  aspiracion: ["Turboalimentado", "Natural"],
+  refrigeracion: ["Agua (radiador)", "Aire"],
+  material: ["Hierro fundido", "Acero forjado", "Aluminio", "Bronce"],
+  succion_in: ["2", "3", "4", "6", "8"],
+  descarga_in: ["2", "3", "4", "6"],
+  cilindros: ["1", "2", "3", "4", "6"],
+  voltaje_v: ["12", "24"],
+};
+const PRODUCT_FACT_CHIPS = [
+  "Minería de aluvión",
+  "Minería a tajo abierto",
+  "Riego agrícola",
+  "Bombeo de alto caudal",
+  "Alta presión / cabeza",
+  "Construcción y drenaje",
+  "Repuesto original verificado",
+  "Incluye chasis y tablero",
+] as const;
+
 const MAX_IMAGE_SIDE = 2000;
 /** Modelo 3D: tamaño máximo del archivo original y del ya comprimido */
 const MAX_3D_INPUT = 300 * 1024 * 1024;
@@ -52,6 +82,10 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [models, setModels] = useState(options.engineModels);
   const [newModel, setNewModel] = useState({ brand: "", model: "" });
+  const [aiQuestions, setAiQuestions] = useState<{ hint: string; questions: string[] } | null>(null);
+  const [selectedFacts, setSelectedFacts] = useState<string[]>([]);
+  const [extraFacts, setExtraFacts] = useState("");
+
   const set = <K extends keyof ProductFormValue>(k: K, value: ProductFormValue[K]) => setV((p) => ({ ...p, [k]: value }));
   const setText = (field: "name" | "summary" | "description", value: string) =>
     setV((p) => {
@@ -72,6 +106,94 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
         categoryId: options.categories.find((c) => c.catalog === catalog)?.id ?? null,
         specs: emptySpecs ? SPEC_KEYS[catalog].slice(0, 5).map(([key]) => ({ key, value: "" })) : p.specs,
       };
+    });
+  }
+
+  async function handleTranslateWithAi() {
+    if (!v.name.es.trim() && !v.summary.es.trim() && !v.description.es.trim()) {
+      return setMsg({ ok: false, error: "" } as never), setMsg({ ok: false, text: "Escribe primero el texto en español antes de traducir." });
+    }
+    setBusy("ai-translate");
+    setMsg(null);
+    const r = await translateFieldsWithAi(
+      {
+        name: v.name.es,
+        summary: v.summary.es,
+        description: v.description.es,
+      },
+      `Producto ${v.catalog} (${v.ref || v.name.es}) de JF Motores`,
+    );
+    setBusy(null);
+    if (!r.ok) return setMsg({ ok: false, text: r.error });
+    setV((p) => ({
+      ...p,
+      name: { ...p.name, en: r.en.name || p.name.en, pt: r.pt.name || p.name.pt },
+      summary: { ...p.summary, en: r.en.summary || p.summary.en, pt: r.pt.summary || p.summary.pt },
+      description: { ...p.description, en: r.en.description || p.description.en, pt: r.pt.description || p.description.pt },
+    }));
+    setMsg({ ok: true, text: "Nombre, resumen y descripción traducidos a inglés y portugués con IA." });
+  }
+
+  async function handleGenerateWithAi(confirmedFacts = false) {
+    setBusy("ai-generate");
+    setMsg(null);
+    const catLabel = categories.find((c) => c.id === v.categoryId)?.label;
+    const engLabel = models.find((m) => m.id === v.engineModelId)?.label;
+    const compatLabels = [
+      ...v.compatModels.map((id) => models.find((m) => m.id === id)?.label ?? ""),
+      ...v.compatProducts.map((id) => options.equipment.find((e) => e.id === id)?.label ?? ""),
+    ].filter(Boolean);
+    const specEntries = v.specs
+      .filter((s) => s.key.trim() && s.value.trim())
+      .map((s) => ({
+        key: s.key,
+        label: SPEC_KEYS[v.catalog].find(([k]) => k === s.key)?.[1] ?? s.key,
+        value: s.value,
+      }));
+    const combinedFacts = [
+      selectedFacts.length ? `Usos/características reales confirmados: ${selectedFacts.join(", ")}` : "",
+      extraFacts.trim(),
+    ]
+      .filter(Boolean)
+      .join(". ");
+
+    const r = await generateDescriptionWithAi({
+      kind: "producto",
+      catalog: v.catalog,
+      ref: v.ref,
+      nameEs: v.name.es,
+      categoryLabel: catLabel,
+      engineModelLabel: engLabel,
+      compatLabels,
+      specs: specEntries,
+      warrantyMonths: v.warrantyMonths,
+      currentSummaryEs: confirmedFacts ? "" : v.summary.es,
+      currentDescEs: confirmedFacts ? "" : v.description.es,
+      extraFacts: combinedFacts,
+    });
+    setBusy(null);
+    if (!r.ok) return setMsg({ ok: false, text: r.error });
+    if (r.needsInfo) {
+      setAiQuestions({ hint: r.missingHint, questions: r.questions });
+      return;
+    }
+    setAiQuestions(null);
+    setV((p) => ({
+      ...p,
+      summary: {
+        es: r.summaryEs || p.summary.es,
+        en: r.summaryEn || p.summary.en,
+        pt: r.summaryPt || p.summary.pt,
+      },
+      description: {
+        es: r.es,
+        en: r.en || p.description.en,
+        pt: r.pt || p.description.pt,
+      },
+    }));
+    setMsg({
+      ok: true,
+      text: "Descripción y resumen generados en español, inglés y portugués usando solo datos reales verificados.",
     });
   }
 
@@ -123,7 +245,6 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
         return setMsg({ ok: false, text: `No se pudo leer el STL: ${err instanceof Error ? err.message : "archivo dañado"}` });
       }
     }
-    // Compresión en el navegador: texturas a WebP y geometría con meshopt
     let body: Blob = new Blob([source], { type: "model/gltf-binary" });
     try {
       const { compressGlb } = await import("@/features/catalog/compress-glb");
@@ -269,6 +390,87 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               ))}
             </div>
           </div>
+
+          <div className="ai-toolbar">
+            <div>
+              <strong>Asistente de redacción y traducción (DeepSeek)</strong>
+              <small className="muted block">
+                Usa solo especificaciones y datos reales verificables. Si faltan datos, pregunta antes de generar.
+              </small>
+            </div>
+            <div className="ai-toolbar-actions">
+              <button
+                type="button"
+                className="btn-secondary ai-btn"
+                disabled={!!busy}
+                onClick={() => handleGenerateWithAi(false)}
+              >
+                {busy === "ai-generate" ? "Consultando IA…" : "✨ Generar descripción con IA"}
+              </button>
+              <button
+                type="button"
+                className="btn-secondary ai-btn"
+                disabled={!!busy || (!v.name.es.trim() && !v.summary.es.trim() && !v.description.es.trim())}
+                onClick={handleTranslateWithAi}
+              >
+                {busy === "ai-translate" ? "Traduciendo…" : "🌐 Traducir a Inglés y Portugués con IA"}
+              </button>
+            </div>
+          </div>
+
+          {aiQuestions && (
+            <div className="ai-prompt-box">
+              <b>⚠️ Para no inventar datos técnicos, confirma la información real del producto:</b>
+              <p className="muted small">{aiQuestions.hint}</p>
+              <ul className="ai-questions-list">
+                {aiQuestions.questions.map((q, i) => (
+                  <li key={i}>{q}</li>
+                ))}
+              </ul>
+              <div className="field">
+                <span className="field-label">Marca con 1 clic las aplicaciones o características reales que aplican:</span>
+                <div className="chips">
+                  {PRODUCT_FACT_CHIPS.map((fc) => {
+                    const on = selectedFacts.includes(fc);
+                    return (
+                      <button
+                        key={fc}
+                        type="button"
+                        className={`chip ${on ? "on" : ""}`}
+                        onClick={() =>
+                          setSelectedFacts(on ? selectedFacts.filter((x) => x !== fc) : [...selectedFacts, fc])
+                        }
+                      >
+                        {fc}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <label>
+                <span>Datos técnicos o comerciales reales adicionales (opcional)</span>
+                <input
+                  value={extraFacts}
+                  placeholder="Ej.: Motor 4 cilindros 85 HP, bomba 6×4 pulgadas, acoplado en chasis reforzado"
+                  onChange={(e) => setExtraFacts(e.target.value)}
+                />
+              </label>
+              <div className="row-actions">
+                <button
+                  type="button"
+                  className="btn-primary"
+                  disabled={!!busy || (!selectedFacts.length && !extraFacts.trim())}
+                  onClick={() => handleGenerateWithAi(true)}
+                >
+                  {busy === "ai-generate" ? "Generando…" : "Confirmar datos reales y redactar en los 3 idiomas"}
+                </button>
+                <button type="button" className="btn-ghost" onClick={() => setAiQuestions(null)}>
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          )}
+
           <label>
             <span>
               Nombre {lang === "es" && <span className="req">obligatorio</span>}
@@ -326,20 +528,23 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
               </select>
             </label>
           </div>
-          <label>
-            <span>
-              Garantía <span className="hint">(meses; vacío = sin garantía. Se propone al registrar cada venta)</span>
+          <div className="field">
+            <span className="field-label">
+              Garantía <span className="hint">(elige con 1 clic; se propone al registrar cada venta)</span>
             </span>
-            <input
-              inputMode="numeric"
-              value={v.warrantyMonths ?? ""}
-              placeholder="Sin garantía"
-              onChange={(e) => {
-                const d = e.target.value.replace(/\D/g, "").slice(0, 3);
-                set("warrantyMonths", d && Number(d) > 0 ? Math.min(Number(d), 120) : null);
-              }}
-            />
-          </label>
+            <div className="chips">
+              {WARRANTY_PRESETS.map((w) => (
+                <button
+                  key={String(w.value)}
+                  type="button"
+                  className={`chip ${v.warrantyMonths === w.value ? "on" : ""}`}
+                  onClick={() => set("warrantyMonths", w.value)}
+                >
+                  {w.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <label className="check">
             <input type="checkbox" checked={v.featured} onChange={(e) => set("featured", e.target.checked)} />
             <span>
@@ -395,26 +600,75 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
 
         <section className="panel">
           <h2>Especificaciones</h2>
-          <datalist id="spec-keys">
-            {SPEC_KEYS[v.catalog].map(([k, label]) => (
-              <option key={k} value={k} label={label} />
-            ))}
-          </datalist>
-          <div className="specs">
-            {v.specs.map((s, i) => (
-              <div className="spec-row" key={i}>
-                <input list="spec-keys" placeholder="Dato (ej. hp)" value={s.key} onChange={(e) => set("specs", v.specs.map((x, n) => (n === i ? { ...x, key: e.target.value } : x)))} />
-                <input placeholder={SPEC_KEYS[v.catalog].find(([k]) => k === s.key)?.[1] ?? "Valor"} value={s.value} onChange={(e) => set("specs", v.specs.map((x, n) => (n === i ? { ...x, value: e.target.value } : x)))} />
-                <button type="button" className="link-danger" onClick={() => set("specs", v.specs.filter((_, n) => n !== i))} aria-label="Quitar">
-                  ✕
+          <div className="chips">
+            {SPEC_KEYS[v.catalog].map(([k, label]) => {
+              const already = v.specs.some((s) => s.key === k);
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  className={`chip ${already ? "on" : ""}`}
+                  onClick={() => {
+                    if (already) return;
+                    set("specs", [...v.specs, { key: k, value: "" }]);
+                  }}
+                >
+                  + {label}
                 </button>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+          <div className="specs">
+            {v.specs.map((s, i) => {
+              const presets = SPEC_VALUE_PRESETS[s.key];
+              return (
+                <div className="spec-item-wrap" key={i}>
+                  <div className="spec-row">
+                    <select
+                      value={s.key}
+                      onChange={(e) => set("specs", v.specs.map((x, n) => (n === i ? { ...x, key: e.target.value } : x)))}
+                    >
+                      <option value="">Elige el dato…</option>
+                      {!SPEC_KEYS[v.catalog].some(([k]) => k === s.key) && s.key && (
+                        <option value={s.key}>{s.key}</option>
+                      )}
+                      {SPEC_KEYS[v.catalog].map(([k, label]) => (
+                        <option key={k} value={k}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      placeholder={SPEC_KEYS[v.catalog].find(([k]) => k === s.key)?.[1] ?? "Valor"}
+                      value={s.value}
+                      onChange={(e) => set("specs", v.specs.map((x, n) => (n === i ? { ...x, value: e.target.value } : x)))}
+                    />
+                    <button type="button" className="link-danger" onClick={() => set("specs", v.specs.filter((_, n) => n !== i))} aria-label="Quitar">
+                      ✕
+                    </button>
+                  </div>
+                  {presets && (
+                    <div className="spec-presets">
+                      {presets.map((val) => (
+                        <button
+                          key={val}
+                          type="button"
+                          className={`chip-btn${s.value === val ? " on" : ""}`}
+                          onClick={() => set("specs", v.specs.map((x, n) => (n === i ? { ...x, value: val } : x)))}
+                        >
+                          {val}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <button type="button" className="btn-ghost" onClick={() => set("specs", [...v.specs, { key: "", value: "" }])}>
-            + Agregar dato
+            + Agregar fila de dato
           </button>
-          <p className="hint">Escribe solo el número (sin unidades): el sitio agrega HP, L/min, m… y traduce el nombre del dato.</p>
+          <p className="hint">Elige el dato en la lista o toca las opciones rápidas; el sitio agrega unidades (HP, L/min, m…) y traduce el nombre.</p>
         </section>
 
         <section className="panel">
@@ -534,4 +788,3 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
     </form>
   );
 }
-

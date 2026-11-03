@@ -259,9 +259,9 @@ export default async function HomePage() {
           <div>
             <b>{dict.contact.workshop}</b>
             {contact.branches.map((br) => (
-              <span className="c-line" key={br.id}>
+              <Link className="c-line" key={br.id} href={`/${locale}/sedes#${br.slug}`}>
                 <strong>{br.city}</strong> · {br.address}
-              </span>
+              </Link>
             ))}
           </div>
           <div>

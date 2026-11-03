@@ -1,3 +1,7 @@
+:root { color-scheme: dark; }
+:where(a) { color: var(--yellow); }
+input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: var(--yellow); }
+
 /* Ajustes sobre el diseño original (legacy.css) para la versión Next.js. */
 
 /* Fondo provisional mientras no está montado el motor 3D (día 5). */
@@ -1297,3 +1301,51 @@ body.in-journey:not(.stage-b) #hud { opacity: 0; transform: translateY(20px); }
 /* Videos dentro de Guías */
 .guide-videos { margin-top: 18px; }
 .guide-videos .library-intro { color: var(--mut); max-width: 70ch; margin-bottom: 8px; }
+
+/* ---------- Sedes ---------- */
+.branch-tabs { flex-wrap: wrap; }
+.branch-panel { margin-top: 22px; display: grid; gap: 36px; }
+.branch-panel[hidden] { display: none; }
+.branch-top { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.25fr); gap: 22px; align-items: stretch; }
+.branch-info { padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: rgba(14, 17, 21, 0.88); display: grid; gap: 16px; align-content: start; }
+.branch-info h2 { margin: 0; font-family: var(--disp); font-weight: 900; font-size: clamp(24px, 3vw, 34px); text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.05; }
+.branch-desc { margin: 0; color: var(--mut); font-size: 15px; line-height: 1.55; }
+.branch-meta { margin: 0; display: grid; gap: 12px; }
+.branch-meta div { display: grid; gap: 3px; padding-top: 10px; border-top: 1px dashed var(--line); }
+.branch-meta div:first-child { border-top: 0; padding-top: 0; }
+.branch-meta dt { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); }
+.branch-meta dd { margin: 0; font-size: 15px; color: var(--ink); line-height: 1.45; }
+.branch-meta a { color: var(--ink); text-decoration: none; }
+.branch-meta a:hover { color: var(--yellow); }
+.branch-map-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.branch-map-actions .btn { padding: 11px 16px; font-size: 11px; }
+.branch-map { position: relative; min-height: 320px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #0d1014; }
+.branch-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.branch-sec { display: grid; gap: 14px; }
+.branch-sec .info-h2 { margin: 0; }
+.branch-gallery { display: grid; gap: 12px; }
+.branch-photo-main { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #0d1014; max-height: 460px; aspect-ratio: 16 / 9; }
+.branch-photo-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.branch-photo-thumbs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+.branch-thumb { flex: 0 0 112px; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; border: 2px solid var(--line); padding: 0; background: #0d1014; cursor: pointer; opacity: 0.72; transition: opacity 0.2s, border-color 0.2s; }
+.branch-thumb:hover, .branch-thumb.on { opacity: 1; border-color: var(--yellow); }
+.branch-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.branch-empty { margin: 0; padding: 18px 20px; border: 1px dashed var(--line); border-radius: 14px; color: var(--mut); font-size: 14.5px; }
+.branch-advisors { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.advisor-card { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: rgba(14, 17, 21, 0.88); display: grid; gap: 16px; align-content: start; }
+.advisor-head { display: flex; gap: 14px; align-items: center; }
+.advisor-avatar { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; border: 1px solid rgba(247, 198, 0, 0.45); background: rgba(247, 198, 0, 0.12); color: var(--yellow); display: grid; place-items: center; font-family: var(--disp); font-weight: 900; font-size: 22px; flex: none; }
+.advisor-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.advisor-head h4 { margin: 0; font-size: 18px; line-height: 1.25; }
+.advisor-role { margin: 4px 0 0; color: var(--mut); font-size: 13.5px; }
+.advisor-actions { display: grid; gap: 8px; }
+.advisor-actions .btn, .advisor-actions .mail-pick > button.btn { width: 100%; justify-content: center; padding: 11px 14px; font-size: 11px; text-align: center; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.04); color: var(--ink); }
+.advisor-actions .btn.y { background: var(--yellow); border-color: var(--yellow); color: #0b0d10; }
+.advisor-actions .btn:hover, .advisor-actions .mail-pick > button.btn:hover { border-color: var(--yellow); }
+.branch-no-advisors { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: rgba(14, 17, 21, 0.88); display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+.branch-no-advisors p { margin: 0; color: var(--mut); font-size: 14.5px; }
+@media (max-width: 760px) {
+  .branch-top { grid-template-columns: 1fr; }
+  .branch-map { order: -1; min-height: 240px; }
+  .branch-advisors { grid-template-columns: 1fr; }
+}

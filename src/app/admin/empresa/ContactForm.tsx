@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { saveContact, type BranchInput, type ContactInput, type PhoneInput } from "./actions";
 
@@ -74,8 +75,13 @@ export function ContactForm({ initial, canEdit }: { initial: ContactInput; canEd
         </section>
 
         <section className="panel full">
-          <h2>Sedes</h2>
-          <p className="muted small">Se muestran en este orden al final de la página principal. Desactiva una sede para ocultarla sin borrarla.</p>
+          <div className="panel-head">
+            <h2>Sedes</h2>
+            <Link href="/admin/sedes" className="btn-secondary">
+              Editar sedes, fotos y mapa →
+            </Link>
+          </div>
+          <p className="muted small">Se muestran en este orden al final de la página principal y en la página de Sedes. Desactiva una sede para ocultarla sin borrarla.</p>
           {v.branches.map((b, i) => (
             <div className="contact-row branch" key={b.id ?? `new-${i}`}>
               <label className="field">

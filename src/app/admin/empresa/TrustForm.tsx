@@ -7,6 +7,10 @@ export type TestimonialRow = Omit<TestimonialInput, "id"> & { id: string };
 
 const empty = (): TestimonialInput => ({ id: null, name: "", place: "", product: "", quote: "", consent: false, active: true });
 
+const FOUNDED_YEAR_PRESETS = ["2005", "2008", "2010", "2012", "2015", "2018", "2020"];
+const PLACE_PRESETS = ["Caucasia, Antioquia", "Segovia, Antioquia", "Zaragoza, Antioquia", "El Bagre, Antioquia", "Remedios, Antioquia", "Medellín, Antioquia"];
+const EQUIP_PRESETS = ["Motobomba Jaguar 25", "Motobomba Diésel 4x4", "Motobomba Diésel 6x6", "Motor Diésel 25 HP", "Motor Diésel 38 HP"];
+
 /** Datos legales (política, términos y pie), IVA, cifras y testimonios. Lo vacío no se muestra en el sitio. */
 export function TrustForm({ initial, testimonials, canEdit }: { initial: TrustInput; testimonials: TestimonialRow[]; canEdit: boolean }) {
   const router = useRouter();
@@ -41,7 +45,24 @@ export function TrustForm({ initial, testimonials, canEdit }: { initial: TrustIn
         {field("legalName", "Razón social", "JF Motores S.A.S.")}
         {field("nit", "NIT", "900123456-7")}
         {field("legalAddress", "Dirección legal", "Cra. 52 # 12-40, Medellín")}
-        {field("foundedYear", "Año de fundación", "2008", { inputMode: "numeric" })}
+        <div className="field">
+          <span className="field-label">Año de fundación</span>
+          {canEdit && (
+            <div className="sched-presets">
+              {FOUNDED_YEAR_PRESETS.map((yr) => (
+                <button
+                  key={yr}
+                  type="button"
+                  className={`chip-btn ${v.foundedYear === yr ? "on" : ""}`}
+                  onClick={() => setV({ ...v, foundedYear: yr })}
+                >
+                  {yr}
+                </button>
+              ))}
+            </div>
+          )}
+          <input value={v.foundedYear} placeholder="2008" inputMode="numeric" disabled={!canEdit} onChange={(e) => setV({ ...v, foundedYear: e.target.value })} />
+        </div>
         <label className="field">
           <span className="field-label">¿Los precios publicados incluyen IVA?</span>
           <select value={v.vat} disabled={!canEdit} onChange={(e) => setV({ ...v, vat: e.target.value as TrustInput["vat"] })}>
@@ -92,14 +113,38 @@ export function TrustForm({ initial, testimonials, canEdit }: { initial: TrustIn
               <span className="field-label">Nombre del cliente</span>
               <input value={t.name} onChange={(e) => setT({ ...t, name: e.target.value })} placeholder="Carlos Pérez" />
             </label>
-            <label className="field">
+            <div className="field">
               <span className="field-label">Mina o lugar (opcional)</span>
+              <div className="sched-presets">
+                {PLACE_PRESETS.map((pl) => (
+                  <button
+                    key={pl}
+                    type="button"
+                    className={`chip-btn ${t.place === pl ? "on" : ""}`}
+                    onClick={() => setT({ ...t, place: pl })}
+                  >
+                    {pl}
+                  </button>
+                ))}
+              </div>
               <input value={t.place} onChange={(e) => setT({ ...t, place: e.target.value })} placeholder="Segovia, Antioquia" />
-            </label>
-            <label className="field">
+            </div>
+            <div className="field">
               <span className="field-label">Equipo que compró (opcional)</span>
+              <div className="sched-presets">
+                {EQUIP_PRESETS.map((eq) => (
+                  <button
+                    key={eq}
+                    type="button"
+                    className={`chip-btn ${t.product === eq ? "on" : ""}`}
+                    onClick={() => setT({ ...t, product: eq })}
+                  >
+                    {eq}
+                  </button>
+                ))}
+              </div>
               <input value={t.product} onChange={(e) => setT({ ...t, product: e.target.value })} placeholder="Motobomba Jaguar 25" />
-            </label>
+            </div>
           </div>
           <label className="field">
             <span className="field-label">Testimonio (sus palabras)</span>

@@ -108,6 +108,7 @@ describe("asesor comercial", () => {
   it("el prompt tiene método de venta, mapa del sitio y no pasa a un asesor por un saludo", () => {
     const sp = systemPrompt([], "es", { siteMap: siteMap("https://jfmotores.altalcurnia.com", "es") });
     expect(sp).toContain("MÉTODO DE VENTA");
+    expect(sp).toContain("https://jfmotores.altalcurnia.com/es/sedes");
     expect(sp).toContain("https://jfmotores.altalcurnia.com/es/guias#biblioteca");
     expect(sp).toContain("https://jfmotores.altalcurnia.com/es/guias#videos");
     expect(sp).toMatch(/saludo[^]*NO son motivo para pasar/);

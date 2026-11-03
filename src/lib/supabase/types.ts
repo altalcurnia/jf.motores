@@ -166,6 +166,7 @@ export type Database = {
       advisors: {
         Row: {
           active: boolean;
+          branch_id: string | null;
           catalogs: CatalogType[];
           countries: string[];
           created_at: string;
@@ -177,7 +178,9 @@ export type Database = {
           phone_e164: string;
           photo_path: string | null;
           profile_id: string | null;
+          public_email: string | null;
           schedule: Json;
+          show_on_site: boolean;
           sort: number;
           title: Json;
           updated_at: string;
@@ -185,6 +188,7 @@ export type Database = {
         };
         Insert: {
           active?: boolean;
+          branch_id?: string | null;
           catalogs?: CatalogType[];
           countries?: string[];
           created_at?: string;
@@ -196,7 +200,9 @@ export type Database = {
           phone_e164: string;
           photo_path?: string | null;
           profile_id?: string | null;
+          public_email?: string | null;
           schedule?: Json;
+          show_on_site?: boolean;
           sort?: number;
           title?: Json;
           updated_at?: string;
@@ -204,6 +210,7 @@ export type Database = {
         };
         Update: Partial<Database["public"]["Tables"]["advisors"]["Insert"]>;
         Relationships: [
+          { foreignKeyName: "advisors_branch_id_fkey"; columns: ["branch_id"]; isOneToOne: false; referencedRelation: "branches"; referencedColumns: ["id"] },
           { foreignKeyName: "advisors_profile_id_fkey"; columns: ["profile_id"]; isOneToOne: true; referencedRelation: "profiles"; referencedColumns: ["id"] },
         ];
       };
@@ -219,12 +226,15 @@ export type Database = {
           address: string | null;
           city: string;
           country: string;
+          description: Json;
           hours: Json;
           id: string;
           lat: number | null;
           lng: number | null;
+          map_query: string | null;
           name: string;
           phone: string | null;
+          photos: string[];
           sort: number;
         };
         Insert: {
@@ -232,12 +242,15 @@ export type Database = {
           address?: string | null;
           city: string;
           country?: string;
+          description?: Json;
           hours?: Json;
           id?: string;
           lat?: number | null;
           lng?: number | null;
+          map_query?: string | null;
           name: string;
           phone?: string | null;
+          photos?: string[];
           sort?: number;
         };
         Update: Partial<Database["public"]["Tables"]["branches"]["Insert"]>;
@@ -616,6 +629,23 @@ export type Database = {
     Functions: {
       lead_create: {
         Args: {
+          p_product?: string | null;
+          p_catalog?: string | null;
+          p_part_key?: string | null;
+          p_source?: string | null;
+          p_country?: string | null;
+          p_locale?: string | null;
+          p_utm?: Json;
+          p_visitor?: string | null;
+          p_user_agent?: string | null;
+          p_device?: string | null;
+          p_ip_hash?: string | null;
+        };
+        Returns: Json;
+      };
+      lead_create_for: {
+        Args: {
+          p_advisor: string;
           p_product?: string | null;
           p_catalog?: string | null;
           p_part_key?: string | null;

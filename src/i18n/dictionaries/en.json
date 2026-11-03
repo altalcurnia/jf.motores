@@ -9,6 +9,7 @@
     "motores": "Engines",
     "repuestos": "Spare parts",
     "empresa": "Company",
+    "sedes": "Locations",
     "contacto": "Contact",
     "cta": "Quote on WhatsApp",
     "language": "Language",
@@ -1101,5 +1102,23 @@
     "copied": "Email copied ✓",
     "subject": "Inquiry to JF Motores",
     "choose": "Choose how to write"
+  },
+  "branches": {
+    "title": "Our locations",
+    "intro": "Visit our workshops and service points. Choose a location to see its Google Maps position, opening hours, photos and talk directly with its advisors.",
+    "address": "Address",
+    "phone": "Phone",
+    "hours": "Hours",
+    "directions": "Get directions",
+    "openMaps": "Open in Google Maps",
+    "photos": "Location photos",
+    "noPhotos": "We will publish photos of this location soon.",
+    "advisors": "Advisors in {city}",
+    "noAdvisors": "Message us on WhatsApp and we will connect you with this location's team.",
+    "whatsapp": "WhatsApp",
+    "call": "Call",
+    "email": "Email",
+    "waMessage": "Hi {name}, I'm writing from the JF Motores website ({city} location).",
+    "mapTitle": "Map of {name}"
   }
 }

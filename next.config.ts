@@ -27,7 +27,7 @@ const csp = [
   "font-src 'self' data:",
   "media-src 'self' blob:",
   "worker-src 'self' blob:",
-  "frame-src https://www.youtube-nocookie.com https://vercel.live",
+  "frame-src https://www.youtube-nocookie.com https://www.google.com https://vercel.live",
   supabase.startsWith("https:") ? "upgrade-insecure-requests" : "",
 ]
   .filter(Boolean)

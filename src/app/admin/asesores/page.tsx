@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { can, getSession } from "@/lib/auth";
+import { supabasePublicEnv } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { AdminTopbar } from "../AdminTopbar";
-import { AdvisorsManager, type AdvisorRow, type RuleRow } from "./AdvisorsManager";
+import { AdvisorsManager, type AdvisorRow, type BranchOption, type RuleRow } from "./AdvisorsManager";
 
 export const metadata = { title: "Asesores y reparto" };
 
@@ -29,31 +30,50 @@ async function Body() {
     return <div className="notice err">No tienes permiso para gestionar asesores.</div>;
   }
   const supabase = await createSupabaseServerClient();
-  const [{ data: advisors, error }, { data: rules }] = await Promise.all([
+  const [{ data: advisors, error }, { data: rules }, { data: branches }] = await Promise.all([
     supabase
       .from("advisors")
-      .select("id, name, title, phone_e164, languages, catalogs, countries, schedule, weight, active, is_fallback, profile_id, profiles ( email )")
+      .select(
+        "id, name, title, phone_e164, public_email, branch_id, photo_path, show_on_site, languages, catalogs, countries, schedule, weight, active, is_fallback, profile_id, profiles ( email )",
+      )
       .order("sort")
       .order("created_at"),
     supabase.from("routing_rules").select("id, name, priority, conditions, strategy, advisor_ids, active").order("priority"),
+    supabase.from("branches").select("id, name, city").order("sort"),
   ]);
   if (error) return <div className="notice err">No se pudieron leer los asesores: {error.message}</div>;
   const rows: AdvisorRow[] = (advisors ?? []).map((a) => {
     const sched = (a.schedule ?? {}) as { days?: Record<string, [string, string]> };
-    const days = Object.keys(sched.days ?? {});
-    const first = days.length ? sched.days![days[0]] : null;
+    const dayMap = sched.days ?? {};
+    const days = Object.keys(dayMap).sort((x, y) => Number(x) - Number(y));
+    const first = days.length ? dayMap[days[0]] : null;
+    const baseFrom = first?.[0] ?? "08:00";
+    const baseTo = first?.[1] ?? "18:00";
+    const hasDifferentHours = days.some((d) => {
+      const pair = dayMap[d];
+      return pair && (pair[0] !== baseFrom || pair[1] !== baseTo);
+    });
+    const titleObj = (a.title ?? {}) as Record<string, string>;
     return {
       id: a.id,
       name: a.name,
-      title: ((a.title ?? {}) as Record<string, string>).es ?? "",
+      title: titleObj.es ?? "",
+      titleEn: titleObj.en ?? "",
+      titlePt: titleObj.pt ?? "",
       phone: a.phone_e164,
       email: (a.profiles as { email: string } | null)?.email ?? "",
+      publicEmail: a.public_email ?? "",
+      branchId: a.branch_id ?? null,
+      photoPath: a.photo_path ?? null,
+      showOnSite: a.show_on_site ?? true,
       languages: a.languages,
       catalogs: a.catalogs,
       countries: a.countries.join(", "),
       days,
-      from: first?.[0] ?? "08:00",
-      to: first?.[1] ?? "18:00",
+      from: baseFrom,
+      to: baseTo,
+      perDaySchedule: hasDifferentHours,
+      dayHours: dayMap,
       weight: a.weight,
       active: a.active,
       isFallback: a.is_fallback,
@@ -74,5 +94,11 @@ async function Body() {
       active: r.active,
     };
   });
-  return <AdvisorsManager advisors={rows} rules={ruleRows} />;
+  const branchOptions: BranchOption[] = (branches ?? []).map((b) => ({
+    id: b.id,
+    name: b.name,
+    city: b.city,
+  }));
+  const supabaseUrl = supabasePublicEnv().NEXT_PUBLIC_SUPABASE_URL;
+  return <AdvisorsManager advisors={rows} rules={ruleRows} branches={branchOptions} supabaseUrl={supabaseUrl} />;
 }

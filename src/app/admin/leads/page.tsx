@@ -19,6 +19,8 @@ const SOURCE_LABEL: Record<string, string> = {
   guia: "Guías",
   repuestos: "Repuestos por pieza",
   "mis-equipos": "Mis equipos",
+  sedes: "Sedes",
+  contacto: "Contacto",
   web: "Página web",
 };
 

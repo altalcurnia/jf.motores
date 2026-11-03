@@ -44,3 +44,6 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+
+# propuestas locales
+/public/imagenes_catalogo_propuestas/

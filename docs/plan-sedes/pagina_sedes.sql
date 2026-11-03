@@ -33,11 +33,12 @@ drop policy if exists sedes_staff_delete on storage.objects;
 create policy sedes_public_read on storage.objects for select
   using (bucket_id = 'sedes');
 create policy sedes_staff_insert on storage.objects for insert to authenticated
-  with check (bucket_id = 'sedes' and ((select public.has_permission('empresa.editar')) or (select public.has_permission('asesores.gestionar'))));
+  with check (bucket_id = 'sedes' and ((select private.has_permission('empresa.editar')) or (select private.has_permission('asesores.gestionar'))));
 create policy sedes_staff_update on storage.objects for update to authenticated
-  using (bucket_id = 'sedes' and ((select public.has_permission('empresa.editar')) or (select public.has_permission('asesores.gestionar'))));
+  using (bucket_id = 'sedes' and ((select private.has_permission('empresa.editar')) or (select private.has_permission('asesores.gestionar'))))
+  with check (bucket_id = 'sedes' and ((select private.has_permission('empresa.editar')) or (select private.has_permission('asesores.gestionar'))));
 create policy sedes_staff_delete on storage.objects for delete to authenticated
-  using (bucket_id = 'sedes' and ((select public.has_permission('empresa.editar')) or (select public.has_permission('asesores.gestionar'))));
+  using (bucket_id = 'sedes' and ((select private.has_permission('empresa.editar')) or (select private.has_permission('asesores.gestionar'))));
 
 -- Un asesor puede salir en la página de Sedes sin recibir cotizaciones (active = recibe por WhatsApp)
 drop policy if exists advisors_read_site on public.advisors;

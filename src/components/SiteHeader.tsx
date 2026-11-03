@@ -48,6 +48,7 @@ export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dicti
                 { href: l("/soporte"), label: t.techSupport },
                 { href: l("/guias"), label: t.guias },
                 { href: l("/soporte#faq"), label: t.faq },
+                { href: l("/sedes"), label: t.sedes },
                 { href: l("#contacto"), label: t.contacto },
               ],
             },
@@ -94,6 +95,7 @@ export async function SiteHeader({ locale, dict }: { locale: Locale; dict: Dicti
           ]}
           activePaths={[l("/soporte"), l("/guias"), l("/videos")]}
         />
+        <Link href={l("/sedes")}>{t.sedes}</Link>
         <Link href={l("#contacto")}>{t.contacto}</Link>
       </div>
       <div className="nav-right">

@@ -1,4 +1,5 @@
 "use server";
+import { updateTag } from "next/cache";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -6,19 +7,30 @@ type Result = { ok: true } | { ok: false; error: string };
 const CATALOGS = ["motobomba", "motor", "repuesto"] as const;
 const LANGS = ["es", "en", "pt"];
 const DAYS = ["1", "2", "3", "4", "5", "6", "7"];
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHOTO_PATH = /^asesores\/[a-z0-9-]+\.(jpg|png|webp)$/i;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type AdvisorInput = {
   id: string | null;
   name: string;
   title: string;
+  titleEn: string;
+  titlePt: string;
   phone: string;
   email: string;
+  publicEmail: string;
+  branchId: string | null;
+  photoPath: string | null;
+  showOnSite: boolean;
   languages: string[];
   catalogs: string[];
   countries: string;
   days: string[];
   from: string;
   to: string;
+  perDaySchedule?: boolean;
+  dayHours?: Record<string, [string, string]>;
   weight: number;
   active: boolean;
   isFallback: boolean;
@@ -55,10 +67,23 @@ export async function saveAdvisor(a: AdvisorInput): Promise<Result> {
   let phone = a.phone.replace(/\D/g, "");
   if (phone.length === 10 && phone.startsWith("3")) phone = `57${phone}`;
   if (!/^[1-9][0-9]{7,14}$/.test(phone)) return { ok: false, error: "WhatsApp inválido. Escríbelo con indicativo, por ejemplo 573001234567." };
+  const publicEmail = a.publicEmail.trim().toLowerCase();
+  if (publicEmail && !EMAIL.test(publicEmail)) return { ok: false, error: "El correo público de contacto no es válido." };
   const days = a.days.filter((d) => DAYS.includes(d));
   const hhmm = /^([01]\d|2[0-3]):[0-5]\d$/;
-  if (days.length && (!hhmm.test(a.from) || !hhmm.test(a.to) || a.from >= a.to)) return { ok: false, error: "Revisa el horario: hora de inicio antes de la de fin." };
-  const schedule = days.length ? { tz: "America/Bogota", days: Object.fromEntries(days.map((d) => [d, [a.from, a.to]])) } : {};
+
+  const daysMap: Record<string, [string, string]> = {};
+  if (days.length) {
+    for (const d of days) {
+      const pair = a.perDaySchedule && a.dayHours?.[d] ? a.dayHours[d] : [a.from, a.to];
+      const [dFrom, dTo] = pair;
+      if (!hhmm.test(dFrom) || !hhmm.test(dTo) || dFrom >= dTo) {
+        return { ok: false, error: "Revisa el horario: la hora de inicio debe ser anterior a la hora de salida en cada día." };
+      }
+      daysMap[d] = [dFrom, dTo];
+    }
+  }
+  const schedule = days.length ? { tz: "America/Bogota", days: daysMap } : {};
 
   let profileId: string | null = null;
   if (a.email.trim()) {
@@ -67,11 +92,21 @@ export async function saveAdvisor(a: AdvisorInput): Promise<Result> {
     profileId = p.id;
   }
   if (a.isFallback) await supabase.from("advisors").update({ is_fallback: false }).neq("id", a.id ?? "00000000-0000-0000-0000-000000000000");
+
+  const title: Record<string, string> = {};
+  if (a.title.trim()) title.es = a.title.trim().slice(0, 60);
+  if (a.titleEn.trim()) title.en = a.titleEn.trim().slice(0, 60);
+  if (a.titlePt.trim()) title.pt = a.titlePt.trim().slice(0, 60);
+
   const row = {
     name,
-    title: { es: a.title.trim().slice(0, 60) },
+    title,
     phone_e164: phone,
     profile_id: profileId,
+    public_email: publicEmail || null,
+    branch_id: a.branchId && UUID.test(a.branchId) ? a.branchId : null,
+    photo_path: a.photoPath && PHOTO_PATH.test(a.photoPath) ? a.photoPath : null,
+    show_on_site: a.showOnSite,
     languages: a.languages.filter((l) => LANGS.includes(l)).length ? a.languages.filter((l) => LANGS.includes(l)) : ["es"],
     catalogs: (a.catalogs.filter((c) => (CATALOGS as readonly string[]).includes(c)).length
       ? a.catalogs.filter((c) => (CATALOGS as readonly string[]).includes(c))
@@ -84,16 +119,20 @@ export async function saveAdvisor(a: AdvisorInput): Promise<Result> {
   };
   const { error } = a.id ? await supabase.from("advisors").update(row).eq("id", a.id) : await supabase.from("advisors").insert(row);
   if (error) return { ok: false, error: error.message.includes("profile_id") ? "Esa cuenta ya está asignada a otro asesor." : error.message };
+  updateTag("company");
   return { ok: true };
 }
 
 export async function deleteAdvisor(id: string): Promise<Result> {
   const supabase = await manager();
   if (!supabase) return { ok: false, error: "No tienes permiso." };
-  const { data } = await supabase.from("advisors").select("is_fallback").eq("id", id).maybeSingle();
+  const { data } = await supabase.from("advisors").select("is_fallback, photo_path").eq("id", id).maybeSingle();
   if (data?.is_fallback) return { ok: false, error: "No se puede borrar el asesor de respaldo. Marca otro como respaldo primero." };
+  if (data?.photo_path) await supabase.storage.from("sedes").remove([data.photo_path]);
   const { error } = await supabase.from("advisors").delete().eq("id", id);
-  return error ? { ok: false, error: error.message } : { ok: true };
+  if (error) return { ok: false, error: error.message };
+  updateTag("company");
+  return { ok: true };
 }
 
 export async function saveRule(r: RuleInput): Promise<Result> {

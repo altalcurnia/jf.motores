@@ -19,6 +19,7 @@ export function AdminTopbar() {
         <Link href="/admin/tickets">Tickets</Link>
         <Link href="/admin/interesados">Interesados app</Link>
         <Link href="/admin/empresa">Empresa</Link>
+        <Link href="/admin/sedes">Sedes</Link>
         <Link href="/admin/asesores">Asesores</Link>
         <Link href="/admin/asistente">Asistente IA</Link>
         <Link href="/admin/usuarios">Usuarios</Link>

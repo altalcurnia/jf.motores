@@ -25,6 +25,15 @@ const channelLabel = { presencial: "En persona", whatsapp: "WhatsApp", web: "Pá
 const money = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
 const fmtDate = (d: string | null) => (d ? new Intl.DateTimeFormat("es-CO", { dateStyle: "medium" }).format(new Date(`${d}T12:00:00`)) : "—");
 
+const WARRANTY_CHIPS = [
+  { label: "Sin garantía", months: 0 },
+  { label: "3m", months: 3 },
+  { label: "6m", months: 6 },
+  { label: "12m", months: 12 },
+  { label: "18m", months: 18 },
+  { label: "24m", months: 24 },
+];
+
 /** Celular colombiano de 10 dígitos (3xx…) → con indicativo 57; otros se usan tal cual. */
 const waNumber = (phone: string) => {
   const d = phone.replace(/\D/g, "");
@@ -63,6 +72,8 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [sending, setSending] = useState<string | null>(null);
+  const [editingWarrantyId, setEditingWarrantyId] = useState<string | null>(null);
+  const [savingWarrantyId, setSavingWarrantyId] = useState<string | null>(null);
   const shown = rows.filter((r) => {
     if (channel !== "todos" && r.channel !== channel) return false;
     const text = `${r.product} ${r.serial ?? ""} ${r.customerName ?? ""} ${r.customerEmail} ${r.customerPhone ?? ""}`.toLowerCase();
@@ -95,14 +106,13 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
       );
   }
 
-  async function editWarranty(r: SaleRow) {
-    const current = r.warrantyStart && r.warrantyEnd ? monthsBetween(r.warrantyStart, r.warrantyEnd) : 0;
-    const input = prompt("Meses de garantía desde la fecha de venta (0 = sin garantía)", String(current));
-    if (input === null) return;
-    const months = Math.max(0, Math.min(120, Number(input.replace(/\D/g, "")) || 0));
+  async function applyWarrantyMonths(r: SaleRow, months: number) {
+    setSavingWarrantyId(r.id);
     setError(null);
     const res = await setWarranty(r.id, r.warrantyStart ?? r.date ?? new Date().toISOString().slice(0, 10), months);
+    setSavingWarrantyId(null);
     if (!res.ok) return setError(res.error ?? "Error");
+    setEditingWarrantyId(null);
     router.refresh();
   }
 
@@ -160,49 +170,70 @@ export function SalesTable({ rows, canEdit }: { rows: SaleRow[]; canEdit: boolea
             </tr>
           </thead>
           <tbody>
-            {shown.map((r) => (
-              <tr key={r.id}>
-                <td className="muted">{fmtDate(r.date)}</td>
-                <td>
-                  <b>{r.product}</b>
-                  {r.serial && <span className="muted block small">Serie {r.serial}</span>}
-                  {r.notes && <span className="muted block small">{r.notes}</span>}
-                  <span className={`block small ${r.warrantyEnd && r.warrantyEnd >= new Date().toISOString().slice(0, 10) ? "mail-ok" : "muted"}`}>
-                    {warrantyText(r)}
-                  </span>
-                </td>
-                <td>
-                  <b>{r.customerName || "—"}</b>
-                  <span className="muted block small">{r.customerEmail}</span>
-                  <span className={`small block ${r.notifiedAt ? "mail-ok" : "muted"}`}>
-                    {r.notifiedAt ? "✓ Correo enviado" : "Sin correo enviado"}
-                  </span>
-                  {r.customerPhone && (
-                    <a className="small" href={`https://wa.me/${waNumber(r.customerPhone)}`} target="_blank" rel="noopener">
-                      {r.customerPhone}
-                    </a>
-                  )}
-                </td>
-                <td>
-                  {channelLabel[r.channel]}
-                  {r.seller && <span className="muted block small">por {r.seller}</span>}
-                </td>
-                <td>{r.price == null ? <span className="muted">—</span> : money.format(r.price)}</td>
-                {canEdit && (
-                  <td className="actions">
-                    <button className="link" onClick={() => editWarranty(r)}>
-                      Garantía
-                    </button>
-                    <button className="link" disabled={sending === r.id} onClick={() => resend(r)}>
-                      {sending === r.id ? "Enviando…" : r.notifiedAt ? "Reenviar correo" : "Enviar correo"}
-                    </button>
-                    <button className="link-danger" onClick={() => voidSale(r)}>
-                      Anular
-                    </button>
+            {shown.map((r) => {
+              const currentMonths = r.warrantyStart && r.warrantyEnd ? monthsBetween(r.warrantyStart, r.warrantyEnd) : 0;
+              return (
+                <tr key={r.id}>
+                  <td className="muted">{fmtDate(r.date)}</td>
+                  <td>
+                    <b>{r.product}</b>
+                    {r.serial && <span className="muted block small">Serie {r.serial}</span>}
+                    {r.notes && <span className="muted block small">{r.notes}</span>}
+                    <span className={`block small ${r.warrantyEnd && r.warrantyEnd >= new Date().toISOString().slice(0, 10) ? "mail-ok" : "muted"}`}>
+                      {warrantyText(r)}
+                    </span>
+                    {editingWarrantyId === r.id && (
+                      <div className="sched-presets" style={{ marginTop: 6 }}>
+                        {WARRANTY_CHIPS.map((chip) => (
+                          <button
+                            key={chip.months}
+                            type="button"
+                            disabled={savingWarrantyId === r.id}
+                            className={`chip-btn ${currentMonths === chip.months ? "on" : ""}`}
+                            onClick={() => applyWarrantyMonths(r, chip.months)}
+                          >
+                            {chip.label}
+                          </button>
+                        ))}
+                        <button type="button" className="chip-btn" onClick={() => setEditingWarrantyId(null)}>
+                          Cerrar
+                        </button>
+                      </div>
+                    )}
                   </td>
-                )}
-              </tr>
-            ))}
+                  <td>
+                    <b>{r.customerName || "—"}</b>
+                    <span className="muted block small">{r.customerEmail}</span>
+                    <span className={`small block ${r.notifiedAt ? "mail-ok" : "muted"}`}>
+                      {r.notifiedAt ? "✓ Correo enviado" : "Sin correo enviado"}
+                    </span>
+                    {r.customerPhone && (
+                      <a className="small" href={`https://wa.me/${waNumber(r.customerPhone)}`} target="_blank" rel="noopener">
+                        {r.customerPhone}
+                      </a>
+                    )}
+                  </td>
+                  <td>
+                    {channelLabel[r.channel]}
+                    {r.seller && <span className="muted block small">por {r.seller}</span>}
+                  </td>
+                  <td>{r.price == null ? <span className="muted">—</span> : money.format(r.price)}</td>
+                  {canEdit && (
+                    <td className="actions">
+                      <button className="link" onClick={() => setEditingWarrantyId(editingWarrantyId === r.id ? null : r.id)}>
+                        Garantía
+                      </button>
+                      <button className="link" disabled={sending === r.id} onClick={() => resend(r)}>
+                        {sending === r.id ? "Enviando…" : r.notifiedAt ? "Reenviar correo" : "Enviar correo"}
+                      </button>
+                      <button className="link-danger" onClick={() => voidSale(r)}>
+                        Anular
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
             {shown.length === 0 && (
               <tr>
                 <td colSpan={canEdit ? 6 : 5} className="muted center">

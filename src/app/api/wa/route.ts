@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
   const source = /^[a-z-]{2,20}$/.test(sp.get("s") ?? "") ? sp.get("s")! : "web";
   const locale = ["es", "en", "pt"].includes(sp.get("l") ?? "") ? sp.get("l")! : "es";
   const product = UUID.test(sp.get("p") ?? "") ? sp.get("p")! : null;
+  const advisor = UUID.test(sp.get("a") ?? "") ? sp.get("a")! : null;
   const catalog = ["motobomba", "motor", "repuesto"].includes(sp.get("c") ?? "") ? sp.get("c")! : null;
   const partKey = /^[a-z0-9-]{2,40}$/.test(sp.get("k") ?? "") ? sp.get("k")! : null;
 
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
   let text = message;
   try {
     const supabase = await createSupabaseServerClient();
-    const { data, error } = await supabase.rpc("lead_create", {
+    const args = {
       p_product: product,
       p_catalog: catalog,
       p_part_key: partKey,
@@ -65,7 +66,10 @@ export async function GET(request: NextRequest) {
       p_user_agent: ua.slice(0, 300),
       p_device: device(ua),
       p_ip_hash: ipHash,
-    });
+    };
+    const { data, error } = advisor
+      ? await supabase.rpc("lead_create_for", { p_advisor: advisor, ...args })
+      : await supabase.rpc("lead_create", args);
     if (error) throw error;
     const r = data as { phone?: string; code?: string } | null;
     if (r?.phone) phone = r.phone;

@@ -40,6 +40,7 @@ const SOURCES: Record<string, string> = {
   guias: "guías",
   repuestos: "repuestos",
   equipos: "Mis equipos",
+  sedes: "sedes",
 };
 
 function hoursAgo(iso: string) {
