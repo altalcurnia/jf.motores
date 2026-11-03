@@ -74,7 +74,15 @@ async function Equipment({ params, locale, dict }: { params: Promise<{ id: strin
   const catalogProduct = data.products.find((x) => x.id === p.id);
   const parts = catalogProduct ? compatibleParts(data, catalogProduct) : [];
   const partsHref = `/${locale}/repuestos?equipo=${p.id}`;
-  const wa = waLead({ message: fill(t.requestPartWa, { name, serial: u.serial ?? p.ref }), source: "mis-equipos", locale, productId: p.id, catalog: "repuesto" });
+  const eqPhotoUrl = img ? storageUrl(img.path, process.env.NEXT_PUBLIC_SUPABASE_URL) : undefined;
+  const wa = waLead({
+    message: fill(t.requestPartWa, { name, serial: u.serial ?? p.ref }),
+    source: "mis-equipos",
+    locale,
+    productId: p.id,
+    catalog: "repuesto",
+    imageUrl: eqPhotoUrl?.startsWith("http") ? eqPhotoUrl : undefined,
+  });
 
   return (
     <>

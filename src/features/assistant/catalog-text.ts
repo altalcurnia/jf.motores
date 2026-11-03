@@ -1,6 +1,6 @@
 import "server-only";
 import { getCatalogData, compatibleParts, compatibleWith } from "@/features/catalog/data";
-import { formatPrice, productHref, tr, type CatalogProduct } from "@/features/catalog/shared";
+import { formatPrice, productHref, storageUrl, tr, type CatalogProduct } from "@/features/catalog/shared";
 import type { AssistantLocale } from "./harness";
 import { site } from "@/lib/site";
 
@@ -56,6 +56,15 @@ export async function catalogForAssistant(locale: AssistantLocale): Promise<stri
         specs(p),
         tr(p.summary, locale),
         `Ficha: ${base}${productHref(locale, p)}`,
+        ...(p.images.length && p.images[0].path
+          ? [
+              `Foto: ${
+                storageUrl(p.images[0].path, process.env.NEXT_PUBLIC_SUPABASE_URL).startsWith("http")
+                  ? storageUrl(p.images[0].path, process.env.NEXT_PUBLIC_SUPABASE_URL)
+                  : `${base}${storageUrl(p.images[0].path, process.env.NEXT_PUBLIC_SUPABASE_URL)}`
+              }`,
+            ]
+          : []),
       ];
       const cat = p.categoryId ? catById.get(p.categoryId) : undefined;
       if (cat) parts.push(`Categoría: ${tr(cat.name, locale)}${cat.partKey ? ` (${base}/${locale}/repuestos/${cat.partKey})` : ""}`);

@@ -56,7 +56,22 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
   const model = data.engineModels.find((m) => m.id === p.engineModelId);
   const pageUrl = `${site.url}${productHref(locale, p)}`;
   const isPart = p.catalog === "repuesto";
-  const message = fill(p.status === "vendido" ? (isPart ? t.whatsappOutOfStock : t.whatsappSold) : t.whatsapp, { name, ref: p.ref, url: pageUrl });
+  const abs = (u: string) => (u.startsWith("http") ? u : `${site.url}${u}`);
+  const photoUrl = p.images.length && p.images[0]?.path ? abs(storageUrl(p.images[0].path, supabaseUrl())) : undefined;
+  const photoLabel: Record<string, string> = { es: "Foto del producto", en: "Product photo", pt: "Foto do produto" };
+  const photoLine = photoUrl ? `${photoLabel[locale] ?? "Foto"}: ${photoUrl}` : "";
+  const baseMessage = fill(p.status === "vendido" ? (isPart ? t.whatsappOutOfStock : t.whatsappSold) : t.whatsapp, {
+    name,
+    ref: p.ref,
+    url: pageUrl,
+    photo: photoLine,
+  });
+  const message =
+    photoUrl && !baseMessage.includes(photoUrl)
+      ? baseMessage.includes(pageUrl)
+        ? baseMessage.replace(pageUrl, `${photoLine}\n${pageUrl}`)
+        : `${baseMessage}\n${photoLine}`
+      : baseMessage;
   const images = p.images.length
     ? p.images.map((i) => ({ url: storageUrl(i.path, supabaseUrl()), alt: tr(i.alt, locale) || name, isReference: i.isReference }))
     : [{ url: BRAND_PLACEHOLDER, alt: name, isReference: false }];
@@ -64,8 +79,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
   const parts = catalog === "repuesto" ? [] : compatibleParts(data, p);
   const fits = catalog === "repuesto" ? compatibleWith(data, p) : null;
   const listHref = `/${locale}/${catalogPaths[catalog]}`;
-  const abs = (u: string) => (u.startsWith("http") ? u : `${site.url}${u}`);
-  const productLd = {
+    const productLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name,
@@ -138,7 +152,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
           {p.status === "vendido" && <p className="pd-sold sold-note">{isPart ? t.outOfStockNotice : t.soldNotice}</p>}
 
           <div className="pd-actions">
-            <a className="btn y" href={waLead({ message, source: "ficha", locale, productId: p.id, catalog: p.catalog })} target="_blank" rel="noopener">
+            <a className="btn y" href={waLead({ message, source: "ficha", locale, productId: p.id, catalog: p.catalog, imageUrl: photoUrl })} target="_blank" rel="noopener">
               {t.quote}
               <Arrow />
             </a>

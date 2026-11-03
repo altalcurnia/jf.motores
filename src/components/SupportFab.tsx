@@ -56,6 +56,7 @@ export function SupportFab({
   // Pasa por /api/wa: registra el lead (fuente «asistente») y abre el WhatsApp del asesor asignado
   const waChatHref = (summary?: string) =>
     waLead({ message: summary ? `${t.waMessage}\n${t.waSummary}${summary}` : t.waMessage, source: "asistente", locale });
+
   const [menu, setMenu] = useState(false);
   const [chat, setChat] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -314,7 +315,12 @@ export function SupportFab({
       <div ref={wrapRef} className={`support${upper ? " upper" : ""}${menu ? " open" : ""}${chat || tickets ? " chatting" : ""}`}>
         {menu && (
           <div className="support-menu" role="menu">
-            <a role="menuitem" className="support-opt sopt-wa" href={waHref} target="_blank" rel="noopener" onClick={() => setMenu(false)}>
+            <a role="menuitem" className="support-opt sopt-wa" href={waHref} target="_blank" rel="noopener" onClick={(e) => {
+              setMenu(false);
+              const pdBtn = document.querySelector<HTMLAnchorElement>(".pd-actions a[href*='/api/wa']");
+              const targetHref = pdBtn?.getAttribute("href");
+              if (targetHref) e.currentTarget.href = targetHref;
+            }}>
               <span className="ico">
                 <WaIcon />
               </span>

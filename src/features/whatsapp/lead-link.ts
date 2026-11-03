@@ -25,14 +25,16 @@ export function waLead(opts: {
   catalog?: string;
   partKey?: string;
   advisorId?: string;
+  imageUrl?: string;
 }): string {
   const q = new URLSearchParams();
   if (opts.advisorId) q.set("a", opts.advisorId);
-  q.set("m", opts.message.slice(0, 700));
+  q.set("m", opts.message.slice(0, 1000));
   q.set("s", opts.source);
   if (opts.locale) q.set("l", opts.locale);
   if (opts.productId) q.set("p", opts.productId);
   if (opts.catalog) q.set("c", opts.catalog);
   if (opts.partKey) q.set("k", opts.partKey);
+  if (opts.imageUrl) q.set("img", opts.imageUrl);
   return `/api/wa?${q.toString()}`;
 }
