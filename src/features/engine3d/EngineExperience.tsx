@@ -113,10 +113,23 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
     // botones responden de inmediato, también en celulares lentos
     const whenIdle = () =>
       new Promise<void>((resolve) => {
-        const go = () =>
-          "requestIdleCallback" in window ? window.requestIdleCallback(() => resolve(), { timeout: 1500 }) : setTimeout(resolve, 200);
-        if (document.readyState === "complete") go();
-        else window.addEventListener("load", go, { once: true });
+        let done = false;
+        const go = () => {
+          if (done) return;
+          done = true;
+          if ("requestIdleCallback" in window) {
+            window.requestIdleCallback(() => resolve(), { timeout: 1500 });
+          } else {
+            setTimeout(resolve, 200);
+          }
+        };
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+          go();
+        } else {
+          window.addEventListener("DOMContentLoaded", go, { once: true });
+          window.addEventListener("load", go, { once: true });
+          setTimeout(go, 1000);
+        }
       });
 
     whenIdle()

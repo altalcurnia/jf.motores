@@ -36,7 +36,9 @@ export async function productMetadata(catalog: CatalogType, slug: string) {
   const title = `${tr(product.name, locale)} · ${product.ref}`;
   const description = tr(product.summary, locale) || tr(product.description, locale).slice(0, 160);
   // Al compartir el enlace (WhatsApp, Facebook) sale la foto del producto
-  const images = img ? [storageUrl(img.path, supabaseUrl())] : ["/og.jpg"];
+  const rawImg = img ? storageUrl(img.path, supabaseUrl()) : "/og.jpg";
+  const absImg = rawImg.startsWith("http") ? rawImg : `${site.url}${rawImg.startsWith("/") ? "" : "/"}${rawImg}`;
+  const images = [absImg];
   return {
     title,
     description,
@@ -58,20 +60,11 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
   const isPart = p.catalog === "repuesto";
   const abs = (u: string) => (u.startsWith("http") ? u : `${site.url}${u}`);
   const photoUrl = p.images.length && p.images[0]?.path ? abs(storageUrl(p.images[0].path, supabaseUrl())) : undefined;
-  const photoLabel: Record<string, string> = { es: "Foto del producto", en: "Product photo", pt: "Foto do produto" };
-  const photoLine = photoUrl ? `${photoLabel[locale] ?? "Foto"}: ${photoUrl}` : "";
-  const baseMessage = fill(p.status === "vendido" ? (isPart ? t.whatsappOutOfStock : t.whatsappSold) : t.whatsapp, {
+  const message = fill(p.status === "vendido" ? (isPart ? t.whatsappOutOfStock : t.whatsappSold) : t.whatsapp, {
     name,
     ref: p.ref,
     url: pageUrl,
-    photo: photoLine,
   });
-  const message =
-    photoUrl && !baseMessage.includes(photoUrl)
-      ? baseMessage.includes(pageUrl)
-        ? baseMessage.replace(pageUrl, `${photoLine}\n${pageUrl}`)
-        : `${baseMessage}\n${photoLine}`
-      : baseMessage;
   const images = p.images.length
     ? p.images.map((i) => ({ url: storageUrl(i.path, supabaseUrl()), alt: tr(i.alt, locale) || name, isReference: i.isReference }))
     : [{ url: BRAND_PLACEHOLDER, alt: name, isReference: false }];

@@ -48,20 +48,23 @@ export function tr(text: I18nText | null | undefined, locale: Locale): string {
   return text[locale] || text.es || Object.values(text).find(Boolean) || "";
 }
 
+const DEFAULT_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://lsrjrwpxxqlgobablyyc.supabase.co";
+
 /** Ruta en un bucket público de Storage, ruta local (/demo/...) o URL absoluta → URL servible. */
-export function bucketUrl(bucket: string, path: string, supabaseUrl: string | undefined): string {
+export function bucketUrl(bucket: string, path: string, supabaseUrl?: string | null): string {
+  if (!path) return "";
   if (path.startsWith("/") || /^https?:\/\//.test(path)) return path;
-  const base = (supabaseUrl ?? "").replace(/\/$/, "");
+  const base = (supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL).replace(/\/$/, "");
   return `${base}/storage/v1/object/public/${bucket}/${path.replace(/^\//, "")}`;
 }
 
 /** Ruta en Storage (bucket catalogo), ruta local (/demo/...) o URL absoluta → URL servible. */
-export function storageUrl(path: string, supabaseUrl: string | undefined): string {
+export function storageUrl(path: string, supabaseUrl?: string | null): string {
   return bucketUrl("catalogo", path, supabaseUrl);
 }
 
 /** Ruta en el bucket público «sedes» (fotos de sedes y asesores) → URL servible. */
-export function sedesUrl(path: string, supabaseUrl: string | undefined): string {
+export function sedesUrl(path: string, supabaseUrl?: string | null): string {
   return bucketUrl("sedes", path, supabaseUrl);
 }
 

@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 /** Origen de Supabase (datos, fotos privadas, modelos 3D y sesión en tiempo real). */
 const supabase = (() => {
   try {
-    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").origin;
+    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || "https://lsrjrwpxxqlgobablyyc.supabase.co").origin;
   } catch {
     return "";
   }
@@ -20,13 +20,14 @@ const csp = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   "form-action 'self'",
-  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'"} https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://connect.facebook.net https://vercel.live`,
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://connect.facebook.net https://vercel.live`,
   `connect-src 'self' blob: data: ${supabase} ${supabase.replace(/^http/, "ws")} https://*.supabase.co wss://*.supabase.co https://cdn.jsdelivr.net https://www.gstatic.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net https://vercel.live wss://ws-us3.pusher.com`,
   `img-src 'self' data: blob: ${supabase} https://*.supabase.co https://i.ytimg.com https://*.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://vercel.live https://vercel.com`,
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "media-src 'self' blob:",
-  "worker-src 'self' blob:",
+  "worker-src 'self' blob: https://cdn.jsdelivr.net",
+  "child-src 'self' blob: https://cdn.jsdelivr.net",
   "frame-src https://www.youtube-nocookie.com https://www.google.com https://vercel.live",
   supabase.startsWith("https:") ? "upgrade-insecure-requests" : "",
 ]
@@ -39,7 +40,11 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   images: {
     // Imágenes y modelos del catálogo servidos desde Supabase Storage
-    remotePatterns: [{ protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" }],
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "lsrjrwpxxqlgobablyyc.supabase.co" },
+    ],
   },
   // Nada del sitio original (legacy/) se publica: solo se usa como referencia.
   // Los PDF públicos de la biblioteca se sirven desde esta ruta (solo con sesión)

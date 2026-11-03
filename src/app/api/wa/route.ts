@@ -3,14 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getContact } from "@/lib/supabase/public";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
-import { getCatalogData } from "@/features/catalog/data";
-import { storageUrl } from "@/features/catalog/shared";
-import { site } from "@/lib/site";
 
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|telegram|headless|lighthouse/i;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const CODE_LABEL: Record<string, string> = { es: "Código de cotización", en: "Quote code", pt: "Código do orçamento" };
-const PHOTO_LABEL: Record<string, string> = { es: "Foto del producto", en: "Product photo", pt: "Foto do produto" };
 const VISITOR_COOKIE = "jf_vid";
 const UTM_COOKIE = "jf_utm";
 
@@ -33,34 +29,7 @@ export async function GET(request: NextRequest) {
   const advisor = UUID.test(sp.get("a") ?? "") ? sp.get("a")! : null;
   const catalog = ["motobomba", "motor", "repuesto"].includes(sp.get("c") ?? "") ? sp.get("c")! : null;
   const partKey = /^[a-z0-9-]{2,40}$/.test(sp.get("k") ?? "") ? sp.get("k")! : null;
-  const imgParam = sp.get("img")?.trim();
-
-  // Si se está preguntando por un producto específico, resolvemos su foto si no viene en el texto
-  let photoUrl = imgParam || "";
-  if (!photoUrl && product) {
-    try {
-      const { products } = await getCatalogData();
-      const prod = products.find((x) => x.id === product);
-      if (prod?.images?.[0]?.path) {
-        const raw = storageUrl(prod.images[0].path, process.env.NEXT_PUBLIC_SUPABASE_URL);
-        photoUrl = raw.startsWith("http") ? raw : `${site.url}${raw}`;
-      }
-    } catch (err) {
-      console.error("No se pudo obtener foto del producto para WhatsApp:", err);
-    }
-  }
-
   let text = message;
-  if (photoUrl && !text.includes(photoUrl)) {
-    const lbl = PHOTO_LABEL[locale] ?? PHOTO_LABEL.es;
-    const photoLine = `${lbl}: ${photoUrl}`;
-    const match = text.match(/(https?:\/\/[^\s]+)/);
-    if (match && match.index != null) {
-      text = `${text.slice(0, match.index)}${photoLine}\n${text.slice(match.index)}`;
-    } else {
-      text = text ? `${text}\n${photoLine}` : photoLine;
-    }
-  }
 
   const fallback = (await getContact()).whatsapp;
   const ua = request.headers.get("user-agent") ?? "";
