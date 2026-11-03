@@ -69,8 +69,8 @@ export async function POST(req: Request) {
       ? `${n} cotización${n > 1 ? "es" : ""} sin atender hace más de 24 h`
       : `Tienes ${n} cotización${n > 1 ? "es" : ""} esperando respuesta`;
     const intro = owner
-      ? "Estos clientes escribieron por WhatsApp hace más de un día y su cotización sigue en «Nuevo»:"
-      : "Estos clientes te escribieron por WhatsApp hace más de 2 horas y su cotización sigue en «Nuevo». Escríbeles y marca el estado en el panel:";
+      ? "Estos clientes escribieron por WhatsApp hace más de un día y su cotización sigue en «Nuevo». Márcalas como «Resueltas» en el panel para dejar de recibir avisos:"
+      : "Estos clientes te escribieron por WhatsApp hace más de 2 horas y su cotización sigue en «Nuevo». Escríbeles y márcala como «Resuelta» en el panel (o todas de una vez) para no recibir más avisos:";
     const rows = list.map((i) => {
       const what = i.product ?? (i.catalog ? `catálogo ${i.catalog}` : "consulta general");
       const from = i.source ? SOURCES[i.source] ?? i.source : "web";

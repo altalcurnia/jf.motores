@@ -393,3 +393,11 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 /* Marca del sitio: muestras de color */
 .bv-swatches { display: grid; grid-template-columns: repeat(3, 1fr); height: 64px; }
 .bv-swatches span { display: block; }
+
+/* Cotizaciones: casilla «Resuelta» y acciones para toda la lista */
+.lead-bulk { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lead-hint { margin: -4px 0 12px; }
+.lead-check-col { width: 72px; text-align: center; }
+.lead-check { width: 20px; height: 20px; accent-color: #3ecf8e; cursor: pointer; }
+.lead-check:disabled { cursor: default; opacity: 0.7; }
+.leads-table tr.lead-nuevo td:first-child { box-shadow: inset 3px 0 0 #f7c600; }

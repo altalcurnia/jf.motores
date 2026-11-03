@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { updateLead, type LeadStatus } from "./actions";
+import { setLeadsResolved, updateLead, type LeadStatus } from "./actions";
 
 export type LeadRow = {
   id: string;
@@ -42,6 +42,17 @@ export function LeadsTable({ rows }: { rows: LeadRow[]; canManage: boolean }) {
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [err, setErr] = useState<string | null>(null);
 
+  async function resolve(ids: string[], resolved: boolean) {
+    setBusy(ids.length === 1 ? ids[0] : "all");
+    setErr(null);
+    const r = await setLeadsResolved(ids, resolved);
+    setBusy(null);
+    if (!r.ok) return setErr(r.error ?? "No se pudo guardar.");
+    router.refresh();
+  }
+  const pending = rows.filter((r) => r.status === "nuevo");
+  const resolvedByCheck = rows.filter((r) => r.status === "contactado");
+
   async function save(id: string, patch: { status?: LeadStatus; notes?: string }) {
     setBusy(id);
     setErr(null);
@@ -62,10 +73,32 @@ export function LeadsTable({ rows }: { rows: LeadRow[]; canManage: boolean }) {
     <section className="panel">
       <div className="panel-head">
         <h2>Leads</h2>
-        <button className="btn-ghost" onClick={download} disabled={!rows.length}>
-          Descargar Excel (CSV)
-        </button>
+        <div className="lead-bulk">
+          <button
+            className="btn-primary"
+            onClick={() => resolve(pending.map((r) => r.id), true)}
+            disabled={!pending.length || busy !== null}
+            title="Pasa a «Contactado» todas las cotizaciones en «Nuevo» de esta lista: dejan de llegar avisos por correo"
+          >
+            ✓ Marcar todas como resueltas{pending.length ? ` (${pending.length})` : ""}
+          </button>
+          <button
+            className="btn-ghost"
+            onClick={() => resolve(resolvedByCheck.map((r) => r.id), false)}
+            disabled={!resolvedByCheck.length || busy !== null}
+            title="Devuelve a «Nuevo» las que están en «Contactado». Las cotizadas, vendidas o perdidas no cambian"
+          >
+            Desmarcar todas
+          </button>
+          <button className="btn-ghost" onClick={download} disabled={!rows.length}>
+            Descargar Excel (CSV)
+          </button>
+        </div>
       </div>
+      <p className="muted small lead-hint">
+        Marca <b>Resuelta</b> cuando ya atendiste al cliente: la cotización pasa a «Contactado» y deja de generar avisos por
+        correo. Luego puedes cambiar el estado a Cotizado, Vendido o Perdido.
+      </p>
       {err && <div className="notice err">{err}</div>}
       {rows.length === 0 ? (
         <p className="muted small">Aún no hay leads en este periodo. Aparecen cuando alguien toca un botón de WhatsApp del sitio.</p>
@@ -74,6 +107,7 @@ export function LeadsTable({ rows }: { rows: LeadRow[]; canManage: boolean }) {
           <table className="table leads-table">
             <thead>
               <tr>
+                <th className="lead-check-col">Resuelta</th>
                 <th>Fecha</th>
                 <th>Código</th>
                 <th>Producto</th>
@@ -87,6 +121,23 @@ export function LeadsTable({ rows }: { rows: LeadRow[]; canManage: boolean }) {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.id} className={`lead-${r.status}`}>
+                  <td className="lead-check-col">
+                    <input
+                      type="checkbox"
+                      className="lead-check"
+                      checked={r.status !== "nuevo"}
+                      disabled={busy === r.id || busy === "all" || (r.status !== "nuevo" && r.status !== "contactado")}
+                      onChange={(e) => resolve([r.id], e.target.checked)}
+                      aria-label={`Resuelta: ${r.code}`}
+                      title={
+                        r.status === "nuevo"
+                          ? "Marcar como resuelta (pasa a «Contactado» y no llegan más avisos)"
+                          : r.status === "contactado"
+                            ? "Desmarcar (vuelve a «Nuevo»)"
+                            : `Resuelta: ${LABEL[r.status]}`
+                      }
+                    />
+                  </td>
                   <td>{fmt.format(new Date(r.createdAt))}</td>
                   <td>
                     <code>{r.code}</code>
