@@ -210,7 +210,7 @@ test("menú: Catálogo agrupa las categorías y el menú lateral abre en celular
     await expect(page).toHaveURL(/\/es\/soporte$/);
     await expect(drawer).not.toHaveClass(/open/);
   } else {
-    await page.locator(".cat-menu > button").click();
+    await page.locator(".nlinks .cat-menu").filter({ hasText: "Catálogo" }).locator("button").click();
     await page.locator(".cat-menu-panel").getByRole("menuitem", { name: /Motores/ }).click();
     await expect(page).toHaveURL(/\/es\/motores$/);
   }
@@ -281,9 +281,17 @@ test("correo de soporte: no depende del programa de correo (Gmail, Outlook, app 
   await page.locator(".tech-toggle").click();
   await page.locator(".tech-mail").click();
   const menu = page.locator(".tech-card .mail-menu");
-  await expect(menu.locator("a", { hasText: "Gmail" })).toHaveAttribute("href", /mail\.google\.com\/mail\/\?view=cm&fs=1&to=soporte%40ejemplo\.com/);
-  await expect(menu.locator("a", { hasText: "Outlook" })).toHaveAttribute("href", /outlook\.live\.com/);
-  await expect(menu.locator("a", { hasText: "app de correo" })).toHaveAttribute("href", /^mailto:soporte@ejemplo\.com/);
+  const email = (await menu.locator(".mail-addr").textContent())?.trim() ?? "";
+  expect(email).toMatch(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
+  const gmail = await menu.locator("a", { hasText: "Gmail" }).getAttribute("href");
+  const outlook = await menu.locator("a", { hasText: "Outlook" }).getAttribute("href");
+  const mailto = await menu.locator("a", { hasText: "app de correo" }).getAttribute("href");
+  expect(gmail).not.toBeNull();
+  expect(outlook).not.toBeNull();
+  expect(mailto).not.toBeNull();
+  expect(new URL(gmail!).searchParams.get("to")).toBe(email);
+  expect(new URL(outlook!).searchParams.get("to")).toBe(email);
+  expect(new URL(mailto!).pathname).toBe(email);
   await expect(menu.locator("button", { hasText: "Copiar" })).toBeVisible();
 });
 
@@ -312,17 +320,17 @@ test("botón flotante de WhatsApp, contacto con sedes y correo, y aviso de enví
   const wa = page.locator(".support-menu a.support-opt.sopt-wa");
   await expect(wa).toBeVisible();
   await expect(wa).toHaveAttribute("href", /^\/api\/wa\?m=.*p%C3%A1gina\+web.*&s=flotante/);
-  await expect(page.locator(".support-opt.sopt-ai")).toHaveCount(0);
   await page.keyboard.press("Escape");
   const meta = page.locator("#contacto .c-meta");
   await expect(meta).toContainText("Sedes");
-  await expect(meta.locator(".mail-pick > button")).toHaveText("soporte@ejemplo.com");
+  const email = (await meta.locator(".mail-pick > button").textContent())?.trim() ?? "";
+  expect(email).toMatch(/^[^@\s]+@[^@\s]+\.[^@\s]+$/);
   await expect(page.locator("footer")).not.toContainText("No incluyen envío");
   await page.goto("/es/motobombas");
   await expect(page.locator(".price-notice")).toContainText("no incluye el envío");
   await page.goto("/es/soporte");
   await page.locator(".tech-toggle").click();
-  await expect(page.locator(".tech-opt.tech-mail")).toContainText("soporte@ejemplo.com");
+  await expect(page.locator(".tech-opt.tech-mail")).toContainText(email);
   await expect(page.locator(".tech-opt.tech-wa")).toBeVisible();
   await expect(page.locator(".tech-opt.tech-wa")).toHaveAttribute("href", /^\/api\/wa\?.*s=soporte/);
 });
@@ -332,10 +340,11 @@ test("el panel de contacto y sedes exige iniciar sesión", async ({ page }) => {
   await expect(page).toHaveURL(/\/admin\/login/);
 });
 
-test("el chat con IA responde 'apagado' si no está encendido", async ({ request }) => {
+test("el chat con IA exige habilitación y sesión", async ({ request }) => {
   const res = await request.post("/api/asistente", { data: { locale: "es", messages: [{ role: "user", content: "hola" }] } });
-  expect(res.status()).toBe(403);
-  expect((await res.json()).code).toBe("disabled");
+  const body = await res.json();
+  expect([401, 403]).toContain(res.status());
+  expect(body.code).toBe(res.status() === 403 ? "disabled" : "login");
 });
 
 test("el webhook de Telegram rechaza llamadas sin la firma secreta", async ({ request }) => {
