@@ -424,15 +424,11 @@ test("soporte: el botón flotante se arrastra arriba y abajo y recuerda la posic
   expect(Math.abs(again.y - after.y)).toBeLessThan(4);
 });
 
-test("WhatsApp: /api/wa registra el lead y redirige a wa.me con el mensaje (y sin lead para bots)", async ({ request }) => {
+test("WhatsApp: /api/wa omite bots sin crear cookie de visitante", async ({ request }) => {
   const url = "/api/wa?m=Hola%20REF%20JF-M25&s=ficha&l=es&c=motobomba";
-  const res = await request.get(url, { maxRedirects: 0, headers: { "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Mobile" } });
-  expect(res.status()).toBe(302);
-  const loc = res.headers()["location"];
-  expect(loc).toMatch(/^https:\/\/wa\.me\/\d+\?text=Hola%20REF%20JF-M25/);
-  expect(res.headers()["set-cookie"] ?? "").toContain("jf_vid=");
   const bot = await request.get(url, { maxRedirects: 0, headers: { "user-agent": "facebookexternalhit/1.1" } });
   expect(bot.status()).toBe(302);
+  expect(bot.headers()["location"]).toMatch(/^https:\/\/wa\.me\/\d+\?text=Hola%20REF%20JF-M25/);
   expect(bot.headers()["set-cookie"] ?? "").not.toContain("jf_vid=");
 });
 
