@@ -1,0 +1,1124 @@
+{
+  "meta": {
+    "title": "JF Motores — Diesel pump sets for mining | Medellín, Colombia",
+    "description": "Diesel pump sets, engines and spare parts for mining, tested in our workshop. Peace of mind and reliability: get a quote on WhatsApp."
+  },
+  "nav": {
+    "home": "Home",
+    "motobombas": "Pump sets",
+    "motores": "Engines",
+    "repuestos": "Spare parts",
+    "empresa": "Company",
+    "sedes": "Locations",
+    "contacto": "Contact",
+    "cta": "Quote on WhatsApp",
+    "language": "Language",
+    "catalog": "Catalogue",
+    "soporte": "Support",
+    "guias": "Guides",
+    "menu": "Menu",
+    "close": "Close menu",
+    "viewAll": "View all",
+    "secCatalog": "Catalogue",
+    "secHelp": "Help",
+    "secAccount": "Your account",
+    "findPart": "Find parts by engine",
+    "faq": "FAQ",
+    "writeUs": "Message us on WhatsApp",
+    "techSupport": "Technical support",
+    "faqShort": "FAQ",
+    "videos": "Videos",
+    "techSupportDesc": "WhatsApp or email with a workshop technician",
+    "guiasDesc": "Official manuals, our guides and videos"
+  },
+  "hero": {
+    "kicker": "Diesel pump sets for mining · Medellín, Colombia",
+    "slogan": "Peace of mind and reliability",
+    "line1": "Diesel pump sets",
+    "line2a": "that give you ",
+    "line2b": "peace of mind",
+    "line2c": "",
+    "line3": "shift after shift.",
+    "copy": "Units tested in our workshop before they ship, spare parts with clear compatibility and a direct line that answers. That's how trust is earned.",
+    "ctaPrimary": "Quote on WhatsApp",
+    "ctaSecondary": "View catalogue",
+    "scrollHint": "Scroll to explore",
+    "spec1": "JAGUAR 25 · 4 CYLINDERS",
+    "spec2": "DIESEL · 25 HP · 6″ SUCTION",
+    "spec3": "READY FOR OPEN-PIT MINING"
+  },
+  "catalogs": {
+    "kicker": "Catalogue",
+    "title": "Everything to keep your mine running",
+    "items": {
+      "motobombas": {
+        "title": "Complete pump sets",
+        "desc": "Ready-to-work units: diesel engine coupled to a pump for water, slurry and underground dewatering."
+      },
+      "motores": {
+        "title": "Engines",
+        "desc": "High-torque diesel engines for mining, new and rebuilt."
+      },
+      "repuestos": {
+        "title": "Spare parts",
+        "desc": "Parts with compatibility information for your engine or pump set."
+      }
+    },
+    "cta": "View catalogue",
+    "soon": "We are loading the catalogue. In the meantime, request a quote directly on WhatsApp.",
+    "all": "All",
+    "allDesc": "Pump sets, engines and spare parts in one place."
+  },
+  "contact": {
+    "kicker": "Contact",
+    "title1": "Shall we talk about",
+    "title2": "your next pump set?",
+    "cta": "Quote on WhatsApp",
+    "workshop": "Locations",
+    "phone": "Direct line",
+    "email": "Email support",
+    "emailHint": "Write to our email"
+  },
+  "footer": {
+    "slogan": "Peace of mind and reliability",
+    "privacy": "Data policy"
+  },
+  "whatsapp": {
+    "general": "Hello JF Motores, I would like information about your equipment.",
+    "fromWeb": "Hi JF Motores, I'm writing from your website. I'd like more information.",
+    "floatLabel": "Message us on WhatsApp"
+  },
+  "journey": {
+    "a": {
+      "pk": "01 · Start-up",
+      "h2": "Starts first time.",
+      "p": "Peace of mind is knowing your pump starts every shift. Every unit leaves our workshop tested.",
+      "chips": [
+        {
+          "label": "Workshop-tested",
+          "value": "✓"
+        },
+        {
+          "label": "Power",
+          "value": "25 HP"
+        },
+        {
+          "label": "Advice",
+          "value": "WhatsApp"
+        }
+      ]
+    },
+    "b": {
+      "pk": "02 · Full load",
+      "torque": "Torque",
+      "temp": "Temp",
+      "flow": "Flow",
+      "p": "Full load: steady flow to get the water out and keep producing, shift after shift."
+    },
+    "c": {
+      "pk": "03 · Inside",
+      "h2": "Trust you can see.",
+      "p": "This is what's inside. Tap a part or its button to see the spare parts and which units they fit.",
+      "hint": "▼ Keep scrolling"
+    },
+    "d": {
+      "pk": "04 · Assembly",
+      "h2": "Every part in its place.",
+      "p": "The parts go back into place. Spare parts with clear compatibility: order the right one first time."
+    },
+    "e": {
+      "pk": "05 · Coming soon",
+      "h2": "And soon, from your phone.",
+      "p": "With JF Monitor you'll watch it work and shut it down from anywhere, with WhatsApp alerts.",
+      "badge": "Not available yet",
+      "cta": "Discover JF Monitor",
+      "screen": {
+        "unit": "Cóndor 40 · #0042",
+        "on": "Running",
+        "stopping": "Stopping",
+        "off": "Stopped",
+        "button": "Stop pump set",
+        "sent": "Command sent",
+        "stopped": "Engine stopped ✓"
+      }
+    },
+    "partsTitle": "Parts",
+    "partsHint": "Hover or tap a part",
+    "sheetOpen": "Open catalog",
+    "sheetContinue": "Keep exploring",
+    "focusKicker": "Part",
+    "focusCatalog": "See this category in the catalog",
+    "focusEmpty": "No parts published in this category yet. Message us and we will quote the one you need.",
+    "focusAsk": "Price on request",
+    "focusInStock": "In stock",
+    "focusOutStock": "Out of stock",
+    "focusClose": "Close"
+  },
+  "hud": {
+    "state": "Status",
+    "standby": "STANDBY",
+    "start": "STARTING",
+    "running": "RUNNING",
+    "full": "FULL LOAD",
+    "rpm": "RPM",
+    "temp": "Temp",
+    "oil": "Oil"
+  },
+  "rail": {
+    "a": "Start-up",
+    "b": "Revving",
+    "c": "Exploded",
+    "d": "Assembly",
+    "e": "App"
+  },
+  "marquee": [
+    "Peace of mind and reliability",
+    "Workshop-tested",
+    "Compatible spare parts",
+    "Direct line on WhatsApp",
+    "Up to 40 HP",
+    "Up to 3,600 L/min",
+    "JF Motores Medellín"
+  ],
+  "benefits": {
+    "kicker": "Why JF",
+    "title1": "Peace of mind you can ",
+    "titleEm": "test",
+    "title2": ", trust you can see.",
+    "intro": "Why our customers recommend us.",
+    "imageAlt": "JF Motores diesel pump set",
+    "bar1": "Jaguar 25",
+    "bar2": "Workshop test · OK",
+    "rows": [
+      {
+        "h3": "Tested before it ships",
+        "p": "Every unit is tested in our workshop before dispatch. It arrives ready to work."
+      },
+      {
+        "h3": "Spare parts, no guesswork",
+        "p": "Each part states which engine and pump set it fits. You order the right one the first time."
+      },
+      {
+        "h3": "Your unit, in your name",
+        "p": "When you buy, your unit is registered to your account with its serial number, warranty and user guide."
+      },
+      {
+        "h3": "A direct line",
+        "p": "You talk to people who know your equipment, on WhatsApp or by email. No call centres."
+      }
+    ],
+    "specs": [
+      {
+        "b": "25 HP",
+        "span": "Rated power"
+      },
+      {
+        "b": "3,000",
+        "span": "L/min max"
+      },
+      {
+        "b": "30 m",
+        "span": "Max head"
+      },
+      {
+        "b": "6″",
+        "span": "Suction"
+      }
+    ]
+  },
+  "parts": {
+    "chasis": "Skid & frame",
+    "luz": "Ambient light",
+    "bloque": "Engine block",
+    "camisas": "Cylinder liners",
+    "pistones": "Pistons & rods",
+    "culata": "Cylinder head",
+    "escape": "Exhaust",
+    "tanque": "Diesel tank",
+    "radiador": "Radiator",
+    "ventilador": "Fan",
+    "volante": "Flywheel",
+    "bomba": "Centrifugal pump",
+    "tablero": "Control panel",
+    "acople": "Coupling & guard",
+    "admision": "Air intake & filter",
+    "mangueras": "Hoses",
+    "arranque": "Starter motor",
+    "inyeccion": "Injection & throttle",
+    "carter": "Oil pan",
+    "soportes": "Engine mounts",
+    "ciguenal": "Crankshaft",
+    "distribucion": "Timing gears & camshaft",
+    "valvulas": "Valves & rocker arms",
+    "alternador": "Alternator & belt"
+  },
+  "partPage": {
+    "title": "Spare parts: ",
+    "back": "See all spare parts",
+    "whatsapp": "Hello JF Motores, I'm looking for spare parts: "
+  },
+  "account": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "myAccount": "My account",
+    "signOut": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 10 characters.",
+    "confirmPassword": "Repeat password",
+    "fullName": "Full name",
+    "phone": "WhatsApp / phone",
+    "phoneOptional": "(optional)",
+    "country": "Country",
+    "countryPlaceholder": "Choose your country",
+    "acceptPrivacy1": "I authorize the processing of my data under JF Motores' ",
+    "privacyLink": "personal data policy",
+    "acceptPrivacy2": ".",
+    "marketingOptIn": "I want to receive news and offers.",
+    "signInTitle": "Sign in to your account",
+    "signInSubtitle": "Check your quotes and the equipment you bought.",
+    "noAccount": "Don't have an account?",
+    "createOne": "Create one",
+    "haveAccount": "Already have an account?",
+    "signInHere": "Sign in",
+    "forgot": "Forgot your password?",
+    "useLink": "Email me a sign-in link instead",
+    "usePassword": "Use my password instead",
+    "sendLink": "Email me the link",
+    "signUpTitle": "Create your account",
+    "signUpSubtitle": "Free. Get quotes faster and keep track of your equipment.",
+    "benefits": [
+      "History of your quotes",
+      "Tracking of the equipment you buy",
+      "Your details saved for faster quotes"
+    ],
+    "checkEmailTitle": "Check your email",
+    "checkEmailSignup": "We sent a link to {email} to confirm your account.",
+    "checkEmailLink": "We sent a sign-in link to {email}.",
+    "checkEmailReset": "We sent a link to {email} to create a new password.",
+    "spamHint": "It may take a minute. Check your spam folder too.",
+    "errors": {
+      "invalid": "Incorrect email or password.",
+      "exists": "An account with that email already exists. Sign in or reset your password.",
+      "weak": "Password must be at least 10 characters.",
+      "mismatch": "Passwords do not match.",
+      "privacy": "You must authorize data processing to create an account.",
+      "rate": "Too many attempts. Please wait a few minutes.",
+      "unconfirmed": "Confirm your email with the link we sent before signing in.",
+      "generic": "Something went wrong. Please try again.",
+      "link": "The link expired or was already used. Request a new one."
+    },
+    "sending": "Sending…",
+    "save": "Save changes",
+    "saved": "Changes saved.",
+    "hello": "Hello",
+    "profileTitle": "Your details",
+    "passwordTitle": "Password",
+    "newPassword": "New password",
+    "savePassword": "Save password",
+    "passwordSaved": "Password saved.",
+    "equipmentTitle": "My equipment",
+    "equipmentEmpty": "When you buy JF equipment we'll register it here so you can keep track of it.",
+    "serial": "Serial",
+    "soldOn": "Purchased on",
+    "quotesTitle": "My quotes",
+    "quotesEmpty": "No quotes yet. Quotes requested while signed in will appear here.",
+    "staffPanel": "Go to the admin panel",
+    "forgotTitle": "Reset password",
+    "forgotSubtitle": "Enter your email and we'll send you a link to create a new one.",
+    "newPasswordTitle": "Create your new password",
+    "backToSignIn": "Back to sign in",
+    "goToAccount": "Go to my account",
+    "quoteStatus": {
+      "nuevo": "New",
+      "contactado": "Contacted",
+      "cotizado": "Quoted",
+      "vendido": "Purchased",
+      "perdido": "Closed"
+    },
+    "google": "Continue with Google",
+    "or": "or with your email",
+    "googleLegal1": "By continuing with Google you authorize the processing of your data under our ",
+    "googleLegal2": ".",
+    "consentBanner": "To use your account, authorize the processing of your data under our ",
+    "consentAccept": "I authorize",
+    "googleError": "Could not connect to Google. Please try again.",
+    "optional": "optional",
+    "googleNoPassword": "You sign in with Google: your account is ready and you don't need a password.",
+    "optionalPassword": "Create a password (optional, to also sign in with your email)",
+    "manual": "User guide (PDF)",
+    "viewProduct": "View product",
+    "warranty": "Warranty",
+    "warrantyFrom": "From",
+    "warrantyUntil": "Until",
+    "warrantyActive": "Active",
+    "warrantyExpired": "Expired",
+    "noWarranty": "No warranty",
+    "daysLeft": "{n} days left",
+    "requestPart": "Request a spare part",
+    "requestPartWa": "Hello JF Motores, I need a spare part for my {name}, serial {serial}.",
+    "appButton": "Manage from the app",
+    "appSoon": "Coming soon",
+    "compatibleParts": "Spare parts compatible with your unit",
+    "noCompatible": "No spare parts listed for this unit yet. Ask us on WhatsApp.",
+    "backToAccount": "Back to my account",
+    "purchaseDate": "Purchase date",
+    "viewAllParts": "See all compatible parts",
+    "open": "Open",
+    "notFoundUnit": "We couldn't find that unit in your account."
+  },
+  "legal": {
+    "privacyTitle": "Personal data processing policy",
+    "draftNotice": "Draft pending legal review and the company's legal details.",
+    "pending": "[pending]",
+    "updated": "Last updated: October 31, 2026",
+    "sections": [
+      {
+        "h": "1. Data controller",
+        "p": "JF Motores ({legalName}, Tax ID {nit}), with its workshop at {address}, is responsible for processing the personal data collected on this site, in accordance with Colombian Law 1581 of 2012 and Decree 1377 of 2013."
+      },
+      {
+        "h": "2. Data we collect",
+        "p": "Name, email, phone or WhatsApp, country, and the details of the quotes you request (product, date and channel). If you sign in with Google, we only receive your name, email and profile picture from Google. Your country is estimated from your connection and you can change it in My account. We also collect technical browsing data such as language and device."
+      },
+      {
+        "h": "3. How we use it",
+        "p": "To handle your quotes and purchases, give you access to your account, track the equipment you buy, improve the site and, only if you authorize it, send you news and offers."
+      },
+      {
+        "h": "4. Your rights",
+        "p": "You may access, update, correct and request deletion of your data, revoke this authorization and file complaints with Colombia's Superintendence of Industry and Commerce. You can update your details from My account."
+      },
+      {
+        "h": "5. How to exercise them",
+        "p": "Message us on WhatsApp at {phone} with your name, email and request. We will reply within the legal deadlines (10 business days for inquiries and 15 for claims)."
+      },
+      {
+        "h": "6. Security and retention",
+        "p": "Your data is stored on servers with restricted access. Passwords are stored encrypted and nobody can see them. We keep data while the business relationship exists or as required by law."
+      },
+      {
+        "h": "7. Cookies and measurement",
+        "p": "We use our own necessary cookies: session, language, preferences and an anonymous identifier we use to record your WhatsApp quote requests (product, approximate country, device and the campaign that brought you). Only if you accept them in the cookie notice do we use Google Analytics 4 and the Meta Pixel to measure visits and ad performance. You can change your choice at any time in “Cookie preferences” at the bottom of the page."
+      }
+    ],
+    "termsTitle": "Terms and conditions",
+    "termsUpdated": "Last updated: November 1, 2026",
+    "terms": "Terms and conditions",
+    "sic": "Superintendence of Industry and Commerce (SIC)",
+    "vatYes": "Published prices include VAT.",
+    "vatNo": "VAT is added to the published prices.",
+    "vatUnknown": "The final price including taxes is confirmed in the written quote.",
+    "termsSections": [
+      {
+        "h": "1. Who sells",
+        "p": "This site is operated by {legalName} (trade name JF Motores), tax ID (NIT) {nit}, located at {address}. Email: {email}. WhatsApp and direct line: {phone}."
+      },
+      {
+        "h": "2. Product information",
+        "p": "Each product page shows reference, specifications, status (available or sold; in stock or out of stock) and warranty. Photos marked “Reference image” are illustrative. Before you buy, an advisor confirms availability, specifications and compatibility for your case."
+      },
+      {
+        "h": "3. Prices",
+        "p": "Prices are in Colombian pesos. {vat} Shipping is not included and is quoted separately by destination. Published prices may change; the price in your written quote is honored while it is valid."
+      },
+      {
+        "h": "4. How to buy and pay",
+        "p": "The site does not process payments. Purchases are agreed with an advisor on WhatsApp or at our branches: you get a written quote with product, price, taxes, shipping, payment method and delivery time. The purchase is final once you accept the quote and the agreed payment is recorded. Every sale is registered under your name in My account."
+      },
+      {
+        "h": "5. Shipping and delivery",
+        "p": "Delivery time and carrier are stated in the quote. On delivery, check the equipment before signing the waybill; if there is transport damage, note it on the waybill and contact us right away."
+      },
+      {
+        "h": "6. Right of withdrawal",
+        "p": "If you buy remotely (WhatsApp, phone or the site, without visiting a branch), you may withdraw within 5 business days after delivery, under article 47 of Colombian Law 1480 of 2011. Return the product unused and in the condition you received it; return shipping is at your expense. We refund the money, without deductions, within 30 calendar days. It does not apply to goods made or adjusted to your specifications (for example, a pump set built for your mine) or to in-person purchases at our branches."
+      },
+      {
+        "h": "7. Legal warranty",
+        "p": "Every new product has a legal warranty of quality, fitness and safety (Law 1480 of 2011, articles 7 and 8), even if not advertised. The term is the one stated on the product page or invoice; if none is stated, it is one year for new products. Used or rebuilt products are identified as such on their page, with the warranty offered. The warranty does not cover damage from misuse, lack of the maintenance indicated in the manual, contaminated fuel, overload or repairs by third parties."
+      },
+      {
+        "h": "8. How to claim the warranty",
+        "p": "Write to us with the serial number (see My account → My equipment) and photos or video of the fault. We answer within 15 business days at most. If it applies, we repair, replace or refund the product within the legal terms."
+      },
+      {
+        "h": "9. Requests, complaints and claims",
+        "p": "You can file them on WhatsApp at {phone}, by email at {email} or at our branches. If you are not satisfied with the answer, you can contact Colombia's Superintendence of Industry and Commerce at www.sic.gov.co."
+      },
+      {
+        "h": "10. Personal data and governing law",
+        "p": "The processing of your data is governed by our Personal Data Policy. These terms are governed by the laws of the Republic of Colombia."
+      }
+    ]
+  },
+  "catalog": {
+    "all": "All",
+    "available": "Available",
+    "sold": "Sold",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "unavailable": "Sold or out of stock",
+    "search": "Search by name or reference",
+    "category": "Category",
+    "allCategories": "All categories",
+    "compatibleWith": "Compatible with",
+    "anyModel": "Any engine",
+    "sort": "Sort",
+    "sortNew": "Newest",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "sortHp": "Most powerful",
+    "results": "{n} results",
+    "empty": "No products match these filters.",
+    "clear": "Clear filters",
+    "details": "View details",
+    "quote": "Get a quote",
+    "askPrice": "Ask for price",
+    "statusAvailable": "Available",
+    "statusSold": "Sold",
+    "statusInStock": "In stock",
+    "statusOutOfStock": "Out of stock",
+    "reference": "Reference image",
+    "ref": "REF",
+    "shippingNote": "Price does not include shipping. Get a shipping quote on WhatsApp.",
+    "specsTitle": "Specifications",
+    "descriptionTitle": "Description",
+    "compatTitle": "Compatible with",
+    "partsTitle": "Compatible spare parts",
+    "engineModel": "Engine",
+    "view3d": "View in 3D",
+    "photos": "Photos",
+    "close": "Close",
+    "back": "Back to catalogue",
+    "soldNotice": "This unit has been sold. Message us and we'll offer you a similar one.",
+    "outOfStockNotice": "This part is out of stock for now. Message us and we'll tell you when it arrives or offer an equivalent.",
+    "whatsapp": "Hello JF Motores, I'd like a quote for: {name} (REF {ref}). {url}",
+    "whatsappSold": "Hello JF Motores, I saw the {name} (REF {ref}) is sold. Do you have a similar one? {url}",
+    "whatsappOutOfStock": "Hi JF Motores, the part {name} (REF {ref}) shows as out of stock. When will it arrive, or do you have an equivalent? {url}",
+    "partCategoryIntro": "Spare parts for this engine part.",
+    "specs": {
+      "hp": "Power",
+      "succion_in": "Suction",
+      "descarga_in": "Discharge",
+      "caudal_lpm": "Max flow",
+      "cabeza_m": "Max head",
+      "rpm": "Speed",
+      "arranque": "Start",
+      "peso_kg": "Weight",
+      "cilindros": "Cylinders",
+      "refrigeracion": "Cooling",
+      "material": "Material",
+      "filas": "Rows",
+      "diametro_mm": "Diameter",
+      "diametro_in": "Diameter",
+      "unidades": "Units",
+      "capacidad_l": "Capacity",
+      "aspas": "Blades",
+      "dientes": "Teeth",
+      "caras": "Faces",
+      "voltaje_v": "Voltage",
+      "solidos_mm": "Solids handling",
+      "cilindrada_l": "Displacement",
+      "aspiracion": "Aspiration",
+      "consumo_lh": "Fuel use at 75% load"
+    },
+    "featuredKicker": "Featured",
+    "featuredTitle": "Units ready to ship",
+    "manual": "User guide (PDF)",
+    "owned": "Your unit",
+    "ownedBanner": "This unit is yours.",
+    "ownedLink": "See it in my equipment",
+    "compatibleFor": "Compatible with your {name}",
+    "warrantyMonths": "{n}-month warranty",
+    "vatIncluded": "VAT included.",
+    "vatExcluded": "Price + VAT."
+  },
+  "notFound": {
+    "title": "We couldn't find that page",
+    "text": "The product may no longer be listed. Browse the catalogue or message us on WhatsApp.",
+    "home": "Go to home"
+  },
+  "support": {
+    "title": "Technical support",
+    "intro": "Does your equipment need help? A workshop technician will assist you on WhatsApp.",
+    "waTech": "Hello JF Motores, I need technical support for my equipment. Model: ___ Serial: ___ Issue: ___",
+    "cards": [
+      {
+        "h": "Technical support",
+        "p": "Tell us the model, the serial number and what is happening. If you can, send photos or a short video.",
+        "cta": "Choose how to reach us"
+      },
+      {
+        "h": "Order a spare part",
+        "p": "Search by part or by compatible engine. If you can't find it, send us a photo of the engine plate.",
+        "cta": "See spare parts"
+      },
+      {
+        "h": "Your equipment",
+        "p": "With your account you can see the units you bought and your quotes.",
+        "cta": "Go to my account"
+      }
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faq": [
+      {
+        "q": "Do prices include shipping?",
+        "a": "No. The price covers the item. Shipping is quoted separately on WhatsApp depending on the destination; for international shipments, your advisor will guide you through import formalities."
+      },
+      {
+        "q": "Are the photos of the exact unit?",
+        "a": "When a photo says “Reference image”, it shows the same or a similar unit. If you need photos of the exact unit, ask us on WhatsApp."
+      },
+      {
+        "q": "How do I know if a part fits my engine?",
+        "a": "Each part lists the engines and units it fits. If in doubt, send us the model and a photo of the engine plate and we will confirm."
+      },
+      {
+        "q": "Do I need an account to buy?",
+        "a": "For a pump set, yes: that way we register the unit in your name and you can track it. You don't need an account to request a quote."
+      }
+    ],
+    "techOptions": {
+      "whatsapp": "On WhatsApp",
+      "whatsappDesc": "Quick answer from a workshop technician",
+      "email": "By email",
+      "emailDesc": "Write to {email}: best for photos, documents and written follow-up"
+    }
+  },
+  "guides": {
+    "title": "Guides",
+    "intro": "Practical guides to choose, care for and repair your equipment. They are general guidance: always follow your equipment manufacturer's manual.",
+    "tabs": {
+      "official": "Official guides",
+      "ours": "Our guides",
+      "videos": "Videos"
+    },
+    "items": [
+      {
+        "id": "elegir-motobomba",
+        "h": "How to choose a pump set",
+        "steps": [
+          "Flow: how much water or slurry you need to move, in litres per minute. Work it out from the volume to drain and the time available.",
+          "Total head: add the suction height (from the water to the pump), the discharge height (from the pump to the outlet) and the hose losses, which grow with length and bends.",
+          "What you will pump: for slurry or sandy water choose a solids-handling pump with an abrasion-resistant impeller.",
+          "Suction and discharge diameter: it must match your hoses; a narrower hose reduces flow.",
+          "Altitude: diesel engines lose power at higher altitude. For high-mountain work ask about a turbocharged engine.",
+          "With that data (flow, head and type of fluid) message us and we will recommend the right unit."
+        ]
+      },
+      {
+        "id": "mantenimiento",
+        "h": "Basic diesel engine maintenance",
+        "steps": [
+          "Before starting: check oil and coolant levels and look for leaks.",
+          "Air filter: mining sites are dusty; check and clean it often. A clogged filter cuts power and wears the engine.",
+          "Clean fuel: drain water from the fuel separator filter and store diesel in clean, closed containers.",
+          "Radiator: keep the fins clean and check the hoses and the fan belt.",
+          "Oil and filter changes: follow the hour-meter intervals in the manual, not just the calendar.",
+          "If you notice abnormal smoke, loss of power, knocking or overheating, stop the unit and contact us."
+        ]
+      },
+      {
+        "id": "pedir-repuesto",
+        "h": "How to order the right spare part",
+        "steps": [
+          "Take a photo of the engine or unit plate: it shows the model and serial number.",
+          "Photograph the damaged part from several angles, with a ruler or tape next to it to show the size.",
+          "If you can, note key measurements: diameter, number of teeth, thread type or length.",
+          "Search the spare parts catalogue filtered by your engine, or send everything on WhatsApp and we will confirm the part."
+        ]
+      }
+    ],
+    "cta": "Questions? Message us",
+    "waGuide": "Hello JF Motores, I read the guide and have a question: ",
+    "library": {
+      "kicker": "Free technical library",
+      "title": "Official courses and guides to look after your pump set",
+      "intro": "10 courses and guides from public bodies (SENA, Colombia's National Mining Agency and mine-safety authorities), selected by our workshop. Free for registered customers.",
+      "loginNote": "Sign in or create your free account to open them.",
+      "open": "Open PDF",
+      "openOfficial": "View on the official site",
+      "hosted": "Public document",
+      "official": "Opens on the publisher's official site",
+      "langEn": "In English",
+      "langEs": "In Spanish",
+      "groups": {
+        "motor": "Diesel engine",
+        "bombas": "Pumps",
+        "mantenimiento": "Maintenance",
+        "seguridad": "Mine safety"
+      },
+      "criteriaTitle": "Before ordering a spare part",
+      "criteria": "Don't buy filters, seals, impellers, bearings or belts by looks alone. Note the brand, model and serial number of the engine and the pump, the part code and the running hours.",
+      "items": {
+        "sena-motor-diesel": {
+          "h": "How a diesel engine works",
+          "p": "Working cycle, intake, fuel, exhaust, lubrication and cooling."
+        },
+        "sena-bombas-centrifugas": {
+          "h": "Centrifugal pump maintenance",
+          "p": "Failures, priming, start-up and shutdown, alignment, packing, seals, bearings and cavitation."
+        },
+        "sena-alimentacion-combustible": {
+          "h": "Checking the fuel supply system",
+          "p": "Fuel path, lift pump, common failures and filter replacement."
+        },
+        "sena-mantenimiento-motor": {
+          "h": "Preventive engine maintenance",
+          "p": "How to plan it: maintenance levels, log sheets and control."
+        },
+        "sena-filtros-aceite": {
+          "h": "Changing oil filters",
+          "p": "When to change them and how to do it step by step."
+        },
+        "sena-talleres-diesel": {
+          "h": "Preventive maintenance in diesel workshops",
+          "p": "Organising and controlling machine and equipment maintenance."
+        },
+        "sena-reparador-diesel": {
+          "h": "Diesel engine repair mechanic course",
+          "p": "In-depth material on repair and maintenance (units 9 to 16)."
+        },
+        "anm-metano": {
+          "h": "ANM — preventing methane and coal-dust explosions",
+          "p": "Safety guide for underground coal mines in Colombia."
+        },
+        "msha-toolbox": {
+          "h": "MSHA — reducing diesel exhaust in mining",
+          "p": "Intake, cooling, lubrication, injection and exhaust maintenance to cut emissions."
+        },
+        "wa-diesel-subterraneo": {
+          "h": "Western Australia — diesel equipment in underground mines",
+          "p": "Buying, operating and maintaining diesel-powered equipment underground."
+        }
+      },
+      "langTitle": {
+        "es": "In Spanish",
+        "en": "In English"
+      }
+    },
+    "videos": {
+      "title": "Maintenance videos",
+      "intro": "Spanish-language tutorials on diesel engines, pump sets and filters, selected by our workshop.",
+      "play": "Watch video",
+      "openSite": "View on the official site",
+      "modes": {
+        "label": "Video size",
+        "normal": "Normal",
+        "large": "Enlarged",
+        "cinema": "Theater mode",
+        "fullscreen": "Full screen",
+        "close": "Close"
+      },
+      "note": "Videos belong to their authors and play from YouTube.",
+      "items": {
+        "diesel-cuatro-tiempos": {
+          "h": "Diesel engine: the four-stroke cycle"
+        },
+        "diesel-lubricacion": {
+          "h": "How a diesel engine and its lubrication system work"
+        },
+        "bomba-centrifuga-motor": {
+          "h": "How an engine-driven centrifugal pump works"
+        },
+        "sello-mecanico": {
+          "h": "Mechanical seal repair and test"
+        },
+        "motobomba-preventivo": {
+          "h": "Preventive maintenance of a pump set"
+        },
+        "motobomba-guia-rapida": {
+          "h": "Quick guide to pump set preventive maintenance"
+        },
+        "filtro-combustible": {
+          "h": "Changing the fuel filter on heavy machinery"
+        },
+        "filtros-diesel": {
+          "h": "Diesel engine filter maintenance and replacement"
+        }
+      }
+    }
+  },
+  "app": {
+    "kicker": "Coming soon",
+    "title": "JF Monitor",
+    "subtitle": "Your pump sets in your pocket, in real time.",
+    "badge": "Under construction",
+    "intro": "We are building an app to see from your phone how your JF units are working, with the same account you use on this site.",
+    "scroll": "Scroll to see how it will work",
+    "phases": [
+      {
+        "h": "All good",
+        "p": "Flow, pressure and temperature of every unit, from the mine entrance or from the city."
+      },
+      {
+        "h": "Something starts to change",
+        "p": "The app watches trends: if pressure drops or temperature rises, you see it before it becomes a problem."
+      },
+      {
+        "h": "Instant alert",
+        "p": "A notification tells you the unit, the value and what to check first."
+      },
+      {
+        "h": "On WhatsApp too",
+        "p": "The alert reaches the WhatsApp of the people in charge, even if the app isn't open."
+      },
+      {
+        "h": "Control it remotely",
+        "p": "Lower the speed or stop the pump set from your phone, without walking to the face."
+      },
+      {
+        "h": "Back to normal",
+        "p": "Confirm in seconds that everything is back in range, and it's logged in the history."
+      }
+    ],
+    "screen": {
+      "flow": "Flow",
+      "pressure": "Pressure",
+      "temp": "Temperature",
+      "hours": "Hour meter",
+      "normal": "Normal",
+      "warning": "Check",
+      "alert": "Alert",
+      "recovered": "Recovered",
+      "notifTitle": "Alert · High temperature",
+      "notifBody": "104 °C · check radiator and coolant level",
+      "live": "Live",
+      "waApp": "WhatsApp",
+      "waFrom": "JF Monitor",
+      "waTime": "now",
+      "waMsg": "⚠ Cóndor 40 #0042 · Temperature 104 °C. Check radiator and coolant.",
+      "waOpen": "Open in the app",
+      "rpm": "Speed",
+      "control": "Remote control",
+      "sent": "Command confirmed by the unit",
+      "adjusting": "Adjusting",
+      "oil": "Oil",
+      "discharge": "Discharge",
+      "turnOn": "Start",
+      "turnOff": "Stop",
+      "off": "Off",
+      "starting": "Starting",
+      "tryHint": "Try it: start, stop or change the rpm",
+      "manual": "Test mode: keep scrolling to return to the simulation"
+    },
+    "featuresTitle": "What we are building",
+    "features": [
+      {
+        "h": "Real time",
+        "p": "Readings from sensors installed on the pump set, sent over cellular, LoRa or satellite depending on the site."
+      },
+      {
+        "h": "Alerts",
+        "p": "Phone notifications when a value leaves its range: temperature, pressure, flow or a stopped unit."
+      },
+      {
+        "h": "Remote control",
+        "p": "Start, stop, speed up or slow down the engine from your phone, with confirmation and a log of who did it."
+      },
+      {
+        "h": "History",
+        "p": "Charts by day and shift to understand performance and plan maintenance."
+      },
+      {
+        "h": "Maintenance by hours",
+        "p": "Reminders based on the real hour meter: oil change, filters and inspections."
+      },
+      {
+        "h": "All your units",
+        "p": "Several sites and pump sets on one screen, only for you and JF Motores."
+      },
+      {
+        "h": "Same account",
+        "p": "Sign in with the same email or Google; the units you bought appear automatically."
+      }
+    ],
+    "disclaimer": "The app is in development. Features and launch date may change; the images are a simulation.",
+    "cta": "Let me know when it's ready",
+    "wa": "Hello JF Motores, I'd like to know when the JF Monitor app is ready.",
+    "back": "Back",
+    "plansTitle": "Planned plans",
+    "plansIntro": "Three levels depending on what you need to see. Prices will be set at launch: they depend on the connection available at your site (cellular or satellite).",
+    "recommended": "Recommended",
+    "includesPrev": "Includes everything in {plan}:",
+    "plusTitle": "Plus:",
+    "plans": [
+      {
+        "name": "Essential",
+        "tag": "Telemetry",
+        "items": [
+          "Running hours, temperature, pressure and flow",
+          "Phone alerts when something goes out of range",
+          "Unit location and history by shift",
+          "Maintenance reminders by hour meter"
+        ],
+        "needs": "Cellular connection; satellite optional for areas without signal."
+      },
+      {
+        "name": "Vision",
+        "tag": "Live camera",
+        "items": [
+          "Water- and dust-proof industrial camera",
+          "Live video at 30 frames per second when you open the app",
+          "Remote control: start, stop and adjust speed",
+          "Continuous on-device recording to review later",
+          "Video clip attached to every alert",
+          "Night vision"
+        ],
+        "needs": "Requires good 4G signal or a satellite antenna on site."
+      },
+      {
+        "name": "Vision Pro",
+        "tag": "Live 24/7",
+        "items": [
+          "Live video and cloud recording around the clock",
+          "Several cameras, including a thermal one to detect overheating",
+          "AI cameras that detect anomalies: smoke, leaks, sparks or people near the unit",
+          "Assistance from a JF technician watching the same video"
+        ],
+        "needs": "Requires unlimited satellite connection and permanent power (solar or grid)."
+      }
+    ],
+    "plansNote": "Cameras are designed for surface units (open pit, mine entrance, dredges); inside underground workings each case is assessed. They are installed with a video-surveillance notice, as personal data law requires.",
+    "extrasTitle": "Add-ons for any plan",
+    "extrasIntro": "It will work like professional pumping equipment: a required base plan plus add-ons you choose for your operation.",
+    "extras": [
+      {
+        "h": "WhatsApp alarms",
+        "p": "If something goes out of range, the alert reaches each person in charge on WhatsApp with the unit, the value and what to check."
+      },
+      {
+        "h": "Satellite connection",
+        "p": "For sites without mobile signal: data and alerts arrive via satellite."
+      },
+      {
+        "h": "Advanced data",
+        "p": "Detailed history with more readings per minute and downloadable reports by shift or month."
+      }
+    ],
+    "extrasNote": "The Essential plan is the base: add-ons and camera plans are added on top of it. Remote control is included from the Vision plan."
+  },
+  "appForm": {
+    "title": "Let me know",
+    "intro": "Leave your details and we'll tell you first when JF Monitor is ready. The optional questions help us build the app you really need.",
+    "needLogin": "You need your JF Motores account to sign up: that way, when the app is ready, your units will appear automatically.",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "required": "Your details",
+    "optional": "Optional questions",
+    "name": "Full name",
+    "phone": "Mobile / WhatsApp",
+    "country": "Country",
+    "company": "Company or mine (optional)",
+    "role": "What is your role?",
+    "roles": {
+      "dueno": "Owner",
+      "administrador": "Mine manager",
+      "operador": "Operator",
+      "tecnico": "Technician / mechanic",
+      "otro": "Other"
+    },
+    "units": "How many pump sets do you run?",
+    "siteType": "Where do your units work? (choose any)",
+    "sites": {
+      "tajo": "Open pit",
+      "socavon": "Underground",
+      "draga": "Dredge or river",
+      "otro": "Other"
+    },
+    "signal": "Is there mobile signal where the pumps are?",
+    "signals": {
+      "buena": "Yes, good",
+      "debil": "Weak or patchy",
+      "ninguna": "No signal",
+      "no_se": "Not sure"
+    },
+    "plan": "Which plan interests you most?",
+    "plans": {
+      "esencial": "Essential (data and alerts)",
+      "vision": "Vision (live camera)",
+      "vision_pro": "Vision Pro (24/7)",
+      "no_se": "Not sure yet"
+    },
+    "priorities": "What would you like to see first? (choose any)",
+    "prio": {
+      "video": "Live video",
+      "alertas": "Phone alerts",
+      "control": "Remote start and stop",
+      "combustible": "Fuel level",
+      "mantenimiento": "Maintenance reminders",
+      "termica": "Thermal camera",
+      "seguridad": "Alert when people approach"
+    },
+    "visits": "How many times a month do you go to the site just to check the pumps?",
+    "budget": "How much would you pay per unit per month for live camera?",
+    "budgets": {
+      "lt100": "Less than COP 100,000",
+      "100-250": "COP 100,000 – 250,000",
+      "250-500": "COP 250,000 – 500,000",
+      "gt500": "More than COP 500,000",
+      "no_se": "Not sure"
+    },
+    "comments": "Anything else you'd like to tell us?",
+    "contactOk": "I agree that JF Motores may contact me by WhatsApp or email about the app.",
+    "submit": "Sign me up",
+    "update": "Update my answers",
+    "saving": "Saving…",
+    "saved": "Done! You're on the list. We'll let you know when JF Monitor is ready.",
+    "updatedOk": "Your answers were updated.",
+    "already": "You're already on the list. You can update your answers anytime.",
+    "error": "Could not save. Check your details and try again.",
+    "phoneError": "Enter a valid mobile number.",
+    "privacy": "We use this data only for the app and according to our data policy.",
+    "select": "Choose an option"
+  },
+  "assistant": {
+    "fab": "Support",
+    "fabClose": "Close support",
+    "whatsapp": "WhatsApp",
+    "whatsappDesc": "Talk to an advisor",
+    "ai": "AI chat",
+    "aiDesc": "Instant answers, 24/7",
+    "title": "JF Assistant",
+    "badge": "AI",
+    "notice": "Answers only with JF Motores' official information and may make mistakes. To get a quote or buy, message us on WhatsApp. Don't share personal data.",
+    "placeholder": "Type your question…",
+    "send": "Send",
+    "thinking": "Searching our information…",
+    "close": "Close chat",
+    "welcome": "Hi, I'm the JF Motores virtual advisor. I can help you choose a pump set, find the exact spare part for your engine, troubleshoot a failure or explain how buying on the site works.",
+    "suggestions": [
+      "Which pump set do I need for my mine?",
+      "I need a spare part for my engine",
+      "My pump won't prime, what should I check?",
+      "How do I buy on the site?"
+    ],
+    "noInfo": "I don't have that in our official information. An advisor will answer you on WhatsApp.",
+    "limit": "You sent many questions in a row. Wait a few minutes or message us on WhatsApp.",
+    "unavailable": "The assistant isn't available right now. Message us on WhatsApp.",
+    "disabled": "The AI chat is turned off. Message us on WhatsApp.",
+    "toWhatsapp": "Continue on WhatsApp",
+    "waMessage": "Hi JF Motores, I'm coming from your website chat and would like to talk to an advisor.",
+    "handoff": "An advisor will confirm this on WhatsApp; I'll pass them a summary of our chat.",
+    "waSummary": "Chat summary: ",
+    "toAdvisor": "Talk to an advisor",
+    "loginTitle": "Sign in to use the assistant",
+    "loginText": "The technical assistant is free for registered customers. If you've bought from us, you get more questions per month.",
+    "login": "Sign in",
+    "register": "Create account",
+    "quota": "You've used this month's AI questions. An advisor will help you on WhatsApp; questions renew every month and grow with your purchases.",
+    "low": "You have {n}% of this month's questions left.",
+    "telegramPrivate": "This bot is private. Your chat ID is {id}: ask for it to be authorized."
+  },
+  "tickets": {
+    "option": "Open a ticket",
+    "optionDesc": "Write to us with photos and we'll reply here",
+    "title": "Support tickets",
+    "subtitle": "The JF Motores team will answer you",
+    "myTickets": "My tickets",
+    "newTicket": "New ticket",
+    "empty": "You don't have tickets yet. Tell us what you need and attach photos if you can.",
+    "subject": "Subject",
+    "subjectPh": "E.g.: the pump won't prime",
+    "message": "Message",
+    "messagePh": "Equipment, model and what's happening. You can attach photos.",
+    "create": "Send ticket",
+    "creating": "Sending…",
+    "back": "← My tickets",
+    "close": "Close ticket",
+    "status": {
+      "abierto": "Open",
+      "respondido": "Answered",
+      "cerrado": "Closed"
+    },
+    "newReply": "New reply",
+    "loginTitle": "Sign in to open a ticket",
+    "loginText": "That way we keep the conversation and email you when we reply.",
+    "login": "Sign in",
+    "signup": "Create account",
+    "photosHint": "Up to 4 photos per message.",
+    "dragHint": "Press and drag to move it",
+    "thread": {
+      "you": "You",
+      "team": "JF Motores",
+      "customer": "Customer",
+      "placeholder": "Write your message…",
+      "send": "Send",
+      "attach": "Attach photos",
+      "sending": "Sending…",
+      "closed": "Ticket closed.",
+      "reopenHint": "This ticket is closed. If you write, it reopens.",
+      "error": "Couldn't send. Try again.",
+      "photo": "View photo"
+    }
+  },
+  "consent": {
+    "text": "We use necessary cookies to run the site and, if you accept, measurement cookies (Google Analytics and Meta Pixel) to learn which ads and products interest you.",
+    "accept": "Accept all",
+    "necessary": "Necessary only",
+    "policy": "Privacy policy",
+    "settings": "Cookie preferences"
+  },
+  "trust": {
+    "kicker": "Trust",
+    "title": "What people already working with JF say",
+    "years": "years in business",
+    "equipos": "units delivered",
+    "clientes": "customers served",
+    "municipios": "municipalities served"
+  },
+  "partsInfo": {
+    "chasis": "Channel skid and protective frame with lifting lugs: support the unit and let you move it by crane.",
+    "luz": "Electrical and lighting system.",
+    "bloque": "Engine block: houses the cylinders, crankshaft and camshaft, with water and oil passages.",
+    "camisas": "Cylinder liners: the piston moves inside them. Replace them when worn or oval and the engine loses compression.",
+    "pistones": "Pistons with rings and connecting rods: they take the combustion force and turn it into crankshaft motion.",
+    "culata": "Cylinder head and rocker covers: close the cylinders and hold valves and injectors. The head gasket seals combustion.",
+    "escape": "Manifold, muffler and gooseneck: take exhaust gases out and keep rain from entering the outlet.",
+    "tanque": "Diesel tank in the skid base, with its cap. Keeping it clean prevents injection problems.",
+    "radiador": "Radiator with expansion tank and pressure cap: cools the engine water. A clogged core overheats the unit.",
+    "ventilador": "Fan: pulls air through the radiator to cool the engine, on the water pump shaft.",
+    "volante": "Crankshaft flywheel: stores inertia so the engine runs smoothly and drives the pump coupling.",
+    "bomba": "End-suction centrifugal pump: the impeller turns with the engine and pushes water out of the vertical discharge. Volute, seals and bearings set flow and head.",
+    "tablero": "Panel with rpm, temperature and oil pressure gauges and key switch: shows engine health during the shift.",
+    "acople": "Flexible coupling between the engine flywheel and the pump shaft, with its safety guard. It absorbs vibration and small misalignments.",
+    "admision": "Air filter, hose and intake manifold: deliver clean air. A dirty filter raises fuel use and smoke.",
+    "mangueras": "Cooling hoses and clamps: carry water between the engine and the radiator.",
+    "arranque": "Starter motor: cranks the engine to start it. Check battery, solenoid and pinion if it starts hard.",
+    "inyeccion": "Injection pump, lines, injectors and throttle: meter diesel at high pressure into each cylinder.",
+    "carter": "Oil pan: holds the engine oil, with its drain plug and gasket.",
+    "soportes": "Engine mounts: fix the engine to the skid and absorb vibration to protect coupling and pump.",
+    "ciguenal": "Counterweighted crankshaft: turns the up-and-down piston motion into rotation, running on main bearings.",
+    "distribucion": "Gear-driven timing: the crankshaft drives the camshaft and injection pump at half speed, always in sync.",
+    "valvulas": "Intake and exhaust valves with springs, pushrods and rocker arms: they let air in and gases out at the right moment.",
+    "alternador": "Alternator and belt: charge the battery and power the panel while the engine runs."
+  },
+  "mail": {
+    "gmail": "Open in Gmail",
+    "outlook": "Open in Outlook",
+    "app": "My email app",
+    "copy": "Copy email",
+    "copied": "Email copied ✓",
+    "subject": "Inquiry to JF Motores",
+    "choose": "Choose how to write"
+  },
+  "branches": {
+    "title": "Our locations",
+    "intro": "Visit our workshops and service points. Choose a location to see its Google Maps position, opening hours, photos and talk directly with its advisors.",
+    "address": "Address",
+    "phone": "Phone",
+    "hours": "Hours",
+    "directions": "Get directions",
+    "openMaps": "Open in Google Maps",
+    "photos": "Location photos",
+    "noPhotos": "We will publish photos of this location soon.",
+    "advisors": "Advisors in {city}",
+    "noAdvisors": "Message us on WhatsApp and we will connect you with this location's team.",
+    "whatsapp": "WhatsApp",
+    "call": "Call",
+    "email": "Email",
+    "waMessage": "Hi {name}, I'm writing from the JF Motores website ({city} location).",
+    "mapTitle": "Map of {name}"
+  }
+}

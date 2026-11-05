@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "title": "JF Motores · Motobombas diésel para minería | Medellín",
+    "description": "Motobombas diésel probadas bajo carga, motores y repuestos que encajan a la primera. Asesoría por WhatsApp para la minería en Colombia."
+  },
+  "hero": {
+    "kicker": "Motobombas diésel · Minería · Medellín",
+    "line1": "Que el agua",
+    "line2a": "no ",
+    "line2b": "detenga",
+    "line2c": "",
+    "line3": "tu mina.",
+    "copy": "Motobombas diésel probadas bajo carga en nuestro taller, repuestos que encajan a la primera y un asesor que responde por WhatsApp.",
+    "ctaPrimary": "Cotizar ahora",
+    "ctaSecondary": "Ver equipos",
+    "scrollHint": "Desliza y mírala por dentro"
+  },
+  "marquee": [
+    "Probadas bajo carga",
+    "Repuestos que encajan",
+    "Asesor por WhatsApp",
+    "Hasta 40 HP",
+    "Hasta 3 600 L/min",
+    "Taller en Medellín"
+  ],
+  "benefits": {
+    "title1": "Menos !paradas!, ",
+    "titleEm": "más turnos",
+    "title2": ".",
+    "intro": "Lo que ganas cuando tu motobomba sale de nuestro taller.",
+    "rows": [
+      {
+        "h3": "Probada bajo carga",
+        "p": "Antes del despacho la ponemos a trabajar en el taller. Llega a la mina lista para arrancar."
+      },
+      {
+        "h3": "Repuestos que encajan",
+        "p": "Cada repuesto dice con qué motor y motobomba es compatible. Pides el correcto a la primera."
+      },
+      {
+        "h3": "Tu equipo, registrado",
+        "p": "Al comprar, tu equipo queda en tu cuenta con su serie, su garantía y su guía de uso."
+      },
+      {
+        "h3": "Un asesor que responde",
+        "p": "Hablas con quien conoce tu equipo, por WhatsApp o por correo. Sin conmutadores ni esperas."
+      }
+    ]
+  },
+  "catalogs": {
+    "title": "Equipos y repuestos para que la mina no pare"
+  },
+  "contact": {
+    "title1": "¿Cuánta !agua!",
+    "title2": "hay que sacar?",
+    "cta": "Cotizar ahora"
+  },
+  "journey": {
+    "a": {
+      "h2": "Prende al primer intento.",
+      "p": "Cada equipo sale de nuestro taller probado bajo carga. Llega a la mina listo para trabajar."
+    },
+    "b": {
+      "p": "A plena carga: caudal constante para mantener seco el frente de trabajo, turno tras turno."
+    },
+    "c": {
+      "h2": "Mírala por dentro.",
+      "p": "Toca una pieza o su número: ves sus repuestos, precios y con qué equipos encaja."
+    },
+    "d": {
+      "h2": "Todo vuelve a su sitio.",
+      "p": "Repuestos con compatibilidad clara: pides el correcto y la mina no para."
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "title": "JF Motores · Diesel pumps for mining | Medellín",
+    "description": "Diesel water pumps load-tested in our workshop, engines and parts that fit the first time. WhatsApp advice for mining in Colombia."
+  },
+  "hero": {
+    "kicker": "Diesel pumps · Mining · Medellín",
+    "line1": "Don't let water",
+    "line2a": "",
+    "line2b": "stop",
+    "line2c": "",
+    "line3": "your mine.",
+    "copy": "Diesel water pumps load-tested in our workshop, parts that fit the first time and an advisor who answers on WhatsApp.",
+    "ctaPrimary": "Get a quote",
+    "ctaSecondary": "See equipment",
+    "scrollHint": "Scroll to see inside"
+  },
+  "marquee": [
+    "Load-tested",
+    "Parts that fit",
+    "WhatsApp advisor",
+    "Up to 40 HP",
+    "Up to 3,600 L/min",
+    "Workshop in Medellín"
+  ],
+  "benefits": {
+    "title1": "Less !downtime!, ",
+    "titleEm": "more shifts",
+    "title2": ".",
+    "intro": "What you get when your pump leaves our workshop.",
+    "rows": [
+      {
+        "h3": "Load-tested",
+        "p": "Before shipping we run it under load in the workshop. It arrives at the mine ready to start."
+      },
+      {
+        "h3": "Parts that fit",
+        "p": "Every part states which engine and pump it fits. You order the right one the first time."
+      },
+      {
+        "h3": "Your unit, registered",
+        "p": "When you buy, your unit is saved in your account with its serial, warranty and user guide."
+      },
+      {
+        "h3": "An advisor who answers",
+        "p": "You talk to someone who knows your unit, by WhatsApp or email. No switchboards, no waiting."
+      }
+    ]
+  },
+  "catalogs": {
+    "title": "Equipment and parts to keep your mine running"
+  },
+  "contact": {
+    "title1": "How much !water!",
+    "title2": "do you need to move?",
+    "cta": "Get a quote"
+  },
+  "journey": {
+    "a": {
+      "h2": "Starts on the first try.",
+      "p": "Every unit leaves our workshop load-tested. It reaches the mine ready to work."
+    },
+    "b": {
+      "p": "At full load: steady flow to keep the work face dry, shift after shift."
+    },
+    "c": {
+      "h2": "See it inside.",
+      "p": "Tap a part or its number: see its spare parts, prices and which units it fits."
+    },
+    "d": {
+      "h2": "Everything back in place.",
+      "p": "Clear compatibility: you order the right part and the mine keeps going."
+    }
+  }
+}

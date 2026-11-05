@@ -1,0 +1,1124 @@
+{
+  "meta": {
+    "title": "JF Motores — Motobombas diésel para minería | Medellín, Colombia",
+    "description": "Motobombas diésel, motores y repuestos para minería, probados en taller. Tranquilidad y confianza: cotiza por WhatsApp."
+  },
+  "nav": {
+    "home": "Inicio",
+    "motobombas": "Motobombas",
+    "motores": "Motores",
+    "repuestos": "Repuestos",
+    "empresa": "Empresa",
+    "sedes": "Sedes",
+    "contacto": "Contacto",
+    "cta": "Cotizar por WhatsApp",
+    "language": "Idioma",
+    "catalog": "Catálogo",
+    "soporte": "Soporte",
+    "guias": "Guías",
+    "menu": "Menú",
+    "close": "Cerrar menú",
+    "viewAll": "Ver todo",
+    "secCatalog": "Catálogo",
+    "secHelp": "Ayuda",
+    "secAccount": "Tu cuenta",
+    "findPart": "Buscar repuesto por motor",
+    "faq": "Preguntas frecuentes",
+    "writeUs": "Escríbenos por WhatsApp",
+    "techSupport": "Soporte técnico",
+    "faqShort": "Preguntas",
+    "videos": "Videos",
+    "techSupportDesc": "WhatsApp o correo con un técnico del taller",
+    "guiasDesc": "Manuales oficiales, nuestras guías y videos"
+  },
+  "hero": {
+    "kicker": "Motobombas diésel para minería · Medellín, Colombia",
+    "slogan": "Tranquilidad y confianza",
+    "line1": "Motobombas diésel",
+    "line2a": "que te dan ",
+    "line2b": "tranquilidad",
+    "line2c": "",
+    "line3": "turno tras turno.",
+    "copy": "Equipos probados en nuestro taller antes de salir, repuestos con compatibilidad clara y una línea directa que responde. Así se gana la confianza.",
+    "ctaPrimary": "Cotizar por WhatsApp",
+    "ctaSecondary": "Ver catálogo",
+    "scrollHint": "Desliza para explorar",
+    "spec1": "JAGUAR 25 · 4 CILINDROS",
+    "spec2": "DIÉSEL · 25 HP · SUCCIÓN 6″",
+    "spec3": "LISTA PARA TAJO ABIERTO"
+  },
+  "catalogs": {
+    "kicker": "Catálogo",
+    "title": "Todo para mantener tu mina en operación",
+    "items": {
+      "motobombas": {
+        "title": "Motobombas completas",
+        "desc": "Equipos listos para trabajar: motor diésel acoplado a bomba para agua, lodo y desagüe de socavón."
+      },
+      "motores": {
+        "title": "Motores",
+        "desc": "Motores diésel de alto torque para minería, nuevos y reconstruidos."
+      },
+      "repuestos": {
+        "title": "Repuestos",
+        "desc": "Piezas con información de compatibilidad para tu motor o motobomba."
+      }
+    },
+    "cta": "Ver catálogo",
+    "soon": "Estamos cargando el catálogo. Mientras tanto, cotiza directamente por WhatsApp.",
+    "all": "Todo",
+    "allDesc": "Motobombas, motores y repuestos en un solo lugar."
+  },
+  "contact": {
+    "kicker": "Contacto",
+    "title1": "¿Hablamos de tu",
+    "title2": "próxima motobomba?",
+    "cta": "Cotizar por WhatsApp",
+    "workshop": "Sedes",
+    "phone": "Línea directa",
+    "email": "Soporte por correo",
+    "emailHint": "Escríbenos a nuestro correo"
+  },
+  "footer": {
+    "slogan": "Tranquilidad y confianza",
+    "privacy": "Política de datos"
+  },
+  "whatsapp": {
+    "general": "Hola JF Motores, quiero información sobre sus equipos.",
+    "fromWeb": "Hola JF Motores, les escribo desde su página web. Quisiera más información.",
+    "floatLabel": "Escríbenos por WhatsApp"
+  },
+  "journey": {
+    "a": {
+      "pk": "01 · Arranque",
+      "h2": "Arranca a la primera.",
+      "p": "Tranquilidad es saber que tu bomba enciende en cada turno. Cada unidad sale probada de nuestro taller.",
+      "chips": [
+        {
+          "label": "Probado en taller",
+          "value": "✓"
+        },
+        {
+          "label": "Potencia",
+          "value": "25 HP"
+        },
+        {
+          "label": "Asesoría",
+          "value": "WhatsApp"
+        }
+      ]
+    },
+    "b": {
+      "pk": "02 · Plena carga",
+      "torque": "Torque",
+      "temp": "Temp",
+      "flow": "Caudal",
+      "p": "Régimen pleno: caudal constante para sacar el agua y seguir produciendo, turno tras turno."
+    },
+    "c": {
+      "pk": "03 · Por dentro",
+      "h2": "Confianza que se puede ver.",
+      "p": "Así es por dentro. Toca una pieza o su botón para ver los repuestos y con qué equipos son compatibles.",
+      "hint": "▼ Sigue bajando"
+    },
+    "d": {
+      "pk": "04 · Ensamble",
+      "h2": "Cada pieza, en su sitio.",
+      "p": "Las piezas vuelven a su lugar. Repuestos con compatibilidad clara: pides lo correcto a la primera."
+    },
+    "e": {
+      "pk": "05 · Muy pronto",
+      "h2": "Y pronto, desde tu celular.",
+      "p": "Con JF Monitor la verás trabajar y podrás apagarla desde donde estés, con alertas por WhatsApp.",
+      "badge": "Aún no disponible",
+      "cta": "Conoce JF Monitor",
+      "screen": {
+        "unit": "Cóndor 40 · #0042",
+        "on": "En marcha",
+        "stopping": "Apagando",
+        "off": "Detenida",
+        "button": "Apagar motobomba",
+        "sent": "Orden enviada",
+        "stopped": "Motor detenido ✓"
+      }
+    },
+    "partsTitle": "Piezas",
+    "partsHint": "Pasa el cursor o toca una pieza",
+    "sheetOpen": "Abrir catálogo",
+    "sheetContinue": "Continuar explorando",
+    "focusKicker": "Pieza",
+    "focusCatalog": "Ver la categoría en el catálogo",
+    "focusEmpty": "Aún no hay repuestos publicados en esta categoría. Escríbenos y te cotizamos el que necesitas.",
+    "focusAsk": "Precio a consultar",
+    "focusInStock": "En stock",
+    "focusOutStock": "Sin stock",
+    "focusClose": "Cerrar"
+  },
+  "hud": {
+    "state": "Estado",
+    "standby": "STANDBY",
+    "start": "ARRANQUE",
+    "running": "RÉGIMEN",
+    "full": "PLENA CARGA",
+    "rpm": "RPM",
+    "temp": "Temp",
+    "oil": "Aceite"
+  },
+  "rail": {
+    "a": "Encendido",
+    "b": "Revolución",
+    "c": "Despiece",
+    "d": "Ensamble",
+    "e": "App"
+  },
+  "marquee": [
+    "Tranquilidad y confianza",
+    "Probadas en taller",
+    "Repuestos compatibles",
+    "Línea directa por WhatsApp",
+    "Hasta 40 HP",
+    "Hasta 3 600 L/min",
+    "JF Motores Medellín"
+  ],
+  "benefits": {
+    "kicker": "Por qué JF",
+    "title1": "Tranquilidad que se ",
+    "titleEm": "prueba",
+    "title2": ", confianza que se ve.",
+    "intro": "Por qué nuestros clientes nos recomiendan.",
+    "imageAlt": "Motobomba diésel JF Motores",
+    "bar1": "Jaguar 25",
+    "bar2": "Prueba de taller · OK",
+    "rows": [
+      {
+        "h3": "Probada antes de salir",
+        "p": "Cada unidad se prueba en nuestro taller antes del despacho. Llega lista para trabajar."
+      },
+      {
+        "h3": "Repuestos sin adivinar",
+        "p": "Cada repuesto dice con qué motor y motobomba es compatible. Pides lo correcto a la primera."
+      },
+      {
+        "h3": "Tu equipo, a tu nombre",
+        "p": "Al comprar, tu equipo queda registrado en tu cuenta con su serie, su garantía y su guía de uso."
+      },
+      {
+        "h3": "Una línea directa",
+        "p": "Hablas con quien conoce tu equipo, por WhatsApp o por correo. Sin conmutadores."
+      }
+    ],
+    "specs": [
+      {
+        "b": "25 HP",
+        "span": "Potencia nominal"
+      },
+      {
+        "b": "3 000",
+        "span": "L/min máx."
+      },
+      {
+        "b": "30 m",
+        "span": "Cabeza máxima"
+      },
+      {
+        "b": "6″",
+        "span": "Succión"
+      }
+    ]
+  },
+  "parts": {
+    "chasis": "Chasis y marco",
+    "luz": "Luz ambiental",
+    "bloque": "Bloque",
+    "camisas": "Camisas",
+    "pistones": "Pistones y bielas",
+    "culata": "Culata",
+    "escape": "Escape",
+    "tanque": "Tanque diésel",
+    "radiador": "Radiador",
+    "ventilador": "Ventilador",
+    "volante": "Volante",
+    "bomba": "Bomba centrífuga",
+    "tablero": "Tablero",
+    "acople": "Acople y guarda",
+    "admision": "Admisión y filtro de aire",
+    "mangueras": "Mangueras",
+    "arranque": "Motor de arranque",
+    "inyeccion": "Inyección y acelerador",
+    "carter": "Cárter",
+    "soportes": "Soportes del motor",
+    "ciguenal": "Cigüeñal",
+    "distribucion": "Distribución y árbol de levas",
+    "valvulas": "Válvulas y balancines",
+    "alternador": "Alternador y correa"
+  },
+  "partPage": {
+    "title": "Repuestos: ",
+    "back": "Ver todos los repuestos",
+    "whatsapp": "Hola JF Motores, busco repuestos de: "
+  },
+  "account": {
+    "signIn": "Entrar",
+    "signUp": "Crear cuenta",
+    "myAccount": "Mi cuenta",
+    "signOut": "Cerrar sesión",
+    "email": "Correo",
+    "password": "Contraseña",
+    "passwordHint": "Mínimo 10 caracteres.",
+    "confirmPassword": "Repetir contraseña",
+    "fullName": "Nombre completo",
+    "phone": "WhatsApp / teléfono",
+    "phoneOptional": "(opcional)",
+    "country": "País",
+    "countryPlaceholder": "Elige tu país",
+    "acceptPrivacy1": "Autorizo el tratamiento de mis datos según la ",
+    "privacyLink": "política de tratamiento de datos",
+    "acceptPrivacy2": " de JF Motores.",
+    "marketingOptIn": "Quiero recibir novedades y ofertas.",
+    "signInTitle": "Entra a tu cuenta",
+    "signInSubtitle": "Consulta tus cotizaciones y los equipos que compraste.",
+    "noAccount": "¿No tienes cuenta?",
+    "createOne": "Créala aquí",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "signInHere": "Entra aquí",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "useLink": "Prefiero recibir un enlace al correo",
+    "usePassword": "Prefiero usar mi contraseña",
+    "sendLink": "Enviarme el enlace",
+    "signUpTitle": "Crea tu cuenta",
+    "signUpSubtitle": "Gratis. Te ayuda a cotizar más rápido y a hacer seguimiento de tus equipos.",
+    "benefits": [
+      "Historial de tus cotizaciones",
+      "Seguimiento de los equipos que compres",
+      "Tus datos ya guardados para cotizar más rápido"
+    ],
+    "checkEmailTitle": "Revisa tu correo",
+    "checkEmailSignup": "Te enviamos un enlace a {email} para confirmar tu cuenta.",
+    "checkEmailLink": "Te enviamos un enlace a {email} para entrar.",
+    "checkEmailReset": "Te enviamos un enlace a {email} para crear una nueva contraseña.",
+    "spamHint": "Puede tardar un minuto. Revisa también la carpeta de spam.",
+    "errors": {
+      "invalid": "Correo o contraseña incorrectos.",
+      "exists": "Ya existe una cuenta con ese correo. Entra o recupera tu contraseña.",
+      "weak": "La contraseña debe tener al menos 10 caracteres.",
+      "mismatch": "Las contraseñas no coinciden.",
+      "privacy": "Debes autorizar el tratamiento de datos para crear la cuenta.",
+      "rate": "Demasiados intentos. Espera unos minutos.",
+      "unconfirmed": "Confirma tu correo con el enlace que te enviamos antes de entrar.",
+      "generic": "Algo salió mal. Intenta de nuevo.",
+      "link": "El enlace venció o ya se usó. Pide uno nuevo."
+    },
+    "sending": "Enviando…",
+    "save": "Guardar cambios",
+    "saved": "Cambios guardados.",
+    "hello": "Hola",
+    "profileTitle": "Tus datos",
+    "passwordTitle": "Contraseña",
+    "newPassword": "Nueva contraseña",
+    "savePassword": "Guardar contraseña",
+    "passwordSaved": "Contraseña guardada.",
+    "equipmentTitle": "Mis equipos",
+    "equipmentEmpty": "Cuando compres un equipo JF lo registraremos aquí para que puedas hacerle seguimiento.",
+    "serial": "Serie",
+    "soldOn": "Comprado el",
+    "quotesTitle": "Mis cotizaciones",
+    "quotesEmpty": "Aún no tienes cotizaciones. Cuando cotices con tu sesión iniciada aparecerán aquí.",
+    "staffPanel": "Ir al panel de administración",
+    "forgotTitle": "Recuperar contraseña",
+    "forgotSubtitle": "Escribe tu correo y te enviaremos un enlace para crear una nueva.",
+    "newPasswordTitle": "Crea tu nueva contraseña",
+    "backToSignIn": "Volver a entrar",
+    "goToAccount": "Ir a mi cuenta",
+    "quoteStatus": {
+      "nuevo": "Nueva",
+      "contactado": "Contactado",
+      "cotizado": "Cotizada",
+      "vendido": "Comprada",
+      "perdido": "Cerrada"
+    },
+    "google": "Continuar con Google",
+    "or": "o con tu correo",
+    "googleLegal1": "Al continuar con Google autorizas el tratamiento de tus datos según la ",
+    "googleLegal2": ".",
+    "consentBanner": "Para usar tu cuenta, autoriza el tratamiento de tus datos según la ",
+    "consentAccept": "Autorizo",
+    "googleError": "No se pudo conectar con Google. Intenta de nuevo.",
+    "optional": "opcional",
+    "googleNoPassword": "Entras con Google: tu cuenta ya está lista y no necesitas contraseña.",
+    "optionalPassword": "Crear una contraseña (opcional, para entrar también con tu correo)",
+    "manual": "Guía de usuario (PDF)",
+    "viewProduct": "Ver ficha",
+    "warranty": "Garantía",
+    "warrantyFrom": "Desde",
+    "warrantyUntil": "Hasta",
+    "warrantyActive": "Vigente",
+    "warrantyExpired": "Vencida",
+    "noWarranty": "Sin garantía",
+    "daysLeft": "Quedan {n} días",
+    "requestPart": "Solicitar repuesto",
+    "requestPartWa": "Hola JF Motores, necesito un repuesto para mi {name}, serie {serial}.",
+    "appButton": "Administrar desde la app",
+    "appSoon": "En construcción",
+    "compatibleParts": "Repuestos compatibles con tu equipo",
+    "noCompatible": "Aún no hay repuestos publicados para este equipo. Pídelos por WhatsApp.",
+    "backToAccount": "Volver a mi cuenta",
+    "purchaseDate": "Fecha de compra",
+    "viewAllParts": "Ver todos los compatibles",
+    "open": "Abrir",
+    "notFoundUnit": "No encontramos ese equipo en tu cuenta."
+  },
+  "legal": {
+    "privacyTitle": "Política de tratamiento de datos personales",
+    "draftNotice": "Borrador pendiente de revisión jurídica y de los datos legales de la empresa.",
+    "pending": "[pendiente]",
+    "updated": "Última actualización: 31 de octubre de 2026",
+    "sections": [
+      {
+        "h": "1. Responsable",
+        "p": "JF Motores ({legalName}, NIT {nit}), con taller en {address}, es responsable del tratamiento de los datos personales recolectados en este sitio, conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013 de Colombia."
+      },
+      {
+        "h": "2. Datos que recolectamos",
+        "p": "Nombre, correo electrónico, teléfono o WhatsApp, país, y la información de las cotizaciones que solicitas (producto, fecha y canal). Si entras con Google, recibimos de Google solo tu nombre, correo y foto de perfil. El país se calcula de forma aproximada a partir de la conexión y puedes cambiarlo en Mi cuenta. También datos técnicos de navegación como idioma y dispositivo."
+      },
+      {
+        "h": "3. Para qué los usamos",
+        "p": "Atender tus cotizaciones y compras, darte acceso a tu cuenta, hacer seguimiento de los equipos que compres, mejorar el sitio y, solo si lo autorizas, enviarte novedades y ofertas."
+      },
+      {
+        "h": "4. Tus derechos",
+        "p": "Puedes conocer, actualizar, rectificar y solicitar la eliminación de tus datos, revocar esta autorización y presentar quejas ante la Superintendencia de Industria y Comercio. Puedes actualizar tus datos desde Mi cuenta."
+      },
+      {
+        "h": "5. Cómo ejercerlos",
+        "p": "Escríbenos por WhatsApp al {phone} indicando tu nombre, correo y la solicitud. Responderemos dentro de los plazos de ley (10 días hábiles para consultas y 15 para reclamos)."
+      },
+      {
+        "h": "6. Seguridad y conservación",
+        "p": "Tus datos se guardan en servidores con acceso restringido. Las contraseñas se almacenan cifradas y nadie puede verlas. Conservamos los datos mientras exista la relación comercial o lo exija la ley."
+      },
+      {
+        "h": "7. Cookies y medición",
+        "p": "Usamos cookies propias necesarias: sesión, idioma, preferencias y un identificador anónimo con el que registramos tus solicitudes de cotización por WhatsApp (producto, país aproximado, dispositivo y la campaña por la que llegaste). Solo si las aceptas en el aviso de cookies usamos Google Analytics 4 y el Píxel de Meta para medir visitas y el rendimiento de nuestros anuncios. Puedes cambiar tu decisión cuando quieras en «Preferencias de cookies», al pie de la página."
+      }
+    ],
+    "termsTitle": "Términos y condiciones",
+    "termsUpdated": "Última actualización: 1 de noviembre de 2026",
+    "terms": "Términos y condiciones",
+    "sic": "Superintendencia de Industria y Comercio",
+    "vatYes": "Los precios publicados incluyen IVA.",
+    "vatNo": "A los precios publicados se les suma el IVA.",
+    "vatUnknown": "El precio final con impuestos se confirma en la cotización escrita.",
+    "termsSections": [
+      {
+        "h": "1. Quién vende",
+        "p": "Este sitio lo opera {legalName} (nombre comercial JF Motores), NIT {nit}, con domicilio en {address}. Correo: {email}. WhatsApp y línea directa: {phone}."
+      },
+      {
+        "h": "2. Información de los productos",
+        "p": "Cada ficha muestra referencia, especificaciones, estado (disponible o vendido; en stock o sin stock) y garantía. Las fotos marcadas como «Imagen de referencia» son ilustrativas. Antes de comprar, un asesor confirma disponibilidad, especificaciones y compatibilidad para tu caso."
+      },
+      {
+        "h": "3. Precios",
+        "p": "Los precios están en pesos colombianos. {vat} El envío no está incluido y se cotiza aparte según el destino. Los precios publicados pueden cambiar; se respeta el precio de la cotización escrita durante su vigencia."
+      },
+      {
+        "h": "4. Cómo comprar y pagar",
+        "p": "La página no procesa pagos. La compra se acuerda con un asesor por WhatsApp o en nuestras sedes: recibes una cotización escrita con producto, precio, impuestos, envío, forma de pago y plazo de entrega. La compra queda en firme cuando aceptas la cotización y se registra el pago acordado. Cada venta queda registrada a tu nombre en Mi cuenta."
+      },
+      {
+        "h": "5. Envío y entrega",
+        "p": "El plazo de entrega y la transportadora se informan en la cotización. Al recibir, revisa el equipo antes de firmar la guía; si hay daños de transporte, déjalo anotado en la guía y escríbenos de inmediato."
+      },
+      {
+        "h": "6. Derecho de retracto",
+        "p": "Si compras a distancia (por WhatsApp, teléfono o la página, sin ir a una sede), puedes retractarte dentro de los 5 días hábiles siguientes a la entrega, según el artículo 47 de la Ley 1480 de 2011. Debes devolver el producto sin uso y en el mismo estado en que lo recibiste; el transporte de la devolución corre por tu cuenta. Te devolvemos el dinero, sin descuentos, en máximo 30 días calendario. No aplica a bienes fabricados o ajustados según tus especificaciones (por ejemplo, una motobomba armada a la medida de tu mina) ni a compras hechas en persona en nuestras sedes."
+      },
+      {
+        "h": "7. Garantía legal",
+        "p": "Todo producto nuevo tiene garantía legal de calidad, idoneidad y seguridad (Ley 1480 de 2011, artículos 7 y 8), aunque no se anuncie. El plazo es el que indica la ficha o la factura; si no se indica, es de un año para productos nuevos. Los productos usados o reconstruidos se identifican así en su ficha, con la garantía que se ofrece. La garantía no cubre daños por mal uso, falta del mantenimiento indicado en el manual, combustible contaminado, sobrecarga ni reparaciones hechas por terceros."
+      },
+      {
+        "h": "8. Cómo hacer efectiva la garantía",
+        "p": "Escríbenos con el número de serie (lo ves en Mi cuenta → Mis equipos) y fotos o video de la falla. Respondemos tu solicitud en máximo 15 días hábiles. Si procede, reparamos el equipo, lo cambiamos o te devolvemos el dinero, en los plazos que fija la ley."
+      },
+      {
+        "h": "9. Peticiones, quejas y reclamos",
+        "p": "Puedes presentarlos por WhatsApp al {phone}, al correo {email} o en nuestras sedes. Si no quedas conforme con la respuesta, puedes acudir a la Superintendencia de Industria y Comercio en www.sic.gov.co."
+      },
+      {
+        "h": "10. Datos personales y ley aplicable",
+        "p": "El tratamiento de tus datos se rige por nuestra Política de tratamiento de datos personales. Estos términos se rigen por las leyes de la República de Colombia."
+      }
+    ]
+  },
+  "catalog": {
+    "all": "Todos",
+    "available": "Disponibles",
+    "sold": "Vendidos",
+    "inStock": "En stock",
+    "outOfStock": "Sin stock",
+    "unavailable": "Vendidos o sin stock",
+    "search": "Buscar por nombre o referencia",
+    "category": "Categoría",
+    "allCategories": "Todas las categorías",
+    "compatibleWith": "Compatible con",
+    "anyModel": "Cualquier motor",
+    "sort": "Ordenar",
+    "sortNew": "Más recientes",
+    "sortPriceAsc": "Precio: menor a mayor",
+    "sortPriceDesc": "Precio: mayor a menor",
+    "sortHp": "Mayor potencia",
+    "results": "{n} resultados",
+    "empty": "No hay productos con esos filtros.",
+    "clear": "Quitar filtros",
+    "details": "Ver detalle",
+    "quote": "Cotizar",
+    "askPrice": "Consultar precio",
+    "statusAvailable": "Disponible",
+    "statusSold": "Vendido",
+    "statusInStock": "En stock",
+    "statusOutOfStock": "Sin stock",
+    "reference": "Imagen de referencia",
+    "ref": "REF",
+    "shippingNote": "El precio no incluye el envío. Cotiza el envío por WhatsApp.",
+    "specsTitle": "Especificaciones",
+    "descriptionTitle": "Descripción",
+    "compatTitle": "Compatible con",
+    "partsTitle": "Repuestos compatibles",
+    "engineModel": "Motor",
+    "view3d": "Ver en 3D",
+    "photos": "Fotos",
+    "close": "Cerrar",
+    "back": "Volver al catálogo",
+    "soldNotice": "Este equipo ya fue vendido. Escríbenos y te ofrecemos uno similar.",
+    "outOfStockNotice": "Este repuesto está sin stock por ahora. Escríbenos: te avisamos cuando llegue o te ofrecemos uno equivalente.",
+    "whatsapp": "Hola JF Motores, quiero cotizar: {name} (REF {ref}). {url}",
+    "whatsappSold": "Hola JF Motores, vi el {name} (REF {ref}) vendido. ¿Tienen uno similar? {url}",
+    "whatsappOutOfStock": "Hola JF Motores, el repuesto {name} (REF {ref}) aparece sin stock. ¿Cuándo llega o tienen uno equivalente? {url}",
+    "partCategoryIntro": "Repuestos de esta pieza del motor.",
+    "specs": {
+      "hp": "Potencia",
+      "succion_in": "Succión",
+      "descarga_in": "Descarga",
+      "caudal_lpm": "Caudal máximo",
+      "cabeza_m": "Cabeza máxima",
+      "rpm": "Régimen",
+      "arranque": "Arranque",
+      "peso_kg": "Peso",
+      "cilindros": "Cilindros",
+      "refrigeracion": "Refrigeración",
+      "material": "Material",
+      "filas": "Filas",
+      "diametro_mm": "Diámetro",
+      "diametro_in": "Diámetro",
+      "unidades": "Unidades",
+      "capacidad_l": "Capacidad",
+      "aspas": "Aspas",
+      "dientes": "Dientes",
+      "caras": "Caras",
+      "voltaje_v": "Voltaje",
+      "solidos_mm": "Paso de sólidos",
+      "cilindrada_l": "Cilindrada",
+      "aspiracion": "Aspiración",
+      "consumo_lh": "Consumo al 75 % de carga"
+    },
+    "featuredKicker": "Destacados",
+    "featuredTitle": "Equipos listos para entregar",
+    "manual": "Guía de usuario (PDF)",
+    "owned": "Tu equipo",
+    "ownedBanner": "Este equipo es tuyo.",
+    "ownedLink": "Ver en mis equipos",
+    "compatibleFor": "Compatibles con tu {name}",
+    "warrantyMonths": "Garantía de {n} meses",
+    "vatIncluded": "IVA incluido.",
+    "vatExcluded": "Precio + IVA."
+  },
+  "notFound": {
+    "title": "No encontramos esa página",
+    "text": "Puede que el producto ya no esté publicado. Mira el catálogo o escríbenos por WhatsApp.",
+    "home": "Ir al inicio"
+  },
+  "support": {
+    "title": "Soporte técnico",
+    "intro": "¿Tu equipo necesita ayuda? Te atendemos por WhatsApp con un técnico del taller.",
+    "waTech": "Hola JF Motores, necesito soporte técnico para mi equipo. Modelo: ___ Serie: ___ Problema: ___",
+    "cards": [
+      {
+        "h": "Soporte técnico",
+        "p": "Cuéntanos el modelo, el número de serie y qué está pasando. Si puedes, envía fotos o un video corto.",
+        "cta": "Elegir cómo escribir"
+      },
+      {
+        "h": "Pedir un repuesto",
+        "p": "Busca por pieza o por motor compatible. Si no lo encuentras, envíanos una foto de la placa del motor.",
+        "cta": "Ver repuestos"
+      },
+      {
+        "h": "Tus equipos",
+        "p": "Con tu cuenta ves los equipos que compraste y tus cotizaciones.",
+        "cta": "Ir a mi cuenta"
+      }
+    ],
+    "faqTitle": "Preguntas frecuentes",
+    "faq": [
+      {
+        "q": "¿Los precios incluyen el envío?",
+        "a": "No. El precio corresponde al artículo. El envío se cotiza aparte por WhatsApp según el destino; para envíos al exterior, el asesor te orienta sobre los trámites de importación."
+      },
+      {
+        "q": "¿Las fotos son del equipo exacto?",
+        "a": "Cuando una foto dice “Imagen de referencia”, muestra un equipo igual o similar. Si necesitas fotos del equipo exacto, pídelas por WhatsApp."
+      },
+      {
+        "q": "¿Cómo sé si un repuesto le sirve a mi motor?",
+        "a": "Cada repuesto indica con qué motores y equipos es compatible. Si tienes dudas, envíanos el modelo y una foto de la placa del motor y te confirmamos."
+      },
+      {
+        "q": "¿Necesito una cuenta para comprar?",
+        "a": "Para comprar una motobomba sí: así registramos el equipo a tu nombre y puedes hacerle seguimiento. Para cotizar no necesitas cuenta."
+      }
+    ],
+    "techOptions": {
+      "whatsapp": "Por WhatsApp",
+      "whatsappDesc": "Respuesta rápida con un técnico del taller",
+      "email": "Por correo",
+      "emailDesc": "Escribe a {email}: ideal para fotos, documentos y seguimiento por escrito"
+    }
+  },
+  "guides": {
+    "title": "Guías",
+    "intro": "Guías prácticas para elegir, cuidar y reparar tus equipos. Son orientación general: sigue siempre el manual del fabricante de tu equipo.",
+    "tabs": {
+      "official": "Guías oficiales",
+      "ours": "Nuestras guías",
+      "videos": "Videos"
+    },
+    "items": [
+      {
+        "id": "elegir-motobomba",
+        "h": "Cómo elegir una motobomba",
+        "steps": [
+          "Caudal: cuánta agua o lodo necesitas mover, en litros por minuto. Calcúlalo con el volumen a desaguar y el tiempo disponible.",
+          "Altura total: suma la altura de succión (del agua a la bomba), la altura de descarga (de la bomba al punto de salida) y las pérdidas de la manguera, que crecen con el largo y las curvas.",
+          "Qué vas a bombear: para lodo o agua con arena elige una bomba para sólidos, con impulsor resistente a la abrasión.",
+          "Diámetro de succión y descarga: debe coincidir con tus mangueras; una manguera más angosta reduce el caudal.",
+          "Altitud: los motores diésel pierden potencia a mayor altura. Para trabajo en alta montaña consulta un motor turboalimentado.",
+          "Con esos datos (caudal, altura y tipo de fluido) escríbenos y te recomendamos el equipo."
+        ]
+      },
+      {
+        "id": "mantenimiento",
+        "h": "Mantenimiento básico de un motor diésel",
+        "steps": [
+          "Antes de arrancar: revisa el nivel de aceite y de refrigerante, y que no haya fugas.",
+          "Filtro de aire: en minería hay mucho polvo; revísalo y límpialo con frecuencia. Un filtro tapado reduce potencia y desgasta el motor.",
+          "Combustible limpio: drena el agua del filtro separador y guarda el diésel en recipientes limpios y tapados.",
+          "Radiador: mantén limpias las aletas y revisa las mangueras y la correa del ventilador.",
+          "Cambios de aceite y filtros: hazlos según las horas del horómetro que indique el manual, no solo por fechas.",
+          "Si notas humo anormal, pérdida de fuerza, golpeteo o sobrecalentamiento, detén el equipo y consúltanos."
+        ]
+      },
+      {
+        "id": "pedir-repuesto",
+        "h": "Cómo pedir el repuesto correcto",
+        "steps": [
+          "Toma una foto de la placa del motor o del equipo: allí está el modelo y el número de serie.",
+          "Toma fotos de la pieza dañada desde varios ángulos, con una regla o un metro al lado para ver el tamaño.",
+          "Si puedes, anota medidas clave: diámetro, número de dientes, tipo de rosca o largo.",
+          "Busca en el catálogo de repuestos filtrando por tu motor, o envíanos todo por WhatsApp y te confirmamos la pieza."
+        ]
+      }
+    ],
+    "cta": "¿Tienes dudas? Escríbenos",
+    "waGuide": "Hola JF Motores, leí la guía y tengo una pregunta: ",
+    "library": {
+      "kicker": "Biblioteca técnica gratuita",
+      "title": "Cursos y guías oficiales para cuidar tu motobomba",
+      "intro": "10 cursos y guías de entidades públicas (SENA, Agencia Nacional de Minería y autoridades de seguridad minera), seleccionados por nuestro taller. Gratis para clientes registrados.",
+      "loginNote": "Inicia sesión o crea tu cuenta gratis para abrirlos.",
+      "open": "Abrir PDF",
+      "openOfficial": "Ver en el sitio oficial",
+      "hosted": "Documento público",
+      "official": "Se abre en el sitio oficial de la entidad",
+      "langEn": "En inglés",
+      "langEs": "En español",
+      "groups": {
+        "motor": "Motor diésel",
+        "bombas": "Bombas",
+        "mantenimiento": "Mantenimiento",
+        "seguridad": "Seguridad en minería"
+      },
+      "criteriaTitle": "Antes de pedir un repuesto",
+      "criteria": "No compres filtros, sellos, impulsores, rodamientos ni correas solo por su apariencia. Anota marca, modelo y número de serie del motor y de la bomba, el código del repuesto y las horas de trabajo.",
+      "items": {
+        "sena-motor-diesel": {
+          "h": "Funcionamiento del motor diésel",
+          "p": "Ciclo de trabajo, admisión, combustible, escape, lubricación y refrigeración."
+        },
+        "sena-bombas-centrifugas": {
+          "h": "Mantenimiento de bombas centrífugas",
+          "p": "Fallas, cebado, arranque y parada, alineación, empaques, sellos, cojinetes y cavitación."
+        },
+        "sena-alimentacion-combustible": {
+          "h": "Revisión del sistema de alimentación de combustible",
+          "p": "Recorrido del combustible, bomba de alimentación, fallas comunes y cambio de filtro."
+        },
+        "sena-mantenimiento-motor": {
+          "h": "Mantenimiento preventivo del motor",
+          "p": "Cómo programarlo: niveles de mantenimiento, hojas de registro y control."
+        },
+        "sena-filtros-aceite": {
+          "h": "Cambio de filtros de aceite",
+          "p": "Cuándo cambiarlos y el paso a paso para hacerlo bien."
+        },
+        "sena-talleres-diesel": {
+          "h": "Mantenimiento preventivo en talleres diésel",
+          "p": "Organización y control del mantenimiento de máquinas y equipos."
+        },
+        "sena-reparador-diesel": {
+          "h": "Curso de mecánico reparador de motores diésel",
+          "p": "Material extenso para profundizar en reparación y mantenimiento (unidades 9 a 16)."
+        },
+        "anm-metano": {
+          "h": "ANM — prevención de explosiones por metano y polvo de carbón",
+          "p": "Guía de seguridad para minas subterráneas de carbón en Colombia."
+        },
+        "msha-toolbox": {
+          "h": "MSHA — cómo reducir el escape diésel en minería",
+          "p": "Mantenimiento de admisión, refrigeración, lubricación, inyección y escape para bajar emisiones."
+        },
+        "wa-diesel-subterraneo": {
+          "h": "Australia Occidental — equipos diésel en minería subterránea",
+          "p": "Compra, operación y mantenimiento de equipos con motor diésel bajo tierra."
+        }
+      },
+      "langTitle": {
+        "es": "En español",
+        "en": "En inglés"
+      }
+    },
+    "videos": {
+      "title": "Videos de mantenimiento",
+      "intro": "Tutoriales en español sobre motor diésel, motobombas y filtros, seleccionados por nuestro taller.",
+      "play": "Ver video",
+      "openSite": "Ver en el sitio oficial",
+      "modes": {
+        "label": "Tamaño del video",
+        "normal": "Normal",
+        "large": "Ampliado",
+        "cinema": "Modo cine",
+        "fullscreen": "Pantalla completa",
+        "close": "Cerrar"
+      },
+      "note": "Los videos pertenecen a sus autores y se reproducen desde YouTube.",
+      "items": {
+        "diesel-cuatro-tiempos": {
+          "h": "Motor diésel: ciclo de cuatro tiempos"
+        },
+        "diesel-lubricacion": {
+          "h": "Funcionamiento del motor diésel y su sistema de lubricación"
+        },
+        "bomba-centrifuga-motor": {
+          "h": "Cómo funciona una bomba centrífuga acoplada a un motor"
+        },
+        "sello-mecanico": {
+          "h": "Reparación y prueba del sello mecánico"
+        },
+        "motobomba-preventivo": {
+          "h": "Mantenimiento preventivo de una motobomba"
+        },
+        "motobomba-guia-rapida": {
+          "h": "Guía rápida de mantenimiento preventivo de motobomba"
+        },
+        "filtro-combustible": {
+          "h": "Cambio del filtro de combustible en maquinaria pesada"
+        },
+        "filtros-diesel": {
+          "h": "Mantenimiento y cambio de filtros de motores diésel"
+        }
+      }
+    }
+  },
+  "app": {
+    "kicker": "Próximamente",
+    "title": "JF Monitor",
+    "subtitle": "Tus motobombas en el bolsillo, en tiempo real.",
+    "badge": "En construcción",
+    "intro": "Estamos desarrollando una app para ver desde el celular cómo trabajan tus equipos JF, con la misma cuenta que usas en esta página.",
+    "scroll": "Desliza para ver cómo funcionará",
+    "phases": [
+      {
+        "h": "Todo en orden",
+        "p": "Caudal, presión y temperatura de cada equipo, desde la bocamina o desde la ciudad."
+      },
+      {
+        "h": "Algo empieza a cambiar",
+        "p": "La app vigila las tendencias: si la presión cae o la temperatura sube, lo ves antes de que sea un problema."
+      },
+      {
+        "h": "Alerta al instante",
+        "p": "Una notificación te avisa con el equipo, el valor y qué revisar primero."
+      },
+      {
+        "h": "También por WhatsApp",
+        "p": "El aviso llega al WhatsApp de los responsables, aunque no tengan la app abierta."
+      },
+      {
+        "h": "Lo controlas a distancia",
+        "p": "Bajas las revoluciones o detienes la motobomba desde el celular, sin ir hasta el frente."
+      },
+      {
+        "h": "De vuelta a la normalidad",
+        "p": "Confirmas en segundos que todo volvió a su rango y queda registrado en el historial."
+      }
+    ],
+    "screen": {
+      "flow": "Caudal",
+      "pressure": "Presión",
+      "temp": "Temperatura",
+      "hours": "Horómetro",
+      "normal": "Normal",
+      "warning": "Revisar",
+      "alert": "Alerta",
+      "recovered": "Normalizado",
+      "notifTitle": "Alerta · Temperatura alta",
+      "notifBody": "104 °C · revisa radiador y nivel de refrigerante",
+      "live": "En vivo",
+      "waApp": "WhatsApp",
+      "waFrom": "JF Monitor",
+      "waTime": "ahora",
+      "waMsg": "⚠ Cóndor 40 #0042 · Temperatura 104 °C. Revisa radiador y refrigerante.",
+      "waOpen": "Abrir en la app",
+      "rpm": "Régimen",
+      "control": "Control remoto",
+      "sent": "Orden confirmada por el equipo",
+      "adjusting": "Ajustando",
+      "oil": "Aceite",
+      "discharge": "Descarga",
+      "turnOn": "Encender",
+      "turnOff": "Apagar",
+      "off": "Apagada",
+      "starting": "Arrancando",
+      "tryHint": "Pruébalo: enciende, apaga o mueve las rpm",
+      "manual": "Modo prueba: sigue bajando para volver a la simulación"
+    },
+    "featuresTitle": "Lo que estamos construyendo",
+    "features": [
+      {
+        "h": "Tiempo real",
+        "p": "Lecturas de sensores instalados en la motobomba, enviadas por red celular, LoRa o satélite según el sitio."
+      },
+      {
+        "h": "Alertas",
+        "p": "Avisos al celular cuando un valor sale de su rango: temperatura, presión, caudal o paro del equipo."
+      },
+      {
+        "h": "Control remoto",
+        "p": "Enciende, apaga, acelera o desacelera el motor desde el celular, con confirmación y registro de quién lo hizo."
+      },
+      {
+        "h": "Historial",
+        "p": "Gráficas por día y por turno para entender el rendimiento y planear el mantenimiento."
+      },
+      {
+        "h": "Mantenimiento por horas",
+        "p": "Recordatorios según el horómetro real: cambio de aceite, filtros y revisiones."
+      },
+      {
+        "h": "Todos tus equipos",
+        "p": "Varios frentes y varias motobombas en una sola pantalla, solo para ti y para JF Motores."
+      },
+      {
+        "h": "Tu misma cuenta",
+        "p": "Entras con el mismo correo o con Google; tus equipos comprados aparecen solos."
+      }
+    ],
+    "disclaimer": "La app está en desarrollo. Las funciones y la fecha de lanzamiento pueden cambiar; las imágenes son una simulación.",
+    "cta": "Quiero enterarme cuando esté lista",
+    "wa": "Hola JF Motores, quiero enterarme cuando esté lista la app de monitoreo JF Monitor.",
+    "back": "Volver",
+    "plansTitle": "Planes previstos",
+    "plansIntro": "Tres niveles según lo que necesitas ver. Los precios se definirán al lanzar: dependen de la conexión disponible en tu sitio (celular o satelital).",
+    "recommended": "Recomendado",
+    "includesPrev": "Incluye todo lo de {plan}:",
+    "plusTitle": "Y además:",
+    "plans": [
+      {
+        "name": "Esencial",
+        "tag": "Telemetría",
+        "items": [
+          "Horas de trabajo, temperatura, presión y caudal",
+          "Alertas al celular cuando algo sale de rango",
+          "Ubicación del equipo e historial por turno",
+          "Recordatorios de mantenimiento por horómetro"
+        ],
+        "needs": "Conexión celular; satelital opcional para zonas sin señal."
+      },
+      {
+        "name": "Visión",
+        "tag": "Cámara en vivo",
+        "items": [
+          "Cámara industrial a prueba de agua y polvo",
+          "Video en vivo a 30 cuadros por segundo cuando abres la app",
+          "Control remoto: encender, apagar y ajustar la velocidad",
+          "Grabación continua en el equipo para revisar después",
+          "Clip de video adjunto a cada alerta",
+          "Visión nocturna"
+        ],
+        "needs": "Requiere buena señal 4G o una antena satelital en el sitio."
+      },
+      {
+        "name": "Visión Pro",
+        "tag": "En vivo 24/7",
+        "items": [
+          "Video en vivo y grabación en la nube las 24 horas",
+          "Varias cámaras, incluida una térmica para detectar recalentamiento",
+          "Cámaras con IA que detectan anomalías: humo, fugas, chispas o personas cerca del equipo",
+          "Asistencia de un técnico de JF viendo el mismo video"
+        ],
+        "needs": "Requiere conexión satelital ilimitada y energía permanente (solar o red)."
+      }
+    ],
+    "plansNote": "Las cámaras están pensadas para equipos en superficie (tajo abierto, bocamina, dragas); dentro del socavón se estudia cada caso. Se instalan con aviso de zona videovigilada, como exige la ley de datos personales.",
+    "extrasTitle": "Extras para cualquier plan",
+    "extrasIntro": "Funcionará como en los equipos de bombeo profesionales: un plan base necesario y extras que agregas según tu operación.",
+    "extras": [
+      {
+        "h": "Alarmas por WhatsApp",
+        "p": "Si algo sale de rango, el aviso llega al WhatsApp de cada responsable con el equipo, el valor y qué revisar."
+      },
+      {
+        "h": "Conexión satelital",
+        "p": "Para sitios sin señal de celular: los datos y las alertas llegan por satélite."
+      },
+      {
+        "h": "Datos avanzados",
+        "p": "Historial detallado con más lecturas por minuto y reportes descargables por turno o por mes."
+      }
+    ],
+    "extrasNote": "El plan Esencial es la base: los extras y los planes con cámara se suman sobre él. El control remoto viene incluido desde el plan Visión."
+  },
+  "appForm": {
+    "title": "Quiero enterarme",
+    "intro": "Déjanos tus datos y te avisamos primero cuando JF Monitor esté listo. Las preguntas opcionales nos ayudan a construir la app que de verdad necesitas.",
+    "needLogin": "Para anotarte necesitas tu cuenta de JF Motores: así, cuando la app esté lista, tus equipos aparecerán solos.",
+    "signIn": "Entrar",
+    "signUp": "Crear cuenta",
+    "required": "Tus datos",
+    "optional": "Preguntas opcionales",
+    "name": "Nombre completo",
+    "phone": "Celular / WhatsApp",
+    "country": "País",
+    "company": "Empresa o mina (opcional)",
+    "role": "¿Cuál es tu rol?",
+    "roles": {
+      "dueno": "Dueño",
+      "administrador": "Administrador de mina",
+      "operador": "Operador",
+      "tecnico": "Técnico / mecánico",
+      "otro": "Otro"
+    },
+    "units": "¿Cuántas motobombas operas?",
+    "siteType": "¿Dónde trabajan tus equipos? (puedes elegir varios)",
+    "sites": {
+      "tajo": "Tajo abierto",
+      "socavon": "Socavón",
+      "draga": "Draga o río",
+      "otro": "Otro"
+    },
+    "signal": "¿Hay señal de celular donde están las bombas?",
+    "signals": {
+      "buena": "Sí, buena",
+      "debil": "Débil o a ratos",
+      "ninguna": "No hay señal",
+      "no_se": "No sé"
+    },
+    "plan": "¿Qué plan te interesa más?",
+    "plans": {
+      "esencial": "Esencial (datos y alertas)",
+      "vision": "Visión (cámara en vivo)",
+      "vision_pro": "Visión Pro (24/7)",
+      "no_se": "Aún no sé"
+    },
+    "priorities": "¿Qué te gustaría ver primero? (elige las que quieras)",
+    "prio": {
+      "video": "Video en vivo",
+      "alertas": "Alertas al celular",
+      "control": "Encender y apagar a distancia",
+      "combustible": "Nivel de combustible",
+      "mantenimiento": "Recordatorios de mantenimiento",
+      "termica": "Cámara térmica",
+      "seguridad": "Aviso de personas cerca del equipo"
+    },
+    "visits": "¿Cuántas veces al mes vas al sitio solo para revisar las bombas?",
+    "budget": "¿Cuánto pagarías al mes por equipo con cámara en vivo?",
+    "budgets": {
+      "lt100": "Menos de $100.000",
+      "100-250": "$100.000 – $250.000",
+      "250-500": "$250.000 – $500.000",
+      "gt500": "Más de $500.000",
+      "no_se": "No sé"
+    },
+    "comments": "¿Algo más que quieras contarnos?",
+    "contactOk": "Acepto que JF Motores me contacte por WhatsApp o correo sobre la app.",
+    "submit": "Anotarme",
+    "update": "Actualizar mis datos",
+    "saving": "Guardando…",
+    "saved": "¡Listo! Quedaste en la lista. Te avisaremos cuando JF Monitor esté listo.",
+    "updatedOk": "Tus respuestas se actualizaron.",
+    "already": "Ya estás en la lista. Puedes actualizar tus respuestas cuando quieras.",
+    "error": "No se pudo guardar. Revisa los datos e intenta de nuevo.",
+    "phoneError": "Escribe un número de celular válido.",
+    "privacy": "Usamos estos datos solo para la app y según nuestra política de datos.",
+    "select": "Elige una opción"
+  },
+  "assistant": {
+    "fab": "Soporte",
+    "fabClose": "Cerrar soporte",
+    "whatsapp": "WhatsApp",
+    "whatsappDesc": "Habla con un asesor",
+    "ai": "Chat con IA",
+    "aiDesc": "Respuestas al instante, 24/7",
+    "title": "Asistente JF",
+    "badge": "IA",
+    "notice": "Responde solo con la información oficial de JF Motores y puede equivocarse. Para cotizar o comprar, escríbenos por WhatsApp. No compartas datos personales.",
+    "placeholder": "Escribe tu pregunta…",
+    "send": "Enviar",
+    "thinking": "Buscando en nuestra información…",
+    "close": "Cerrar chat",
+    "welcome": "Hola, soy el asesor virtual de JF Motores. Te ayudo a elegir tu motobomba, encontrar el repuesto exacto para tu motor, resolver una falla o entender cómo comprar en la página.",
+    "suggestions": [
+      "¿Qué motobomba necesito para mi mina?",
+      "Busco un repuesto para mi motor",
+      "Mi motobomba no ceba, ¿qué reviso?",
+      "¿Cómo compro en la página?"
+    ],
+    "noInfo": "No tengo ese dato en nuestra información oficial. Un asesor te responde por WhatsApp.",
+    "limit": "Enviaste muchas preguntas seguidas. Espera unos minutos o escríbenos por WhatsApp.",
+    "unavailable": "El asistente no está disponible ahora. Escríbenos por WhatsApp.",
+    "disabled": "El chat con IA está apagado. Escríbenos por WhatsApp.",
+    "toWhatsapp": "Seguir por WhatsApp",
+    "waMessage": "Hola JF Motores, vengo del chat de su página web y quiero hablar con un asesor.",
+    "handoff": "Un asesor te confirma esto por WhatsApp; ya le dejo el resumen de lo que hablamos.",
+    "waSummary": "Resumen del chat: ",
+    "toAdvisor": "Hablar con un asesor",
+    "loginTitle": "Inicia sesión para usar el asistente",
+    "loginText": "El asistente técnico es gratis para clientes registrados. Si ya compraste con nosotros, tienes más consultas al mes.",
+    "login": "Entrar",
+    "register": "Crear cuenta",
+    "quota": "Usaste tus consultas de IA de este mes. Un asesor te atiende por WhatsApp; las consultas se renuevan cada mes y aumentan con tus compras.",
+    "low": "Te queda el {n} % de tus consultas del mes.",
+    "telegramPrivate": "Este bot es privado. Tu ID de chat es {id}: pide que lo autoricen."
+  },
+  "tickets": {
+    "option": "Abrir ticket",
+    "optionDesc": "Escríbenos con fotos y te respondemos aquí",
+    "title": "Tickets de soporte",
+    "subtitle": "Te responde el equipo de JF Motores",
+    "myTickets": "Mis tickets",
+    "newTicket": "Nuevo ticket",
+    "empty": "Aún no tienes tickets. Cuéntanos qué necesitas y adjunta fotos si puedes.",
+    "subject": "Asunto",
+    "subjectPh": "Ej.: la motobomba no ceba",
+    "message": "Mensaje",
+    "messagePh": "Equipo, modelo y qué está pasando. Puedes adjuntar fotos.",
+    "create": "Enviar ticket",
+    "creating": "Enviando…",
+    "back": "← Mis tickets",
+    "close": "Cerrar ticket",
+    "status": {
+      "abierto": "Abierto",
+      "respondido": "Respondido",
+      "cerrado": "Cerrado"
+    },
+    "newReply": "Respuesta nueva",
+    "loginTitle": "Inicia sesión para abrir un ticket",
+    "loginText": "Así guardamos la conversación y te avisamos por correo cuando respondamos.",
+    "login": "Entrar",
+    "signup": "Crear cuenta",
+    "photosHint": "Hasta 4 fotos por mensaje.",
+    "dragHint": "Mantén presionado y arrastra para moverlo",
+    "thread": {
+      "you": "Tú",
+      "team": "JF Motores",
+      "customer": "Cliente",
+      "placeholder": "Escribe tu mensaje…",
+      "send": "Enviar",
+      "attach": "Adjuntar fotos",
+      "sending": "Enviando…",
+      "closed": "Ticket cerrado.",
+      "reopenHint": "Este ticket está cerrado. Si escribes, se vuelve a abrir.",
+      "error": "No se pudo enviar. Intenta de nuevo.",
+      "photo": "Ver foto"
+    }
+  },
+  "consent": {
+    "text": "Usamos cookies necesarias para que el sitio funcione y, si aceptas, cookies de medición (Google Analytics y Píxel de Meta) para saber qué anuncios y productos interesan.",
+    "accept": "Aceptar todas",
+    "necessary": "Solo necesarias",
+    "policy": "Política de datos",
+    "settings": "Preferencias de cookies"
+  },
+  "trust": {
+    "kicker": "Confianza",
+    "title": "Lo que dicen quienes ya trabajan con JF",
+    "years": "años en el mercado",
+    "equipos": "equipos entregados",
+    "clientes": "clientes atendidos",
+    "municipios": "municipios atendidos"
+  },
+  "partsInfo": {
+    "chasis": "Chasis de canal y marco de protección con orejas de izaje: sostienen el equipo y permiten moverlo con grúa.",
+    "luz": "Sistema eléctrico e iluminación del equipo.",
+    "bloque": "Bloque del motor: aloja los cilindros, el cigüeñal y el árbol de levas, y tiene los conductos de agua y aceite.",
+    "camisas": "Camisas de cilindro: el pistón sube y baja dentro de ellas. Se cambian cuando hay desgaste u ovalamiento y el motor pierde compresión.",
+    "pistones": "Pistones con sus anillos y bielas: reciben la combustión y la convierten en movimiento del cigüeñal.",
+    "culata": "Culata y tapas de balancines: cierran los cilindros por arriba y alojan válvulas e inyectores. El empaque de culata sella la combustión.",
+    "escape": "Múltiple, silenciador y cuello de ganso: sacan los gases del motor y evitan que entre agua por la salida.",
+    "tanque": "Tanque diésel en la base del chasis, con su tapa. Mantenerlo limpio evita fallas en la inyección.",
+    "radiador": "Radiador con tanque de expansión y tapa de presión: enfría el agua del motor. Un panal tapado recalienta el equipo.",
+    "ventilador": "Ventilador: mueve aire por el radiador para enfriar el motor. Va en el eje de la bomba de agua.",
+    "volante": "Volante del cigüeñal: guarda inercia para que el motor gire parejo y transmite la fuerza al acople de la bomba.",
+    "bomba": "Bomba centrífuga de succión axial: el impulsor gira con el motor y empuja el agua por la descarga vertical. Su voluta, sellos y rodamientos definen el caudal y la altura.",
+    "tablero": "Tablero con relojes de rpm, temperatura y presión de aceite y llave de encendido: muestra la salud del motor en el turno.",
+    "acople": "Acople flexible entre el volante del motor y el eje de la bomba, con su guarda de protección. Absorbe vibraciones y pequeñas desalineaciones.",
+    "admision": "Filtro de aire, manguera y múltiple de admisión: llevan aire limpio al motor. Un filtro sucio sube el consumo y el humo.",
+    "mangueras": "Mangueras de refrigeración con sus abrazaderas: llevan el agua entre el motor y el radiador.",
+    "arranque": "Motor de arranque: hace girar el motor al encenderlo. Revisa batería, solenoide y piñón si arranca con dificultad.",
+    "inyeccion": "Bomba de inyección, cañerías, inyectores y acelerador: dosifican el diésel a alta presión en cada cilindro.",
+    "carter": "Cárter: guarda el aceite del motor. Incluye el tapón de drenaje y su empaque.",
+    "soportes": "Soportes del motor: lo fijan al chasis y absorben la vibración para cuidar el acople y la bomba.",
+    "ciguenal": "Cigüeñal con contrapesos: convierte el sube y baja de los pistones en giro. Va apoyado en cojinetes de bancada.",
+    "distribucion": "Distribución por engranajes: el cigüeñal mueve el árbol de levas y la bomba de inyección a media velocidad, siempre sincronizados.",
+    "valvulas": "Válvulas de admisión y escape con resortes, varillas y balancines: dejan entrar aire y salir gases en el momento justo.",
+    "alternador": "Alternador y correa: cargan la batería y alimentan el tablero mientras el motor trabaja."
+  },
+  "mail": {
+    "gmail": "Abrir en Gmail",
+    "outlook": "Abrir en Outlook",
+    "app": "Mi app de correo",
+    "copy": "Copiar correo",
+    "copied": "Correo copiado ✓",
+    "subject": "Consulta a JF Motores",
+    "choose": "Elige cómo escribir"
+  },
+  "branches": {
+    "title": "Nuestras sedes",
+    "intro": "Visítanos en nuestros talleres y puntos de atención. Elige una sede para ver su ubicación en Google Maps, horarios, fotos y hablar directamente con sus asesores.",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "hours": "Horario",
+    "directions": "Cómo llegar",
+    "openMaps": "Abrir en Google Maps",
+    "photos": "Fotos de la sede",
+    "noPhotos": "Pronto publicaremos fotos de esta sede.",
+    "advisors": "Asesores en {city}",
+    "noAdvisors": "Escríbenos por WhatsApp y te comunicamos con el equipo de esta sede.",
+    "whatsapp": "WhatsApp",
+    "call": "Llamar",
+    "email": "Correo",
+    "waMessage": "Hola {name}, te escribo desde la página de JF Motores (sede {city}).",
+    "mapTitle": "Mapa de {name}"
+  }
+}
