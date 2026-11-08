@@ -27,7 +27,7 @@ El sitio ya hace solo lo demás:
 1. Entra a [business.facebook.com](https://business.facebook.com) con la cuenta de la empresa y crea el **portafolio comercial** si no existe.
 2. Abre el **Administrador de eventos** → **Conectar orígenes de datos** → **Web** → ponle nombre (p. ej. «JF Motores web») → elige **instalar el código manualmente** y cierra la ventana del código (no hace falta: el sitio ya lo trae).
 3. Copia el **identificador del píxel** (solo números) y pégalo en el panel, campo «Píxel de Meta».
-4. En el mismo Administrador de eventos, **verifica el dominio** cuando te lo pida (Configuración del negocio → Seguridad de la marca → Dominios). Para eso Meta pide un registro DNS. Pásale el texto a Claude y lo agrega en el dominio.
+4. **Verifica el dominio** en Meta: Configuración del negocio → Seguridad de la marca → Dominios → agregar `jfmotoresmedellin.com` → opción **Etiqueta meta**. Copia la etiqueta completa, pégala en el panel en «Meta (verificación del dominio)», guarda y vuelve a Meta a tocar **Verificar**.
 5. En la campaña, elige como objetivo **Clientes potenciales** o **Ventas** con el evento **Lead**.
 
 ### 1.2 Google Analytics 4
@@ -73,6 +73,16 @@ https://<dominio>/es/motobombas?utm_source=instagram&utm_medium=pago&utm_campaig
 - `utm_source`: la red (instagram, facebook, google, tiktok).
 - `utm_campaign`: el nombre de la campaña, sin espacios ni tildes.
 - Meta, Google y TikTok además agregan solos su identificador de clic. Aunque se te olvide la etiqueta, el panel muestra al menos de qué red vino.
+
+---
+
+### 1.7 Google Search Console (gratis)
+
+1. Entra a [search.google.com/search-console](https://search.google.com/search-console) con la cuenta de Google de la empresa → **Agregar propiedad** → **Prefijo de la URL** → `https://jfmotoresmedellin.com`.
+2. Elige el método **Etiqueta HTML**, copia la etiqueta completa y pégala en el panel en «Google Search Console (código de verificación)». Guarda y vuelve a tocar **Verificar**.
+3. En Search Console → **Sitemaps** → escribe `sitemap.xml` → **Enviar**.
+
+Si inicias sesión con esa cuenta en el navegador de Claude, él puede hacer estos pasos por ti.
 
 ---
 
