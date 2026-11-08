@@ -24,7 +24,7 @@ separados), ordenar cuentas y ramas, y herramientas para vender más.
 | # | Tarea | Quién | Estado |
 |---|---|---|---|
 | 1.1 | Endpoint `/api/health` (responde 200 si el sitio y la base de datos funcionan) para el monitor | Claude | ✅ |
-| 1.2 | Monitor de caídas: **Better Stack** o **UptimeRobot** (gratis) vigilando `https://jfmotoresmedellin.com/api/health` cada 3–5 min, aviso al correo/app de jfmotoresm@gmail.com | Dueño (Claude guía) | ⏳ |
+| 1.2 | Monitor de caídas: **Better Stack** o **UptimeRobot** (gratis) vigilando `https://jfmotoresmedellin.com/api/health` cada 3–5 min, aviso al correo/app de jfmotoresm@gmail.com | Dueño (Claude guía) | ✅ UptimeRobot activo |
 | 1.3 | **Verificación en dos pasos (2FA)** + método de respaldo en: GitHub, Vercel, Supabase, Resend, Hostinger, Cloudflare, Google (jfmotoresm@gmail.com), DeepSeek, Tavily | Dueño | ⏳ |
 | 1.4 | Gestor de contraseñas (**Bitwarden**, gratis) con todas las cuentas y claves; nunca en chats ni archivos sueltos | Dueño | ⏳ |
 | 1.5 | Contraseñas más fuertes en Supabase → Auth → Providers → Email: mínimo 10 caracteres, letras y dígitos (gratis) | Dueño | ⏳ |
@@ -33,6 +33,10 @@ separados), ordenar cuentas y ramas, y herramientas para vender más.
 
 Nota de la auditoría corregida: `SUPABASE_SECRET_KEY` **no es necesaria hoy** (la función
 `createSupabaseAdminClient` existe pero no se usa en ningún lado).
+
+## Extra ya hecho
+
+- ✅ Admin → **Tecnologías** (`/admin/tecnologias`): enlaces, descripción y estado en vivo de cada plataforma.
 
 ## Fase 2 — Planes pagos y cuentas de la empresa (jfmotoresm@gmail.com)
 
