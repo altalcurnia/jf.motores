@@ -12,6 +12,12 @@ vi.mock("@/lib/supabase/server", () => ({
   createSupabaseServerClient: mocks.createSupabaseServerClient,
 }));
 
+// after() solo existe dentro de una petición real: aquí se ejecuta en el acto
+const afterMock = vi.hoisted(() => vi.fn((cb: () => unknown) => void cb()));
+vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/server")>()), after: afterMock }));
+const notifyMock = vi.hoisted(() => vi.fn(() => Promise.resolve()));
+vi.mock("@/features/leads/notify", () => ({ notifyTeamLead: notifyMock }));
+
 vi.mock("@/lib/supabase/public", () => ({
   getContact: mocks.getContact,
 }));
@@ -49,6 +55,7 @@ describe("GET /api/wa", () => {
     expect(destination.pathname).toBe("/573111222333");
     expect(destination.searchParams.get("text")).toBe("Hola REF JF-M25\n\nCódigo de cotización: COT-2026-001");
     expect(response.cookies.get("jf_vid")?.value).toMatch(/^[0-9a-f-]{36}$/i);
+    expect(notifyMock).toHaveBeenCalledWith(expect.objectContaining({ code: "COT-2026-001", source: "ficha", device: "mobile" }));
     expect(mocks.rpc).toHaveBeenCalledOnce();
     expect(mocks.rpc).toHaveBeenCalledWith(
       "lead_create",

@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
+import { notifyTeamLead } from "@/features/leads/notify";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getContact } from "@/lib/supabase/public";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
@@ -80,6 +81,17 @@ export async function GET(request: NextRequest) {
     const r = data as { phone?: string; code?: string } | null;
     if (r?.phone) phone = r.phone;
     if (r?.code) text = `${text}\n\n${CODE_LABEL[locale]}: ${r.code}`;
+    // Aviso al equipo por Telegram después de responder (no demora la apertura de WhatsApp)
+    after(() =>
+      notifyTeamLead({
+        code: r?.code ?? null,
+        source,
+        message,
+        country: args.p_country,
+        device: args.p_device,
+        campaign: utm.utm_campaign ?? (utm.fbclid ? "Meta" : utm.gclid || utm.gbraid || utm.wbraid ? "Google Ads" : utm.ttclid ? "TikTok" : null),
+      }),
+    );
   } catch (e) {
     // El cliente igual llega a WhatsApp (línea principal), pero el lead se perdió: avisar
     reportError("Lead no registrado", e, { source, product });

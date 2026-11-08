@@ -627,3 +627,4 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
 .tech-links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
 .tech-links a { color: var(--yellow); text-decoration: none; }
 .tech-links a:hover { text-decoration: underline; }
+.bots-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }

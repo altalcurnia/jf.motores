@@ -36,6 +36,36 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["ai_settings"]["Insert"]>;
         Relationships: [];
       };
+      telegram_settings: {
+        Row: {
+          id: boolean;
+          public_enabled: boolean;
+          test_chats: number[];
+          team_chats: number[];
+          notify_leads: boolean;
+          monthly_cap_usd: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          id?: boolean;
+          public_enabled?: boolean;
+          test_chats?: number[];
+          team_chats?: number[];
+          notify_leads?: boolean;
+          monthly_cap_usd?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["telegram_settings"]["Insert"]>;
+        Relationships: [];
+      };
+      telegram_usage: {
+        Row: { month: string; cost_usd: number; messages: number; updated_at: string };
+        Insert: { month: string; cost_usd?: number; messages?: number; updated_at?: string };
+        Update: Partial<Database["public"]["Tables"]["telegram_usage"]["Insert"]>;
+        Relationships: [];
+      };
       testimonials: {
         Row: { active: boolean; consent: boolean; created_at: string; id: string; name: string; place: string | null; product: string | null; quote: string; sort: number };
         Insert: { active?: boolean; consent?: boolean; created_at?: string; id?: string; name: string; place?: string | null; product?: string | null; quote: string; sort?: number };
@@ -699,6 +729,7 @@ export type Database = {
       assistant_context: { Args: Record<string, never>; Returns: Json };
       ai_budget: { Args: Record<string, never>; Returns: Json };
       ai_charge: { Args: { cost: number; tokens_in: number; tokens_out: number }; Returns: undefined };
+      telegram_charge: { Args: { p_cost: number }; Returns: number };
       list_customers: {
         Args: Record<string, never>;
         Returns: { id: string; email: string; full_name: string | null; phone: string | null; purchases: number }[];

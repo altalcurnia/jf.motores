@@ -364,6 +364,13 @@ test("el webhook de Telegram rechaza llamadas sin la firma secreta", async ({ re
   expect(res.status()).toBe(403);
 });
 
+test("el webhook de WhatsApp rechaza la verificación sin token y no acepta mensajes sin conectar", async ({ request }) => {
+  const verify = await request.get("/api/whatsapp?hub.mode=subscribe&hub.verify_token=x&hub.challenge=123");
+  expect(verify.status()).toBe(403);
+  const post = await request.post("/api/whatsapp", { data: { entry: [] } });
+  expect([403, 404]).toContain(post.status());
+});
+
 test("guías: biblioteca técnica con documentos que piden iniciar sesión", async ({ page, request }) => {
   await page.goto("/es/guias");
   await expect(page.locator("#biblioteca h2")).toBeVisible();

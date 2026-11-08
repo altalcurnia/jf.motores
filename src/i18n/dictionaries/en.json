@@ -1016,7 +1016,10 @@
     "register": "Create account",
     "quota": "You've used this month's AI questions. An advisor will help you on WhatsApp; questions renew every month and grow with your purchases.",
     "low": "You have {n}% of this month's questions left.",
-    "telegramPrivate": "This bot is private. Your chat ID is {id}: ask for it to be authorized."
+    "telegramPrivate": "This bot is private. Your chat ID is {id}: ask for it to be authorized.",
+    "botBudget": "The assistant has used up its replies for this month. Message us on WhatsApp and an advisor will help you.",
+    "handoffWa": "I am passing your question to a JF Motores advisor, who will message you soon. If you prefer, write to them directly: {wa}",
+    "telegramId": "Your chat ID is {id}."
   },
   "tickets": {
     "option": "Open a ticket",

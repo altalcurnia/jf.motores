@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getAnalyticsIds } from "@/lib/supabase/public";
+import { whatsappConfig, whatsappReady } from "@/features/whatsapp/cloud";
 import { AdminTopbar } from "../AdminTopbar";
 import { SERVICES, ciStatus, deepseekStatus, type Service, type ServiceKey, type Status } from "./services";
 
@@ -94,7 +95,20 @@ async function Body() {
     ],
     deepseek: [ds],
     tavily: [env.TAVILY_API_KEY ? { level: "ok", text: "Clave configurada." } : { level: "warn", text: "Falta TAVILY_API_KEY: el asistente no busca en internet." }],
-    telegram: [env.TELEGRAM_BOT_TOKEN ? { level: "ok", text: "Bot configurado." } : { level: "info", text: "No configurado (opcional)." }],
+    telegram: [
+      env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_WEBHOOK_SECRET
+        ? { level: "ok", text: "Bot configurado." }
+        : { level: "info", text: "Falta TELEGRAM_BOT_TOKEN o TELEGRAM_WEBHOOK_SECRET en Vercel." },
+      env.SUPABASE_SECRET_KEY
+        ? { level: "ok", text: "Lee los ajustes del panel (modo público, avisos y tope)." }
+        : { level: "warn", text: "Falta SUPABASE_SECRET_KEY en Vercel: el bot ignora los ajustes del panel y no avisa al equipo." },
+    ],
+    whatsapp: [
+      { level: "ok", text: "Botones de cotización activos." },
+      whatsappReady()
+        ? { level: "ok", text: `Bot de WhatsApp conectado (modo de prueba: ${whatsappConfig().allowed.length} número(s)).` }
+        : { level: "info", text: "Bot de WhatsApp listo para conectar (faltan las variables WHATSAPP_* en Vercel)." },
+    ],
     sentry: [
       env.NEXT_PUBLIC_SENTRY_DSN
         ? { level: "ok", text: env.SENTRY_AUTH_TOKEN ? "Activo, con mapas de código." : "Activo. Falta SENTRY_AUTH_TOKEN para ver la línea exacta del error." }

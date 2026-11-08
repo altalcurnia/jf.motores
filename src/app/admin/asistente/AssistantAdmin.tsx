@@ -6,7 +6,6 @@ import { Linkified } from "@/components/Linkified";
 import { OwnerUnlock } from "../OwnerUnlock";
 import {
   addDocument,
-  connectTelegram,
   deleteDocument,
   newDocumentPath,
   saveCustomerBudget,
@@ -29,7 +28,6 @@ export function AssistantAdmin(props: {
   model: string;
   docs: DocRow[];
   keyConfigured: boolean;
-  telegramConfigured: boolean;
   searchConfigured: boolean;
   webVerify: boolean;
   domains: string[];
@@ -352,16 +350,6 @@ export function AssistantAdmin(props: {
           </div>
         </section>
 
-        <section className="panel full">
-          <h2>Telegram (pruebas)</h2>
-          <p className="muted small">
-            El mismo asistente, con los mismos documentos, en un bot de Telegram. Necesita TELEGRAM_BOT_TOKEN y TELEGRAM_WEBHOOK_SECRET
-            en Vercel.
-          </p>
-          <button className="btn-secondary" disabled={pending || !props.telegramConfigured} onClick={() => run(connectTelegram)}>
-            {props.telegramConfigured ? "Conectar bot de Telegram" : "Faltan las variables de Telegram en Vercel"}
-          </button>
-        </section>
       </div>
       {note && <p className={note.ok ? "mail-ok" : "err-text"}>{note.text}</p>}
     </div>

@@ -138,18 +138,22 @@ export const SERVICES: Service[] = [
     key: "whatsapp",
     name: "WhatsApp",
     group: "Clientes y ventas",
-    what: "Canal de venta: todos los botones «Cotizar» registran la cotización y abren el chat del asesor asignado.",
+    what: "Canal de venta: todos los botones «Cotizar» registran la cotización y abren el chat del asesor asignado. El bot de WhatsApp (API oficial de Meta, /api/whatsapp) queda listo para conectar.",
     links: [
       { label: "WhatsApp Web", href: "https://web.whatsapp.com" },
       { label: "WhatsApp Business", href: "https://business.whatsapp.com" },
+      { label: "Meta (apps)", href: "https://developers.facebook.com/apps" },
     ],
   },
   {
     key: "telegram",
     name: "Telegram",
     group: "Otros",
-    what: "Bot del asistente de IA en Telegram (/api/telegram). Hoy solo responde a los chats de prueba autorizados; la clave del bot va en Vercel.",
-    links: [{ label: "BotFather", href: "https://t.me/BotFather" }],
+    what: "Bot de Telegram: asistente de ventas y técnico (de prueba o abierto al público, con tope de gasto) y avisos al equipo de cada cliente nuevo. Se configura en Admin → Asistente.",
+    links: [
+      { label: "BotFather", href: "https://t.me/BotFather" },
+      { label: "Configurar", href: "/admin/asistente" },
+    ],
   },
   {
     key: "analytics",

@@ -8,6 +8,7 @@ import { site } from "@/lib/site";
 import { askAssistant } from "@/features/assistant/deepseek";
 import { cleanDomains, sanitizeHistory } from "@/features/assistant/harness";
 import { catalogForAssistant } from "@/features/assistant/catalog-text";
+import { parseChatIds, tgSend } from "@/features/telegram/api";
 
 export type ActionResult = { ok: true; message?: string } | { ok: false; error: string };
 
@@ -174,6 +175,48 @@ export async function connectTelegram(): Promise<ActionResult> {
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) };
   }
+}
+
+export type TelegramInput = { publicEnabled: boolean; testChats: string; teamChats: string; notifyLeads: boolean; capUsd: number };
+
+/** Ajustes del bot de Telegram (quién lo usa, avisos al equipo y tope de gasto mensual). */
+export async function saveTelegram(input: TelegramInput): Promise<ActionResult> {
+  const m = await manager();
+  if (!m) return { ok: false, error: "No tienes permiso." };
+  const cap = Math.round(Number(input.capUsd) * 100) / 100;
+  if (!Number.isFinite(cap) || cap < 0 || cap > 100) return { ok: false, error: "El tope mensual debe estar entre 0 y 100 dólares." };
+  const test = parseChatIds(input.testChats);
+  const team = parseChatIds(input.teamChats);
+  if (test.length > 50 || team.length > 20) return { ok: false, error: "Máximo 50 chats de prueba y 20 del equipo." };
+  const { error } = await m.supabase
+    .from("telegram_settings")
+    .update({
+      public_enabled: input.publicEnabled,
+      test_chats: test.map(Number),
+      team_chats: team.map(Number),
+      notify_leads: input.notifyLeads,
+      monthly_cap_usd: cap,
+      updated_at: new Date().toISOString(),
+      updated_by: m.session.userId,
+    })
+    .eq("id", true);
+  if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
+  updateTag("telegram");
+  return { ok: true, message: "Guardado. El bot lo aplica en unos minutos." };
+}
+
+/** Mensaje de prueba a los chats del equipo (comprueba token y IDs). */
+export async function testTelegramTeam(teamChats: string): Promise<ActionResult> {
+  const m = await manager();
+  if (!m) return { ok: false, error: "No tienes permiso." };
+  if (!process.env.TELEGRAM_BOT_TOKEN) return { ok: false, error: "Falta TELEGRAM_BOT_TOKEN en Vercel." };
+  const chats = parseChatIds(teamChats);
+  if (!chats.length) return { ok: false, error: "Escribe al menos un ID de chat del equipo." };
+  const results = await Promise.all(chats.map((c) => tgSend(c, "✅ Prueba del panel de JF Motores: aquí llegarán los avisos de clientes nuevos.")));
+  const failed = chats.filter((_, i) => !results[i]);
+  return failed.length
+    ? { ok: false, error: `No llegó a: ${failed.join(", ")}. Cada persona debe escribirle primero al bot (o agregarlo al grupo).` }
+    : { ok: true, message: "Mensaje de prueba enviado." };
 }
 
 /** Nombre aleatorio para el PDF en el bucket. */

@@ -116,17 +116,88 @@ No incluye las fotos ni los modelos 3D (Storage), solo la base de datos.
 
 ---
 
-## 5. Una sola vez en Vercel (secreto)
+## 5. Una sola vez en Vercel (secretos)
+
+En Vercel → el proyecto → **Settings → Environment Variables**, entorno **Production**. Los pone el dueño:
 
 - `LEAD_SALT`: un texto aleatorio largo (genéralo con Bitwarden). Protege las IP de los clientes en los leads. Ponlo una sola vez y no lo cambies.
+- `SUPABASE_SECRET_KEY`: en Supabase → **Project Settings → API Keys → Secret keys** (empieza por `sb_secret_`). Con ella el servidor lee los ajustes de los bots, que el público no puede ver. Nunca va en el navegador ni en el chat.
+
+Después de agregar variables hay que **volver a publicar** (Vercel → Deployments → el último → Redeploy) para que se apliquen.
 
 ---
 
-## 6. Telegram (pendiente)
+## 6. Bot de Telegram
 
-El bot ya funciona en modo de prueba. Falta aprobar el cambio de base de datos para:
-- configurar los chats desde el panel;
-- avisar al equipo de cada cliente nuevo;
-- abrirlo al público como asistente de ventas y técnico, con un tope de gasto mensual.
+Sirve para tres cosas:
+- probar el asistente;
+- atender clientes como asistente de ventas y técnico;
+- avisar al equipo de cada cliente nuevo.
 
-Necesitará `TELEGRAM_BOT_TOKEN` y `TELEGRAM_WEBHOOK_SECRET` en Vercel (secretos: el token se pide a [@BotFather](https://t.me/BotFather)).
+Es gratis. La IA gasta según las respuestas y el tope mensual lo controla (US$2 por defecto).
+
+1. En Telegram abre [@BotFather](https://t.me/BotFather) → `/newbot` → ponle nombre (p. ej. «JF Motores») y un usuario terminado en `bot`. BotFather entrega el **token**: es **secreto**.
+2. En Vercel crea (secretos, entorno Production):
+   - `TELEGRAM_BOT_TOKEN`: el token del paso 1.
+   - `TELEGRAM_WEBHOOK_SECRET`: un texto inventado de 16 a 256 letras, números, `_` o `-` (genéralo con Bitwarden).
+   - `SUPABASE_SECRET_KEY` (sección 5), si no está.
+3. Vuelve a publicar en Vercel. Luego, en **Admin → Asistente → Bot de Telegram**, toca **«Conectar el bot (registrar webhook)»**.
+4. Escríbele `/id` al bot desde tu Telegram: responde el número de tu chat.
+   - Para avisos en un **grupo** del equipo: agrega el bot al grupo y escribe `/id` allí (el número empieza con `-`).
+5. En el panel:
+   - **Chats de prueba**: tu ID y el de quien vaya a probar.
+   - **Chats del equipo**: el ID del grupo o de cada asesor. Toca **«Probar aviso al equipo»**.
+   - **Tope mensual**: US$2 (se puede cambiar).
+   - **Abierto al público**: actívalo solo cuando el asistente responda bien en las pruebas.
+   - Toca **Guardar Telegram**.
+
+El aviso de cada cliente nuevo dice de qué página vino, el país, el dispositivo y la campaña. No incluye datos personales del cliente.
+
+---
+
+## 7. Bot de WhatsApp (listo para conectar)
+
+El código ya está listo: usa la **API oficial de Meta** (WhatsApp Cloud API) y responde con el mismo asistente. Mientras no estén las variables, está apagado.
+
+**Antes de empezar, decide el número:**
+- **Un número nuevo solo para el bot** (recomendado para empezar). El número de ventas actual sigue igual en la app.
+- **El número de ventas actual**. Meta permite usarlo a la vez en la app WhatsApp Business y en la API (función «coexistencia»), pero hay que conectarlo desde la app siguiendo los pasos de Meta.
+
+**Costos:** responder a un cliente que escribió en las últimas 24 horas no tiene costo de plantilla. Solo se cobra si la empresa inicia la conversación con una plantilla (el bot no lo hace). La IA gasta igual que en Telegram.
+
+**Pasos (cuando quieran conectarlo):**
+
+1. Verificar la empresa en Meta (portafolio comercial → **Centro de seguridad**). Pide la razón social y el NIT (sección 2).
+2. En [developers.facebook.com/apps](https://developers.facebook.com/apps) → **Crear app** → tipo **Empresa** → agregar el producto **WhatsApp** → agregar el número y verificarlo por SMS o llamada.
+3. En **WhatsApp → Configuración de la API** copia el **Identificador del número de teléfono** (no es secreto).
+4. Crea un **token permanente**: portafolio comercial → **Usuarios del sistema** → nuevo usuario administrador → **Generar token** para la app, con los permisos `whatsapp_business_messaging` y `whatsapp_business_management`. Es **secreto**.
+5. En la app → **Configuración → Básica** copia la **Clave secreta de la app**. Es **secreta**.
+6. En Vercel crea (entorno Production):
+   - `WHATSAPP_TOKEN`: el token del paso 4 (secreto).
+   - `WHATSAPP_APP_SECRET`: la clave del paso 5 (secreto).
+   - `WHATSAPP_VERIFY_TOKEN`: un texto inventado (secreto). Se usa en el paso 7.
+   - `WHATSAPP_PHONE_NUMBER_ID`: el identificador del paso 3.
+   - `WHATSAPP_ALLOWED_NUMBERS`: los números de prueba, solo dígitos con indicativo, separados por coma (p. ej. `573001112233`).
+7. Vuelve a publicar en Vercel. En Meta → **WhatsApp → Configuración → Webhook**:
+   - URL de devolución de llamada: `https://<dominio>/api/whatsapp` (aparece en Admin → Asistente);
+   - token de verificación: el mismo `WHATSAPP_VERIFY_TOKEN`;
+   - suscríbete al campo **messages**.
+8. Escríbele al número desde un teléfono de prueba. Cuando el cliente pide un asesor, el equipo recibe el aviso por Telegram con su número.
+
+**Para abrirlo a todos los clientes** hace falta una migración pequeña: agrega el modo público y el tope de gasto de WhatsApp en el panel, como en Telegram. Se aprueba al conectar el número.
+
+---
+
+## 8. Privacidad
+
+Al activar cada servicio, agregar a la política de datos (Ley 1581, encargados y transferencias internacionales):
+- Meta (Píxel y WhatsApp);
+- Google (Analytics y Ads);
+- TikTok;
+- Telegram;
+- Sentry;
+- Vercel y Supabase (Estados Unidos);
+- DeepSeek (China);
+- Resend.
+
+Pídele a Claude que lo redacte con los datos oficiales de la empresa.

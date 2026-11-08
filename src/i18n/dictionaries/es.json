@@ -1016,7 +1016,10 @@
     "register": "Crear cuenta",
     "quota": "Usaste tus consultas de IA de este mes. Un asesor te atiende por WhatsApp; las consultas se renuevan cada mes y aumentan con tus compras.",
     "low": "Te queda el {n} % de tus consultas del mes.",
-    "telegramPrivate": "Este bot es privado. Tu ID de chat es {id}: pide que lo autoricen."
+    "telegramPrivate": "Este bot es privado. Tu ID de chat es {id}: pide que lo autoricen.",
+    "botBudget": "Por este mes el asistente ya respondió todas las consultas que tenía disponibles. Escríbenos por WhatsApp y te atiende un asesor.",
+    "handoffWa": "Le paso tu consulta a un asesor de JF Motores y te escribe pronto. Si prefieres, escríbele directo: {wa}",
+    "telegramId": "Tu ID de chat es {id}."
   },
   "tickets": {
     "option": "Abrir ticket",

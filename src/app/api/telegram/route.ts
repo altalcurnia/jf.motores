@@ -1,17 +1,14 @@
-import { site } from "@/lib/site";
 import { NextResponse, type NextRequest } from "next/server";
-import { askAssistant } from "@/features/assistant/deepseek";
-import { getAssistantContext, rateLimited } from "@/features/assistant/context";
-import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { botAnswer, botLocale } from "@/features/assistant/bot";
 import { dictionaryFor } from "@/i18n/dictionaries";
-import { getContact } from "@/lib/supabase/public";
-import { catalogForAssistant } from "@/features/assistant/catalog-text";
-import { plainLinks } from "@/features/assistant/links";
-import { reportError } from "@/lib/report-error";
+import { tgSend } from "@/features/telegram/api";
+import { botSpentThisMonth, chargeBot, getTelegramSettings } from "@/features/telegram/settings";
 
 /**
- * Webhook del bot de Telegram (pruebas del asistente fuera de la página).
- * Telegram firma cada llamada con el encabezado secreto que se registró en setWebhook.
+ * Webhook del bot de Telegram: asistente de ventas y técnico (mismos documentos que el chat de la página).
+ * Telegram firma cada llamada con el encabezado secreto registrado en setWebhook (Admin → Asistente → Registrar).
+ * Modo de prueba: solo responde a los chats autorizados. Abierto al público: responde a todos, con tope de gasto mensual.
+ * `/id` siempre responde el ID del chat (para autorizar chats de prueba o del equipo).
  */
 export async function POST(request: NextRequest) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -26,57 +23,35 @@ export async function POST(request: NextRequest) {
   const text = update?.message?.text?.trim();
   if (!chatId || !text) return NextResponse.json({ ok: true });
 
-  const lc = update?.message?.from?.language_code ?? "es";
-  const locale = lc.startsWith("pt") ? "pt" : lc.startsWith("en") ? "en" : "es";
+  const locale = botLocale(update?.message?.from?.language_code);
   const t = (await dictionaryFor(locale)).assistant;
-  const send = (body: string) =>
-    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text: body, disable_web_page_preview: true }),
-      signal: AbortSignal.timeout(10_000),
-    }).catch(() => null);
+  const send = (body: string) => tgSend(chatId, body, token);
+  const id = String(chatId);
 
-  // Bot de pruebas: solo responde a los chats autorizados en TELEGRAM_ALLOWED_CHATS (IDs separados por coma)
-  const allowed = (process.env.TELEGRAM_ALLOWED_CHATS ?? "").split(/[\s,]+/).filter(Boolean);
-  if (!allowed.includes(String(chatId))) {
-    await send(t.telegramPrivate.replace("{id}", String(chatId)));
+  if (/^\/id(@\w+)?$/i.test(text)) {
+    await send(t.telegramId.replace("{id}", id));
+    return NextResponse.json({ ok: true });
+  }
+
+  const settings = await getTelegramSettings();
+  const isTest = settings.testChats.includes(id);
+  if (!isTest && !settings.publicEnabled) {
+    await send(t.telegramPrivate.replace("{id}", id));
     return NextResponse.json({ ok: true });
   }
   if (text.startsWith("/start")) {
     await send(t.welcome);
     return NextResponse.json({ ok: true });
   }
-  const wa = buildWhatsAppUrl((await getContact()).whatsapp, t.waMessage);
-  if (rateLimited(`tg:${chatId}`)) {
-    await send(`${t.limit}\n${wa}`);
-    return NextResponse.json({ ok: true });
-  }
-  const ctx = await getAssistantContext();
-  if (!ctx.enabled) {
-    await send(`${t.disabled}\n${wa}`);
-    return NextResponse.json({ ok: true });
-  }
-  const r = await askAssistant({
-    siteUrl: site.url,
-    docs: ctx.docs,
-    model: ctx.model,
-    history: [{ role: "user", content: text.slice(0, 800) }],
+
+  const answer = await botAnswer({
+    channel: "telegram",
+    chatKey: id,
+    text,
     locale,
-    catalog: await catalogForAssistant(locale),
-    webVerify: ctx.webVerify,
-    officialDomains: ctx.officialDomains,
+    // Los chats de prueba no se frenan por el tope del público, pero su consumo se suma igual
+    budget: settings.fromDb ? { cap: isTest ? Number.POSITIVE_INFINITY : settings.capUsd, spent: botSpentThisMonth, charge: chargeBot } : null,
   });
-  if (!r.ok) {
-    reportError("Asistente IA (Telegram)", r.reason, { detail: r.detail });
-    await send(`${t.unavailable}\n${wa}`);
-  } else {
-    const contact = (await getContact()).whatsapp;
-    if (r.handoff !== null) {
-      await send(`${r.reply ? plainLinks(r.reply) : t.handoff}\n\n${buildWhatsAppUrl(contact, `${t.waMessage}\n${t.waSummary}${r.handoff}`)}`);
-    } else {
-      await send(r.noInfo ? `${t.noInfo}\n${wa}` : plainLinks(r.reply));
-    }
-  }
+  await send(answer.text);
   return NextResponse.json({ ok: true });
 }
