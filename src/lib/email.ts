@@ -1,4 +1,5 @@
 import "server-only";
+import { reportError } from "@/lib/report-error";
 
 /**
  * Envío de correos transaccionales con Resend (el mismo proveedor que ya envía los
@@ -32,9 +33,14 @@ export async function sendEmail(msg: { to: string; subject: string; html: string
       signal: AbortSignal.timeout(10_000),
     });
     const body = (await res.json().catch(() => ({}))) as { id?: string; message?: string };
-    if (!res.ok || !body.id) return { ok: false, reason: "failed", detail: body.message ?? `HTTP ${res.status}` };
+    if (!res.ok || !body.id) {
+      const detail = body.message ?? `HTTP ${res.status}`;
+      reportError("Correo no enviado", new Error(detail));
+      return { ok: false, reason: "failed", detail };
+    }
     return { ok: true, id: body.id };
   } catch (e) {
+    reportError("Correo no enviado", e);
     return { ok: false, reason: "failed", detail: e instanceof Error ? e.message : "error" };
   }
 }

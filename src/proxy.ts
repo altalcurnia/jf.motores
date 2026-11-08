@@ -16,7 +16,8 @@ const ACCOUNT_RE = /^\/(es|en|pt)\/cuenta(?:\/([^/]+))?\/?$/;
  * 2. Sitio público: redirige las rutas sin idioma a /es, /en o /pt.
  */
 /** Parámetros de campaña que se guardan para atribuir el lead (último clic de campaña, 30 días). */
-const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"];
+// Etiquetas de campaña y los identificadores de clic de Google Ads, Meta y TikTok
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "gbraid", "wbraid", "fbclid", "ttclid"];
 
 function withUtm(request: NextRequest, response: NextResponse | undefined) {
   const sp = request.nextUrl.searchParams;

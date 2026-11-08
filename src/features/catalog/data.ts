@@ -1,6 +1,7 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
+import { reportError } from "@/lib/report-error";
 import type {
   CatalogCategory,
   CatalogProduct,
@@ -80,7 +81,7 @@ export async function getCatalogData(): Promise<CatalogData> {
     };
   } catch (error) {
     // Falla temporal: se muestra vacío, pero se reintenta al minuto para reintentar pronto.
-    console.error("[catalog] no se pudo leer el catálogo", error);
+    reportError("Catálogo: no se pudo leer", error);
     cacheLife("minutes");
     return empty;
   }

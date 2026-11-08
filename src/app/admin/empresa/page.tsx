@@ -8,6 +8,7 @@ import { AdminTopbar } from "../AdminTopbar";
 import { ContactForm } from "./ContactForm";
 import { SiteImages } from "./SiteImages";
 import { AnalyticsForm } from "./AnalyticsForm";
+import { parseAnalytics, type AnalyticsIds } from "@/features/analytics/ids";
 import { TrustForm } from "./TrustForm";
 import { EngineVariants } from "./EngineVariants";
 import { BrandVersions } from "./BrandVersions";
@@ -112,10 +113,9 @@ async function Editor() {
       />
       <AnalyticsForm
         canEdit={canEdit}
-        initial={{
-          ga4: String((company?.analytics as { ga4?: string } | null)?.ga4 ?? ""),
-          pixel: String((company?.analytics as { pixel?: string } | null)?.pixel ?? ""),
-        }}
+        initial={Object.fromEntries(
+          Object.entries(parseAnalytics(company?.analytics)).map(([k, v]) => [k, v ?? ""]),
+        ) as Record<keyof AnalyticsIds, string>}
       />
     </>
   );

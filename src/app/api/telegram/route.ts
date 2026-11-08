@@ -7,6 +7,7 @@ import { dictionaryFor } from "@/i18n/dictionaries";
 import { getContact } from "@/lib/supabase/public";
 import { catalogForAssistant } from "@/features/assistant/catalog-text";
 import { plainLinks } from "@/features/assistant/links";
+import { reportError } from "@/lib/report-error";
 
 /**
  * Webhook del bot de Telegram (pruebas del asistente fuera de la página).
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     officialDomains: ctx.officialDomains,
   });
   if (!r.ok) {
-    console.error("Asistente IA (Telegram):", r.reason, r.detail ?? "");
+    reportError("Asistente IA (Telegram)", r.reason, { detail: r.detail });
     await send(`${t.unavailable}\n${wa}`);
   } else {
     const contact = (await getContact()).whatsapp;

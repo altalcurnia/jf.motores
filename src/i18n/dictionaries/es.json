@@ -399,7 +399,7 @@
       },
       {
         "h": "7. Cookies y medición",
-        "p": "Usamos cookies propias necesarias: sesión, idioma, preferencias y un identificador anónimo con el que registramos tus solicitudes de cotización por WhatsApp (producto, país aproximado, dispositivo y la campaña por la que llegaste). Solo si las aceptas en el aviso de cookies usamos Google Analytics 4 y el Píxel de Meta para medir visitas y el rendimiento de nuestros anuncios. Puedes cambiar tu decisión cuando quieras en «Preferencias de cookies», al pie de la página."
+        "p": "Usamos cookies propias necesarias: sesión, idioma, preferencias y un identificador anónimo con el que registramos tus solicitudes de cotización por WhatsApp (producto, país aproximado, dispositivo y la campaña por la que llegaste). Solo si las aceptas en el aviso de cookies usamos Google Analytics 4, Google Ads y los píxeles de Meta (Instagram y Facebook) y TikTok para medir visitas y el rendimiento de nuestros anuncios. Puedes cambiar tu decisión cuando quieras en «Preferencias de cookies», al pie de la página."
       }
     ],
     "termsTitle": "Términos y condiciones",
@@ -538,6 +538,13 @@
     "title": "No encontramos esa página",
     "text": "Puede que el producto ya no esté publicado. Mira el catálogo o escríbenos por WhatsApp.",
     "home": "Ir al inicio"
+  },
+  "errorPage": {
+    "title": "Algo falló al cargar esta página",
+    "text": "Intenta de nuevo en un momento o escríbenos por WhatsApp y te atendemos.",
+    "retry": "Intentar de nuevo",
+    "whatsapp": "Escribir por WhatsApp",
+    "waMessage": "Hola JF Motores, la página me mostró un error. ¿Me pueden ayudar?"
   },
   "support": {
     "title": "Soporte técnico",
@@ -1054,7 +1061,7 @@
     }
   },
   "consent": {
-    "text": "Usamos cookies necesarias para que el sitio funcione y, si aceptas, cookies de medición (Google Analytics y Píxel de Meta) para saber qué anuncios y productos interesan.",
+    "text": "Usamos cookies necesarias para que el sitio funcione y, si aceptas, cookies de medición (Google Analytics, Google Ads y los píxeles de Meta y TikTok) para saber qué anuncios y productos interesan.",
     "accept": "Aceptar todas",
     "necessary": "Solo necesarias",
     "policy": "Política de datos",

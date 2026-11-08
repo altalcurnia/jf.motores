@@ -95,10 +95,25 @@ async function Body() {
     deepseek: [ds],
     tavily: [env.TAVILY_API_KEY ? { level: "ok", text: "Clave configurada." } : { level: "warn", text: "Falta TAVILY_API_KEY: el asistente no busca en internet." }],
     telegram: [env.TELEGRAM_BOT_TOKEN ? { level: "ok", text: "Bot configurado." } : { level: "info", text: "No configurado (opcional)." }],
+    sentry: [
+      env.NEXT_PUBLIC_SENTRY_DSN
+        ? { level: "ok", text: env.SENTRY_AUTH_TOKEN ? "Activo, con mapas de código." : "Activo. Falta SENTRY_AUTH_TOKEN para ver la línea exacta del error." }
+        : { level: "info", text: "Sin DSN: no se envían avisos de errores (plan 1.7)." },
+    ],
     analytics: [
-      analytics.ga4 || analytics.pixel
-        ? { level: "ok", text: [analytics.ga4 && `GA4 ${analytics.ga4}`, analytics.pixel && `Pixel ${analytics.pixel}`].filter(Boolean).join(" · ") }
-        : { level: "info", text: "Sin IDs configurados: no se mide el tráfico. Plan 4.3." },
+      analytics.ga4 || analytics.pixel || analytics.gads || analytics.tiktok
+        ? {
+            level: "ok",
+            text: [
+              analytics.pixel && `Meta ${analytics.pixel}`,
+              analytics.ga4 && `GA4 ${analytics.ga4}`,
+              analytics.gads && `Google Ads ${analytics.gads}${analytics.gadsLabel ? "" : " (falta la etiqueta de conversión)"}`,
+              analytics.tiktok && `TikTok ${analytics.tiktok}`,
+            ]
+              .filter(Boolean)
+              .join(" · "),
+          }
+        : { level: "info", text: "Sin IDs configurados: no se mide el tráfico. Se llenan en Empresa → Medición de anuncios." },
     ],
   };
 

@@ -28,8 +28,8 @@ separados), ordenar cuentas y ramas, y herramientas para vender más.
 | 1.3 | **Verificación en dos pasos (2FA)** + método de respaldo en: GitHub, Vercel, Supabase, Resend, Hostinger, Cloudflare, Google (jfmotoresm@gmail.com), DeepSeek, Tavily | Dueño | ⏳ |
 | 1.4 | Gestor de contraseñas (**Bitwarden**, gratis) con todas las cuentas y claves; nunca en chats ni archivos sueltos | Dueño | ⏳ |
 | 1.5 | Contraseñas más fuertes en Supabase → Auth → Providers → Email: mínimo 10 caracteres, letras y dígitos (gratis) | Dueño | ⏳ |
-| 1.6 | Bot de Telegram (`/api/telegram`): decidir si se usa (configurar `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `TELEGRAM_ALLOWED_CHATS` en Vercel) o se quita del código | Dueño decide, Claude ejecuta | ⏳ |
-| 1.7 | Errores del servidor con aviso: **Sentry** (gratis). Requiere crear la cuenta y pasar el DSN (no es secreto) para instalar `@sentry/nextjs` | Dueño crea cuenta, Claude integra | ⏳ |
+| 1.6 | Bot de Telegram (`/api/telegram`): decidir si se usa (configurar `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `TELEGRAM_ALLOWED_CHATS` en Vercel) o se quita del código. **Decidido (8-nov):** se queda, como asistente de ventas y técnico, pruebas y avisos de leads al equipo. Falta aprobar la migración de ajustes | Dueño decide, Claude ejecuta | ⏳ |
+| 1.7 | Errores del servidor con aviso: **Sentry** (gratis). Requiere crear la cuenta y pasar el DSN (no es secreto) para instalar `@sentry/nextjs`. **Código listo (8-nov), apagado hasta tener `NEXT_PUBLIC_SENTRY_DSN`** (ver docs/06) | Dueño crea cuenta, Claude integra | 🟡 |
 
 Nota de la auditoría corregida: `SUPABASE_SECRET_KEY` **no es necesaria hoy** (la función
 `createSupabaseAdminClient` existe pero no se usa en ningún lado).
@@ -42,7 +42,7 @@ Nota de la auditoría corregida: `SUPABASE_SECRET_KEY` **no es necesaria hoy** (
 
 | # | Tarea | Costo aprox. | Quién |
 |---|---|---|---|
-| 2.1 | **Supabase Pro**: respaldo diario automático (hoy: «Sin copias de seguridad»), sin pausa del proyecto | 25 USD/mes | Dueño |
+| 2.1 | **Supabase Pro**: respaldo diario automático (hoy: «Sin copias de seguridad»), sin pausa del proyecto. Mientras tanto: copia semanal cifrada gratis con GitHub Actions (`respaldo.yml`, ver docs/06 §4) | 25 USD/mes | Dueño |
 | 2.2 | **Protección de contraseñas filtradas** (HaveIBeenPwned) — solo disponible en Pro | incluido | Dueño |
 | 2.3 | **Vercel Pro** (Hobby es solo para uso no comercial) | 20 USD/mes | Dueño |
 | 2.4 | Pasar a jfmotoresm@gmail.com: Supabase (invitar como Owner de la organización), Vercel (transferir proyecto con código de transferencia + reconectar GitHub), Google Cloud (inicio con Google), DeepSeek, Tavily, Hostinger. Resend ✅ ya hecho | — | Dueño + Claude |

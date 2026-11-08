@@ -15,6 +15,7 @@ export type ServiceKey =
   | "google-cloud"
   | "whatsapp"
   | "telegram"
+  | "sentry"
   | "analytics"
   | "cloudflare"
   | "search-console"
@@ -103,6 +104,13 @@ export const SERVICES: Service[] = [
     links: [{ label: "Monitores", href: "https://dashboard.uptimerobot.com/monitors" }],
   },
   {
+    key: "sentry",
+    name: "Sentry",
+    group: "Correo y avisos",
+    what: "Avisa por correo cuando algo falla en la página, en el servidor o en el celular del cliente (sin datos personales). Se activa con NEXT_PUBLIC_SENTRY_DSN en Vercel.",
+    links: [{ label: "Sentry", href: "https://sentry.io" }],
+  },
+  {
     key: "deepseek",
     name: "DeepSeek",
     group: "Inteligencia artificial",
@@ -140,17 +148,19 @@ export const SERVICES: Service[] = [
     key: "telegram",
     name: "Telegram",
     group: "Otros",
-    what: "Bot opcional del asistente de IA en Telegram (/api/telegram).",
+    what: "Bot del asistente de IA en Telegram (/api/telegram). Hoy solo responde a los chats de prueba autorizados; la clave del bot va en Vercel.",
     links: [{ label: "BotFather", href: "https://t.me/BotFather" }],
   },
   {
     key: "analytics",
-    name: "Google Analytics y Meta Pixel",
+    name: "Medición de anuncios (Meta, Google y TikTok)",
     group: "Medición y crecimiento",
-    what: "Medición de visitas y anuncios. Solo se cargan si el visitante acepta las cookies; los IDs se ponen en Admin → Empresa.",
+    what: "Píxel de Meta, Google Analytics 4, conversión de Google Ads y Píxel de TikTok. Solo se cargan si el visitante acepta las cookies; los IDs se ponen en Admin → Empresa.",
     links: [
       { label: "Google Analytics", href: "https://analytics.google.com" },
       { label: "Meta (eventos)", href: "https://business.facebook.com/events_manager2" },
+      { label: "Google Ads", href: "https://ads.google.com" },
+      { label: "TikTok Ads", href: "https://ads.tiktok.com" },
       { label: "Configurar IDs", href: "/admin/empresa" },
     ],
   },

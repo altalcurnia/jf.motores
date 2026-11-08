@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { supabasePublicEnv, supabaseSecretKey } from "@/lib/env";
@@ -8,10 +9,14 @@ import type { Database } from "./types";
 /**
  * Cliente con la sesión del usuario actual (respeta RLS).
  * Crear uno nuevo por petición.
+ *
+ * `connection()` detiene aquí el prerender y la precarga parcial (`partialPrefetching`): la librería de
+ * Supabase usa `Date.now()` al leer la sesión, y eso solo se permite con una petición real del visitante.
  */
 export async function createSupabaseServerClient() {
   const env = supabasePublicEnv();
   const cookieStore = await cookies();
+  await connection();
   return createServerClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
     cookies: {
       getAll: () => cookieStore.getAll(),

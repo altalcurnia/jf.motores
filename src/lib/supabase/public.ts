@@ -7,6 +7,7 @@ import { site } from "@/lib/site";
 import { branchSlug, sedesUrl, type I18nText } from "@/features/catalog/shared";
 import { DEFAULT_ENGINE_VARIANT, isEngineVariant } from "@/features/engine3d/variants";
 import { DEFAULT_BRAND, isBrand, type BrandKey } from "@/features/brand/brands";
+import { EMPTY_ANALYTICS, parseAnalytics, type AnalyticsIds } from "@/features/analytics/ids";
 
 /** Cliente sin sesión (solo datos públicos, respeta RLS). Se puede usar dentro de "use cache". */
 export function createSupabasePublicClient() {
@@ -155,20 +156,16 @@ export async function getEngineVariant(): Promise<string> {
   }
 }
 
-/** IDs de medición (GA4 y Píxel de Meta) editables en /admin/empresa. Vacíos = no se carga nada. */
-export async function getAnalyticsIds(): Promise<{ ga4: string | null; pixel: string | null }> {
+/** IDs de medición de anuncios (GA4, Meta, Google Ads, TikTok) editables en /admin/empresa. Vacíos = no se carga nada. */
+export async function getAnalyticsIds(): Promise<AnalyticsIds> {
   "use cache";
   cacheLife("hours");
   cacheTag("company");
   try {
     const { data } = await createSupabasePublicClient().from("company_settings").select("analytics").maybeSingle();
-    const a = (data?.analytics ?? {}) as { ga4?: string; pixel?: string };
-    return {
-      ga4: a.ga4 && /^G-[A-Z0-9]{4,15}$/.test(a.ga4) ? a.ga4 : null,
-      pixel: a.pixel && /^[0-9]{6,20}$/.test(a.pixel) ? a.pixel : null,
-    };
+    return parseAnalytics(data?.analytics);
   } catch {
-    return { ga4: null, pixel: null };
+    return EMPTY_ANALYTICS;
   }
 }
 

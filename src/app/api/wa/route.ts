@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getContact } from "@/lib/supabase/public";
 import { buildWhatsAppUrl } from "@/features/whatsapp/link";
+import { isHumanClick } from "@/features/whatsapp/human";
+import { reportError } from "@/lib/report-error";
 
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|telegram|headless|lighthouse/i;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -39,7 +41,11 @@ export async function GET(request: NextRequest) {
     res.headers.set("X-Robots-Tag", "noindex");
     return res;
   };
-  if (!ua || BOT.test(ua)) return go(fallback, text);
+  // Robots y aperturas automáticas: van a la línea principal sin contar como lead
+  if (!ua || BOT.test(ua) || !isHumanClick(request.headers, request.nextUrl.host)) return go(fallback, text);
+  // Local, pruebas automáticas y vistas previas usan la misma base que producción: no ensucian la métrica
+  // (LEADS_RECORD_ANY_ENV=1 lo permite, p. ej. para probar el reparto de asesores en una vista previa)
+  if (process.env.VERCEL_ENV !== "production" && process.env.LEADS_RECORD_ANY_ENV !== "1") return go(fallback, text);
 
   let visitor = request.cookies.get(VISITOR_COOKIE)?.value ?? "";
   const newVisitor = !/^[A-Za-z0-9-]{8,64}$/.test(visitor);
@@ -75,7 +81,8 @@ export async function GET(request: NextRequest) {
     if (r?.phone) phone = r.phone;
     if (r?.code) text = `${text}\n\n${CODE_LABEL[locale]}: ${r.code}`;
   } catch (e) {
-    console.error("Lead no registrado:", e instanceof Error ? e.message : e);
+    // El cliente igual llega a WhatsApp (línea principal), pero el lead se perdió: avisar
+    reportError("Lead no registrado", e, { source, product });
   }
 
   const res = go(phone, text);

@@ -21,6 +21,7 @@ const SOURCE_LABEL: Record<string, string> = {
   "mis-equipos": "Mis equipos",
   sedes: "Sedes",
   contacto: "Contacto",
+  error: "Página de error",
   web: "Página web",
 };
 
@@ -86,7 +87,15 @@ async function Body({ searchParams }: Pick<PageProps<"/admin/leads">, "searchPar
       source: SOURCE_LABEL[l.source ?? "web"] ?? l.source ?? "—",
       country: l.country,
       device: l.device,
-      campaign: utm.utm_campaign ?? (utm.fbclid ? "Meta (sin campaña)" : utm.gclid ? "Google Ads" : null),
+      campaign:
+        utm.utm_campaign ??
+        (utm.fbclid
+          ? "Meta (sin campaña)"
+          : utm.gclid || utm.gbraid || utm.wbraid
+            ? "Google Ads"
+            : utm.ttclid
+              ? "TikTok (sin campaña)"
+              : null),
       medium: utm.utm_source ?? null,
       product: p ? `${p.ref} · ${p.name?.es ?? ""}` : l.part_key ? `Repuestos: ${l.part_key}` : l.catalog ? `Catálogo ${l.catalog}` : null,
       productHref: p ? `/es/${p.catalog === "motobomba" ? "motobombas" : p.catalog === "motor" ? "motores" : "repuestos"}/${p.slug}` : null,

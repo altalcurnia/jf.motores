@@ -5,6 +5,7 @@ import { getAssistantContext, rateLimited } from "@/features/assistant/context";
 import { sanitizeHistory, type AssistantLocale } from "@/features/assistant/harness";
 import { catalogForAssistant } from "@/features/assistant/catalog-text";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { reportError } from "@/lib/report-error";
 
 type Budget = { ok: boolean; reason?: string; limit_usd?: number; used_usd?: number };
 
@@ -71,10 +72,10 @@ export async function POST(request: NextRequest) {
       tokens_in: r.usage.tokensIn,
       tokens_out: r.usage.tokensOut,
     });
-    if (error) console.error("Asistente IA: no se pudo registrar el consumo", error.message);
+    if (error) reportError("Asistente IA: no se pudo registrar el consumo", error);
   }
   if (!r.ok) {
-    console.error("Asistente IA:", r.reason, r.detail ?? "");
+    reportError("Asistente IA", r.reason, { detail: r.detail });
     return NextResponse.json({ code: "unavailable" }, { status: 503 });
   }
   // Traspaso a un asesor: se muestra la respuesta útil (si la hay) con el botón de WhatsApp

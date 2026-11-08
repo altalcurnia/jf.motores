@@ -3,7 +3,8 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    # migracion-next es la rama que hoy se publica en producción: se revisa en cada cambio
+    branches: [main, migracion-next]
 
 jobs:
   verificar:

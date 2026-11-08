@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs/config";
 
 /** Origen de Supabase (datos, fotos privadas, modelos 3D y sesión en tiempo real). */
 const supabase = (() => {
@@ -20,15 +21,15 @@ const csp = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   "form-action 'self'",
-  `script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://connect.facebook.net https://vercel.live`,
-  `connect-src 'self' blob: data: ${supabase} ${supabase.replace(/^http/, "ws")} https://*.supabase.co wss://*.supabase.co https://cdn.jsdelivr.net https://www.gstatic.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net https://vercel.live wss://ws-us3.pusher.com`,
-  `img-src 'self' data: blob: ${supabase} https://*.supabase.co https://i.ytimg.com https://*.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://vercel.live https://vercel.com`,
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://connect.facebook.net https://www.googleadservices.com https://googleads.g.doubleclick.net https://analytics.tiktok.com https://vercel.live`,
+  `connect-src 'self' blob: data: ${supabase} ${supabase.replace(/^http/, "ws")} https://*.supabase.co wss://*.supabase.co https://cdn.jsdelivr.net https://www.gstatic.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net https://www.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://analytics.tiktok.com https://*.tiktok.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://vercel.live wss://ws-us3.pusher.com`,
+  `img-src 'self' data: blob: ${supabase} https://*.supabase.co https://i.ytimg.com https://*.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://www.google.com https://www.google.com.co https://www.googleadservices.com https://googleads.g.doubleclick.net https://analytics.tiktok.com https://vercel.live https://vercel.com`,
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "media-src 'self' blob:",
   "worker-src 'self' blob: https://cdn.jsdelivr.net",
   "child-src 'self' blob: https://cdn.jsdelivr.net",
-  "frame-src https://www.youtube-nocookie.com https://www.google.com https://vercel.live",
+  "frame-src https://www.youtube-nocookie.com https://www.google.com https://td.doubleclick.net https://www.googletagmanager.com https://vercel.live",
   supabase.startsWith("https:") ? "upgrade-insecure-requests" : "",
 ]
   .filter(Boolean)
@@ -67,4 +68,20 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+/**
+ * Sentry (avisos de errores) solo se conecta a la compilación si hay DSN en Vercel. Con SENTRY_AUTH_TOKEN
+ * (secreto, solo en Vercel), SENTRY_ORG y SENTRY_PROJECT además sube los mapas de código para ver la línea exacta.
+ */
+export default process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? withSentryConfig(nextConfig, {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      silent: !process.env.CI,
+      telemetry: false,
+      widenClientFileUpload: true,
+      suppressOnRouterTransitionStartWarning: true,
+      sourcemaps: { disable: !process.env.SENTRY_AUTH_TOKEN, deleteSourcemapsAfterUpload: true },
+      bundleSizeOptimizations: { excludeDebugStatements: true, excludeTracing: true, excludeReplayShadowDom: true, excludeReplayIframe: true, excludeReplayWorker: true },
+    })
+  : nextConfig;

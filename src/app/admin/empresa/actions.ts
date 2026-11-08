@@ -4,6 +4,7 @@ import { brandVersions, isBrand } from "@/features/brand/brands";
 import { updateTag } from "next/cache";
 import { can, getSession } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { validateAnalytics, type AnalyticsIds } from "@/features/analytics/ids";
 
 export type PhoneInput = { label: string; number: string; whatsapp: boolean };
 export type BranchInput = { id: string | null; name: string; city: string; address: string; phone: string; active: boolean };
@@ -75,20 +76,15 @@ export async function saveBenefitsImage(path: string | null): Promise<SaveResult
 }
 
 /** IDs de GA4 y del Píxel de Meta (vacíos = desactivados). */
-export async function saveAnalytics(input: { ga4: string; pixel: string }): Promise<SaveResult> {
+export async function saveAnalytics(input: Partial<Record<keyof AnalyticsIds, string>>): Promise<SaveResult> {
   const session = await getSession();
   if (!session || !session.role.isInternal || !can(session, "empresa.editar")) {
     return { ok: false, error: "No tienes permiso para cambiar la medición." };
   }
-  const ga4 = input.ga4.trim().toUpperCase();
-  const pixel = input.pixel.replace(/\D/g, "");
-  if (ga4 && !/^G-[A-Z0-9]{4,15}$/.test(ga4)) return { ok: false, error: "El ID de GA4 debe verse como G-ABC123XYZ." };
-  if (pixel && !/^[0-9]{6,20}$/.test(pixel)) return { ok: false, error: "El ID del Píxel son solo números (6 a 20)." };
-  const analytics: Record<string, string> = {};
-  if (ga4) analytics.ga4 = ga4;
-  if (pixel) analytics.pixel = pixel;
+  const v = validateAnalytics(input);
+  if (!v.ok) return v;
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("company_settings").update({ analytics }).eq("id", true);
+  const { error } = await supabase.from("company_settings").update({ analytics: v.value }).eq("id", true);
   if (error) return { ok: false, error: `No se pudo guardar: ${error.message}` };
   updateTag("company");
   return { ok: true };

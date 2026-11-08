@@ -399,7 +399,7 @@
       },
       {
         "h": "7. Cookies and measurement",
-        "p": "We use our own necessary cookies: session, language, preferences and an anonymous identifier we use to record your WhatsApp quote requests (product, approximate country, device and the campaign that brought you). Only if you accept them in the cookie notice do we use Google Analytics 4 and the Meta Pixel to measure visits and ad performance. You can change your choice at any time in “Cookie preferences” at the bottom of the page."
+        "p": "We use our own necessary cookies: session, language, preferences and an anonymous identifier we use to record your WhatsApp quote requests (product, approximate country, device and the campaign that brought you). Only if you accept them in the cookie notice do we use Google Analytics 4, Google Ads and the Meta (Instagram and Facebook) and TikTok pixels to measure visits and ad performance. You can change your choice at any time in “Cookie preferences” at the bottom of the page."
       }
     ],
     "termsTitle": "Terms and conditions",
@@ -538,6 +538,13 @@
     "title": "We couldn't find that page",
     "text": "The product may no longer be listed. Browse the catalogue or message us on WhatsApp.",
     "home": "Go to home"
+  },
+  "errorPage": {
+    "title": "Something went wrong loading this page",
+    "text": "Please try again in a moment or message us on WhatsApp and we'll help you.",
+    "retry": "Try again",
+    "whatsapp": "Message us on WhatsApp",
+    "waMessage": "Hi JF Motores, the website showed me an error. Can you help me?"
   },
   "support": {
     "title": "Technical support",
@@ -1054,7 +1061,7 @@
     }
   },
   "consent": {
-    "text": "We use necessary cookies to run the site and, if you accept, measurement cookies (Google Analytics and Meta Pixel) to learn which ads and products interest you.",
+    "text": "We use necessary cookies to run the site and, if you accept, measurement cookies (Google Analytics, Google Ads and the Meta and TikTok pixels) to learn which ads and products interest you.",
     "accept": "Accept all",
     "necessary": "Necessary only",
     "policy": "Privacy policy",

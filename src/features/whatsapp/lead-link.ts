@@ -15,7 +15,8 @@ export type LeadSource =
   | "repuestos"
   | "mis-equipos"
   | "contacto"
-  | "sedes";
+  | "sedes"
+  | "error";
 
 export function waLead(opts: {
   message: string;

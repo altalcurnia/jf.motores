@@ -57,7 +57,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <SiteFooter dict={dict} locale={locale} />
         <SupportFloat dict={dict} locale={locale} />
         <SiteEffects />
-        <Consent t={dict.consent} locale={locale} ga4={analytics.ga4} pixel={analytics.pixel} />
+        <Consent t={dict.consent} locale={locale} ids={analytics} />
       </body>
     </html>
   );
