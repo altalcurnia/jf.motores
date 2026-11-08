@@ -3,12 +3,12 @@ import { Suspense } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { getCatalog, getCatalogData } from "./data";
 import { CatalogFilters } from "./CatalogFilters";
 import { ProductCard } from "./ProductCard";
 import { catalogPaths, fill, filterProducts, parseCatalogQuery, tr, type CatalogType } from "./shared";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 type Tab = CatalogType | "all";
@@ -129,8 +129,8 @@ export async function catalogMetadata(catalog: Tab) {
   const locale = await getLocale();
   const dict = await getDictionary();
   if (catalog === "all") {
-    return { title: dict.nav.catalog, description: dict.catalogs.allDesc, alternates: localizedAlternates(locale, "/catalogo") };
+    return pageMetadata({ locale, path: "/catalogo", title: dict.nav.catalog, description: dict.catalogs.allDesc });
   }
   const item = dict.catalogs.items[catalogPaths[catalog]];
-  return { title: item.title, description: item.desc, alternates: localizedAlternates(locale, `/${catalogPaths[catalog]}`) };
+  return pageMetadata({ locale, path: `/${catalogPaths[catalog]}`, title: item.title, description: item.desc });
 }

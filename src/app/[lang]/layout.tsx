@@ -25,9 +25,14 @@ export function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  const dict = await getDictionary();
+  const [dict, ids] = await Promise.all([getDictionary(), getAnalyticsIds()]);
   return {
     metadataBase: new URL(site.url),
+    // Verificación del sitio en Google Search Console y del dominio en Meta (códigos del panel)
+    verification: {
+      ...(ids.gsc ? { google: ids.gsc } : {}),
+      ...(ids.metaVerify ? { other: { "facebook-domain-verification": ids.metaVerify } } : {}),
+    },
     title: { default: dict.meta.title, template: `%s | ${site.name}` },
     description: dict.meta.description,
     alternates: localizedAlternates(locale),

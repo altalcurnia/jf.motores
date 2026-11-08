@@ -79,12 +79,11 @@ function PhotoGallery({ photos, name, noPhotos }: { photos: string[]; name: stri
               key={url}
               type="button"
               className={`branch-thumb${i === safeIdx ? " on" : ""}`}
-              aria-label={`${name} ${i + 1}`}
               aria-pressed={i === safeIdx}
               onClick={() => setIdx(i)}
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- miniatura de la sede */}
-              <img src={url} alt="" loading="lazy" />
+              <img src={url} alt={`${name} ${i + 1}`} loading="lazy" />
             </button>
           ))}
         </div>

@@ -255,7 +255,8 @@
   "partPage": {
     "title": "Spare parts: ",
     "back": "See all spare parts",
-    "whatsapp": "Hello JF Motores, I'm looking for spare parts: "
+    "whatsapp": "Hello JF Motores, I'm looking for spare parts: ",
+    "metaDesc": "{part} spare parts for diesel engines and water pumps: compatibility by engine model, prices in your currency and WhatsApp advice."
   },
   "account": {
     "signIn": "Sign in",
@@ -450,7 +451,9 @@
         "h": "10. Personal data and governing law",
         "p": "The processing of your data is governed by our Personal Data Policy. These terms are governed by the laws of the Republic of Colombia."
       }
-    ]
+    ],
+    "privacyDesc": "How JF Motores collects, uses and protects your personal data (Colombian Law 1581 of 2012) and how to exercise your rights.",
+    "termsDesc": "JF Motores purchase, warranty, pricing and shipping terms (Colombian Law 1480 of 2011)."
   },
   "catalog": {
     "all": "All",

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { waLead } from "@/features/whatsapp/lead-link";
 import { isPartKey, partKeys, type PartKey } from "@/features/engine3d/parts";
 import { getCatalog } from "@/features/catalog/data";
@@ -10,6 +9,7 @@ import { CatalogTabs } from "@/features/catalog/CatalogListing";
 import { ProductDetail, productMetadata, productStaticParams } from "@/features/catalog/ProductDetail";
 import { Arrow } from "@/components/Arrow";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 /**
  * /repuestos/[slug] sirve dos cosas:
@@ -25,10 +25,12 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/repuestos/
   const { slug } = await params;
   if (!isPartKey(slug)) return productMetadata("repuesto", slug);
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
-  return {
+  return pageMetadata({
+    locale,
+    path: `/repuestos/${slug}`,
     title: dict.partPage.title + dict.parts[slug],
-    alternates: localizedAlternates(locale, `/repuestos/${slug}`),
-  };
+    description: dict.partPage.metaDesc.replace("{part}", dict.parts[slug].toLowerCase()),
+  });
 }
 
 export default async function Page({ params }: PageProps<"/[lang]/repuestos/[slug]">) {

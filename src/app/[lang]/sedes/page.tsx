@@ -1,19 +1,15 @@
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { formatPhone, getBranchesPage } from "@/lib/supabase/public";
 import { fill, tr } from "@/features/catalog/shared";
 import { waLead } from "@/features/whatsapp/lead-link";
 import { JsonLd } from "@/components/JsonLd";
 import { site } from "@/lib/site";
 import { BranchTabs, type BranchView } from "@/features/branches/BranchTabs";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
-  return {
-    title: dict.branches.title,
-    description: dict.branches.intro,
-    alternates: localizedAlternates(locale, "/sedes"),
-  };
+  return pageMetadata({ locale, path: "/sedes", title: dict.branches.title, description: dict.branches.intro });
 }
 
 function initials(name: string): string {

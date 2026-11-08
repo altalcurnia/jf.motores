@@ -1,19 +1,15 @@
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { waLead } from "@/features/whatsapp/lead-link";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
 import { libraryItems, libraryLangs, videoItems } from "@/features/library/items";
 import { VideoGallery } from "@/features/library/VideoGallery";
 import { GuideTabs } from "@/features/library/GuideTabs";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
-  return {
-    title: dict.guides.title,
-    description: dict.guides.intro,
-    alternates: localizedAlternates(locale, "/guias"),
-  };
+  return pageMetadata({ locale, path: "/guias", title: dict.guides.title, description: dict.guides.intro });
 }
 
 export default async function GuidesPage() {

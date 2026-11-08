@@ -1,17 +1,14 @@
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { Arrow } from "@/components/Arrow";
 import { AppStory } from "@/features/app-preview/AppStory";
 import { BackButton } from "@/components/BackButton";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
-  return {
-    title: `${dict.app.title} · ${dict.app.badge}`,
-    description: dict.app.intro,
-    alternates: localizedAlternates(locale, "/app"),
-  };
+  // En construcción: fuera de Google hasta que la app exista
+  return pageMetadata({ locale, path: "/app", title: `${dict.app.title} · ${dict.app.badge}`, description: dict.app.intro, index: false });
 }
 
 /** Presentación de la futura app de monitoreo (en construcción). */

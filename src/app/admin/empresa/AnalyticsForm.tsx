@@ -11,6 +11,8 @@ const FIELDS: { key: keyof AnalyticsIds; label: string; placeholder: string; whe
   { key: "gads", label: "Google Ads (ID de conversión)", placeholder: "AW-123456789", where: "Google Ads → Objetivos → Conversiones → tu acción → Configuración de etiqueta" },
   { key: "gadsLabel", label: "Google Ads (etiqueta de la conversión «clic a WhatsApp»)", placeholder: "AbC-D_efG-h12_34-567", where: "Misma pantalla: lo que va después de la barra en «send_to: AW-…/etiqueta»" },
   { key: "tiktok", label: "Píxel de TikTok", placeholder: "C4ABC123DEF456GHI789", where: "TikTok Ads Manager → Herramientas → Eventos → Web → tu píxel → «ID del píxel»" },
+  { key: "gsc", label: "Google Search Console (código de verificación)", placeholder: "Pega la etiqueta HTML o solo el código", where: "Search Console → Agregar propiedad → Prefijo de URL → Etiqueta HTML" },
+  { key: "metaVerify", label: "Meta (verificación del dominio)", placeholder: "Pega la etiqueta meta o solo el código", where: "Configuración del negocio → Seguridad de la marca → Dominios → Etiqueta meta" },
 ];
 
 /** IDs públicos de medición de anuncios. Solo se activan si el visitante acepta las cookies. */
@@ -20,7 +22,7 @@ export function AnalyticsForm({ initial, canEdit }: { initial: Values; canEdit: 
   const [pending, start] = useTransition();
   return (
     <section className="panel">
-      <h2>Medición de anuncios (Meta, Google y TikTok)</h2>
+      <h2>Medición de anuncios y verificación (Meta, Google y TikTok)</h2>
       <p className="muted small">
         Pega los identificadores y guarda. Ninguno es secreto. Se cargan solo para visitantes que acepten las cookies de
         medición, y cada clic a WhatsApp se envía como evento de cliente potencial (<b>Lead</b> en Meta,{" "}

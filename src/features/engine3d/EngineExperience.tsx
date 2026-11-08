@@ -29,6 +29,9 @@ type Props = {
  * Motor 3D de fondo + recorrido por scroll (encendido, revolución, despiece, apagado).
  * El texto de la página se muestra de inmediato; el 3D se carga después y aparece con un fundido.
  */
+// Tras el primer toque, los reinicios del 3D (girar el celular, volver al inicio) no vuelven a esperar
+let userInteracted = false;
+
 export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "nueva", partProducts = {} }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -109,30 +112,55 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
     let cleanup: (() => void) | undefined;
     let cancelled = false;
 
-    // El 3D se descarga cuando la página ya pintó y el navegador está libre: el texto y los
-    // botones responden de inmediato, también en celulares lentos
-    const whenIdle = () =>
+    // Celulares con ahorro de datos o muy poca memoria: fondo fijo, sin descargar el 3D
+    const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+    if (mobile && (nav.connection?.saveData || (nav.deviceMemory ?? 8) <= 2)) {
+      document.body.classList.add("no-3d");
+      return () => {
+        canvas.remove();
+        document.body.classList.remove("no-3d");
+      };
+    }
+
+    // El 3D se descarga cuando la página ya cargó y el navegador está libre: el texto y los botones
+    // responden de inmediato. En celular espera además al primer toque o desplazamiento (o 5 s):
+    // así el botón de WhatsApp nunca se traba mientras arranca el 3D (tráfico de anuncios, RNF-01)
+    let stopWaiting = () => {};
+    const whenReady = () =>
       new Promise<void>((resolve) => {
         let done = false;
-        const go = () => {
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        const events = ["pointerdown", "touchstart", "scroll", "wheel", "keydown"] as const;
+        const onInteract = () => {
+          userInteracted = true;
+          go();
+        };
+        stopWaiting = () => {
+          clearTimeout(timer);
+          events.forEach((e) => window.removeEventListener(e, onInteract));
+        };
+        function go() {
           if (done) return;
           done = true;
-          if ("requestIdleCallback" in window) {
-            window.requestIdleCallback(() => resolve(), { timeout: 1500 });
-          } else {
-            setTimeout(resolve, 200);
+          stopWaiting();
+          if ("requestIdleCallback" in window) window.requestIdleCallback(() => resolve(), { timeout: 1500 });
+          else setTimeout(resolve, 200);
+        }
+        const afterLoad = (cb: () => void) => {
+          if (document.readyState === "complete") cb();
+          else {
+            window.addEventListener("load", cb, { once: true });
+            setTimeout(cb, 3000);
           }
         };
-        if (document.readyState === "complete" || document.readyState === "interactive") {
-          go();
-        } else {
-          window.addEventListener("DOMContentLoaded", go, { once: true });
-          window.addEventListener("load", go, { once: true });
-          setTimeout(go, 1000);
-        }
+        if (!mobile || userInteracted) return afterLoad(go);
+        events.forEach((e) => window.addEventListener(e, onInteract, { passive: true, once: true }));
+        afterLoad(() => {
+          if (!done) timer = setTimeout(go, 5000);
+        });
       });
 
-    whenIdle()
+    whenReady()
       .then(() => (cancelled ? Promise.reject(new Error("cancelled")) : import("./engine.js")))
       .then(({ startEngine }) => {
         if (cancelled) return;
@@ -185,6 +213,7 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
 
     return () => {
       cancelled = true;
+      stopWaiting();
       engineRef.current = null;
       cleanup?.();
       canvas.remove();
@@ -356,7 +385,7 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
                 {(partProducts[sheet] ?? []).map((it) => (
                   <Link key={it.href} href={it.href} className="pf-item">
                     {/* eslint-disable-next-line @next/next/no-img-element -- miniatura del catálogo */}
-                    {it.img ? <img src={it.img} alt="" loading="lazy" /> : <span className="pf-noimg" />}
+                    {it.img ? <img src={it.img} alt={it.name} loading="lazy" /> : <span className="pf-noimg" />}
                     <span className="pf-name">{it.name}</span>
                     <small className={it.inStock ? "ok" : "off"}>
                       {it.price ?? j.focusAsk} · {it.inStock ? j.focusInStock : j.focusOutStock}

@@ -68,9 +68,8 @@ export function Gallery({
                 setI(n);
                 setShow3d(false);
               }}
-              aria-label={img.alt}
             >
-              <Image src={img.url} alt="" fill sizes="96px" />
+              <Image src={img.url} alt={img.alt} fill sizes="96px" />
             </button>
           ))}
         </div>

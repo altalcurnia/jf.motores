@@ -53,3 +53,11 @@ describe("repuestos compatibles con un equipo", () => {
   });
   it("ignora un id de equipo inválido", () => expect(parseCatalogQuery({ equipo: "x" }).equipment).toBeNull());
 });
+
+describe("título de la ficha para Google", () => {
+  it("no repite la referencia si ya está en el nombre y agrega potencia y succión", async () => {
+    const { productSeoTitle } = await import("@/features/catalog/shared");
+    expect(productSeoTitle("Motobomba Cummins 4BT", "CUMMINS 4BT", { hp: 120, succion_in: 4 })).toBe('Motobomba Cummins 4BT · 120 HP · 4"');
+    expect(productSeoTitle("Motobomba JF diésel", "JF-M25", {})).toBe("Motobomba JF diésel · JF-M25");
+  });
+});

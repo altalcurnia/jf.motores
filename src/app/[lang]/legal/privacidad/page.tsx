@@ -1,11 +1,11 @@
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { getCompanyInfo } from "@/lib/supabase/public";
 import { site } from "@/lib/site";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 export async function generateMetadata() {
-  const dict = await getDictionary();
-  return { title: dict.legal.privacyTitle, alternates: localizedAlternates(await getLocale(), "/legal/privacidad") };
+  const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
+  return pageMetadata({ locale, path: "/legal/privacidad", title: dict.legal.privacyTitle, description: dict.legal.privacyDesc });
 }
 
 /** Política de tratamiento de datos (Ley 1581/2012). Toma razón social, NIT y dirección del panel. */

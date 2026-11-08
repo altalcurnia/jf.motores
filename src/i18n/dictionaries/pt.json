@@ -255,7 +255,8 @@
   "partPage": {
     "title": "Peças: ",
     "back": "Ver todas as peças",
-    "whatsapp": "Olá JF Motores, procuro peças de: "
+    "whatsapp": "Olá JF Motores, procuro peças de: ",
+    "metaDesc": "Peças de {part} para motores a diesel e motobombas: compatibilidade por modelo de motor, preço na sua moeda e atendimento pelo WhatsApp."
   },
   "account": {
     "signIn": "Entrar",
@@ -450,7 +451,9 @@
         "h": "10. Dados pessoais e lei aplicável",
         "p": "O tratamento dos seus dados é regido pela nossa Política de tratamento de dados pessoais. Estes termos são regidos pelas leis da República da Colômbia."
       }
-    ]
+    ],
+    "privacyDesc": "Como a JF Motores coleta, usa e protege seus dados pessoais (Lei colombiana 1581 de 2012) e como exercer seus direitos.",
+    "termsDesc": "Condições de compra, garantia, preços e envios da JF Motores (Lei colombiana 1480 de 2011)."
   },
   "catalog": {
     "all": "Todos",

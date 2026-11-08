@@ -226,7 +226,7 @@ export default async function HomePage() {
           {catalogKeys.map((key) => (
             <Link key={key} href={`/${locale}/${key}`} className="catalog-card reveal">
               <span className="catalog-thumb">
-                <FallbackImage src={catalogThumbs[key]} alt="" />
+                <FallbackImage src={catalogThumbs[key]} alt={dict.catalogs.items[key].title} />
               </span>
               <h3>{dict.catalogs.items[key].title}</h3>
               <p>{dict.catalogs.items[key].desc}</p>

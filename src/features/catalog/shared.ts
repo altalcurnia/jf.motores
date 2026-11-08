@@ -221,3 +221,18 @@ export function statusLabels(
     ? { available: t.statusInStock, sold: t.statusOutOfStock }
     : { available: t.statusAvailable, sold: t.statusSold };
 }
+
+/**
+ * Título para Google y al compartir: nombre + referencia (si el nombre no la trae ya) + potencia y succión.
+ * Ej.: «Motobomba Cummins 4BT · 120 HP · 4"» en vez de «Motobomba Cummins 4BT · CUMMINS 4BT».
+ */
+export function productSeoTitle(name: string, ref: string, specs: Record<string, string | number>): string {
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const parts = [name];
+  if (ref && !norm(name).includes(norm(ref))) parts.push(ref);
+  const hp = Number(specs.hp);
+  if (hp > 0) parts.push(`${hp} HP`);
+  const suction = Number(specs.succion_in);
+  if (suction > 0) parts.push(`${suction}"`);
+  return parts.join(" · ");
+}

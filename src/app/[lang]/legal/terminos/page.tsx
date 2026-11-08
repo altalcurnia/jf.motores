@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { formatPhone, getCompanyInfo, getContact, getTrust } from "@/lib/supabase/public";
 import { site } from "@/lib/site";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 export async function generateMetadata() {
-  const dict = await getDictionary();
-  return { title: dict.legal.termsTitle, alternates: localizedAlternates(await getLocale(), "/legal/terminos") };
+  const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
+  return pageMetadata({ locale, path: "/legal/terminos", title: dict.legal.termsTitle, description: dict.legal.termsDesc });
 }
 
 /** Términos y condiciones (Ley 1480 de 2011). Toma razón social, NIT, dirección, IVA y contacto del panel. */

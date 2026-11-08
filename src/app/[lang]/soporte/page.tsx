@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { localizedAlternates } from "@/i18n/metadata";
 import { waLead } from "@/features/whatsapp/lead-link";
 import { getContact } from "@/lib/supabase/public";
 import { Arrow } from "@/components/Arrow";
 import { SupportTabs } from "@/components/SupportTabs";
 import { TechSupportCard } from "@/features/support/TechSupportCard";
+import { pageMetadata } from "@/i18n/page-metadata";
 
 export async function generateMetadata() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
-  return { title: dict.support.title, description: dict.support.intro, alternates: localizedAlternates(locale, "/soporte") };
+  return pageMetadata({ locale, path: "/soporte", title: dict.support.title, description: dict.support.intro });
 }
 
 export default async function SupportPage() {

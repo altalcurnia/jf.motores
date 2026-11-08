@@ -255,7 +255,8 @@
   "partPage": {
     "title": "Repuestos: ",
     "back": "Ver todos los repuestos",
-    "whatsapp": "Hola JF Motores, busco repuestos de: "
+    "whatsapp": "Hola JF Motores, busco repuestos de: ",
+    "metaDesc": "Repuestos de {part} para motores diésel y motobombas: compatibilidad por modelo de motor, precio en tu moneda y asesoría por WhatsApp."
   },
   "account": {
     "signIn": "Entrar",
@@ -450,7 +451,9 @@
         "h": "10. Datos personales y ley aplicable",
         "p": "El tratamiento de tus datos se rige por nuestra Política de tratamiento de datos personales. Estos términos se rigen por las leyes de la República de Colombia."
       }
-    ]
+    ],
+    "privacyDesc": "Cómo JF Motores recoge, usa y protege tus datos personales (Ley 1581 de 2012) y cómo ejercer tus derechos.",
+    "termsDesc": "Condiciones de compra, garantía, precios y envíos de JF Motores (Ley 1480 de 2011)."
   },
   "catalog": {
     "all": "Todos",

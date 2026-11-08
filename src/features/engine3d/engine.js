@@ -679,9 +679,14 @@ export function startEngine(opts) {
         return d;
       }
 
-      function tick() {
+      // Celular: 30 cuadros por segundo (la mitad de trabajo para el procesador y la batería)
+      const FRAME_MS = isMobile ? 1000 / 30 : 0;
+      let lastFrame = 0;
+      function tick(now = performance.now()) {
         if (rafId === -1) return;
         rafId = requestAnimationFrame(tick);
+        if (FRAME_MS && now - lastFrame < FRAME_MS - 2) return;
+        lastFrame = now;
         const dt = Math.min(clock.getDelta(), 0.05);
         const t = clock.elapsedTime;
         const hk = S.handoff;

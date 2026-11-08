@@ -10,7 +10,7 @@ import { compatibleParts, compatibleWith, getCatalogData } from "./data";
 import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
 import { OwnerBanner, StatusPill } from "./owned";
-import { catalogPaths, fill, formatPrice, productHref, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
+import { catalogPaths, fill, formatPrice, productHref, productSeoTitle, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
 import { JsonLd } from "@/components/JsonLd";
 
@@ -33,7 +33,7 @@ export async function productMetadata(catalog: CatalogType, slug: string) {
   const [{ product }, locale] = await Promise.all([findProduct(catalog, slug), getLocale()]);
   if (!product) return {};
   const img = product.images[0];
-  const title = `${tr(product.name, locale)} · ${product.ref}`;
+  const title = productSeoTitle(tr(product.name, locale), product.ref, product.specs);
   const description = tr(product.summary, locale) || tr(product.description, locale).slice(0, 160);
   // Al compartir el enlace (WhatsApp, Facebook) sale la foto del producto
   const rawImg = img ? storageUrl(img.path, supabaseUrl()) : "/og.jpg";

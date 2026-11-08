@@ -18,7 +18,7 @@ describe("IDs de medición de anuncios", () => {
 
   it("campos vacíos = esa red no se carga", () => {
     expect(validateAnalytics({ ga4: "", pixel: "" })).toEqual({ ok: true, value: {} });
-    expect(parseAnalytics({})).toEqual({ ga4: null, pixel: null, gads: null, gadsLabel: null, tiktok: null });
+    expect(parseAnalytics({})).toEqual({ ga4: null, pixel: null, gads: null, gadsLabel: null, tiktok: null, gsc: null, metaVerify: null });
   });
 
   it("descarta lo guardado con formato inválido y la etiqueta sin ID de Google Ads", () => {
@@ -28,6 +28,16 @@ describe("IDs de medición de anuncios", () => {
       gads: null,
       gadsLabel: null,
       tiktok: null,
+      gsc: null,
+      metaVerify: null,
     });
+  });
+
+  it("acepta la etiqueta completa de verificación y guarda solo el código", () => {
+    const r = validateAnalytics({
+      gsc: "<meta name=\"google-site-verification\" content=\"AbCdEfGhIjKlMnOpQrStUv_123-xyz\" />",
+      metaVerify: "<meta name=\"facebook-domain-verification\" content=\"abc123def456ghi789jkl012mno345\" />",
+    });
+    expect(r).toEqual({ ok: true, value: { gsc: "AbCdEfGhIjKlMnOpQrStUv_123-xyz", metaVerify: "abc123def456ghi789jkl012mno345" } });
   });
 });
