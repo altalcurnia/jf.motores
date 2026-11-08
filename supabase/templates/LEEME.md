@@ -8,6 +8,14 @@ Se pegan en Supabase → Authentication → Emails → Templates. El idioma sale
 | Confirm sign up | `confirmar-cuenta.html` | `Confirma tu cuenta de JF Motores` |
 | Magic link | `enlace-de-acceso.html` | `Tu enlace para entrar a JF Motores` |
 | Reset password | `recuperar-contrasena.html` | `Crea una nueva contraseña · JF Motores` |
+| Password changed (notificación de seguridad) | `contrasena-cambiada.html` | `Tu contraseña de JF Motores cambió` |
+
+**Forma rápida:** `powershell -ExecutionPolicy Bypass -File .\scripts\supabase-plantillas.ps1` sube las cuatro
+y activa el aviso de contraseña cambiada (pide un token personal de Supabase). Las plantillas no se pueden
+cambiar con SQL: viven en la configuración de Supabase Auth, no en la base de datos.
+
+El correo de **bienvenida** (cuenta confirmada) no es de Supabase: lo envía el sitio desde `/auth/confirm`
+(`src/features/account/welcome-email.ts`).
 
 ## Enlace de los botones
 

@@ -3,6 +3,10 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { safeNextPath } from "@/lib/safe-redirect";
 import { isStaffUser, localeFromRequest, resolveDestination } from "@/lib/auth-routing";
+import { sendEmail } from "@/lib/email";
+import { site } from "@/lib/site";
+import { hasLocale } from "@/i18n/config";
+import { isFirstConfirmation, welcomeEmail } from "@/features/account/welcome-email";
 
 const TYPES: EmailOtpType[] = ["email", "signup", "magiclink", "recovery", "invite", "email_change"];
 
@@ -23,6 +27,12 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
     if (!error && data.user) {
       const isStaff = await isStaffUser(supabase, data.user.id);
+      // Cuenta recién confirmada: correo de bienvenida (no bloquea la redirección si falla)
+      if (type !== "recovery" && data.user.email && isFirstConfirmation(data.user.email_confirmed_at)) {
+        const meta = (data.user.user_metadata ?? {}) as { locale?: string };
+        const mail = welcomeEmail({ locale: hasLocale(meta.locale ?? "") ? (meta.locale as typeof locale) : locale, siteUrl: site.url });
+        await sendEmail({ to: data.user.email, ...mail }).catch(() => undefined);
+      }
       // Recuperar contraseña siempre termina en la pantalla para crear la nueva
       const wanted = type === "recovery" && !requested?.includes("nueva-clave") && !isStaff ? `/${locale}/cuenta/nueva-clave` : requested;
       return NextResponse.redirect(new URL(resolveDestination({ requested: wanted, isStaff, locale }), origin));
