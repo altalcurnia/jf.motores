@@ -306,6 +306,13 @@ test("menú Soporte del encabezado: Soporte técnico y Guías", async ({ page, i
   await expect(page.locator(".guide-subtabs button")).toHaveText(["Guías oficiales", "Nuestras guías", "Videos"]);
 });
 
+test("salud del sitio para el monitor de caídas: 200 con la base de datos respondiendo", async ({ request }) => {
+  const res = await request.get("/api/health");
+  expect(res.status()).toBe(200);
+  expect(res.headers()["cache-control"]).toContain("no-store");
+  expect(await res.json()).toMatchObject({ ok: true, db: true });
+});
+
 test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ page }) => {
   await page.goto("/es/app");
   await page.locator(".app-hero-cta a").click();
