@@ -604,3 +604,26 @@ form.unlock { border-color: color-mix(in srgb, var(--yellow) 45%, transparent); 
   display: grid;
   gap: 6px;
 }
+
+/* Tecnologías: plataformas, enlaces y estado */
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.tech-card { display: grid; gap: 10px; align-content: start; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #0d1014; }
+.tech-card header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tech-card h3 { margin: 0; font-size: 16px; }
+.tech-card p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tech-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--mut); }
+.tech-status { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; line-height: 1.45; }
+.tech-status li { padding: 7px 10px; border-radius: 8px; border-left: 3px solid var(--line); background: rgba(255, 255, 255, 0.03); }
+.tech-status b { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 6px; }
+.tech-status .lvl-ok { border-left-color: var(--ok); }
+.tech-status .lvl-ok b { color: var(--ok); }
+.tech-status .lvl-warn { border-left-color: var(--yellow); }
+.tech-status .lvl-warn b { color: var(--yellow); }
+.tech-status .lvl-error { border-left-color: var(--err); }
+.tech-status .lvl-error b { color: var(--err); }
+.tech-status .lvl-info b { color: var(--mut); }
+.stat b.lvl-error { color: var(--err); }
+.stat b.lvl-warn { color: var(--yellow); }
+.tech-links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.tech-links a { color: var(--yellow); text-decoration: none; }
+.tech-links a:hover { text-decoration: underline; }

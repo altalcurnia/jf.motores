@@ -313,6 +313,11 @@ test("salud del sitio para el monitor de caídas: 200 con la base de datos respo
   expect(await res.json()).toMatchObject({ ok: true, db: true });
 });
 
+test("panel: la página de Tecnologías exige iniciar sesión", async ({ page }) => {
+  await page.goto("/admin/tecnologias");
+  await expect(page).toHaveURL(/\/admin\/login/);
+});
+
 test("'Quiero enterarme' lleva al formulario y pide iniciar sesión", async ({ page }) => {
   await page.goto("/es/app");
   await page.locator(".app-hero-cta a").click();

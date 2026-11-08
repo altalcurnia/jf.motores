@@ -22,6 +22,7 @@ export function AdminTopbar() {
         <Link href="/admin/sedes">Sedes</Link>
         <Link href="/admin/asesores">Asesores</Link>
         <Link href="/admin/asistente">Asistente IA</Link>
+        <Link href="/admin/tecnologias">Tecnologías</Link>
         <Link href="/admin/usuarios">Usuarios</Link>
         <Link href="/admin/permisos">Roles y permisos</Link>
         <Link href="/es">Ver sitio</Link>
