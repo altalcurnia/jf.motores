@@ -5,6 +5,16 @@ import { localeTags } from "@/i18n/config";
 export type CatalogType = "motobomba" | "motor" | "repuesto";
 export type CatalogPath = "motobombas" | "motores" | "repuestos";
 export type ProductStatus = "borrador" | "disponible" | "vendido";
+/** Condición del producto (columna products.condition). */
+export const productConditions = ["nuevo", "usado", "reconstruido"] as const;
+export type ProductCondition = (typeof productConditions)[number];
+export const isProductCondition = (v: unknown): v is ProductCondition => (productConditions as readonly unknown[]).includes(v);
+/** Valor de schema.org para Google según la condición. */
+export const conditionSchema: Record<ProductCondition, string> = {
+  nuevo: "https://schema.org/NewCondition",
+  usado: "https://schema.org/UsedCondition",
+  reconstruido: "https://schema.org/RefurbishedCondition",
+};
 export type I18nText = Partial<Record<Locale, string>>;
 
 export const catalogPaths: Record<CatalogType, CatalogPath> = {
@@ -26,6 +36,7 @@ export type CatalogProduct = {
   description: I18nText;
   priceCop: number | null;
   status: Exclude<ProductStatus, "borrador">;
+  condition: ProductCondition;
   specs: Record<string, string | number>;
   featured: boolean;
   publishedAt: string;
@@ -108,6 +119,8 @@ export type StatusFilter = (typeof statusFilters)[number];
 
 export type CatalogQuery = {
   status: StatusFilter;
+  /** Nuevo, usado o reconstruido (?condicion=). */
+  condition: ProductCondition | null;
   category: string | null;
   model: string | null;
   q: string;
@@ -124,6 +137,7 @@ export function parseCatalogQuery(params: RawParams): CatalogQuery {
   const sort = first(params.orden);
   return {
     status: (statusFilters as readonly string[]).includes(status) ? (status as StatusFilter) : "all",
+    condition: isProductCondition(first(params.condicion)) ? (first(params.condicion) as ProductCondition) : null,
     category: first(params.categoria) || null,
     model: first(params.motor) || null,
     q: first(params.q).trim().slice(0, 80),
@@ -155,6 +169,7 @@ export function filterProducts(
   const needle = normalize(query.q);
   const list = products.filter((p) => {
     if (query.status !== "all" && p.status !== query.status) return false;
+    if (query.condition && p.condition !== query.condition) return false;
     if (query.category && p.categoryId !== categoryId) return false;
     if (query.model) {
       const direct = p.engineModelId === query.model;
@@ -235,4 +250,53 @@ export function productSeoTitle(name: string, ref: string, specs: Record<string,
   const suction = Number(specs.succion_in);
   if (suction > 0) parts.push(`${suction}"`);
   return parts.join(" · ");
+}
+
+/** Datos que más ayudan a comparar desde Google, en orden de importancia. */
+const SEO_SPEC_ORDER = [
+  "hp", "caudal_lpm", "cabeza_m", "solidos_mm", "succion_in", "descarga_in", "cilindros", "cilindrada_l",
+  "diametro_mm", "diametro_in", "filas", "capacidad_l", "aspas", "dientes", "voltaje_v", "material", "peso_kg",
+];
+const SEO_DESC_MAX = 160;
+
+/**
+ * Descripción para Google y al compartir. Si el resumen del producto ya es completo, se usa tal cual.
+ * Si es corto (p. ej. «Minera · tajo abierto»), se arma con el nombre y las especificaciones de la ficha:
+ * «Motobomba JF Jaguar 25: Minera · tajo abierto. Potencia 25 HP, caudal máximo 3.000 L/min… Cotiza por WhatsApp.»
+ * Solo usa datos que ya están cargados en el producto.
+ */
+export function productSeoDescription(opts: {
+  name: string;
+  summary: string;
+  description: string;
+  specs: Record<string, string | number>;
+  labels: Record<string, string>;
+  cta: string;
+  locale: Locale;
+}): string {
+  const summary = opts.summary.trim();
+  if (summary.length >= 70) return summary.slice(0, SEO_DESC_MAX);
+  const facts = SEO_SPEC_ORDER.flatMap((k) => {
+    const value = specValue(k, opts.specs[k], opts.locale);
+    return value && opts.labels[k] ? [`${opts.labels[k]} ${value}`] : [];
+  });
+  if (!facts.length) return summary || opts.description.trim().slice(0, SEO_DESC_MAX);
+  const intro = summary ? `${opts.name}: ${summary.replace(/[.\s]+$/, "")}.` : `${opts.name}.`;
+  const tag = localeTags[opts.locale];
+  let list = "";
+  for (const [i, fact] of facts.entries()) {
+    const piece = i === 0 ? fact : `, ${fact.charAt(0).toLocaleLowerCase(tag)}${fact.slice(1)}`;
+    if (`${intro} ${list}${piece}. ${opts.cta}`.length > SEO_DESC_MAX) break;
+    list += piece;
+  }
+  return list ? `${intro} ${list}. ${opts.cta}` : `${intro} ${opts.cta}`.slice(0, SEO_DESC_MAX);
+}
+
+/** Piezas del despiece que tienen al menos un repuesto publicado (las demás aún no van a Google). */
+export function partKeysWithProducts(
+  categories: { id: string; partKey: string | null }[],
+  products: { categoryId: string | null }[],
+): Set<string> {
+  const used = new Set(products.map((p) => p.categoryId));
+  return new Set(categories.flatMap((c) => (c.partKey && used.has(c.id) ? [c.partKey] : [])));
 }

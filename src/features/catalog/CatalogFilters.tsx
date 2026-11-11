@@ -20,6 +20,7 @@ type Labels = {
   sortPriceAsc: string;
   sortPriceDesc: string;
   sortHp: string;
+  condition: { label: string; all: string };
 };
 
 /** Filtros del catálogo. Todo vive en la URL para poder compartir o volver atrás. */
@@ -27,11 +28,14 @@ export function CatalogFilters({
   t,
   categories,
   models,
+  conditions,
   catalog,
 }: {
   t: Labels;
   categories: Option[];
   models: Option[];
+  /** Condiciones presentes en este catálogo (nuevo, usado, reconstruido); con una sola no se muestra el filtro. */
+  conditions: Option[];
   /** Repuestos se filtran por existencias; la vista «Todo» mezcla ambos. */
   catalog: "all" | "motobomba" | "motor" | "repuesto";
 }) {
@@ -80,6 +84,19 @@ export function CatalogFilters({
           <select value={params.get("categoria") ?? ""} onChange={(e) => set("categoria", e.target.value)}>
             <option value="">{t.allCategories}</option>
             {categories.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      {conditions.length > 1 && (
+        <label className="cf-field">
+          <span>{t.condition.label}</span>
+          <select value={params.get("condicion") ?? ""} onChange={(e) => set("condicion", e.target.value)}>
+            <option value="">{t.condition.all}</option>
+            {conditions.map((c) => (
               <option key={c.value} value={c.value}>
                 {c.label}
               </option>

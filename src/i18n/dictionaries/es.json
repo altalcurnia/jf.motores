@@ -53,21 +53,28 @@
     "items": {
       "motobombas": {
         "title": "Motobombas completas",
+        "seoTitle": "Motobombas diésel para minería",
+        "listTitle": "Motobombas en catálogo",
         "desc": "Equipos listos para trabajar: motor diésel acoplado a bomba para agua, lodo y desagüe de socavón."
       },
       "motores": {
         "title": "Motores",
+        "seoTitle": "Motores diésel para minería",
+        "listTitle": "Motores en catálogo",
         "desc": "Motores diésel de alto torque para minería, nuevos y reconstruidos."
       },
       "repuestos": {
         "title": "Repuestos",
+        "seoTitle": "Repuestos para motores diésel y motobombas",
+        "listTitle": "Repuestos en catálogo",
         "desc": "Piezas con información de compatibilidad para tu motor o motobomba."
       }
     },
     "cta": "Ver catálogo",
     "soon": "Estamos cargando el catálogo. Mientras tanto, cotiza directamente por WhatsApp.",
     "all": "Todo",
-    "allDesc": "Motobombas, motores y repuestos en un solo lugar."
+    "allDesc": "Motobombas, motores y repuestos en un solo lugar.",
+    "allList": "Productos en catálogo"
   },
   "contact": {
     "kicker": "Contacto",
@@ -144,6 +151,7 @@
     },
     "partsTitle": "Piezas",
     "partsHint": "Pasa el cursor o toca una pieza",
+    "partOff": "Aún sin repuestos",
     "sheetOpen": "Abrir catálogo",
     "sheetContinue": "Continuar explorando",
     "focusKicker": "Pieza",
@@ -256,7 +264,7 @@
     "title": "Repuestos: ",
     "back": "Ver todos los repuestos",
     "whatsapp": "Hola JF Motores, busco repuestos de: ",
-    "metaDesc": "Repuestos de {part} para motores diésel y motobombas: compatibilidad por modelo de motor, precio en tu moneda y asesoría por WhatsApp."
+    "metaDesc": "Repuestos de {part} para motores diésel y motobombas: compatibilidad por modelo de motor y asesoría por WhatsApp. Precio en pesos colombianos; el envío se cotiza aparte."
   },
   "account": {
     "signIn": "Entrar",
@@ -500,6 +508,14 @@
     "whatsappSold": "Hola JF Motores, vi el {name} (REF {ref}) vendido. ¿Tienen uno similar? {url}",
     "whatsappOutOfStock": "Hola JF Motores, el repuesto {name} (REF {ref}) aparece sin stock. ¿Cuándo llega o tienen uno equivalente? {url}",
     "partCategoryIntro": "Repuestos de esta pieza del motor.",
+    "metaCta": "Cotiza por WhatsApp.",
+    "condition": {
+      "label": "Condición",
+      "all": "Cualquier condición",
+      "nuevo": "Nuevo",
+      "usado": "Usado",
+      "reconstruido": "Reconstruido"
+    },
     "specs": {
       "hp": "Potencia",
       "succion_in": "Succión",

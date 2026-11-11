@@ -53,21 +53,28 @@
     "items": {
       "motobombas": {
         "title": "Motobombas completas",
+        "seoTitle": "Motobombas a diesel para mineração",
+        "listTitle": "Motobombas no catálogo",
         "desc": "Equipamentos prontos para trabalhar: motor a diesel acoplado à bomba para água, lama e drenagem de galerias."
       },
       "motores": {
         "title": "Motores",
+        "seoTitle": "Motores a diesel para mineração",
+        "listTitle": "Motores no catálogo",
         "desc": "Motores a diesel de alto torque para mineração, novos e recondicionados."
       },
       "repuestos": {
         "title": "Peças de reposição",
+        "seoTitle": "Peças para motores a diesel e motobombas",
+        "listTitle": "Peças no catálogo",
         "desc": "Peças com informação de compatibilidade para seu motor ou motobomba."
       }
     },
     "cta": "Ver catálogo",
     "soon": "Estamos carregando o catálogo. Enquanto isso, peça seu orçamento diretamente pelo WhatsApp.",
     "all": "Tudo",
-    "allDesc": "Motobombas, motores e peças em um só lugar."
+    "allDesc": "Motobombas, motores e peças em um só lugar.",
+    "allList": "Produtos no catálogo"
   },
   "contact": {
     "kicker": "Contato",
@@ -144,6 +151,7 @@
     },
     "partsTitle": "Peças",
     "partsHint": "Passe o cursor ou toque numa peça",
+    "partOff": "Ainda sem peças",
     "sheetOpen": "Abrir catálogo",
     "sheetContinue": "Continuar explorando",
     "focusKicker": "Peça",
@@ -256,7 +264,7 @@
     "title": "Peças: ",
     "back": "Ver todas as peças",
     "whatsapp": "Olá JF Motores, procuro peças de: ",
-    "metaDesc": "Peças de {part} para motores a diesel e motobombas: compatibilidade por modelo de motor, preço na sua moeda e atendimento pelo WhatsApp."
+    "metaDesc": "Peças de {part} para motores a diesel e motobombas: compatibilidade por modelo de motor e atendimento pelo WhatsApp. Preço em pesos colombianos; o frete é cotado à parte."
   },
   "account": {
     "signIn": "Entrar",
@@ -500,6 +508,14 @@
     "whatsappSold": "Olá JF Motores, vi que o {name} (REF {ref}) foi vendido. Vocês têm um semelhante? {url}",
     "whatsappOutOfStock": "Olá JF Motores, a peça {name} (REF {ref}) aparece sem estoque. Quando chega ou vocês têm uma equivalente? {url}",
     "partCategoryIntro": "Peças desta parte do motor.",
+    "metaCta": "Peça sua cotação pelo WhatsApp.",
+    "condition": {
+      "label": "Condição",
+      "all": "Qualquer condição",
+      "nuevo": "Novo",
+      "usado": "Usado",
+      "reconstruido": "Recondicionado"
+    },
     "specs": {
       "hp": "Potência",
       "succion_in": "Sucção",

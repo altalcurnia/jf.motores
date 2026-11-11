@@ -29,6 +29,7 @@ export const emptyProduct = (): ProductFormValue => ({
   description: { es: "", en: "", pt: "" },
   priceCop: null,
   status: "borrador",
+  condition: "nuevo",
   publishedAt: null,
   featured: false,
   specs: SPEC_KEYS.motobomba.slice(0, 5).map(([key]) => ({ key, value: "" })),

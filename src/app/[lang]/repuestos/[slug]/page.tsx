@@ -10,6 +10,7 @@ import { ProductDetail, productMetadata, productStaticParams } from "@/features/
 import { Arrow } from "@/components/Arrow";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
 import { pageMetadata } from "@/i18n/page-metadata";
+import { partKeysWithProducts } from "@/features/catalog/shared";
 
 /**
  * /repuestos/[slug] sirve dos cosas:
@@ -24,12 +25,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/[lang]/repuestos/[slug]">) {
   const { slug } = await params;
   if (!isPartKey(slug)) return productMetadata("repuesto", slug);
-  const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
+  const [locale, dict, data] = await Promise.all([getLocale(), getDictionary(), getCatalog("repuesto")]);
   return pageMetadata({
     locale,
     path: `/repuestos/${slug}`,
     title: dict.partPage.title + dict.parts[slug],
     description: dict.partPage.metaDesc.replace("{part}", dict.parts[slug].toLowerCase()),
+    // Una pieza sin repuestos cargados sigue abierta para los visitantes, pero no va a Google hasta tener productos
+    index: partKeysWithProducts(data.categories, data.products).has(slug),
   });
 }
 
@@ -60,6 +63,7 @@ async function PartCategory({ part }: { part: PartKey }) {
         <p>{t.partCategoryIntro}</p>
         <p className="price-notice">{(await vatPrefix(t)) + t.shippingNote}</p>
       </header>
+      <h2 className="sr-only">{dict.catalogs.items.repuestos.listTitle}</h2>
       {products.length ? (
         <div className="pc-grid">
           {products.map((p) => (

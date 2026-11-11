@@ -28,7 +28,7 @@ export function ProductCard({ p, locale, t }: { p: CatalogProduct; locale: Local
       </div>
       <div className="pc-body">
         <span className="pc-ref">
-          {t.ref} {p.ref}
+          {t.ref} {p.ref} · {t.condition[p.condition]}
         </span>
         <h3>{name}</h3>
         {tr(p.summary, locale) && <p>{tr(p.summary, locale)}</p>}

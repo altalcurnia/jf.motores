@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { locales, localeTags } from "@/i18n/config";
 import { site } from "@/lib/site";
 import { getCatalogData } from "@/features/catalog/data";
-import { catalogPaths, storageUrl } from "@/features/catalog/shared";
+import { catalogPaths, partKeysWithProducts, storageUrl } from "@/features/catalog/shared";
 import { partKeys } from "@/features/engine3d/parts";
 
 /** Mapa del sitio para buscadores: páginas públicas y productos en los tres idiomas. */
@@ -34,12 +34,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...entry("/sedes", { priority: 0.7, changeFrequency: "monthly" }),
     ...entry("/legal/terminos", { priority: 0.2, changeFrequency: "yearly" }),
     ...entry("/legal/privacidad", { priority: 0.2, changeFrequency: "yearly" }),
-    ...partKeys.flatMap((k) => entry(`/repuestos/${k}`, { priority: 0.6, changeFrequency: "weekly" })),
   ];
 
   let products: MetadataRoute.Sitemap = [];
   try {
     const data = await getCatalogData();
+    // Piezas del despiece: solo las que ya tienen repuestos (las vacías entran solas cuando se les cargue uno)
+    const withProducts = partKeysWithProducts(data.categories, data.products);
+    pages.push(
+      ...partKeys.filter((k) => withProducts.has(k)).flatMap((k) => entry(`/repuestos/${k}`, { priority: 0.6, changeFrequency: "weekly" })),
+    );
     products = data.products.flatMap((p) =>
       entry(`/${catalogPaths[p.catalog]}/${p.slug}`, {
         priority: p.status === "disponible" ? 0.8 : 0.5,

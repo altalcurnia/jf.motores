@@ -42,6 +42,7 @@ export async function loadProduct(supabase: Awaited<ReturnType<typeof createSupa
     description: three(p.description),
     priceCop: p.price_cop == null ? null : Number(p.price_cop),
     status: p.status,
+    condition: p.condition,
     publishedAt: p.published_at,
     featured: p.featured,
     specs: Object.entries((p.specs ?? {}) as Record<string, unknown>).map(([key, value]) => ({ key, value: String(value ?? "") })),

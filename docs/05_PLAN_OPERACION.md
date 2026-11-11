@@ -65,7 +65,7 @@ Nota de la auditoría corregida: `SUPABASE_SECRET_KEY` **no es necesaria hoy** (
 | # | Tarea | Quién |
 |---|---|---|
 | 4.1 | **Perfil de Empresa de Google** por sede (Medellín, Caucasia): aparece en Google Maps y búsquedas locales | Dueño (Claude guía) |
-| 4.2 | **Google Search Console**: verificar el dominio y enviar `https://jfmotoresmedellin.com/sitemap.xml` | Dueño + Claude |
+| 4.2 | ~~**Google Search Console**: verificar el dominio y enviar `https://jfmotoresmedellin.com/sitemap.xml`~~ ✅ **Hecho (8-nov)**: propiedad verificada con etiqueta HTML (el código vive en Admin → Empresa; si se borra, se pierde la verificación) y sitemap enviado. Falta revisar cada mes la cobertura y las consultas | Dueño + Claude |
 | 4.3 | Analítica: **Vercel Web Analytics** o **GA4** (el sitio ya soporta GA4 y Meta Pixel desde Admin → Empresa) | Dueño |
 | 4.4 | **WhatsApp Business** (app): catálogo, respuestas rápidas, etiquetas por estado de cotización | Dueño |
 | 4.5 | Opcional: facturación electrónica (Alegra/Siigo) y pagos en línea (Wompi/Mercado Pago) | Más adelante |

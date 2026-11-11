@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { fill, filterProducts, parseCatalogQuery, specValue, storageUrl, tr, type CatalogProduct } from "@/features/catalog/shared";
 
 const base: Omit<CatalogProduct, "id" | "ref" | "slug" | "name" | "priceCop" | "status" | "publishedAt" | "specs"> = {
-  catalog: "motobomba", summary: {}, description: {}, featured: false, categoryId: "c1", engineModelId: null, images: [], glbPath: null,
+  catalog: "motobomba", condition: "nuevo", summary: {}, description: {}, featured: false, categoryId: "c1", engineModelId: null, images: [], glbPath: null,
 };
 const mk = (id: string, o: Partial<CatalogProduct>): CatalogProduct =>
   ({ ...base, id, ref: id.toUpperCase(), slug: id, name: { es: `Bomba ${id}` }, priceCop: 100, status: "disponible", publishedAt: "2026-01-01", specs: {}, ...o }) as CatalogProduct;
@@ -59,5 +59,66 @@ describe("título de la ficha para Google", () => {
     const { productSeoTitle } = await import("@/features/catalog/shared");
     expect(productSeoTitle("Motobomba Cummins 4BT", "CUMMINS 4BT", { hp: 120, succion_in: 4 })).toBe('Motobomba Cummins 4BT · 120 HP · 4"');
     expect(productSeoTitle("Motobomba JF diésel", "JF-M25", {})).toBe("Motobomba JF diésel · JF-M25");
+  });
+});
+
+describe("descripción de la ficha para Google", () => {
+  const labels = { hp: "Potencia", caudal_lpm: "Caudal máximo", cabeza_m: "Cabeza máxima", solidos_mm: "Paso de sólidos", succion_in: "Succión" };
+  const cta = "Cotiza por WhatsApp.";
+
+  it("si el resumen es corto, la arma con el nombre y las especificaciones de la ficha", async () => {
+    const { productSeoDescription } = await import("@/features/catalog/shared");
+    const d = productSeoDescription({
+      name: "Motobomba JF Jaguar 25",
+      summary: "Minera · tajo abierto",
+      description: "",
+      specs: { hp: 25, caudal_lpm: 3000, cabeza_m: 30, solidos_mm: 50, succion_in: 6 },
+      labels,
+      cta,
+      locale: "es",
+    });
+    expect(d.startsWith("Motobomba JF Jaguar 25: Minera · tajo abierto. Potencia 25 HP, caudal máximo")).toBe(true);
+    expect(d).toContain("cabeza máxima 30 m");
+    expect(d.endsWith(cta)).toBe(true);
+    expect(d.length).toBeLessThanOrEqual(160);
+  });
+
+  it("respeta un resumen completo y no inventa datos cuando no hay especificaciones", async () => {
+    const { productSeoDescription } = await import("@/features/catalog/shared");
+    const long = "Motobomba diésel lista para trabajar en tajo abierto, con motor de 25 HP y bomba de 6 pulgadas probada en taller.";
+    expect(productSeoDescription({ name: "X", summary: long, description: "", specs: { hp: 25 }, labels, cta, locale: "es" })).toBe(long);
+    expect(productSeoDescription({ name: "X", summary: "Corto", description: "Texto largo", specs: {}, labels, cta, locale: "es" })).toBe("Corto");
+    expect(productSeoDescription({ name: "X", summary: "", description: "Texto de la ficha", specs: {}, labels, cta, locale: "es" })).toBe("Texto de la ficha");
+  });
+});
+
+describe("piezas del despiece con repuestos", () => {
+  it("solo cuenta las piezas cuya categoría tiene al menos un producto", async () => {
+    const { partKeysWithProducts } = await import("@/features/catalog/shared");
+    const categories = [
+      { id: "c1", partKey: "radiador" },
+      { id: "c2", partKey: "ciguenal" },
+      { id: "c3", partKey: null },
+    ];
+    const withProducts = partKeysWithProducts(categories, [{ categoryId: "c1" }, { categoryId: "c3" }, { categoryId: null }]);
+    expect([...withProducts]).toEqual(["radiador"]);
+  });
+});
+
+describe("condición del producto", () => {
+  it("filtra por nuevo, usado o reconstruido e ignora valores desconocidos en la URL", () => {
+    const list = [mk("n", { condition: "nuevo" }), mk("u", { condition: "usado" }), mk("r", { condition: "reconstruido" })];
+    const ctx = { locale: "es" as const, categories: [], compat: [] };
+    expect(filterProducts(list, parseCatalogQuery({ condicion: "reconstruido" }), ctx).map((p) => p.id)).toEqual(["r"]);
+    expect(filterProducts(list, parseCatalogQuery({ condicion: "usado" }), ctx).map((p) => p.id)).toEqual(["u"]);
+    expect(parseCatalogQuery({ condicion: "roto" }).condition).toBeNull();
+    expect(filterProducts(list, parseCatalogQuery({ condicion: "roto" }), ctx)).toHaveLength(3);
+  });
+
+  it("le dice a Google la condición real", async () => {
+    const { conditionSchema } = await import("@/features/catalog/shared");
+    expect(conditionSchema.nuevo).toBe("https://schema.org/NewCondition");
+    expect(conditionSchema.usado).toBe("https://schema.org/UsedCondition");
+    expect(conditionSchema.reconstruido).toBe("https://schema.org/RefurbishedCondition");
   });
 });

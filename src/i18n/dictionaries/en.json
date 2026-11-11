@@ -53,21 +53,28 @@
     "items": {
       "motobombas": {
         "title": "Complete pump sets",
+        "seoTitle": "Diesel pump sets for mining",
+        "listTitle": "Pump sets in the catalogue",
         "desc": "Ready-to-work units: diesel engine coupled to a pump for water, slurry and underground dewatering."
       },
       "motores": {
         "title": "Engines",
+        "seoTitle": "Diesel engines for mining",
+        "listTitle": "Engines in the catalogue",
         "desc": "High-torque diesel engines for mining, new and rebuilt."
       },
       "repuestos": {
         "title": "Spare parts",
+        "seoTitle": "Spare parts for diesel engines and pump sets",
+        "listTitle": "Spare parts in the catalogue",
         "desc": "Parts with compatibility information for your engine or pump set."
       }
     },
     "cta": "View catalogue",
     "soon": "We are loading the catalogue. In the meantime, request a quote directly on WhatsApp.",
     "all": "All",
-    "allDesc": "Pump sets, engines and spare parts in one place."
+    "allDesc": "Pump sets, engines and spare parts in one place.",
+    "allList": "Products in the catalogue"
   },
   "contact": {
     "kicker": "Contact",
@@ -144,6 +151,7 @@
     },
     "partsTitle": "Parts",
     "partsHint": "Hover or tap a part",
+    "partOff": "No spare parts yet",
     "sheetOpen": "Open catalog",
     "sheetContinue": "Keep exploring",
     "focusKicker": "Part",
@@ -256,7 +264,7 @@
     "title": "Spare parts: ",
     "back": "See all spare parts",
     "whatsapp": "Hello JF Motores, I'm looking for spare parts: ",
-    "metaDesc": "{part} spare parts for diesel engines and water pumps: compatibility by engine model, prices in your currency and WhatsApp advice."
+    "metaDesc": "{part} spare parts for diesel engines and water pumps: compatibility by engine model and WhatsApp advice. Prices in Colombian pesos; shipping is quoted separately."
   },
   "account": {
     "signIn": "Sign in",
@@ -500,6 +508,14 @@
     "whatsappSold": "Hello JF Motores, I saw the {name} (REF {ref}) is sold. Do you have a similar one? {url}",
     "whatsappOutOfStock": "Hi JF Motores, the part {name} (REF {ref}) shows as out of stock. When will it arrive, or do you have an equivalent? {url}",
     "partCategoryIntro": "Spare parts for this engine part.",
+    "metaCta": "Get a quote on WhatsApp.",
+    "condition": {
+      "label": "Condition",
+      "all": "Any condition",
+      "nuevo": "New",
+      "usado": "Used",
+      "reconstruido": "Rebuilt"
+    },
     "specs": {
       "hp": "Power",
       "succion_in": "Suction",

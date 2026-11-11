@@ -477,6 +477,7 @@ export type Database = {
           engine_model_id: string | null;
           featured: boolean;
           id: string;
+          condition: "nuevo" | "usado" | "reconstruido";
           is_demo: boolean;
           model_glb_path: string | null;
           manual_path: string | null;
@@ -502,6 +503,7 @@ export type Database = {
           engine_model_id?: string | null;
           featured?: boolean;
           id?: string;
+          condition?: "nuevo" | "usado" | "reconstruido";
           is_demo?: boolean;
           model_glb_path?: string | null;
           manual_path?: string | null;

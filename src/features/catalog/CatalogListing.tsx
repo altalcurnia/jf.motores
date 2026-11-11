@@ -6,7 +6,7 @@ import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getCatalog, getCatalogData } from "./data";
 import { CatalogFilters } from "./CatalogFilters";
 import { ProductCard } from "./ProductCard";
-import { catalogPaths, fill, filterProducts, parseCatalogQuery, tr, type CatalogType } from "./shared";
+import { catalogPaths, fill, filterProducts, parseCatalogQuery, productConditions, tr, type CatalogType } from "./shared";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
 import { pageMetadata } from "@/i18n/page-metadata";
 
@@ -38,13 +38,15 @@ export function CatalogTabs({ current, locale, dict }: { current: Tab | null; lo
 export async function CatalogListing({ catalog, searchParams }: { catalog: Tab; searchParams: SearchParams }) {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
   const item =
-    catalog === "all" ? { title: dict.nav.catalog, desc: dict.catalogs.allDesc } : dict.catalogs.items[catalogPaths[catalog]];
+    catalog === "all"
+      ? { seoTitle: dict.nav.catalog, desc: dict.catalogs.allDesc }
+      : dict.catalogs.items[catalogPaths[catalog]];
   return (
     <section className="block cat-page">
       <CatalogTabs current={catalog} locale={locale} dict={dict} />
       <header className="cat-head">
         <div className="sk">{dict.catalogs.kicker}</div>
-        <h1>{item.title}</h1>
+        <h1>{item.seoTitle}</h1>
         <p>{item.desc}</p>
         <p className="price-notice">{(await vatPrefix(dict.catalog)) + dict.catalog.shippingNote}</p>
       </header>
@@ -76,15 +78,20 @@ async function Results({ catalog, searchParams }: { catalog: Tab; searchParams: 
   const usedCategories = data.categories.filter((c) => data.products.some((p) => p.categoryId === c.id));
   const models =
     catalog === "motobomba" ? [] : data.engineModels.map((m) => ({ value: m.id, label: `${m.brand} ${m.model}` }));
-  const filtered = query.status !== "all" || query.category || query.model || query.q || query.equipment;
+  const filtered = query.status !== "all" || query.condition || query.category || query.model || query.q || query.equipment;
+
+  // Subtítulo del listado (solo para lectores de pantalla y buscadores): ordena H1 → H2 → H3 de las tarjetas
+  const listTitle = catalog === "all" ? dict.catalogs.allList : dict.catalogs.items[catalogPaths[catalog]].listTitle;
 
   return (
     <>
+      <h2 className="sr-only">{listTitle}</h2>
       <CatalogFilters
         t={t}
         catalog={catalog}
         categories={usedCategories.map((c) => ({ value: c.slug, label: tr(c.name, locale) }))}
         models={models}
+        conditions={productConditions.filter((c) => data.products.some((p) => p.condition === c)).map((c) => ({ value: c, label: t.condition[c] }))}
       />
       {equipment && (
         <p className="equip-chip">
@@ -132,5 +139,5 @@ export async function catalogMetadata(catalog: Tab) {
     return pageMetadata({ locale, path: "/catalogo", title: dict.nav.catalog, description: dict.catalogs.allDesc });
   }
   const item = dict.catalogs.items[catalogPaths[catalog]];
-  return pageMetadata({ locale, path: `/${catalogPaths[catalog]}`, title: item.title, description: item.desc });
+  return pageMetadata({ locale, path: `/${catalogPaths[catalog]}`, title: item.seoTitle, description: item.desc });
 }

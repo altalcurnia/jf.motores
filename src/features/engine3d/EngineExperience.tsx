@@ -96,8 +96,12 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
   }, [mobile, brand]);
   // Referencias estables: el motor se crea una sola vez por idioma.
   const hudRef = useRef(t.hud);
+  // Piezas con repuestos cargados: las demás salen grises y sin enlace hasta que tengan productos
+  const hasParts = (part: string) => (partProducts[part]?.length ?? 0) > 0;
+  const hasPartsRef = useRef(hasParts);
   useEffect(() => {
     hudRef.current = t.hud;
+    hasPartsRef.current = hasParts;
   });
 
   useEffect(() => {
@@ -179,7 +183,7 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
             hud: hudRef.current,
             // Clic o toque en una pieza del modelo: acercamiento + panel con información y repuestos
             onPartClick: (part: string) => {
-              if (!isPartKey(part)) return;
+              if (!isPartKey(part) || !hasPartsRef.current(part)) return;
               setHover(part);
               started.highlight(part);
               setSheet(part);
@@ -353,7 +357,12 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
             {j.partsTitle}
             <small>{j.partsHint}</small>
           </span>
-          {engineLabels.map((l, i) => (
+          {engineLabels.map((l, i) =>
+            !hasParts(l.part) ? (
+              <a key={l.id} className="off" aria-disabled="true" title={j.partOff}>
+                <b>{String(i + 1).padStart(2, "0")}</b> {t.parts[l.part]}
+              </a>
+            ) : (
             <Link
               key={l.id}
               href={`/${locale}/repuestos/${l.part}`}
@@ -368,7 +377,8 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
             >
               <b>{String(i + 1).padStart(2, "0")}</b> {t.parts[l.part]}
             </Link>
-          ))}
+            ),
+          )}
         </div>
         {sheet && exploded && (
           <aside className="part-focus" role="dialog" aria-label={t.parts[sheet]}>
@@ -411,21 +421,25 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
       {/* Marcadores del despiece: solo el número en un botón redondo; al pasar el cursor o tocarlo
           se ilumina la pieza y el botón se abre con el nombre */}
       <div id="labels">
-        {engineLabels.map((l, i) => (
+        {engineLabels.map((l, i) => {
+          const off = !hasParts(l.part);
+          return (
           <a
-            className={`lbl${hover === l.part ? " hl" : ""}`}
+            className={`lbl${hover === l.part ? " hl" : ""}${off ? " off" : ""}`}
             id={l.id}
             key={l.id}
             data-part={l.part}
             data-main=""
-            href={`/${locale}/repuestos/${l.part}`}
-            aria-label={t.parts[l.part]}
+            href={off ? undefined : `/${locale}/repuestos/${l.part}`}
+            aria-label={off ? `${t.parts[l.part]} · ${j.partOff}` : t.parts[l.part]}
+            aria-disabled={off || undefined}
+            title={off ? j.partOff : undefined}
             onMouseEnter={() => lightPart(l.part)}
             onMouseLeave={() => lightPart(null)}
             onFocus={() => lightPart(l.part)}
             onBlur={() => lightPart(null)}
             onTouchStart={() => lightPart(l.part)}
-            onClick={(e) => onPartTap(e, l.part)}
+            onClick={(e) => (off ? e.preventDefault() : onPartTap(e, l.part))}
           >
             <div className="tag">
               <b>{String(i + 1).padStart(2, "0")}</b>
@@ -433,7 +447,8 @@ export function EngineExperience({ locale, t, monitor, variant = "v2", brand = "
             </div>
             <div className="stem" />
           </a>
-        ))}
+          );
+        })}
       </div>
 
       {/* Tablero como el de la motobomba real: 3 relojes en columna (rpm, temperatura del agua,

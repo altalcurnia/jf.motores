@@ -10,7 +10,7 @@ import { compatibleParts, compatibleWith, getCatalogData } from "./data";
 import { Gallery } from "./Gallery";
 import { ProductCard } from "./ProductCard";
 import { OwnerBanner, StatusPill } from "./owned";
-import { catalogPaths, fill, formatPrice, productHref, productSeoTitle, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
+import { catalogPaths, conditionSchema, fill, formatPrice, productHref, productSeoDescription, productSeoTitle, specValue, statusLabels, storageUrl, tr, type CatalogType } from "./shared";
 import { vatPrefix } from "@/features/catalog/PriceNotice";
 import { JsonLd } from "@/components/JsonLd";
 
@@ -30,11 +30,19 @@ export async function productStaticParams(catalog: CatalogType) {
 }
 
 export async function productMetadata(catalog: CatalogType, slug: string) {
-  const [{ product }, locale] = await Promise.all([findProduct(catalog, slug), getLocale()]);
+  const [{ product }, locale, dict] = await Promise.all([findProduct(catalog, slug), getLocale(), getDictionary()]);
   if (!product) return {};
   const img = product.images[0];
   const title = productSeoTitle(tr(product.name, locale), product.ref, product.specs);
-  const description = tr(product.summary, locale) || tr(product.description, locale).slice(0, 160);
+  const description = productSeoDescription({
+    name: tr(product.name, locale),
+    summary: tr(product.summary, locale),
+    description: tr(product.description, locale),
+    specs: product.specs,
+    labels: dict.catalog.specs,
+    cta: dict.catalog.metaCta,
+    locale,
+  });
   // Al compartir el enlace (WhatsApp, Facebook) sale la foto del producto
   const rawImg = img ? storageUrl(img.path, supabaseUrl()) : "/og.jpg";
   const absImg = rawImg.startsWith("http") ? rawImg : `${site.url}${rawImg.startsWith("/") ? "" : "/"}${rawImg}`;
@@ -89,7 +97,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
             url: pageUrl,
             priceCurrency: "COP",
             price: p.priceCop,
-            itemCondition: "https://schema.org/NewCondition",
+            itemCondition: conditionSchema[p.condition],
             availability: p.status === "disponible" ? "https://schema.org/InStock" : isPart ? "https://schema.org/OutOfStock" : "https://schema.org/SoldOut",
             seller: { "@type": "Organization", name: site.name },
           }
@@ -125,7 +133,7 @@ export async function ProductDetail({ catalog, slug }: { catalog: CatalogType; s
 
         <div className="pd-info">
           <span className="pc-ref">
-            {t.ref} {p.ref}
+            {t.ref} {p.ref} · {t.condition[p.condition]}
           </span>
           <h1>{name}</h1>
           {tr(p.summary, locale) && <p className="pd-summary">{tr(p.summary, locale)}</p>}

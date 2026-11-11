@@ -2,6 +2,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { reportError } from "@/lib/report-error";
+import { isProductCondition } from "./shared";
 import type {
   CatalogCategory,
   CatalogProduct,
@@ -34,7 +35,7 @@ export async function getCatalogData(): Promise<CatalogData> {
       supabase
         .from("products")
         .select(
-          "id, catalog, ref, slug, name, summary, description, price_cop, status, specs, featured, published_at, category_id, engine_model_id, model_glb_path, manual_path, manual_public, warranty_months, product_images(path, alt, is_reference, sort)",
+          "id, catalog, ref, slug, name, summary, description, price_cop, status, condition, specs, featured, published_at, category_id, engine_model_id, model_glb_path, manual_path, manual_public, warranty_months, product_images(path, alt, is_reference, sort)",
         )
         .neq("status", "borrador")
         .order("published_at", { ascending: false }),
@@ -56,6 +57,7 @@ export async function getCatalogData(): Promise<CatalogData> {
         description: p.description as I18nText,
         priceCop: p.price_cop == null ? null : Number(p.price_cop),
         status: p.status === "vendido" ? "vendido" : "disponible",
+        condition: isProductCondition(p.condition) ? p.condition : "nuevo",
         specs: (p.specs ?? {}) as Record<string, string | number>,
         featured: p.featured,
         publishedAt: p.published_at ?? "",

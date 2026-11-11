@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { storageUrl, type CatalogType, type ProductStatus } from "@/features/catalog/shared";
+import { storageUrl, type CatalogType, type ProductCondition, type ProductStatus } from "@/features/catalog/shared";
 import { generateDescriptionWithAi, lookupEngineSpecsWithAi, translateFieldsWithAi } from "../ai-copy";
 import { createEngineModel, deleteProduct, saveProduct, type ProductInput } from "./actions";
 import { SPEC_KEYS, slugify, type FormOptions, type Lang, type ProductFormValue } from "./form-model";
@@ -617,6 +617,14 @@ export function ProductForm({ initial, options, supabaseUrl, canEdit }: { initia
                 <option value="borrador">Borrador (oculto)</option>
                 <option value="disponible">{v.catalog === "repuesto" ? "En stock" : "Disponible"}</option>
                 <option value="vendido">{v.catalog === "repuesto" ? "Sin stock" : "Vendido"}</option>
+              </select>
+            </label>
+            <label>
+              Condición
+              <select value={v.condition} onChange={(e) => set("condition", e.target.value as ProductCondition)}>
+                <option value="nuevo">Nuevo</option>
+                <option value="usado">Usado</option>
+                <option value="reconstruido">Reconstruido</option>
               </select>
             </label>
           </div>

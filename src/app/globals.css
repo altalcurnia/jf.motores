@@ -334,7 +334,7 @@ section.cat-page, section.pd-page { padding-top: 130px; min-height: 80vh; }
   background: rgba(14, 17, 21, 0.92); color: var(--ink); text-decoration: none; transition: border-color 0.25s, transform 0.25s;
 }
 .pc:hover { border-color: var(--yellow); transform: translateY(-3px); }
-.pc.is-sold .pc-media img { filter: grayscale(0.85) brightness(0.8); }
+/* Los vendidos se ven a color, igual que en su ficha: solo los distingue la etiqueta «Vendido» */
 .pc-skel { min-height: 380px; animation: pc-pulse 1.4s ease-in-out infinite; }
 @keyframes pc-pulse { 50% { opacity: 0.5; } }
 .pc-media { position: relative; aspect-ratio: 4 / 3; background: #0d1014; }
@@ -865,6 +865,17 @@ body.drawer-open { overflow: hidden; }
 #labels .lbl.hl .tag b { color: #fff; }
 #labels .lbl.hl .tag .nm { max-width: 280px; opacity: 1; }
 .lbl.hl { z-index: 2; }
+/* Pieza sin repuestos cargados: gris y sin enlace. Se activa sola cuando tenga productos. */
+.part-row a.off, .part-row a.off:hover, .part-row a.off:focus-visible {
+  color: var(--mut); border-color: var(--line); background: rgba(8, 10, 12, 0.35); transform: none;
+  opacity: 0.55; cursor: not-allowed;
+}
+.part-row a.off b { color: var(--mut); }
+#labels .lbl.off .tag, #labels .lbl.off.hl .tag {
+  color: var(--mut); border-color: var(--line); background: rgba(20, 22, 26, 0.92); box-shadow: none;
+  opacity: 0.7; cursor: not-allowed;
+}
+#labels .lbl.off .tag b, #labels .lbl.off.hl .tag b { color: var(--mut); }
 
 @media (max-width: 760px) {
   #journey { height: 600vh; }
