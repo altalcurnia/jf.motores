@@ -1,0 +1,39 @@
+<!doctype html>
+<html><body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f3f4f6;padding:32px 16px;">
+<tr><td align="center">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:520px;background:#ffffff;border-radius:16px;overflow:hidden;">
+<tr><td style="background:#0b0d10;padding:22px 28px;">
+<img src="https://jfmotoresmedellin.com/logo.png" width="40" height="40" alt="JF Motores" style="vertical-align:middle;border:0;">
+<span style="vertical-align:middle;margin-left:10px;font-size:16px;font-weight:900;letter-spacing:2px;color:#ffffff;">JF <span style="color:#f7c600;">MOTORES</span></span>
+</td></tr>
+<tr><td style="padding:32px 28px;">
+{{ if eq .Data.locale "en" }}
+<h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#0b0d10;">Confirm your account</h1>
+<p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#3a3f45;">Thanks for signing up with JF Motores. Confirm your email to activate your account and keep track of your quotes and equipment.</p>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="border-radius:999px;background:#f7c600;">
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;redirect_to={{ .RedirectTo }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Confirm my account</a>
+</td></tr></table>
+<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">If this wasn't you, ignore this email. The link expires in 1 hour and can only be used once.</p>
+{{ else if eq .Data.locale "pt" }}
+<h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#0b0d10;">Confirme sua conta</h1>
+<p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#3a3f45;">Obrigado por se cadastrar na JF Motores. Confirme seu e-mail para ativar sua conta e acompanhar seus orçamentos e equipamentos.</p>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="border-radius:999px;background:#f7c600;">
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;redirect_to={{ .RedirectTo }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Confirmar minha conta</a>
+</td></tr></table>
+<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">Se não foi você, ignore este e-mail. O link expira em 1 hora e só pode ser usado uma vez.</p>
+{{ else }}
+<h1 style="margin:0 0 12px;font-size:24px;line-height:1.25;color:#0b0d10;">Confirma tu cuenta</h1>
+<p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#3a3f45;">Gracias por registrarte en JF Motores. Confirma tu correo para activar tu cuenta y hacer seguimiento a tus cotizaciones y equipos.</p>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td style="border-radius:999px;background:#f7c600;">
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;redirect_to={{ .RedirectTo }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0b0d10;text-decoration:none;border-radius:999px;">Confirmar mi cuenta</a>
+</td></tr></table>
+<p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">Si no fuiste tú, ignora este correo. El enlace vence en 1 hora y solo se puede usar una vez.</p>
+{{ end }}
+</td></tr>
+<tr><td style="padding:18px 28px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;">
+JF Motores · Medellín, Colombia · <a href="https://jfmotoresmedellin.com" style="color:#9ca3af;">jfmotoresmedellin.com</a>
+</td></tr>
+</table>
+</td></tr></table>
+</body></html>

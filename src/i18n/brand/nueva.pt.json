@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "title": "JF Motores · Motobombas diesel para mineração | Medellín",
+    "description": "Motobombas diesel testadas sob carga, motores e peças que encaixam de primeira. Atendimento por WhatsApp para a mineração."
+  },
+  "hero": {
+    "kicker": "Motobombas diesel · Mineração · Medellín",
+    "line1": "Que a água",
+    "line2a": "não ",
+    "line2b": "pare",
+    "line2c": "",
+    "line3": "sua mina.",
+    "copy": "Motobombas diesel testadas sob carga na nossa oficina, peças que encaixam de primeira e um consultor que responde no WhatsApp.",
+    "ctaPrimary": "Pedir orçamento",
+    "ctaSecondary": "Ver equipamentos",
+    "scrollHint": "Role e veja por dentro"
+  },
+  "marquee": [
+    "Testadas sob carga",
+    "Peças que encaixam",
+    "Consultor no WhatsApp",
+    "Até 40 HP",
+    "Até 3 600 L/min",
+    "Oficina em Medellín"
+  ],
+  "benefits": {
+    "title1": "Menos !paradas!, ",
+    "titleEm": "mais turnos",
+    "title2": ".",
+    "intro": "O que você ganha quando sua motobomba sai da nossa oficina.",
+    "rows": [
+      {
+        "h3": "Testada sob carga",
+        "p": "Antes do envio colocamos para trabalhar na oficina. Chega à mina pronta para partir."
+      },
+      {
+        "h3": "Peças que encaixam",
+        "p": "Cada peça diz com qual motor e motobomba é compatível. Você pede a certa de primeira."
+      },
+      {
+        "h3": "Seu equipamento, registrado",
+        "p": "Ao comprar, seu equipamento fica na sua conta com série, garantia e guia de uso."
+      },
+      {
+        "h3": "Um consultor que responde",
+        "p": "Você fala com quem conhece seu equipamento, por WhatsApp ou e-mail. Sem central nem espera."
+      }
+    ]
+  },
+  "catalogs": {
+    "title": "Equipamentos e peças para a mina não parar"
+  },
+  "contact": {
+    "title1": "Quanta !água!",
+    "title2": "precisa tirar?",
+    "cta": "Pedir orçamento"
+  },
+  "journey": {
+    "a": {
+      "h2": "Liga na primeira.",
+      "p": "Cada equipamento sai da nossa oficina testado sob carga. Chega à mina pronto para trabalhar."
+    },
+    "b": {
+      "p": "A plena carga: vazão constante para manter seca a frente de trabalho, turno após turno."
+    },
+    "c": {
+      "h2": "Veja por dentro.",
+      "p": "Toque numa peça ou no seu número: veja peças de reposição, preços e com quais equipamentos encaixa."
+    },
+    "d": {
+      "h2": "Tudo de volta ao lugar.",
+      "p": "Compatibilidade clara: você pede a peça certa e a mina não para."
+    }
+  }
+}

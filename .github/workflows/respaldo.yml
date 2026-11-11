@@ -1,0 +1,69 @@
+name: Copia de seguridad semanal
+
+# Copia gratis de la base de datos de Supabase (mientras no se pague Supabase Pro, que trae copias diarias).
+# Guarda roles, estructura y datos (incluye cuentas de usuario), CIFRADOS con una frase secreta, como archivo
+# del flujo (se conservan 35 días: unas 5 copias). Aunque el repositorio fuera público, sin la frase no se pueden leer.
+#
+# Necesita dos secretos en GitHub → Settings → Secrets and variables → Actions (los pone el dueño, nunca en el chat):
+#   SUPABASE_DB_URL     Cadena «Session pooler» de Supabase (Connect → Session pooler), con la contraseña de la base.
+#   BACKUP_PASSPHRASE   Frase larga para cifrar. Guárdala en Bitwarden: sin ella la copia no sirve.
+# Cómo restaurar: docs/06_GUIA_CONEXIONES.md, sección «Copia de seguridad».
+# No incluye los archivos de Storage (fotos y modelos 3D), solo la base de datos.
+
+on:
+  schedule:
+    - cron: "0 8 * * 0" # domingos 3:00 a. m. hora de Colombia
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  respaldo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+    steps:
+      - name: Revisar que estén los secretos
+        id: check
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ] || [ -z "$BACKUP_PASSPHRASE" ]; then
+            echo "::warning::Faltan SUPABASE_DB_URL o BACKUP_PASSPHRASE en los secretos de GitHub. No se hizo la copia."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: supabase/setup-cli@v1
+        if: steps.check.outputs.ok == 'true'
+        with:
+          version: 2.121.0
+
+      - name: Copiar roles, estructura y datos
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          mkdir -p copia
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f copia/roles.sql --role-only
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f copia/schema.sql
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f copia/data.sql --use-copy --data-only
+          ls -la copia
+
+      - name: Cifrar
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          name="jf-motores-db-$(date -u +%Y-%m-%d)"
+          tar -czf "$name.tar.gz" -C copia .
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" \
+            --symmetric --cipher-algo AES256 -o "$name.tar.gz.gpg" "$name.tar.gz"
+          rm -rf copia "$name.tar.gz"
+          echo "NAME=$name" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-artifact@v4
+        if: steps.check.outputs.ok == 'true'
+        with:
+          name: ${{ env.NAME }}
+          path: ${{ env.NAME }}.tar.gz.gpg
+          retention-days: 35
+          if-no-files-found: error
